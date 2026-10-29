@@ -28,6 +28,11 @@ Git and Workshop source paths point to local snapshots used by the build. The
 manifest identifies how those snapshots were obtained; the initial tool does
 not download or update them. Paths must be relative to the repository root.
 
+For Git sources, export only the distributable mod paths from the pinned
+revision into `sources/git/<package-id>/`. Do not point a package at an entire
+development repository when it also contains tooling, reference data,
+documentation assets, or unrelated submods.
+
 An empty `packages` array is valid. Do not invent compatibility versions,
 licenses, author details, or source pins to make an imported package fit.
 

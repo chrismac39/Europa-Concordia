@@ -4,6 +4,7 @@ dist/*
 reports/*
 !reports/.gitkeep
 sources/steam-workshop/
+sources/git/
 sources/tmp/
 *.tmp
 .vscode/settings.json

@@ -5,16 +5,18 @@ Compared on 2026-10-29 against `config/packages.json`.
 - `[x]` means the Workshop item is recorded as a Concordia package.
 - `[ ]` means it is downloaded locally but has not been added.
 - A checked item is not necessarily enabled or ready for redistribution.
+- Community Mod Framework is intentionally external and required at publish
+  time rather than bundled into Concordia.
 
-**Progress: 25 of 37 downloaded Workshop items recorded**
+**Progress: 23 of 37 downloaded Workshop items recorded**
 
 | Added | Mod                                                       |  Workshop ID | Local version | Declared EU5 version | Package ID                     |
 | ----- | --------------------------------------------------------- | -----------: | ------------- | -------------------- | ------------------------------ |
 | [x]   | [v1.4 beta] Standard of Living                            | `3815438890` | `261024`      | `1.4.*`              | `standard-of-living`           |
 | [x]   | Better Road Builder                                       | `3605677866` | `1.6`         | `1.4.*`              | `better-road-builder`          |
 | [ ]   | Brandenburg Country Pack                                  | `3675113573` | `1.1`         | `1.2.*`              |                                |
-| [x]   | Community Flavor Pack                                     | `3599543453` | `1.1`         | `1.*`                | `community-flavor-pack`        |
-| [x]   | Community Mod Framework                                   | `3692202776` | `2.5.0`       | `1.4.*`              | `community-mod-framework`      |
+| [ ]   | Community Flavor Pack                                     | `3599543453` | `1.1`         | `1.*`                |                                |
+| [ ]   | Community Mod Framework                                   | `3692202776` | `2.5.0`       | `1.4.*`              | External publishing dependency |
 | [x]   | Continental Hegemonies                                    | `3664577264` | `0.4.1`       | `1.3.*`              | `continental-hegemonies`       |
 | [ ]   | Decline of Nations                                        | `3798442778` | `1.0.2`       | `1.3.*`              |                                |
 | [x]   | Diverse Unit Models                                       | `3714859568` | `1.0`         | `1.3.X`              | `diverse-unit-models`          |

@@ -42,6 +42,7 @@ allowlist or calling an artifact installable.
 `config/workshop.json` records:
 
 - Steam App ID `3450310`;
+- required external Workshop items that users must subscribe to separately;
 - exactly one configured channel, `stable`;
 - `publishedFileId: null` until the user creates the item;
 - intended public visibility; and
@@ -73,6 +74,9 @@ The preflight must verify all of the following:
    changelog have been generated and reviewed.
 7. The packaged content has been installed and tested locally before a public
    release.
+8. Every configured external Workshop dependency is present in the release
+   description and configured as a required item on the published Workshop
+   page.
 
 If `publishedFileId` is `null`, present the action as **create a new public
 stable Workshop item**. Require an additional explicit confirmation before

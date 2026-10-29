@@ -1,6 +1,12 @@
 {
   "version": 1,
   "steamAppId": 3450310,
+  "requiredWorkshopItems": [
+    {
+      "workshopId": "3692202776",
+      "name": "Community Mod Framework"
+    }
+  ],
   "channels": {
     "stable": {
       "publishedFileId": null,
