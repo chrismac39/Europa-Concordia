@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "targetGameVersion": "1.4.5",
   "packagesFile": "config/packages.json",
   "outputDirectory": "dist/europa-concordia"
 }

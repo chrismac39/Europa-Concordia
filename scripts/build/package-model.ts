@@ -41,6 +41,7 @@ export interface PackageManifest {
 
 export interface BuildConfiguration {
   version: 1;
+  targetGameVersion: string;
   packagesFile: string;
   outputDirectory: string;
 }
@@ -49,4 +50,8 @@ export interface ProjectConfiguration {
   rootDirectory: string;
   build: BuildConfiguration;
   packages: ConcordiaPackage[];
+}
+
+export interface ProjectOptions {
+  targetGameVersion?: string;
 }

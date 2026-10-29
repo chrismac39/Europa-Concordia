@@ -13,7 +13,9 @@ interface Fixture {
   writeManifest(): Promise<void>;
 }
 
-async function createFixture(): Promise<Fixture> {
+async function createFixture(
+  configuredTargetGameVersion = "1.4.5",
+): Promise<Fixture> {
   const root = await mkdtemp(path.join(os.tmpdir(), "europa-concordia-test-"));
   const packages: unknown[] = [];
   await mkdir(path.join(root, "config"), { recursive: true });
@@ -22,6 +24,7 @@ async function createFixture(): Promise<Fixture> {
     path.join(root, "config", "build.json"),
     JSON.stringify({
       version: 1,
+      targetGameVersion: configuredTargetGameVersion,
       packagesFile: "config/packages.json",
       outputDirectory: "dist/europa-concordia",
     }),
@@ -36,7 +39,7 @@ async function createFixture(): Promise<Fixture> {
         type: "original",
         source: { type: "local", path: sourcePath },
         author: "Fixture author",
-        targetGameVersion: "fixture",
+        targetGameVersion: "1.4.5",
         version: "1.0.0",
         enabled: true,
         dependencies,
@@ -80,6 +83,7 @@ test("builds enabled package files deterministically with metadata", async () =>
       ),
       {
         formatVersion: 1,
+        targetGameVersion: "1.4.5",
         packages: [
           { id: "alpha", version: "1.0.0", sourceType: "local" },
           { id: "zeta", version: "1.0.0", sourceType: "local" },
@@ -122,7 +126,7 @@ test("rejects enabled packages with disabled dependencies", async () => {
         type: "original",
         source: { type: "local", path: "packages/base" },
         author: "Fixture author",
-        targetGameVersion: "fixture",
+        targetGameVersion: "1.4.5",
         version: "1.0.0",
         enabled: false,
         dependencies: [],
@@ -134,7 +138,7 @@ test("rejects enabled packages with disabled dependencies", async () => {
         type: "original",
         source: { type: "local", path: "packages/extension" },
         author: "Fixture author",
-        targetGameVersion: "fixture",
+        targetGameVersion: "1.4.5",
         version: "1.0.0",
         enabled: true,
         dependencies: ["base"],
@@ -149,6 +153,57 @@ test("rejects enabled packages with disabled dependencies", async () => {
     await assert.rejects(
       validateProject(fixture.root),
       /depends on disabled package base/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("uses a parameterized EU5 target instead of the configured default", async () => {
+  const fixture = await createFixture("1.4.4");
+  try {
+    fixture.addPackage("compatible", "packages/compatible");
+    await fixture.writePackageFiles("compatible", {
+      "common/file.txt": "content",
+    });
+    await fixture.writeManifest();
+
+    const output = await buildProject(fixture.root, {
+      targetGameVersion: "1.4.5",
+    });
+    const metadata = JSON.parse(
+      await readFile(path.join(output, "build-metadata.json"), "utf8"),
+    ) as { targetGameVersion: string };
+    assert.equal(metadata.targetGameVersion, "1.4.5");
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("rejects packages targeting a different EU5 version", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("incompatible", "packages/incompatible");
+    await fixture.writePackageFiles("incompatible", {
+      "common/file.txt": "content",
+    });
+    await fixture.writeManifest();
+
+    await assert.rejects(
+      validateProject(fixture.root, { targetGameVersion: "1.4.4" }),
+      /incompatible targets EU5 1\.4\.5, but this build targets EU5 1\.4\.4/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("rejects malformed target release versions", async () => {
+  const fixture = await createFixture();
+  try {
+    await assert.rejects(
+      validateProject(fixture.root, { targetGameVersion: "1.4" }),
+      /targetGameVersion override must use MAJOR\.MINOR\.PATCH format/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });

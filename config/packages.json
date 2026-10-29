@@ -1,4 +1,25 @@
 {
   "version": 1,
-  "packages": []
+  "packages": [
+    {
+      "id": "prosper-or-perish",
+      "name": "Prosper or Perish",
+      "type": "upstream",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/JanB1989/prosper-or-perish-constructor.git",
+        "revision": "0e0e285c48f5d74e54241f989112352aa107c9d7",
+        "path": "packages/upstream/prosper-or-perish/mod/Prosper or Perish (Population Growth & Food Rework)"
+      },
+      "author": "JanB1989",
+      "targetGameVersion": "1.4.5",
+      "version": "0.10.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "The public upstream repository has no license file. Keep this local snapshot uncommitted and obtain redistribution permission before enabling it for a distributed build."
+      }
+    }
+  ]
 }

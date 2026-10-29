@@ -12,7 +12,7 @@ array. Each entry has:
 | `type`              | `upstream`, `maintained`, or `original` | Package category                                                     |
 | `source`            | object                                  | Source kind, immutable pin where applicable, and local snapshot path |
 | `author`            | string                                  | Original author or first-party author                                |
-| `targetGameVersion` | string                                  | Intended EU5 compatibility version                                   |
+| `targetGameVersion` | string                                  | Compatible EU5 release in `MAJOR.MINOR.PATCH` format                 |
 | `version`           | semver string                           | Europa Concordia package version                                     |
 | `enabled`           | boolean                                 | Whether the package participates in validation/build                 |
 | `dependencies`      | string array                            | IDs of required packages                                             |
@@ -30,6 +30,16 @@ not download or update them. Paths must be relative to the repository root.
 
 An empty `packages` array is valid. Do not invent compatibility versions,
 licenses, author details, or source pins to make an imported package fit.
+
+The default build target is `targetGameVersion` in `config/build.json`. Supply
+`--target-game-version MAJOR.MINOR.PATCH` after `--` in an npm command to
+override it for one invocation. Enabled packages must match the effective
+target:
+
+```sh
+npm run validate -- --target-game-version 1.4.5
+npm run build -- --target-game-version 1.4.5
+```
 
 ## Keeping source and compatibility work separate
 

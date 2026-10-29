@@ -42,6 +42,12 @@ directories and integration decisions remain separate. Packages are assembled
 in ascending package-ID order. The order is deterministic but is not a conflict
 resolution policy: duplicate output paths fail the build.
 
+The default project-wide EU5 target is stored as `targetGameVersion` in
+`config/build.json`. Validation and builds can override it with
+`--target-game-version MAJOR.MINOR.PATCH`. Every enabled package must declare
+the effective target game version; packages for another game version are
+rejected during validation.
+
 ## Reproducibility and generated files
 
 Git sources require a full commit hash, and Workshop sources require an
@@ -50,8 +56,9 @@ these pins as metadata but does not fetch sources or recompute Workshop
 checksums. Source paths must resolve inside the repository and cannot contain
 symbolic links. Build output is generated under `dist/` and is not versioned.
 
-`build-metadata.json` records the enabled package IDs, versions, and source
-types. Build reports and semantic conflict detection are future extensions.
+`build-metadata.json` records the target EU5 version and the enabled package
+IDs, versions, and source types. Build reports and semantic conflict detection
+are future extensions.
 
 ## Future decisions
 

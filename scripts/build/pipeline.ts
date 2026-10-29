@@ -12,11 +12,13 @@ import path from "node:path";
 import type {
   ConcordiaPackage,
   ProjectConfiguration,
+  ProjectOptions,
 } from "./package-model.js";
 import { validateProject } from "./validation.js";
 
 interface BuildMetadata {
   formatVersion: 1;
+  targetGameVersion: string;
   packages: Array<{
     id: string;
     version: string;
@@ -75,9 +77,13 @@ async function collectPackageFiles(
   return files;
 }
 
-function createBuildMetadata(packages: ConcordiaPackage[]): BuildMetadata {
+function createBuildMetadata(
+  targetGameVersion: string,
+  packages: ConcordiaPackage[],
+): BuildMetadata {
   return {
     formatVersion: 1,
+    targetGameVersion,
     packages: packages.map((packageValue) => ({
       id: packageValue.id,
       version: packageValue.version,
@@ -86,8 +92,11 @@ function createBuildMetadata(packages: ConcordiaPackage[]): BuildMetadata {
   };
 }
 
-export async function buildProject(rootDirectory: string): Promise<string> {
-  const configuration = await validateProject(rootDirectory);
+export async function buildProject(
+  rootDirectory: string,
+  options: ProjectOptions = {},
+): Promise<string> {
+  const configuration = await validateProject(rootDirectory, options);
   const files = await collectPackageFiles(configuration);
   const outputDirectory = path.resolve(
     configuration.rootDirectory,
@@ -112,7 +121,14 @@ export async function buildProject(rootDirectory: string): Promise<string> {
     }
     await writeFile(
       path.join(stagingDirectory, "build-metadata.json"),
-      `${JSON.stringify(createBuildMetadata(configuration.packages), null, 2)}\n`,
+      `${JSON.stringify(
+        createBuildMetadata(
+          configuration.build.targetGameVersion,
+          configuration.packages,
+        ),
+        null,
+        2,
+      )}\n`,
       "utf8",
     );
 

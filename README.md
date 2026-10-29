@@ -23,9 +23,17 @@ npm test
 npm run build
 ```
 
-The initial package manifest is empty, so validation and build operate on zero
-packages until a package is added. Builds write to the ignored
-`dist/europa-concordia/` directory.
+The default EU5 release target is configured in `config/build.json`. Override
+it for a specific validation or build without editing the configuration:
+
+```sh
+npm run validate -- --target-game-version 1.4.5
+npm run build -- --target-game-version 1.4.5
+```
+
+Only enabled packages declaring compatibility with the effective target are
+accepted. Builds write to the ignored `dist/europa-concordia/` directory and
+record the effective target in `build-metadata.json`.
 
 ## Adding a package
 

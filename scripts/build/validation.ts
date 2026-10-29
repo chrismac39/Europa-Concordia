@@ -6,10 +6,12 @@ import type {
   PackageManifest,
   PackageSource,
   ProjectConfiguration,
+  ProjectOptions,
 } from "./package-model.js";
 
 const packageIdPattern = /^[a-z0-9][a-z0-9-]*$/;
 const packageVersionPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
+const gameVersionPattern = /^\d+\.\d+\.\d+$/;
 const pinnedRevisionPattern = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 const snapshotChecksumPattern = /^sha256:[a-f0-9]{64}$/i;
 
@@ -107,7 +109,12 @@ function validatePackage(
   }
   validateSource(value.source, `${label}.source`, errors);
   requiredString(value.author, `${label}.author`, errors);
-  requiredString(value.targetGameVersion, `${label}.targetGameVersion`, errors);
+  if (
+    typeof value.targetGameVersion !== "string" ||
+    !gameVersionPattern.test(value.targetGameVersion)
+  ) {
+    errors.push(`${label}.targetGameVersion must use MAJOR.MINOR.PATCH format`);
+  }
 
   if (
     typeof value.version !== "string" ||
@@ -181,11 +188,13 @@ function validateBuildConfiguration(value: unknown): BuildConfiguration {
   if (
     !isRecord(value) ||
     value.version !== 1 ||
+    typeof value.targetGameVersion !== "string" ||
+    !gameVersionPattern.test(value.targetGameVersion) ||
     typeof value.packagesFile !== "string" ||
     typeof value.outputDirectory !== "string"
   ) {
     throw new Error(
-      "Build configuration must have version 1, packagesFile, and outputDirectory",
+      "Build configuration must have version 1, targetGameVersion, packagesFile, and outputDirectory",
     );
   }
 
@@ -274,14 +283,28 @@ function assertDependencies(packages: ConcordiaPackage[]): void {
 
 export async function validateProject(
   rootDirectory: string,
+  options: ProjectOptions = {},
 ): Promise<ProjectConfiguration> {
   const buildFile = path.join(rootDirectory, "config", "build.json");
   const buildConfiguration = validateBuildConfiguration(
     JSON.parse(await readFile(buildFile, "utf8")) as unknown,
   );
+  if (
+    options.targetGameVersion !== undefined &&
+    !gameVersionPattern.test(options.targetGameVersion)
+  ) {
+    throw new Error(
+      "targetGameVersion override must use MAJOR.MINOR.PATCH format",
+    );
+  }
+  const effectiveBuildConfiguration: BuildConfiguration = {
+    ...buildConfiguration,
+    targetGameVersion:
+      options.targetGameVersion ?? buildConfiguration.targetGameVersion,
+  };
   const packageFile = resolveProjectPath(
     rootDirectory,
-    buildConfiguration.packagesFile,
+    effectiveBuildConfiguration.packagesFile,
     "packagesFile",
   );
   const packageManifest = validateManifest(
@@ -289,7 +312,7 @@ export async function validateProject(
   );
   const outputDirectory = resolveProjectPath(
     rootDirectory,
-    buildConfiguration.outputDirectory,
+    effectiveBuildConfiguration.outputDirectory,
     "outputDirectory",
   );
   const outputRelative = path.relative(rootDirectory, outputDirectory);
@@ -306,6 +329,14 @@ export async function validateProject(
     );
 
   for (const packageValue of enabledPackages) {
+    if (
+      packageValue.targetGameVersion !==
+      effectiveBuildConfiguration.targetGameVersion
+    ) {
+      throw new Error(
+        `${packageValue.id} targets EU5 ${packageValue.targetGameVersion}, but this build targets EU5 ${effectiveBuildConfiguration.targetGameVersion}`,
+      );
+    }
     const sourcePath = resolveProjectPath(
       rootDirectory,
       packageValue.source.path,
@@ -327,7 +358,7 @@ export async function validateProject(
 
   return {
     rootDirectory,
-    build: buildConfiguration,
+    build: effectiveBuildConfiguration,
     packages: enabledPackages,
   };
 }
