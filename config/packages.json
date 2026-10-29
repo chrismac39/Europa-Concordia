@@ -2,6 +2,46 @@
   "version": 1,
   "packages": [
     {
+      "id": "gh-exchequer",
+      "name": "GH: Exchequer",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3812701995",
+        "snapshotChecksum": "sha256:ced4bb79df25875e7361274a1d475a8746027943c8d462ca82daa5a1f7b8df80",
+        "path": "sources/steam-workshop/3812701995"
+      },
+      "author": "IronPrats",
+      "targetGameVersion": "1.4.5",
+      "version": "1.2.0",
+      "enabled": false,
+      "dependencies": ["community-mod-framework"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3812701995. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "gh-exchequer-glorp-ui-patch",
+      "name": "GH: Exchequer - Glorp UI compatch",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3827095294",
+        "snapshotChecksum": "sha256:2d8f971797ebfa8a130302183366561cc81bd8a98c38c0960778ba7c673d480b",
+        "path": "sources/steam-workshop/3827095294"
+      },
+      "author": "IronPrats",
+      "targetGameVersion": "1.4.5",
+      "version": "1.0.0",
+      "enabled": false,
+      "dependencies": ["gh-exchequer", "glorp-ui"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3827095294. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
       "id": "prosper-or-perish",
       "name": "Prosper or Perish",
       "type": "upstream",
