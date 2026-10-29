@@ -42,23 +42,23 @@
       }
     },
     {
-      "id": "prosper-or-perish",
-      "name": "Prosper or Perish",
-      "type": "upstream",
+      "id": "just-goods",
+      "name": "Just Goods",
+      "type": "maintained",
       "source": {
-        "type": "git",
-        "url": "https://github.com/JanB1989/prosper-or-perish-constructor.git",
-        "revision": "0e0e285c48f5d74e54241f989112352aa107c9d7",
-        "path": "packages/upstream/prosper-or-perish/mod/Prosper or Perish (Population Growth & Food Rework)"
+        "type": "steam-workshop",
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada",
+        "path": "sources/steam-workshop/3785316314"
       },
-      "author": "JanB1989",
+      "author": "moveably",
       "targetGameVersion": "1.4.5",
-      "version": "0.10.0",
+      "version": "1.0.0",
       "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
-        "notice": "The public upstream repository has no license file. Keep this local snapshot uncommitted and obtain redistribution permission before enabling it for a distributed build."
+        "notice": "Local snapshot of Steam Workshop item 3785316314. Upstream declares EU5 1.3 compatibility. Obtain redistribution permission before enabling it for a distributed build."
       }
     }
   ]

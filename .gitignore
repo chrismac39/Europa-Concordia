@@ -5,6 +5,5 @@ reports/*
 !reports/.gitkeep
 sources/steam-workshop/
 sources/tmp/
-packages/upstream/prosper-or-perish/
 *.tmp
 .vscode/settings.json
