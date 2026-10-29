@@ -57,3 +57,5 @@ See [architecture](docs/architecture.md), [conflict resolution](docs/conflict-re
 and [legacy migration](docs/legacy-migration.md) for the initial design.
 For EU5-aware editor setup and vanilla-file safety rules, see
 [development setup](docs/development-setup.md).
+The planned, confirmation-gated Workshop release flow is described in
+[Workshop publishing](docs/workshop-publishing.md).

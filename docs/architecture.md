@@ -17,11 +17,18 @@ The initial implementation separates:
    (future work).
 4. **Packaging** — assembling files deterministically and emitting build
    metadata.
+5. **Publishing** — explicitly uploading a verified release artifact to the
+   stable Steam Workshop item (future work).
 
 The current CLI implements validation and local file assembly only. It rejects
 duplicate paths rather than selecting a last writer. It does not parse EU5
 definitions, apply patches, or claim that the output layout is installable by
 EU5; that requires verification against actual game mod requirements.
+
+Publishing will remain a separate operation from build, validation, and
+packaging. It must not be triggered by Git activity, a successful build, or a
+version change. See [Workshop publishing](workshop-publishing.md) for the
+release gates, authentication boundary, and unimplemented configuration.
 
 ## Package categories
 

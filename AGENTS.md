@@ -18,3 +18,14 @@
 - Keep machine-specific paths, including the local EU5 installation path, in
   ignored local configuration where possible. Do not commit machine-specific
   settings.
+- Workshop publishing must only run through an explicit command and must
+  require a human confirmation immediately before creating or updating an
+  item. Never publish as a side effect of Git activity, building, validation,
+  or version changes.
+- Before any publish attempt, require successful build, validation, clean
+  conflict reports, the selected stable item/channel, documented attribution
+  and redistribution permissions, and a generated release summary/changelog.
+- Never request, read, log, copy, store, or commit Steam passwords, tokens,
+  Steam Guard recovery codes, or SteamCMD session files. Keep authentication
+  outside the repository and all generated artifacts. Never disable Steam
+  Guard.
