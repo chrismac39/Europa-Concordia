@@ -7,49 +7,49 @@ or resolve the underlying findings. All votes below were recorded on
 
 ## Vote register
 
-| Decision | Vote | Selected direction |
-|---:|:---:|---|
-| 1 | E | Synthesize a Concordia merge |
-| 2 | D | Synthesize a Concordia merge |
-| 3 | A | Use Oikoumenē as the base |
-| 4 | C | Synthesize a Concordia merge |
-| 5 | C | Synthesize a Concordia merge |
-| 6 | C | Synthesize a Concordia merge |
-| 7 | C | Synthesize a Concordia merge |
-| 8 | C | Use National Destinies as the base |
-| 9 | C | Use National Destinies as the base |
-| 10 | C | Synthesize a Concordia merge |
-| 11 | C | Synthesize a Concordia merge |
-| 12 | A | Merge every compatible hook |
-| 13 | A | Merge every compatible hook |
-| 14 | A | Merge every compatible hook |
-| 15 | A | Merge every compatible hook |
-| 16 | A | Merge every compatible hook |
-| 17 | A | Merge every compatible hook |
-| 18 | A | Merge every compatible hook |
-| 19 | A | Use Gathering the Land of the Rus as the base |
-| 20 | A | Merge every compatible hook |
-| 21 | C | Synthesize a Concordia merge |
-| 22 | A | Merge every compatible hook |
-| 23 | A | Merge every compatible hook |
-| 24 | A | Merge every compatible hook |
-| 25 | C | Synthesize a Concordia merge |
-| 26 | A | Merge every compatible hook |
-| 27 | A | Merge every compatible hook |
-| 28 | A | Merge every compatible hook |
-| 29 | D | Curate by language or key family |
-| 30 | C | Curate by language or key family |
-| 31 | B | Prefer Oikoumenē's shared text |
-| 32 | B | Prefer Oikoumenē's shared text |
-| 33 | A | Prefer More locations Mod's shared text |
-| 34 | A | Use Oikoumenē as the base |
-| 35 | C | Synthesize a Concordia merge |
-| 36 | B | Use Sulphur's Rivers Expanded as the base |
-| 37 | G | Synthesize a Concordia merge |
-| 38 | A | Use SOL-JTG Compatibility Submod as the base |
-| 39 | C | Synthesize a Concordia merge |
-| 40 | C | Synthesize a Concordia merge |
-| 41 | A | Use SOL-JTG Compatibility Submod as the base |
+| Decision | Vote | Selected direction                            |
+| -------: | :--: | --------------------------------------------- |
+|        1 |  E   | Synthesize a Concordia merge                  |
+|        2 |  D   | Synthesize a Concordia merge                  |
+|        3 |  A   | Use Oikoumenē as the base                     |
+|        4 |  C   | Synthesize a Concordia merge                  |
+|        5 |  C   | Synthesize a Concordia merge                  |
+|        6 |  C   | Synthesize a Concordia merge                  |
+|        7 |  C   | Synthesize a Concordia merge                  |
+|        8 |  C   | Use National Destinies as the base            |
+|        9 |  C   | Use National Destinies as the base            |
+|       10 |  C   | Synthesize a Concordia merge                  |
+|       11 |  C   | Synthesize a Concordia merge                  |
+|       12 |  A   | Merge every compatible hook                   |
+|       13 |  A   | Merge every compatible hook                   |
+|       14 |  A   | Merge every compatible hook                   |
+|       15 |  A   | Merge every compatible hook                   |
+|       16 |  A   | Merge every compatible hook                   |
+|       17 |  A   | Merge every compatible hook                   |
+|       18 |  A   | Merge every compatible hook                   |
+|       19 |  A   | Use Gathering the Land of the Rus as the base |
+|       20 |  A   | Merge every compatible hook                   |
+|       21 |  C   | Synthesize a Concordia merge                  |
+|       22 |  A   | Merge every compatible hook                   |
+|       23 |  A   | Merge every compatible hook                   |
+|       24 |  A   | Merge every compatible hook                   |
+|       25 |  C   | Synthesize a Concordia merge                  |
+|       26 |  A   | Merge every compatible hook                   |
+|       27 |  A   | Merge every compatible hook                   |
+|       28 |  A   | Merge every compatible hook                   |
+|       29 |  D   | Curate by language or key family              |
+|       30 |  C   | Curate by language or key family              |
+|       31 |  B   | Prefer Oikoumenē's shared text                |
+|       32 |  B   | Prefer Oikoumenē's shared text                |
+|       33 |  A   | Prefer More locations Mod's shared text       |
+|       34 |  A   | Use Oikoumenē as the base                     |
+|       35 |  C   | Synthesize a Concordia merge                  |
+|       36 |  B   | Use Sulphur's Rivers Expanded as the base     |
+|       37 |  G   | Synthesize a Concordia merge                  |
+|       38 |  A   | Use SOL-JTG Compatibility Submod as the base  |
+|       39 |  C   | Synthesize a Concordia merge                  |
+|       40 |  C   | Synthesize a Concordia merge                  |
+|       41 |  A   | Use SOL-JTG Compatibility Submod as the base  |
 
 ## Global implementation constraint: one coherent implementation per system
 
@@ -113,6 +113,18 @@ the vote does not decide whether the river image needs editing.
 
 ## Implementation status
 
-No source or integration files have been merged as a result of these votes.
-Underlying findings remain unresolved until the selected behavior is
-implemented, reviewed, and verified.
+Decisions 1 and 2 have been implemented as Concordia-owned complete-file
+overrides under `integration/overrides/dynamic-names/`. Decision 3 is
+implemented by selecting Oikoumenē's complete files for its seven language
+path collisions. Decision 36 selects Sulphur's Rivers Expanded raster for the
+shared river-map path. The source snapshots remain unchanged. The dynamic-name
+trigger variants use the user-confirmed union policy. Exact file-path
+resolutions are recorded in `config/conflict-rules.json`, with details in
+`integration/decisions/dynamic-names.md`,
+`integration/decisions/oikoumene-language-base.md`, and
+`integration/decisions/sulphur-rivers.md`.
+
+The latest analysis recognizes these ten path resolutions. All other voted
+implementation work remains pending. The full assembly build remains gated
+by unresolved findings in other systems; no unresolved gameplay behavior was
+silently selected or combined.

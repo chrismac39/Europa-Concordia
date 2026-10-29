@@ -14,7 +14,7 @@
       "author": "猪",
       "targetGameVersion": "1.4.5",
       "version": "0.0.261024",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -34,7 +34,7 @@
       "author": "猪",
       "targetGameVersion": "1.4.5",
       "version": "0.0.261024",
-      "enabled": true,
+      "enabled": false,
       "dependencies": ["just-goods", "standard-of-living"],
       "attribution": {
         "license": "No license provided",
@@ -54,7 +54,7 @@
       "author": "GDI_JeffL",
       "targetGameVersion": "1.4.5",
       "version": "1.6.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -74,7 +74,7 @@
       "author": "Stefan",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -94,7 +94,7 @@
       "author": "Exend",
       "targetGameVersion": "1.4.5",
       "version": "1.2.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -114,7 +114,7 @@
       "author": "Trinedy",
       "targetGameVersion": "1.4.5",
       "version": "0.4.1",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -134,7 +134,7 @@
       "author": "Happyperson3796",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -154,7 +154,7 @@
       "author": "Airdæ",
       "targetGameVersion": "1.4.5",
       "version": "1.1.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -194,7 +194,7 @@
       "author": "Aayom",
       "targetGameVersion": "1.4.5",
       "version": "1.4.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -214,7 +214,7 @@
       "author": "Agamenton",
       "targetGameVersion": "1.4.5",
       "version": "1.1.9",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -254,7 +254,7 @@
       "author": "Relandelon",
       "targetGameVersion": "1.4.5",
       "version": "1.8.2",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -274,7 +274,7 @@
       "author": "Dima_UA",
       "targetGameVersion": "1.4.5",
       "version": "11.3.1",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -294,7 +294,7 @@
       "author": "Trinedy",
       "targetGameVersion": "1.4.5",
       "version": "1.4.1",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -314,7 +314,7 @@
       "author": "Emirke",
       "targetGameVersion": "1.4.5",
       "version": "5.1.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -334,7 +334,7 @@
       "author": "Emperor VI",
       "targetGameVersion": "1.4.5",
       "version": "1.2.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -354,7 +354,7 @@
       "author": "Pontifex",
       "targetGameVersion": "1.4.5",
       "version": "0.19.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -374,7 +374,7 @@
       "author": "bagetbaget",
       "targetGameVersion": "1.4.5",
       "version": "0.9.39",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -394,7 +394,7 @@
       "author": "Atanos",
       "targetGameVersion": "1.4.5",
       "version": "1.1.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -414,7 +414,7 @@
       "author": "IronPrats",
       "targetGameVersion": "1.4.5",
       "version": "1.2.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -434,7 +434,7 @@
       "author": "IronPrats",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": ["gh-exchequer", "glorp-ui"],
       "attribution": {
         "license": "No license provided",
@@ -454,7 +454,7 @@
       "author": "glorp",
       "targetGameVersion": "1.4.5",
       "version": "04.10.26",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -474,7 +474,7 @@
       "author": "moveably",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": true,
+      "enabled": false,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",

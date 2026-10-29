@@ -61,6 +61,75 @@
       "packages": ["gathering-land-rus", "imperial-ambitions"],
       "override": "integration/overrides/collision-2/in_game/common/customizable_localization/countries.txt",
       "reason": "The Concordia merge keeps both packages' unique country definitions and combines Gathering the Rus conditional Golden Horde vassal names with Imperial Ambitions' fallback names for KZN and UZB."
+    },
+    {
+      "path": "in_game/common/customizable_localization/country_ranks.txt",
+      "packages": [
+        "gathering-land-rus",
+        "historical-tweaks",
+        "imperial-ambitions",
+        "prussian-destiny"
+      ],
+      "override": "integration/overrides/dynamic-names/in_game/common/customizable_localization/country_ranks.txt",
+      "reason": "The Concordia merge keeps common rules once, preserves each package's unique rank/title rules across all country-flavor roots, and unions the nine differing shared-rule trigger variants."
+    },
+    {
+      "path": "in_game/common/customizable_localization/country_name_construction.txt",
+      "packages": [
+        "historical-tweaks",
+        "imperial-ambitions",
+        "prussian-destiny"
+      ],
+      "override": "integration/overrides/dynamic-names/in_game/common/customizable_localization/country_name_construction.txt",
+      "reason": "The Concordia merge keeps common construction rules once, preserves package-specific name rules, and unions the four differing shared-rule trigger variants."
+    },
+    {
+      "path": "in_game/common/languages/00_anatolia.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Anatolian language definitions at this colliding path."
+    },
+    {
+      "path": "in_game/common/languages/00_caucasus.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Caucasian language definitions at this colliding path."
+    },
+    {
+      "path": "in_game/common/languages/00_polish.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Polish language definitions at this colliding path."
+    },
+    {
+      "path": "in_game/common/languages/00_russian.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Russian language definitions at this colliding path."
+    },
+    {
+      "path": "in_game/common/languages/00_steppes.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete steppe language definitions at this colliding path."
+    },
+    {
+      "path": "in_game/common/languages/00_tartar.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Tartar language definitions at this colliding path."
+    },
+    {
+      "path": "in_game/common/languages/00_xinjiang.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Xinjiang language definitions at this colliding path."
+    },
+    {
+      "path": "in_game/map_data/rivers.png",
+      "packages": ["more-locations", "sulphurs-rivers-expanded"],
+      "winner": "sulphurs-rivers-expanded",
+      "reason": "Decision 36 selects Sulphur's Rivers Expanded as the river-layer base; its raster matches the selected More locations map canvas dimensions."
     }
   ],
   "semanticResolutions": [],
