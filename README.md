@@ -55,3 +55,5 @@ are recorded for future build support but are not yet applied.
 
 See [architecture](docs/architecture.md), [conflict resolution](docs/conflict-resolution.md),
 and [legacy migration](docs/legacy-migration.md) for the initial design.
+For EU5-aware editor setup and vanilla-file safety rules, see
+[development setup](docs/development-setup.md).

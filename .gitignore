@@ -6,3 +6,4 @@ reports/*
 sources/steam-workshop/
 sources/tmp/
 *.tmp
+.vscode/settings.json
