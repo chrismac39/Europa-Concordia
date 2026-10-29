@@ -13,6 +13,14 @@ export interface LocalizationEntry {
   value: string;
 }
 
+export interface CustomizableLocalizationRule {
+  localizationKey: string;
+  normalizedBody: string;
+  tags: string[];
+  variables: string[];
+  reforms: string[];
+}
+
 function stripComment(line: string): string {
   let quoted = false;
   for (let index = 0; index < line.length; index += 1) {
@@ -160,6 +168,104 @@ export function extractCountryTags(contents: string): Map<string, number> {
     }
   }
   return counts;
+}
+
+function extractReferenceValues(body: string, pattern: RegExp): string[] {
+  return [
+    ...new Set([...body.matchAll(pattern)].map((match) => match[1])),
+  ].sort((left, right) => left.localeCompare(right, "en-US"));
+}
+
+export function extractCustomizableLocalizationRules(
+  relativePath: string,
+  contents: string,
+): CustomizableLocalizationRule[] {
+  if (
+    !relativePath
+      .replaceAll("\\", "/")
+      .includes("/common/customizable_localization/") ||
+    !relativePath.endsWith(".txt")
+  ) {
+    return [];
+  }
+  const cleaned = contents
+    .replace(/^\uFEFF/, "")
+    .split(/\r?\n/)
+    .map(stripComment)
+    .join("\n");
+  const rules: CustomizableLocalizationRule[] = [];
+  const pattern = /\btext\s*=\s*\{/g;
+  for (const match of cleaned.matchAll(pattern)) {
+    const openingBrace = (match.index ?? 0) + match[0].lastIndexOf("{");
+    let depth = 0;
+    let quoted = false;
+    let closingBrace = -1;
+    for (let index = openingBrace; index < cleaned.length; index += 1) {
+      const character = cleaned[index];
+      if (character === '"' && cleaned[index - 1] !== "\\") {
+        quoted = !quoted;
+      } else if (!quoted && character === "{") {
+        depth += 1;
+      } else if (!quoted && character === "}") {
+        depth -= 1;
+        if (depth === 0) {
+          closingBrace = index;
+          break;
+        }
+      }
+    }
+    if (closingBrace < 0) {
+      continue;
+    }
+    const body = cleaned.slice(openingBrace + 1, closingBrace);
+    const localizationKey = /\blocalization_key\s*=\s*([A-Za-z0-9_.-]+)/.exec(
+      body,
+    )?.[1];
+    if (!localizationKey) {
+      continue;
+    }
+    rules.push({
+      localizationKey,
+      normalizedBody: body.replace(/\s+/g, " ").trim(),
+      tags: extractReferenceValues(
+        body,
+        /\b(?:tag|has_or_had_tag)\s*=\s*([A-Z][A-Z0-9_]{2,})\b/g,
+      ),
+      variables: extractReferenceValues(
+        body,
+        /\bhas_variable\s*=\s*([A-Za-z0-9_.-]+)/g,
+      ),
+      reforms: extractReferenceValues(
+        body,
+        /\bhas_reform\s*=\s*(?:government_reform:)?([A-Za-z0-9_.-]+)/g,
+      ),
+    });
+  }
+  return rules;
+}
+
+export type CountryReferenceRole = "observer" | "reference-data" | "active";
+
+export function classifyCountryReferenceFile(
+  relativePath: string,
+): CountryReferenceRole {
+  const normalized = relativePath.replaceAll("\\", "/").toLowerCase();
+  if (
+    /\/common\/scripted_effects\/[^/]*fragment[^/]*history[^/]*\.txt$/.test(
+      normalized,
+    )
+  ) {
+    return "reference-data";
+  }
+  if (
+    /\/common\/(?:customizable_localization|script_values|scripted_triggers|ai_scripted_expansion_score)\//.test(
+      normalized,
+    ) ||
+    /\/gui\//.test(normalized)
+  ) {
+    return "observer";
+  }
+  return "active";
 }
 
 export function fingerprint(parts: string[]): string {

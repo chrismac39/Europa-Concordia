@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { format } from "prettier";
 import type {
@@ -6,6 +6,7 @@ import type {
   ConflictFinding,
   FindingSource,
 } from "./model.js";
+import { extractCustomizableLocalizationRules } from "./parser.js";
 
 function markdownPath(fromDirectory: string, absolutePath: string): string {
   return path.relative(fromDirectory, absolutePath).split(path.sep).join("/");
@@ -32,7 +33,10 @@ function reviewSources(finding: ConflictFinding): FindingSource[] {
 }
 
 function decisionDomain(finding: ConflictFinding): string {
-  if (finding.type === "system-overlap") {
+  if (
+    finding.type === "system-overlap" ||
+    finding.type === "system-interaction"
+  ) {
     return "Cross-system country behavior";
   }
   if (finding.type === "global-variable") {
@@ -141,6 +145,9 @@ function findingTopic(finding: ConflictFinding): string {
   if (finding.type === "system-overlap") {
     return "shared-country behavior";
   }
+  if (finding.type === "system-interaction") {
+    return "active shared-country behavior";
+  }
   if (finding.type === "global-variable") {
     return "shared runtime variables";
   }
@@ -232,6 +239,618 @@ function sourceMarkdown(
   return `[${packageLabel}: ${source.relativePath}](${markdownPath(integrationDirectory, source.absolutePath)})`;
 }
 
+function findingSourceKey(source: FindingSource): string {
+  return `${source.packageId}\u0000${source.relativePath}`;
+}
+
+function ruleTheme(localizationKey: string): string {
+  const words = localizationKey
+    .replace(/^(?:ia|ht)_/, "")
+    .replace(/^(?:country_flavor|country_rank|rank)_/, "")
+    .split("_")
+    .filter(
+      (word) =>
+        !["county", "duchy", "kingdom", "empire", "heir"].includes(word),
+    );
+  return words.join(" ");
+}
+
+function sourceIntentComments(contents: string): string[] {
+  const paragraphs: string[] = [];
+  let current: string[] = [];
+  const flush = (): void => {
+    if (current.length > 0) {
+      paragraphs.push(current.join(" ").replace(/\s+/g, " ").trim());
+      current = [];
+    }
+  };
+  for (const line of contents.replace(/^\uFEFF/, "").split(/\r?\n/)) {
+    const match = /^\s*#\s?(.*)$/.exec(line);
+    if (match) {
+      current.push(match[1]);
+    } else {
+      flush();
+    }
+  }
+  flush();
+  return paragraphs
+    .filter(
+      (paragraph) =>
+        /\b(?:this mod|mod's|imperial ambitions|historical tweaks|gathering|prussian destiny)\b/i.test(
+          paragraph,
+        ) || /\bdisabled\b/i.test(paragraph),
+    )
+    .filter(
+      (paragraph) =>
+        !/\b(?:do not edit|generator|re-run)\b/i.test(paragraph) ||
+        /\b(?:plus one|this mod|mod's)\b/i.test(paragraph),
+    )
+    .map((paragraph) => {
+      if (paragraph.length <= 280) {
+        return paragraph;
+      }
+      const intentIndex = paragraph.search(
+        /\b(?:plus one|this mod's|imperial ambitions|historical tweaks|gathering|prussian destiny)\b/i,
+      );
+      const start = intentIndex > 80 ? intentIndex - 80 : 0;
+      return `${start > 0 ? "..." : ""}${paragraph.slice(start, start + 277)}...`;
+    })
+    .slice(0, 3);
+}
+
+async function definitionSourceNotes(
+  sources: FindingSource[],
+): Promise<Map<string, string[]>> {
+  const notes = new Map<string, string[]>();
+  for (const source of reviewSources({
+    fingerprint: "",
+    type: "definition",
+    title: "",
+    summary: "",
+    packages: [],
+    symbols: [],
+    sources,
+    resolved: false,
+  })) {
+    if (!source.relativePath.endsWith(".txt")) {
+      continue;
+    }
+    const contents = await readFile(source.absolutePath, "utf8");
+    const declaresDisabled = /^\s*#\s*DISABLED\b/im.test(contents);
+    const sourceNotes = sourceIntentComments(contents)
+      .filter((note) => !declaresDisabled || !/\bdisabled\b/i.test(note))
+      .filter((note) =>
+        /\b(?:disabled|human|ai|never starts?|replaces?|creates?|releases?|successor|dissolv|collapse|ends?)\b/i.test(
+          note,
+        ),
+      )
+      .slice(0, 2);
+    if (declaresDisabled) {
+      const activeContents = contents
+        .split(/\r?\n/)
+        .filter((line) => !/^\s*#/.test(line))
+        .join("\n");
+      sourceNotes.push(
+        /\balways\s*=\s*no\b/.test(activeContents)
+          ? "The source declares this system disabled and contains an active `always = no` guard."
+          : "The source declares this system disabled, but its `always = no` guard is commented out; the definition remains active as written.",
+      );
+    }
+    if (sourceNotes.length > 0) {
+      notes.set(findingSourceKey(source), [...new Set(sourceNotes)]);
+    }
+  }
+  return notes;
+}
+
+function customizableLocalizationPurpose(sources: FindingSource[]): string {
+  const names = new Set(
+    sources.map((source) => path.basename(source.relativePath).toLowerCase()),
+  );
+  if (names.has("country_ranks.txt")) {
+    return "This file selects conditional country-rank, ruler-title, and heir-title text such as Tsardom, Khanate, Sultanate, or Confederation. Its downstream effect is display-only: it does not fire events, create successors, mutate state, or replace the underlying country tag.";
+  }
+  if (names.has("country_name_construction.txt")) {
+    return "This file controls how rank words, adjectives, prefixes, suffixes, and base names are assembled into the displayed long country name. Its rules complement, rather than replace, the rank/title rules in `country_ranks.txt`.";
+  }
+  return "These files select conditional displayed text from localization keys. Their rule ordering and triggers determine which name or title is shown.";
+}
+
+interface SemanticSourceSummary {
+  concise: string;
+}
+
+interface CustomizableLocalizationAnalysis {
+  assessments: string[];
+  sharedDifferences: string[];
+  sources: Map<string, SemanticSourceSummary>;
+}
+
+interface ConditionProfile {
+  ruleCount: number;
+  tags: string[];
+  variables: string[];
+  reforms: string[];
+  ranks: string[];
+  governments: string[];
+  languages: string[];
+  advances: string[];
+  hasTimingGuard: boolean;
+  normalized: string;
+}
+
+function matchedValues(contents: string, pattern: RegExp): string[] {
+  return [...new Set([...contents.matchAll(pattern)].map((match) => match[1]))]
+    .filter((value) => value !== undefined)
+    .sort((left, right) => left.localeCompare(right, "en-US"));
+}
+
+function conditionProfile(
+  rules: ReturnType<typeof extractCustomizableLocalizationRules>,
+): ConditionProfile {
+  const contents = rules.map((rule) => rule.normalizedBody).join(" ");
+  return {
+    ruleCount: rules.length,
+    tags: [...new Set(rules.flatMap((rule) => rule.tags))].sort(),
+    variables: [...new Set(rules.flatMap((rule) => rule.variables))].sort(),
+    reforms: [...new Set(rules.flatMap((rule) => rule.reforms))].sort(),
+    ranks: [
+      ...new Set([
+        ...matchedValues(contents, /\bcountry_rank_is_([a-z_]+)\s*=\s*yes/g),
+        ...matchedValues(contents, /\bcountry_rank_level\s*=\s*(\d+)/g).map(
+          (level) => `level-${level}`,
+        ),
+      ]),
+    ].sort(),
+    governments: matchedValues(
+      contents,
+      /\bgovernment_type\s*=\s*government_type:([A-Za-z0-9_.-]+)/g,
+    ),
+    languages: matchedValues(
+      contents,
+      /\b(?:court_language|culture\.language)\s*\?=\s*language:([A-Za-z0-9_.-]+)/g,
+    ),
+    advances: matchedValues(contents, /\bhas_advance\s*=\s*([A-Za-z0-9_.-]+)/g),
+    hasTimingGuard: /\btrigger_if\s*=\s*\{/.test(contents),
+    normalized: contents,
+  };
+}
+
+function describeConditionProfile(profile: ConditionProfile): string {
+  const parts: string[] = [];
+  if (profile.ruleCount > 1) {
+    parts.push(`${profile.ruleCount} alternative rule branches`);
+  }
+  if (profile.tags.length > 0) {
+    parts.push(`tags ${profile.tags.join("/")}`);
+  }
+  if (profile.ranks.length > 0) {
+    parts.push(`rank ${profile.ranks.join("/")}`);
+  } else {
+    parts.push("no explicit rank guard");
+  }
+  if (profile.governments.length > 0) {
+    parts.push(`government ${profile.governments.join("/")}`);
+  }
+  if (profile.variables.length > 0) {
+    parts.push(`state ${profile.variables.join("/")}`);
+  }
+  if (profile.reforms.length > 0) {
+    parts.push(`reform ${profile.reforms.join("/")}`);
+  }
+  if (profile.languages.length > 0) {
+    parts.push(`language ${profile.languages.join("/")}`);
+  }
+  if (profile.advances.length > 0) {
+    parts.push(`advance ${profile.advances.join("/")}`);
+  }
+  if (profile.hasTimingGuard) {
+    parts.push("ruler/reform timing guard");
+  }
+  return parts.join("; ");
+}
+
+function difference<T>(left: T[], right: T[]): T[] {
+  const rightValues = new Set(right);
+  return left.filter((value) => !rightValues.has(value));
+}
+
+function profileImplication(
+  key: string,
+  baseline: ConditionProfile,
+  variant: ConditionProfile,
+): string {
+  const implications: string[] = [];
+  const addedTags = difference(variant.tags, baseline.tags);
+  const removedTags = difference(baseline.tags, variant.tags);
+  const addedVariables = difference(variant.variables, baseline.variables);
+  const removedVariables = difference(baseline.variables, variant.variables);
+  const addedLanguages = difference(variant.languages, baseline.languages);
+  const removedLanguages = difference(baseline.languages, variant.languages);
+  const addedAdvances = difference(variant.advances, baseline.advances);
+  const removedAdvances = difference(baseline.advances, variant.advances);
+  if (variant.ruleCount > baseline.ruleCount) {
+    implications.push(
+      `adds ${variant.ruleCount - baseline.ruleCount} activation branch(es)`,
+    );
+  } else if (variant.ruleCount < baseline.ruleCount) {
+    implications.push(
+      `drops ${baseline.ruleCount - variant.ruleCount} activation branch(es)`,
+    );
+  }
+  if (addedTags.length > 0) {
+    implications.push(`extends the title to ${addedTags.join("/")}`);
+  }
+  if (removedTags.length > 0) {
+    implications.push(
+      `removes explicit eligibility for ${removedTags.join("/")}`,
+    );
+  }
+  if (addedVariables.length > 0) {
+    implications.push(
+      `activates from state ${addedVariables.map((value) => `\`${value}\``).join("/")}`,
+    );
+  }
+  if (removedVariables.length > 0) {
+    implications.push(
+      `does not activate from state ${removedVariables.map((value) => `\`${value}\``).join("/")}`,
+    );
+  }
+  if (addedLanguages.length > 0) {
+    implications.push(
+      `extends eligibility to ${addedLanguages.join("/")} speakers`,
+    );
+  }
+  if (removedLanguages.length > 0) {
+    implications.push(
+      `drops ${removedLanguages.join("/")} language eligibility`,
+    );
+  }
+  if (addedAdvances.length > 0) {
+    implications.push(`adds advance gate ${addedAdvances.join("/")}`);
+  }
+  if (removedAdvances.length > 0) {
+    implications.push(`drops advance gate ${removedAdvances.join("/")}`);
+  }
+  if (baseline.ranks.length > 0 && variant.ranks.length === 0) {
+    implications.push(
+      "removes the rank restriction and may apply at other ranks",
+    );
+  } else if (baseline.ranks.length === 0 && variant.ranks.length > 0) {
+    implications.push(`restricts the title to rank ${variant.ranks.join("/")}`);
+  } else {
+    const addedRanks = difference(variant.ranks, baseline.ranks);
+    const removedRanks = difference(baseline.ranks, variant.ranks);
+    if (addedRanks.length > 0) {
+      implications.push(`adds rank ${addedRanks.join("/")} eligibility`);
+    }
+    if (removedRanks.length > 0) {
+      implications.push(`drops rank ${removedRanks.join("/")} eligibility`);
+    }
+  }
+  if (baseline.hasTimingGuard && !variant.hasTimingGuard) {
+    implications.push("removes the ruler/reform timing guard");
+  } else if (!baseline.hasTimingGuard && variant.hasTimingGuard) {
+    implications.push("adds a ruler/reform timing guard");
+  }
+  if (implications.length === 0) {
+    if (
+      key === "rank_duchy_principality" &&
+      baseline.normalized.includes("tag = ANR AND =") &&
+      variant.normalized.includes("tag = ANR } country_rank_is_duchy")
+    ) {
+      implications.push(
+        "requires ANR to be a duchy, while the majority variant lets ANR display Principality regardless of rank",
+      );
+    } else {
+      implications.push(
+        "uses different boolean grouping or unsupported conditions; inspect the linked source before merging",
+      );
+    }
+  }
+  return implications.join("; ");
+}
+
+function conciseIntent(comment: string): string {
+  const oneLineChange =
+    /plus one line of this mod's:\s*tag\s*=\s*([A-Z0-9_]+)\s+under localization_key\s*=\s*([A-Za-z0-9_.-]+)/i.exec(
+      comment,
+    );
+  if (oneLineChange) {
+    return `Adds tag \`${oneLineChange[1]}\` to the \`${oneLineChange[2].replace(/\.+$/g, "")}\` title rule`;
+  }
+  const vanillaDelta = /Vanilla's file WHOLE,\s*(.+)/i.exec(comment)?.[1];
+  return (vanillaDelta ?? comment)
+    .replace(/[.\s]+$/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+async function customizableLocalizationSummaries(
+  sources: FindingSource[],
+): Promise<CustomizableLocalizationAnalysis> {
+  const groups = new Map<string, FindingSource[]>();
+  for (const source of sources) {
+    const normalized = source.relativePath.replaceAll("\\", "/");
+    if (!normalized.includes("/common/customizable_localization/")) {
+      continue;
+    }
+    const group = groups.get(normalized.toLowerCase()) ?? [];
+    if (
+      !group.some(
+        (candidate) => findingSourceKey(candidate) === findingSourceKey(source),
+      )
+    ) {
+      group.push(source);
+    }
+    groups.set(normalized.toLowerCase(), group);
+  }
+
+  const summaries = new Map<string, SemanticSourceSummary>();
+  const assessments: string[] = [];
+  const sharedDifferences: string[] = [];
+  for (const group of groups.values()) {
+    if (group.length < 2) {
+      continue;
+    }
+    const parsed = await Promise.all(
+      group.map(async (source) => {
+        const contents = await readFile(source.absolutePath, "utf8");
+        return {
+          source,
+          rules: extractCustomizableLocalizationRules(
+            source.relativePath,
+            contents,
+          ),
+          intentComments: sourceIntentComments(contents),
+        };
+      }),
+    );
+    const keySources = new Map<string, Set<string>>();
+    const signatures = new Map<string, Set<string>>();
+    for (const entry of parsed) {
+      const sourceId = findingSourceKey(entry.source);
+      const rulesByKey = new Map<string, string[]>();
+      for (const rule of entry.rules) {
+        const bodies = rulesByKey.get(rule.localizationKey) ?? [];
+        bodies.push(rule.normalizedBody);
+        rulesByKey.set(rule.localizationKey, bodies);
+      }
+      for (const [key, bodies] of rulesByKey) {
+        const owners = keySources.get(key) ?? new Set<string>();
+        owners.add(sourceId);
+        keySources.set(key, owners);
+        const variants = signatures.get(key) ?? new Set<string>();
+        variants.add(JSON.stringify(bodies.sort()));
+        signatures.set(key, variants);
+      }
+    }
+    const commonKeys = [...keySources].filter(
+      ([key, owners]) =>
+        owners.size === group.length && signatures.get(key)?.size === 1,
+    );
+    const uniqueGroupKeys = [...keySources].filter(
+      ([, owners]) => owners.size === 1,
+    );
+    const changedGroupKeys = [...keySources].filter(
+      ([key, owners]) =>
+        owners.size > 1 && (signatures.get(key)?.size ?? 0) > 1,
+    );
+    assessments.push(
+      `Across \`${path.basename(group[0].relativePath)}\`, ${commonKeys.length} shared keys match every copy, ${uniqueGroupKeys.length} keys are package-specific, and ${changedGroupKeys.length} shared keys have different triggers. The package-specific additions are mostly additive; preserve them all and merge only the differing shared triggers.`,
+    );
+    for (const [key] of changedGroupKeys) {
+      const variants = new Map<
+        string,
+        {
+          packageNames: string[];
+          profile: ConditionProfile;
+        }
+      >();
+      for (const entry of parsed) {
+        const rules = entry.rules.filter(
+          (rule) => rule.localizationKey === key,
+        );
+        if (rules.length === 0) {
+          continue;
+        }
+        const signature = JSON.stringify(
+          rules.map((rule) => rule.normalizedBody).sort(),
+        );
+        const variant = variants.get(signature) ?? {
+          packageNames: [],
+          profile: conditionProfile(rules),
+        };
+        variant.packageNames.push(entry.source.packageName);
+        variants.set(signature, variant);
+      }
+      const orderedVariants = [...variants.values()].sort(
+        (left, right) => right.packageNames.length - left.packageNames.length,
+      );
+      const baseline = orderedVariants[0];
+      const alternatives = orderedVariants.slice(1);
+      sharedDifferences.push(
+        `- \`${key}\` — **${baseline.packageNames.join(" / ")}:** ${describeConditionProfile(baseline.profile)}.${alternatives
+          .map(
+            (variant) =>
+              ` **${variant.packageNames.join(" / ")}:** ${describeConditionProfile(variant.profile)}. **Implication:** ${profileImplication(key, baseline.profile, variant.profile)}.`,
+          )
+          .join("")}`,
+      );
+    }
+
+    for (const entry of parsed) {
+      const sourceId = findingSourceKey(entry.source);
+      const uniqueKeys = [
+        ...new Set(
+          entry.rules
+            .map((rule) => rule.localizationKey)
+            .filter((key) => keySources.get(key)?.size === 1),
+        ),
+      ].sort();
+      const relevantRules = entry.rules.filter((rule) =>
+        uniqueKeys.includes(rule.localizationKey),
+      );
+      const variables = [
+        ...new Set(relevantRules.flatMap((rule) => rule.variables)),
+      ].sort();
+      const themes = [
+        ...new Set(uniqueKeys.map(ruleTheme).filter((theme) => theme !== "")),
+      ];
+      const conciseParts: string[] = [];
+      if (themes.length > 0) {
+        conciseParts.push(
+          `Adds conditional title/name rules for ${themes
+            .slice(0, 12)
+            .join(
+              ", ",
+            )}${themes.length > 12 ? `, and ${themes.length - 12} more` : ""}.`,
+        );
+      } else if (entry.intentComments.length > 0) {
+        conciseParts.push(`${conciseIntent(entry.intentComments[0])}.`);
+      } else {
+        conciseParts.push(
+          "Adds no package-specific localization key; its differences are confined to shared trigger bodies.",
+        );
+      }
+      if (variables.length > 0 && themes.length > 0) {
+        conciseParts.push(
+          `State-driven behavior uses ${variables
+            .slice(0, 6)
+            .map((value) => `\`${value}\``)
+            .join(
+              ", ",
+            )}${variables.length > 6 ? `, and ${variables.length - 6} more` : ""}.`,
+        );
+      }
+      summaries.set(sourceId, {
+        concise: conciseParts.join(" "),
+      });
+    }
+  }
+  return { assessments, sharedDifferences, sources: summaries };
+}
+
+function readableOperations(values: string[]): string {
+  return values
+    .slice(0, 12)
+    .map((value) => `\`${value.replace(":", " → ")}\``)
+    .join(", ");
+}
+
+function definitionBehaviorSummary(findings: ConflictFinding[]): {
+  lines: string[];
+  consequence: string | undefined;
+} {
+  const variants = findings.flatMap(
+    (finding) => finding.definitionVariants ?? [],
+  );
+  if (variants.length === 0) {
+    return { lines: [], consequence: undefined };
+  }
+  const grouped = new Map<string, typeof variants>();
+  for (const variant of variants) {
+    const group = grouped.get(variant.packageId) ?? [];
+    group.push(variant);
+    grouped.set(variant.packageId, group);
+  }
+  const lines: string[] = [];
+  const outcomeSets = new Map<string, string[]>();
+  let meaningful = false;
+  for (const packageVariants of grouped.values()) {
+    const packageName = packageVariants[0].packageName;
+    const conditions = [
+      ...new Set(
+        packageVariants.flatMap(
+          (variant) => variant.direct.importantConditions,
+        ),
+      ),
+    ];
+    const values = [
+      ...new Set(
+        packageVariants.flatMap((variant) => variant.direct.importantValues),
+      ),
+    ];
+    const events = [
+      ...new Set(
+        packageVariants.flatMap((variant) => variant.direct.eventReferences),
+      ),
+    ];
+    const variables = [
+      ...new Set(
+        packageVariants.flatMap((variant) => variant.direct.variablesWritten),
+      ),
+    ];
+    const directOutcomes = [
+      ...new Set(
+        packageVariants.flatMap((variant) => variant.direct.countryOutcomes),
+      ),
+    ];
+    const downstreamOutcomes = [
+      ...new Set(
+        packageVariants.flatMap(
+          (variant) => variant.downstream.countryOutcomes,
+        ),
+      ),
+    ];
+    const dependencies = [
+      ...new Set(
+        packageVariants.flatMap((variant) => variant.direct.dependencySymbols),
+      ),
+    ];
+    const allOutcomes = [
+      ...new Set([...directOutcomes, ...downstreamOutcomes]),
+    ].sort();
+    outcomeSets.set(packageName, allOutcomes);
+    const statements: string[] = [];
+    if (conditions.length > 0) {
+      statements.push(`entry/end conditions: ${conditions.join(", ")}`);
+    }
+    if (values.length > 0) {
+      statements.push(`balance values: ${values.join(", ")}`);
+    }
+    if (events.length > 0) {
+      statements.push(`fires events ${events.slice(0, 12).join(", ")}`);
+    }
+    if (variables.length > 0) {
+      statements.push(`writes state ${readableOperations(variables)}`);
+    }
+    if (allOutcomes.length > 0) {
+      statements.push(
+        `country outcomes found in the traced chain: ${readableOperations(allOutcomes)}`,
+      );
+    } else if (dependencies.length > 0) {
+      statements.push(
+        `delegates downstream behavior to ${dependencies
+          .slice(0, 12)
+          .map((value) => `\`${value}\``)
+          .join(", ")}`,
+      );
+    }
+    meaningful ||= statements.length > 0;
+    lines.push(
+      `- **${packageName}:** ${statements.length > 0 ? statements.join("; ") : "No recognized gameplay effects were extracted; inspect the linked definition"}.`,
+    );
+  }
+  if (!meaningful) {
+    return { lines: [], consequence: undefined };
+  }
+  const distinctOutcomes = new Set(
+    [...outcomeSets.values()].map((outcomes) => JSON.stringify(outcomes)),
+  );
+  let consequence: string | undefined;
+  if ([...outcomeSets.values()].some((outcomes) => outcomes.length > 0)) {
+    consequence =
+      distinctOutcomes.size > 1
+        ? `The traced country outcomes differ: ${[...outcomeSets].map(([packageName, outcomes]) => `**${packageName}** ${outcomes.length > 0 ? readableOperations(outcomes) : "has no recognized country-creation/release outcome"}`).join("; ")}. Those successor outcomes must be chosen explicitly before merging.`
+        : "The traced country-creation/release outcomes match across implementations; the remaining choice is trigger, balance, state, and event behavior.";
+  } else {
+    consequence =
+      "No direct country creation, release, annexation, destruction, or tag change was found in the traced package-local dependency chains. If successor states are produced indirectly by engine behavior or an unrecognized command, the linked event chain still requires manual review.";
+  }
+  return { lines, consequence };
+}
+
 export async function writeConflictReports(
   rootDirectory: string,
   analysis: ConflictAnalysis,
@@ -258,7 +877,18 @@ export async function writeConflictReports(
   );
 
   const unresolved = analysis.findings.filter((finding) => !finding.resolved);
-  const resolved = analysis.findings.filter((finding) => finding.resolved);
+  const observations = analysis.findings.filter(
+    (finding) => finding.type === "system-observation",
+  );
+  const interactions = analysis.findings.filter(
+    (finding) => finding.type === "system-interaction",
+  );
+  const resolved = analysis.findings.filter(
+    (finding) =>
+      finding.resolved &&
+      finding.type !== "system-observation" &&
+      finding.type !== "system-interaction",
+  );
   const counts = new Map<string, number>();
   for (const finding of analysis.findings) {
     counts.set(finding.type, (counts.get(finding.type) ?? 0) + 1);
@@ -279,7 +909,7 @@ export async function writeConflictReports(
     "```",
     "",
     "The complete machine-readable evidence, including every source path and symbol, is in",
-    "[`reports/conflicts.json`](../reports/conflicts.json). The Markdown frontier limits very large system-overlap items to representative source files.",
+    "[`reports/conflicts.json`](../reports/conflicts.json). The Markdown frontier limits very large interaction-risk items to representative source files.",
     "",
     "## Summary",
     "",
@@ -290,6 +920,8 @@ export async function writeConflictReports(
     `- Localization findings: ${counts.get("localization") ?? 0}`,
     `- Shared global-variable findings: ${counts.get("global-variable") ?? 0}`,
     `- Country-system overlap findings: ${counts.get("system-overlap") ?? 0}`,
+    `- Non-blocking active interaction risks: ${interactions.length}`,
+    `- Categorized non-conflict observations: ${observations.length}`,
     "",
     "## Navigation index",
     "",
@@ -303,7 +935,14 @@ export async function writeConflictReports(
   ];
 
   analysis.findings.forEach((finding, index) => {
-    const status = finding.resolved ? "RESOLVED" : "DECISION REQUIRED";
+    const status =
+      finding.type === "system-observation"
+        ? "NOT A CONFLICT"
+        : finding.type === "system-interaction"
+          ? "INTERACTION RISK"
+          : finding.resolved
+            ? "RESOLVED"
+            : "DECISION REQUIRED";
     deepLines.push(
       `<a id="finding-${index + 1}"></a>`,
       `- **#${index + 1}** \`${finding.type}: ${finding.title}\`:`,
@@ -388,7 +1027,7 @@ export async function writeConflictReports(
     "",
     "Each card now explains the collision mechanism, breaks broad cards into concrete system questions, and presents choices tailored to the packages and evidence involved. You may choose one option for the whole card or answer its sub-decisions separately.",
     "",
-    "Country-footprint overlap is deliberately labeled as a warning rather than a proven conflict. Exact paths and duplicate definitions cannot safely coexist without a winner or merge; localization and broad system overlap often can, after deliberate review.",
+    "Country-tag overlap alone is excluded from this voting frontier. Read-only and historical-reference overlap is categorized as non-conflicting; active overlap remains a non-blocking runtime interaction risk in the deep frontier. Exact paths, duplicate definitions, differing localization, and shared state remain here because they present concrete integration choices.",
     "",
     "Reply with the decision number, option letter, and any exceptions. For example: `Decision 3, option C; use Imperial Ambitions' horde collapse as the base but preserve the Rus successor-state names, events, and Tatar-yoke mechanics.`",
     "",
@@ -404,7 +1043,7 @@ export async function writeConflictReports(
     "## Decisions",
     "",
   ];
-  decisions.forEach((decision, index) => {
+  for (const [index, decision] of decisions.entries()) {
     const typeCounts = new Map<string, number>();
     const symbols = new Set<string>();
     const allSources: FindingSource[] = [];
@@ -418,6 +1057,13 @@ export async function writeConflictReports(
       topicFindings.push(finding);
       topics.set(topic, topicFindings);
     }
+    const semanticSummaries =
+      await customizableLocalizationSummaries(allSources);
+    const definitionBehavior = definitionBehaviorSummary(decision.findings);
+    const definitionNotes =
+      definitionBehavior.lines.length > 0
+        ? await definitionSourceNotes(allSources)
+        : new Map<string, string[]>();
     const sourceSelection = reviewSources({
       ...decision.findings[0],
       sources: allSources,
@@ -531,16 +1177,159 @@ export async function writeConflictReports(
       "",
       ...directConflictDescription(typeCounts, symbols.size),
       "",
-      "**Package contributions inferred from the colliding source files:**",
+      ...(semanticSummaries.sources.size === 0 &&
+      definitionBehavior.lines.length === 0
+        ? [
+            "**Package contributions inferred from the colliding source files:**",
+            "",
+            ...packageRoles.map(
+              ({ label, roles }) =>
+                `- **${label}:** ${roles
+                  .slice(0, 10)
+                  .join(
+                    ", ",
+                  )}${roles.length > 10 ? `, and ${roles.length - 10} more` : ""}.`,
+            ),
+            "",
+          ]
+        : []),
+      ...(definitionBehavior.lines.length > 0
+        ? [
+            "**Behavioral variants:**",
+            "",
+            ...definitionBehavior.lines,
+            "",
+            ...(definitionNotes.size > 0
+              ? [
+                  "**Source-declared behavior and warnings:**",
+                  "",
+                  ...decision.packages.flatMap((packageId) => {
+                    const packageNotes = [
+                      ...new Set(
+                        allSources
+                          .filter((source) => source.packageId === packageId)
+                          .flatMap(
+                            (source) =>
+                              definitionNotes.get(findingSourceKey(source)) ??
+                              [],
+                          ),
+                      ),
+                    ];
+                    return packageNotes.length > 0
+                      ? [
+                          `- **${packageNames.get(packageId) ?? packageId}:** ${packageNotes.join(" ")}`,
+                        ]
+                      : [];
+                  }),
+                  "",
+                ]
+              : []),
+            `**Downstream implications:** ${definitionBehavior.consequence}`,
+            "",
+          ]
+        : []),
+      ...(semanticSummaries.sources.size > 0
+        ? [
+            `**What this content controls:** ${customizableLocalizationPurpose(allSources)}`,
+            "",
+            `**Decision summary:** ${semanticSummaries.assessments.join(" ")}`,
+            "",
+            "**What each mod adds:**",
+            "",
+            ...decision.packages.flatMap((packageId) => {
+              const summaries = [
+                ...new Set(
+                  allSources
+                    .filter((source) => source.packageId === packageId)
+                    .map((source) =>
+                      semanticSummaries.sources.get(findingSourceKey(source)),
+                    )
+                    .filter(
+                      (value): value is SemanticSourceSummary =>
+                        value !== undefined,
+                    )
+                    .map((value) => value.concise),
+                ),
+              ];
+              return summaries.length > 0
+                ? [
+                    `- **${packageNames.get(packageId) ?? packageId}:** ${summaries.join(" ")}`,
+                  ]
+                : [];
+            }),
+            "",
+            ...(semanticSummaries.sharedDifferences.length > 0
+              ? [
+                  "**Shared trigger differences and implications:**",
+                  "",
+                  ...semanticSummaries.sharedDifferences,
+                  "",
+                ]
+              : []),
+            `**Recommended approach: option ${preservationChoice ?? "merge"}.** Retain the common rules once, preserve every package-specific addition, and reconcile only the changed shared triggers.`,
+            "",
+          ]
+        : []),
+      ...(semanticSummaries.sources.size === 0
+        ? [
+            `**Evidence:** ${decision.findings.length} deep finding(s): ${[...typeCounts].map(([type, count]) => `${count} ${type}`).join(", ")}.`,
+            "",
+            "### System questions",
+            "",
+            ...sortedTopics.slice(0, 16).map(([topic, findings]) => {
+              const topicTypes = new Set(
+                findings.map((finding) => finding.type),
+              );
+              const topicSymbols = [
+                ...new Set(findings.flatMap((finding) => finding.symbols)),
+              ];
+              const ids = findings
+                .map((finding) => deepNumbers.get(finding.fingerprint))
+                .filter((value): value is number => value !== undefined);
+              const instruction =
+                topicTypes.size === 1 && topicTypes.has("system-overlap")
+                  ? "Decide whether these systems can coexist for the shared countries, or which package should govern their overlapping lifecycle and behavior."
+                  : topicTypes.size === 1 && topicTypes.has("localization")
+                    ? "Choose the displayed-name source globally for this language/content set, or identify keys that need curated Concordia values."
+                    : topic === "event triggers and on-actions"
+                      ? "Decide which callbacks from each package must run, their ordering, and whether any are mutually exclusive; shared on-actions normally require an additive Concordia registration rather than a whole-package winner."
+                      : "Choose the owning package or require a semantic merge; identify mechanics, triggers, effects, or data from the non-base implementation that must survive.";
+              return `- **${topic}** — ${findings.length} finding(s), deep ${ids
+                .slice(0, 8)
+                .map((id) => `[#${id}](deep-frontier.md#finding-${id})`)
+                .join(
+                  ", ",
+                )}${ids.length > 8 ? ` and ${ids.length - 8} more` : ""}. ${instruction}${
+                topicSymbols.length > 0
+                  ? ` Representative items: ${topicSymbols
+                      .slice(0, 6)
+                      .map((symbol) => `\`${symbol}\``)
+                      .join(", ")}${topicSymbols.length > 6 ? ", …" : ""}.`
+                  : ""
+              }`;
+            }),
+            ...(sortedTopics.length > 16
+              ? [
+                  `- **Additional topics** — ${sortedTopics.length - 16} more topic group(s) remain linked through the complete deep-finding list above.`,
+                ]
+              : []),
+            "",
+          ]
+        : []),
+      "### Choices",
       "",
-      ...packageRoles.map(
-        ({ label, roles }) =>
-          `- **${label}:** ${roles
-            .slice(0, 10)
-            .join(
-              ", ",
-            )}${roles.length > 10 ? `, and ${roles.length - 10} more` : ""}.`,
-      ),
+      ...choices,
+      "",
+      ...(preservationChoice && semanticSummaries.sources.size === 0
+        ? [
+            `**Preservation-first starting point:** option **${preservationChoice}**. This is not automatic; it is the least destructive policy implied by the static evidence.`,
+            "",
+          ]
+        : []),
+      "<details>",
+      "<summary>Deep evidence and source links</summary>",
+      "",
+      "### Review aids",
       "",
       `**Evidence:** ${decision.findings.length} deep finding(s): ${[...typeCounts].map(([type, count]) => `${count} ${type}`).join(", ")}.`,
       "",
@@ -550,60 +1339,6 @@ export async function writeConflictReports(
         .join(
           ", ",
         )}${deepIds.length > 30 ? `, and ${deepIds.length - 30} more` : ""}`,
-      "",
-      "",
-      "### System questions",
-      "",
-      ...sortedTopics.slice(0, 16).map(([topic, findings]) => {
-        const topicTypes = new Set(findings.map((finding) => finding.type));
-        const topicSymbols = [
-          ...new Set(findings.flatMap((finding) => finding.symbols)),
-        ];
-        const ids = findings
-          .map((finding) => deepNumbers.get(finding.fingerprint))
-          .filter((value): value is number => value !== undefined);
-        const instruction =
-          topicTypes.size === 1 && topicTypes.has("system-overlap")
-            ? "Decide whether these systems can coexist for the shared countries, or which package should govern their overlapping lifecycle and behavior."
-            : topicTypes.size === 1 && topicTypes.has("localization")
-              ? "Choose the displayed-name source globally for this language/content set, or identify keys that need curated Concordia values."
-              : topic === "event triggers and on-actions"
-                ? "Decide which callbacks from each package must run, their ordering, and whether any are mutually exclusive; shared on-actions normally require an additive Concordia registration rather than a whole-package winner."
-                : "Choose the owning package or require a semantic merge; identify mechanics, triggers, effects, or data from the non-base implementation that must survive.";
-        return `- **${topic}** — ${findings.length} finding(s), deep ${ids
-          .slice(0, 8)
-          .map((id) => `[#${id}](deep-frontier.md#finding-${id})`)
-          .join(
-            ", ",
-          )}${ids.length > 8 ? ` and ${ids.length - 8} more` : ""}. ${instruction}${
-          topicSymbols.length > 0
-            ? ` Representative items: ${topicSymbols
-                .slice(0, 6)
-                .map((symbol) => `\`${symbol}\``)
-                .join(", ")}${topicSymbols.length > 6 ? ", …" : ""}.`
-            : ""
-        }`;
-      }),
-      ...(sortedTopics.length > 16
-        ? [
-            `- **Additional topics** — ${sortedTopics.length - 16} more topic group(s) remain linked through the complete deep-finding list above.`,
-          ]
-        : []),
-      "",
-      "### Choices",
-      "",
-      ...choices,
-      "",
-      ...(preservationChoice
-        ? [
-            `**Preservation-first starting point:** option **${preservationChoice}**. This is not an automatic decision; it is the least destructive initial policy implied by the static evidence and still requires the system questions and deep evidence to be reviewed.`,
-            "",
-          ]
-        : []),
-      "<details>",
-      "<summary>Deep evidence and source links</summary>",
-      "",
-      "### Review aids",
       "",
       `**Representative symbols:** ${[...symbols]
         .slice(0, 20)
@@ -623,7 +1358,7 @@ export async function writeConflictReports(
       `**Answer format:** \`Decision ${index + 1}, option <letter>\` plus exceptions or answers to individual system questions. No underlying finding is resolved until the chosen behavior is implemented and verified.`,
       "",
     );
-  });
+  }
   const decisionMarkdown = await format(`${decisionLines.join("\n")}\n`, {
     parser: "markdown",
   });

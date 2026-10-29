@@ -5,10 +5,13 @@ import path from "node:path";
 import type {
   ConflictAnalysis,
   ConflictFinding,
+  DefinitionVariantAnalysis,
   PackageFile,
+  ScriptBehaviorProfile,
 } from "./model.js";
 import type { ProjectConfiguration } from "../build/package-model.js";
 import {
+  classifyCountryReferenceFile,
   extractCountryTags,
   extractDefinitions,
   extractGlobalVariables,
@@ -17,6 +20,105 @@ import {
 } from "./parser.js";
 
 const contentRoots = new Set(["dlc", "in_game", "loading_screen", "main_menu"]);
+
+interface DefinitionOccurrence {
+  source: PackageFile;
+  mode: string;
+  body: string;
+  category: string;
+  key: string;
+}
+
+function emptyBehaviorProfile(): ScriptBehaviorProfile {
+  return {
+    eventReferences: [],
+    dependencySymbols: [],
+    countryOutcomes: [],
+    variablesWritten: [],
+    importantConditions: [],
+    importantValues: [],
+  };
+}
+
+function mergeBehaviorProfiles(
+  profiles: ScriptBehaviorProfile[],
+): ScriptBehaviorProfile {
+  const merged = emptyBehaviorProfile();
+  for (const key of Object.keys(merged) as Array<keyof ScriptBehaviorProfile>) {
+    merged[key] = [
+      ...new Set(profiles.flatMap((profile) => profile[key])),
+    ].sort();
+  }
+  return merged;
+}
+
+function scriptBehaviorProfile(
+  body: string,
+  scriptedEffectKeys: Set<string>,
+): ScriptBehaviorProfile {
+  const eventReferences = [
+    ...body.matchAll(
+      /\btrigger_event(?:_non_silently|_silently)?\s*=\s*([A-Za-z0-9_.-]+)/g,
+    ),
+  ].map((match) => match[1]);
+  const blockEventReferences = [
+    ...body.matchAll(
+      /\btrigger_event(?:_non_silently|_silently)?\s*=\s*\{[^{}]{0,300}?\bid\s*=\s*([A-Za-z0-9_.-]+)/g,
+    ),
+  ].map((match) => match[1]);
+  const assignments = [
+    ...body.matchAll(/\b([A-Za-z0-9_.-]+)\s*=\s*(?:\{|\S+)/g),
+  ].map((match) => match[1]);
+  const effectDependencies = assignments
+    .filter((key) => scriptedEffectKeys.has(key))
+    .map((key) => `common/scripted_effects:${key}`);
+  const events = [...new Set([...eventReferences, ...blockEventReferences])];
+  const countryOutcomes = [
+    ...body.matchAll(
+      /\b(create_country|release_country|annex_country|destroy_country|change_tag)\s*=\s*(?:c:)?([A-Z][A-Z0-9_]{2,})\b/g,
+    ),
+  ].map((match) => `${match[1]}:${match[2]}`);
+  for (const match of body.matchAll(
+    /\b(create_country|release_country|annex_country|destroy_country|change_tag)\s*=\s*\{[^{}]{0,500}?\b(?:tag|country)\s*=\s*(?:c:)?([A-Z][A-Z0-9_]{2,})\b/g,
+  )) {
+    countryOutcomes.push(`${match[1]}:${match[2]}`);
+  }
+  const variablesWritten = [
+    ...body.matchAll(
+      /\b(set|change|remove)_variable\s*=\s*(?:\{[^{}]{0,300}?\bname\s*=\s*)?([A-Za-z0-9_.-]+)/g,
+    ),
+  ].map((match) => `${match[1]}:${match[2]}`);
+  const importantConditions = [
+    ...body.matchAll(
+      /\b(is_ai|is_subject|government_type|horde_unity|country_rank_level)\s*(=|<=|>=|<|>)\s*([A-Za-z0-9_.:-]+)/g,
+    ),
+  ].map((match) => `${match[1]} ${match[2]} ${match[3]}`);
+  const triggerConditions = [
+    ...body.matchAll(/\b([A-Za-z0-9_.-]+_trigger)\s*=\s*yes/g),
+  ].map((match) => `${match[1]} = yes`);
+  const importantValueKeys =
+    /^(?:discipline|subject_loyalty|horde_unity_hit_at_ruler_death|monthly_horde_unity|global_crown_estate_power|global_estate_target_satisfaction)$/;
+  const importantValues = [
+    ...body.matchAll(/\b([A-Za-z0-9_.-]+)\s*=\s*(-?\d+(?:\.\d+)?)/g),
+  ]
+    .filter((match) => importantValueKeys.test(match[1]))
+    .map((match) => `${match[1]} = ${match[2]}`);
+  return {
+    eventReferences: events.sort(),
+    dependencySymbols: [
+      ...new Set([
+        ...events.map((eventId) => `events:${eventId}`),
+        ...effectDependencies,
+      ]),
+    ].sort(),
+    countryOutcomes: [...new Set(countryOutcomes)].sort(),
+    variablesWritten: [...new Set(variablesWritten)].sort(),
+    importantConditions: [
+      ...new Set([...importantConditions, ...triggerConditions]),
+    ].sort(),
+    importantValues: [...new Set(importantValues)].sort(),
+  };
+}
 
 async function listFiles(
   directory: string,
@@ -73,6 +175,7 @@ function finding(
       relativePath: source.relativePath,
       absolutePath: source.absolutePath,
     })),
+    definitionVariants: value.definitionVariants,
     resolved: value.resolved,
     resolution: value.resolution,
   };
@@ -147,16 +250,7 @@ export async function analyzeProject(
   const localizationFiles = packageFiles.filter((file) =>
     file.relativePath.endsWith(".yml"),
   );
-  const definitionGroups = new Map<
-    string,
-    Array<{
-      source: PackageFile;
-      mode: string;
-      body: string;
-      category: string;
-      key: string;
-    }>
-  >();
+  const definitionGroups = new Map<string, DefinitionOccurrence[]>();
   const localizationGroups = new Map<
     string,
     Array<{ source: PackageFile; value: string; key: string; language: string }>
@@ -164,7 +258,15 @@ export async function analyzeProject(
   const variableGroups = new Map<string, PackageFile[]>();
   const packageTags = new Map<
     string,
-    Map<string, { count: number; files: Map<string, PackageFile> }>
+    Map<
+      string,
+      {
+        count: number;
+        activeCount: number;
+        files: Map<string, PackageFile>;
+        activeFiles: Map<string, PackageFile>;
+      }
+    >
   >();
 
   for (const file of scriptFiles) {
@@ -188,14 +290,21 @@ export async function analyzeProject(
     }
     if (file.relativePath.startsWith("in_game/")) {
       const tags = extractCountryTags(contents);
+      const role = classifyCountryReferenceFile(file.relativePath);
       const perPackage = packageTags.get(file.packageId) ?? new Map();
       for (const [tag, count] of tags) {
         const entry = perPackage.get(tag) ?? {
           count: 0,
+          activeCount: 0,
           files: new Map<string, PackageFile>(),
+          activeFiles: new Map<string, PackageFile>(),
         };
         entry.count += count;
         entry.files.set(sourceKey(file), file);
+        if (role === "active") {
+          entry.activeCount += count;
+          entry.activeFiles.set(sourceKey(file), file);
+        }
         perPackage.set(tag, entry);
       }
       packageTags.set(file.packageId, perPackage);
@@ -247,6 +356,65 @@ export async function analyzeProject(
     }
   }
 
+  const scriptedEffectKeys = new Set(
+    [...definitionGroups.keys()]
+      .filter((symbol) => symbol.startsWith("common/scripted_effects:"))
+      .map((symbol) => symbol.slice("common/scripted_effects:".length)),
+  );
+  const occurrenceIndex = new Map<string, DefinitionOccurrence[]>();
+  for (const [symbol, occurrences] of definitionGroups) {
+    for (const occurrence of occurrences) {
+      const key = `${occurrence.source.packageId}\u0000${symbol}`;
+      const packageOccurrences = occurrenceIndex.get(key) ?? [];
+      packageOccurrences.push(occurrence);
+      occurrenceIndex.set(key, packageOccurrences);
+    }
+  }
+  const directProfiles = new Map<string, ScriptBehaviorProfile>();
+  for (const [key, occurrences] of occurrenceIndex) {
+    directProfiles.set(
+      key,
+      mergeBehaviorProfiles(
+        occurrences.map((occurrence) =>
+          scriptBehaviorProfile(occurrence.body, scriptedEffectKeys),
+        ),
+      ),
+    );
+  }
+  const downstreamProfile = (
+    packageId: string,
+    dependencies: string[],
+    visited = new Set<string>(),
+    depth = 0,
+  ): ScriptBehaviorProfile => {
+    if (depth >= 4) {
+      return emptyBehaviorProfile();
+    }
+    const profiles: ScriptBehaviorProfile[] = [];
+    for (const dependency of dependencies) {
+      const key = `${packageId}\u0000${dependency}`;
+      if (visited.has(key)) {
+        continue;
+      }
+      const profile = directProfiles.get(key);
+      if (!profile) {
+        continue;
+      }
+      const nextVisited = new Set(visited);
+      nextVisited.add(key);
+      profiles.push(
+        profile,
+        downstreamProfile(
+          packageId,
+          profile.dependencySymbols,
+          nextVisited,
+          depth + 1,
+        ),
+      );
+    }
+    return mergeBehaviorProfiles(profiles);
+  };
+
   for (const [symbol, occurrences] of definitionGroups) {
     const packages = new Set(
       occurrences.map((occurrence) => occurrence.source.packageId),
@@ -266,6 +434,23 @@ export async function analyzeProject(
       ...new Set(occurrences.map((occurrence) => occurrence.mode)),
     ];
     const bodies = new Set(occurrences.map((occurrence) => occurrence.body));
+    const definitionVariants: DefinitionVariantAnalysis[] = occurrences.map(
+      (occurrence) => {
+        const key = `${occurrence.source.packageId}\u0000${symbol}`;
+        const direct = directProfiles.get(key) ?? emptyBehaviorProfile();
+        return {
+          packageId: occurrence.source.packageId,
+          packageName: occurrence.source.packageName,
+          symbol,
+          mode: occurrence.mode,
+          direct,
+          downstream: downstreamProfile(
+            occurrence.source.packageId,
+            direct.dependencySymbols,
+          ),
+        };
+      },
+    );
     findings.push(
       finding({
         fingerprintParts: ["definition", symbol, ...[...packages].sort()],
@@ -274,6 +459,7 @@ export async function analyzeProject(
         summary: `${occurrences.length} cross-package definitions (${modes.join(", ")}); bodies are ${bodies.size === 1 ? "identical" : "different"}.`,
         symbols: [symbol],
         sources: occurrences.map((occurrence) => occurrence.source),
+        definitionVariants,
         resolved: false,
       }),
     );
@@ -370,29 +556,66 @@ export async function analyzeProject(
       if (!leftTags || !rightTags) {
         continue;
       }
-      const sharedTags = [...leftTags.keys()]
+      const rawSharedTags = [...leftTags.keys()]
         .filter(
           (tag) =>
             (leftTags.get(tag)?.count ?? 0) >= 3 &&
             (rightTags.get(tag)?.count ?? 0) >= 3,
         )
         .sort();
-      if (sharedTags.length < 3) {
+      if (rawSharedTags.length < 3) {
         continue;
       }
-      const sources = sharedTags.flatMap((tag) => [
-        ...(leftTags.get(tag)?.files.values() ?? []),
-        ...(rightTags.get(tag)?.files.values() ?? []),
+      const activeSharedTags = rawSharedTags.filter(
+        (tag) =>
+          (leftTags.get(tag)?.activeCount ?? 0) > 0 &&
+          (rightTags.get(tag)?.activeCount ?? 0) > 0,
+      );
+      if (activeSharedTags.length < 3) {
+        const sources = rawSharedTags.flatMap((tag) => [
+          ...(leftTags.get(tag)?.files.values() ?? []),
+          ...(rightTags.get(tag)?.files.values() ?? []),
+        ]);
+        findings.push(
+          finding({
+            fingerprintParts: [
+              "system-observation",
+              leftId,
+              rightId,
+              ...rawSharedTags,
+            ],
+            type: "system-observation",
+            title: `Non-conflicting country references: ${leftId} / ${rightId}`,
+            summary: `The packages substantially reference ${rawSharedTags.length} of the same country tags, but fewer than three tags have active gameplay references on both sides. The overlap is confined primarily to read-only observers or historical lookup data and does not constitute a system conflict.`,
+            symbols: rawSharedTags,
+            sources,
+            resolved: true,
+            resolution:
+              "Categorized as non-conflict: no substantial active gameplay ownership on both sides.",
+          }),
+        );
+        continue;
+      }
+      const sources = activeSharedTags.flatMap((tag) => [
+        ...(leftTags.get(tag)?.activeFiles.values() ?? []),
+        ...(rightTags.get(tag)?.activeFiles.values() ?? []),
       ]);
       findings.push(
         finding({
-          fingerprintParts: ["system-overlap", leftId, rightId, ...sharedTags],
-          type: "system-overlap",
-          title: `Country-system overlap: ${leftId} / ${rightId}`,
-          summary: `Both packages substantially reference ${sharedTags.length} of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.`,
-          symbols: sharedTags,
+          fingerprintParts: [
+            "system-interaction",
+            leftId,
+            rightId,
+            ...activeSharedTags,
+          ],
+          type: "system-interaction",
+          title: `Country-system interaction risk: ${leftId} / ${rightId}`,
+          summary: `Both packages actively implement gameplay involving ${activeSharedTags.length} of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.`,
+          symbols: activeSharedTags,
           sources,
-          resolved: false,
+          resolved: true,
+          resolution:
+            "Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.",
         }),
       );
     }

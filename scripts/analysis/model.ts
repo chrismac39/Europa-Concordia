@@ -1,13 +1,37 @@
 import type { ProjectConfiguration } from "../build/package-model.js";
 
 export type FindingType =
-  "path" | "definition" | "localization" | "global-variable" | "system-overlap";
+  | "path"
+  | "definition"
+  | "localization"
+  | "global-variable"
+  | "system-overlap"
+  | "system-interaction"
+  | "system-observation";
 
 export interface FindingSource {
   packageId: string;
   packageName: string;
   relativePath: string;
   absolutePath: string;
+}
+
+export interface ScriptBehaviorProfile {
+  eventReferences: string[];
+  dependencySymbols: string[];
+  countryOutcomes: string[];
+  variablesWritten: string[];
+  importantConditions: string[];
+  importantValues: string[];
+}
+
+export interface DefinitionVariantAnalysis {
+  packageId: string;
+  packageName: string;
+  symbol: string;
+  mode: string;
+  direct: ScriptBehaviorProfile;
+  downstream: ScriptBehaviorProfile;
 }
 
 export interface ConflictFinding {
@@ -18,6 +42,7 @@ export interface ConflictFinding {
   packages: string[];
   symbols: string[];
   sources: FindingSource[];
+  definitionVariants?: DefinitionVariantAnalysis[];
   resolved: boolean;
   resolution?: string;
 }

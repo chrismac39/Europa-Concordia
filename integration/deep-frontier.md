@@ -12,17 +12,19 @@ npm run diff -- 1
 ```
 
 The complete machine-readable evidence, including every source path and symbol, is in
-[`reports/conflicts.json`](../reports/conflicts.json). The Markdown frontier limits very large system-overlap items to representative source files.
+[`reports/conflicts.json`](../reports/conflicts.json). The Markdown frontier limits very large interaction-risk items to representative source files.
 
 ## Summary
 
-- Unresolved findings: 367
+- Unresolved findings: 339
 - User-approved resolved findings: 10
 - Exact path findings: 42
 - Cross-file definition findings: 203
 - Localization findings: 100
 - Shared global-variable findings: 4
-- Country-system overlap findings: 28
+- Country-system overlap findings: 0
+- Non-blocking active interaction risks: 26
+- Categorized non-conflict observations: 2
 
 ## Navigation index
 
@@ -365,44 +367,44 @@ The complete machine-readable evidence, including every source path and symbol, 
 - [#337 — path: File path: main_menu/setup/1337/10_countries.txt](#finding-337)
 - [#338 — path: File path: main_menu/setup/1337/14_development.txt](#finding-338)
 - [#339 — path: File path: main_menu/setup/1337/15_international_organizations.txt](#finding-339)
-- [#340 — system-overlap: Country-system overlap: gathering-land-rus / glorp-ui](#finding-340)
-- [#341 — system-overlap: Country-system overlap: gathering-land-rus / historical-tweaks](#finding-341)
-- [#342 — system-overlap: Country-system overlap: gathering-land-rus / imperial-ambitions](#finding-342)
-- [#343 — system-overlap: Country-system overlap: gathering-land-rus / just-goods](#finding-343)
-- [#344 — system-overlap: Country-system overlap: gathering-land-rus / more-unique-urban-rights](#finding-344)
-- [#345 — system-overlap: Country-system overlap: gathering-land-rus / national-destinies](#finding-345)
-- [#346 — system-overlap: Country-system overlap: gathering-land-rus / prussian-destiny](#finding-346)
-- [#347 — system-overlap: Country-system overlap: gathering-land-rus / ruthenia-steppe-fix](#finding-347)
-- [#348 — system-overlap: Country-system overlap: glorp-ui / imperial-ambitions](#finding-348)
-- [#349 — system-overlap: Country-system overlap: historical-tweaks / imperial-ambitions](#finding-349)
-- [#350 — system-overlap: Country-system overlap: historical-tweaks / just-goods](#finding-350)
-- [#351 — system-overlap: Country-system overlap: historical-tweaks / more-unique-urban-rights](#finding-351)
-- [#352 — system-overlap: Country-system overlap: historical-tweaks / national-destinies](#finding-352)
-- [#353 — system-overlap: Country-system overlap: historical-tweaks / prussian-destiny](#finding-353)
-- [#354 — system-overlap: Country-system overlap: historical-tweaks / ruthenia-steppe-fix](#finding-354)
-- [#355 — system-overlap: Country-system overlap: imperial-ambitions / just-goods](#finding-355)
-- [#356 — system-overlap: Country-system overlap: imperial-ambitions / more-unique-urban-rights](#finding-356)
-- [#357 — system-overlap: Country-system overlap: imperial-ambitions / national-destinies](#finding-357)
-- [#358 — system-overlap: Country-system overlap: imperial-ambitions / prussian-destiny](#finding-358)
-- [#359 — system-overlap: Country-system overlap: imperial-ambitions / ruthenia-steppe-fix](#finding-359)
-- [#360 — system-overlap: Country-system overlap: just-goods / national-destinies](#finding-360)
-- [#361 — system-overlap: Country-system overlap: just-goods / prussian-destiny](#finding-361)
-- [#362 — system-overlap: Country-system overlap: just-goods / ruthenia-steppe-fix](#finding-362)
-- [#363 — system-overlap: Country-system overlap: more-unique-urban-rights / national-destinies](#finding-363)
-- [#364 — system-overlap: Country-system overlap: more-unique-urban-rights / prussian-destiny](#finding-364)
-- [#365 — system-overlap: Country-system overlap: more-unique-urban-rights / ruthenia-steppe-fix](#finding-365)
-- [#366 — system-overlap: Country-system overlap: national-destinies / prussian-destiny](#finding-366)
-- [#367 — system-overlap: Country-system overlap: national-destinies / ruthenia-steppe-fix](#finding-367)
-- [#368 — path: File path: in_game/common/customizable_localization/countries.txt](#finding-368)
-- [#369 — path: File path: in_game/common/on_action/historical_tweaks_on_actions.txt](#finding-369)
-- [#370 — path: File path: in_game/events/historical_tweaks_events.txt](#finding-370)
-- [#371 — path: File path: in_game/events/historical_tweaks_union_events.txt](#finding-371)
-- [#372 — path: File path: in_game/gui/economy_lateralview.gui](#finding-372)
-- [#373 — path: File path: in_game/gui/location_window.gui](#finding-373)
-- [#374 — path: File path: in_game/gui/panels/left_panel/glorpUI_left_panel.gui](#finding-374)
-- [#375 — path: File path: in_game/gui/panels/situation/global_living_standard.gui](#finding-375)
-- [#376 — path: File path: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui](#finding-376)
-- [#377 — path: File path: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui](#finding-377)
+- [#340 — path: File path: in_game/common/customizable_localization/countries.txt](#finding-340)
+- [#341 — path: File path: in_game/common/on_action/historical_tweaks_on_actions.txt](#finding-341)
+- [#342 — path: File path: in_game/events/historical_tweaks_events.txt](#finding-342)
+- [#343 — path: File path: in_game/events/historical_tweaks_union_events.txt](#finding-343)
+- [#344 — path: File path: in_game/gui/economy_lateralview.gui](#finding-344)
+- [#345 — path: File path: in_game/gui/location_window.gui](#finding-345)
+- [#346 — path: File path: in_game/gui/panels/left_panel/glorpUI_left_panel.gui](#finding-346)
+- [#347 — path: File path: in_game/gui/panels/situation/global_living_standard.gui](#finding-347)
+- [#348 — path: File path: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui](#finding-348)
+- [#349 — path: File path: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui](#finding-349)
+- [#350 — system-interaction: Country-system interaction risk: gathering-land-rus / historical-tweaks](#finding-350)
+- [#351 — system-interaction: Country-system interaction risk: gathering-land-rus / imperial-ambitions](#finding-351)
+- [#352 — system-interaction: Country-system interaction risk: gathering-land-rus / just-goods](#finding-352)
+- [#353 — system-interaction: Country-system interaction risk: gathering-land-rus / more-unique-urban-rights](#finding-353)
+- [#354 — system-interaction: Country-system interaction risk: gathering-land-rus / national-destinies](#finding-354)
+- [#355 — system-interaction: Country-system interaction risk: gathering-land-rus / prussian-destiny](#finding-355)
+- [#356 — system-interaction: Country-system interaction risk: gathering-land-rus / ruthenia-steppe-fix](#finding-356)
+- [#357 — system-interaction: Country-system interaction risk: historical-tweaks / imperial-ambitions](#finding-357)
+- [#358 — system-interaction: Country-system interaction risk: historical-tweaks / just-goods](#finding-358)
+- [#359 — system-interaction: Country-system interaction risk: historical-tweaks / more-unique-urban-rights](#finding-359)
+- [#360 — system-interaction: Country-system interaction risk: historical-tweaks / national-destinies](#finding-360)
+- [#361 — system-interaction: Country-system interaction risk: historical-tweaks / prussian-destiny](#finding-361)
+- [#362 — system-interaction: Country-system interaction risk: historical-tweaks / ruthenia-steppe-fix](#finding-362)
+- [#363 — system-interaction: Country-system interaction risk: imperial-ambitions / just-goods](#finding-363)
+- [#364 — system-interaction: Country-system interaction risk: imperial-ambitions / more-unique-urban-rights](#finding-364)
+- [#365 — system-interaction: Country-system interaction risk: imperial-ambitions / national-destinies](#finding-365)
+- [#366 — system-interaction: Country-system interaction risk: imperial-ambitions / prussian-destiny](#finding-366)
+- [#367 — system-interaction: Country-system interaction risk: imperial-ambitions / ruthenia-steppe-fix](#finding-367)
+- [#368 — system-interaction: Country-system interaction risk: just-goods / national-destinies](#finding-368)
+- [#369 — system-interaction: Country-system interaction risk: just-goods / prussian-destiny](#finding-369)
+- [#370 — system-interaction: Country-system interaction risk: just-goods / ruthenia-steppe-fix](#finding-370)
+- [#371 — system-interaction: Country-system interaction risk: more-unique-urban-rights / national-destinies](#finding-371)
+- [#372 — system-interaction: Country-system interaction risk: more-unique-urban-rights / prussian-destiny](#finding-372)
+- [#373 — system-interaction: Country-system interaction risk: more-unique-urban-rights / ruthenia-steppe-fix](#finding-373)
+- [#374 — system-interaction: Country-system interaction risk: national-destinies / prussian-destiny](#finding-374)
+- [#375 — system-interaction: Country-system interaction risk: national-destinies / ruthenia-steppe-fix](#finding-375)
+- [#376 — system-observation: Non-conflicting country references: gathering-land-rus / glorp-ui](#finding-376)
+- [#377 — system-observation: Non-conflicting country references: glorp-ui / imperial-ambitions](#finding-377)
 
 ## Findings
 
@@ -3580,60 +3582,144 @@ The complete machine-readable evidence, including every source path and symbol, 
 
 <a id="finding-340"></a>
 
-- **#340** `system-overlap: Country-system overlap: gathering-land-rus / glorp-ui`:
-  **DECISION REQUIRED** — Both packages substantially reference 4 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `bafb2c0a6464349e`
-  Symbols: `ENG`, `LIT`, `NRM`, `PAL`
-  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
-  [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
-  [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
-  [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
-  [Gathering the Land of the Rus: in_game/common/international_organizations/northeast_rus.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/northeast_rus.txt)
-  [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
-  [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_hardcode.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_hardcode.txt)
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt](../sources/git/glorp-ui/in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt)
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt](../sources/git/glorp-ui/in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt)
-  15 additional source file(s) are listed in the JSON report.
+- **#340** `path: File path: in_game/common/customizable_localization/countries.txt`:
+  **RESOLVED** — The Concordia merge keeps both packages' unique country definitions and combines Gathering the Rus conditional Golden Horde vassal names with Imperial Ambitions' fallback names for KZN and UZB.
+  Fingerprint: `b8968b26a0b56a67`
+  Symbols: `in_game/common/customizable_localization/countries.txt`
+  Resolution: Concordia override: integration/overrides/collision-2/in_game/common/customizable_localization/countries.txt
+  [Gathering the Land of the Rus: in_game/common/customizable_localization/countries.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/countries.txt)
+  [Imperial Ambitions: in_game/common/customizable_localization/countries.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/countries.txt)
 
 <a id="finding-341"></a>
 
-- **#341** `system-overlap: Country-system overlap: gathering-land-rus / historical-tweaks`:
-  **DECISION REQUIRED** — Both packages substantially reference 35 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `146757d756cb5a64`
-  Symbols: `ARA`, `BOH`, `BRI`, `BUL`, `BUR`, `BYZ`, `CAS`, `ENG`, `FRA`, `GEN`, `GEO`, `GLH`, `HAB`, `HAL`, `HUN`, `INJ`, `KIE`, `KRM`, `LIT`, `MAL`, and 15 more
-  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/countries.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/countries.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
+- **#341** `path: File path: in_game/common/on_action/historical_tweaks_on_actions.txt`:
+  **RESOLVED** — The standalone Historical Tweaks file is the newer superset and includes explicit Gathering of the Rus compatibility logic.
+  Fingerprint: `0e63766fe35762b2`
+  Symbols: `in_game/common/on_action/historical_tweaks_on_actions.txt`
+  Resolution: historical-tweaks
+  [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
+  [Historical Tweaks: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3603092142/in_game/common/on_action/historical_tweaks_on_actions.txt)
+
+<a id="finding-342"></a>
+
+- **#342** `path: File path: in_game/events/historical_tweaks_events.txt`:
+  **RESOLVED** — The standalone Historical Tweaks event file includes the Rus-bundled events plus newer events and explicit Gathering of the Rus compatibility behavior.
+  Fingerprint: `1860a40d706abca6`
+  Symbols: `in_game/events/historical_tweaks_events.txt`
+  Resolution: historical-tweaks
+  [Gathering the Land of the Rus: in_game/events/historical_tweaks_events.txt](../sources/steam-workshop/3652214415/in_game/events/historical_tweaks_events.txt)
+  [Historical Tweaks: in_game/events/historical_tweaks_events.txt](../sources/steam-workshop/3603092142/in_game/events/historical_tweaks_events.txt)
+
+<a id="finding-343"></a>
+
+- **#343** `path: File path: in_game/events/historical_tweaks_union_events.txt`:
+  **RESOLVED** — The standalone Historical Tweaks union events contain later trigger, AI-selection, and player-option fixes than the copy bundled with Gathering of the Rus.
+  Fingerprint: `4d9ab7419c50fa0b`
+  Symbols: `in_game/events/historical_tweaks_union_events.txt`
+  Resolution: historical-tweaks
+  [Gathering the Land of the Rus: in_game/events/historical_tweaks_union_events.txt](../sources/steam-workshop/3652214415/in_game/events/historical_tweaks_union_events.txt)
+  [Historical Tweaks: in_game/events/historical_tweaks_union_events.txt](../sources/steam-workshop/3603092142/in_game/events/historical_tweaks_union_events.txt)
+
+<a id="finding-344"></a>
+
+- **#344** `path: File path: in_game/gui/economy_lateralview.gui`:
+  **RESOLVED** — GH Exchequer intentionally replaces Glorp UI's economy panel when loaded later; the GH Exchequer - Glorp UI compatch restores the Trade tab in Glorp's left panel.
+  Fingerprint: `ea44f289c98fd024`
+  Symbols: `in_game/gui/economy_lateralview.gui`
+  Resolution: gh-exchequer
+  [GH: Exchequer: in_game/gui/economy_lateralview.gui](../sources/steam-workshop/3812701995/in_game/gui/economy_lateralview.gui)
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/economy_lateralview.gui](../sources/git/glorp-ui/in_game/gui/economy_lateralview.gui)
+
+<a id="finding-345"></a>
+
+- **#345** `path: File path: in_game/gui/location_window.gui`:
+  **RESOLVED** — Standard of Living supplies an upstream-generated copy of Glorp UI 04.10.26's location window with its living-standard tooltip added.
+  Fingerprint: `e323ff5940f2f48e`
+  Symbols: `in_game/gui/location_window.gui`
+  Resolution: standard-of-living
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/location_window.gui](../sources/git/glorp-ui/in_game/gui/location_window.gui)
+  [v1.4 beta Standard of Living: in_game/gui/location_window.gui](../sources/git/standard-of-living/in_game/gui/location_window.gui)
+
+<a id="finding-346"></a>
+
+- **#346** `path: File path: in_game/gui/panels/left_panel/glorpUI_left_panel.gui`:
+  **RESOLVED** — The upstream compatch explicitly replaces Glorp UI's left panel to add GH Exchequer's Trade tab.
+  Fingerprint: `8afe07dd2edfb9f9`
+  Symbols: `in_game/gui/panels/left_panel/glorpUI_left_panel.gui`
+  Resolution: gh-exchequer-glorp-ui-patch
+  [GH: Exchequer - Glorp UI compatch: in_game/gui/panels/left_panel/glorpUI_left_panel.gui](../sources/steam-workshop/3827095294/in_game/gui/panels/left_panel/glorpUI_left_panel.gui)
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/panels/left_panel/glorpUI_left_panel.gui](../sources/git/glorp-ui/in_game/gui/panels/left_panel/glorpUI_left_panel.gui)
+
+<a id="finding-347"></a>
+
+- **#347** `path: File path: in_game/gui/panels/situation/global_living_standard.gui`:
+  **RESOLVED** — The SOL-JTG compatibility submod supplies the integration replacement for Standard of Living's shared living-standard panel.
+  Fingerprint: `936fbfe1c8ee5991`
+  Symbols: `in_game/gui/panels/situation/global_living_standard.gui`
+  Resolution: sol-jtg-compatibility-submod
+  [SOL-JTG Compatibility Submod: in_game/gui/panels/situation/global_living_standard.gui](../sources/git/sol-jtg-compatibility-submod/in_game/gui/panels/situation/global_living_standard.gui)
+  [v1.4 beta Standard of Living: in_game/gui/panels/situation/global_living_standard.gui](../sources/git/standard-of-living/in_game/gui/panels/situation/global_living_standard.gui)
+
+<a id="finding-348"></a>
+
+- **#348** `path: File path: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui`:
+  **RESOLVED** — GH Exchequer documents that its extracted vanilla economy templates replace the copy supplied by UI mods such as Glorp UI when GH loads later.
+  Fingerprint: `c112d6fe9ce1010f`
+  Symbols: `in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui`
+  Resolution: gh-exchequer
+  [GH: Exchequer: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui](../sources/steam-workshop/3812701995/in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui)
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui](../sources/git/glorp-ui/in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui)
+
+<a id="finding-349"></a>
+
+- **#349** `path: File path: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui`:
+  **RESOLVED** — Standard of Living supplies the synchronized Glorp UI 04.10.26 location-window types used by its pre-merged location window.
+  Fingerprint: `2c3433cf7bc58dbf`
+  Symbols: `in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui`
+  Resolution: standard-of-living
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui](../sources/git/glorp-ui/in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui)
+  [v1.4 beta Standard of Living: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui](../sources/git/standard-of-living/in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui)
+
+<a id="finding-350"></a>
+
+- **#350** `system-interaction: Country-system interaction risk: gathering-land-rus / historical-tweaks`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 15 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `ac28de5f4d1993bc`
+  Symbols: `BOH`, `GEO`, `GLH`, `HAB`, `HAL`, `HUN`, `KIE`, `LIT`, `MOS`, `NOV`, `PAP`, `PLC`, `POL`, `TUR`, `VOL`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Gathering the Land of the Rus: in_game/common/disasters/horde_civil_war.txt](../sources/steam-workshop/3652214415/in_game/common/disasters/horde_civil_war.txt)
   [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/tatar_yoke.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/tatar_yoke.txt)
   [Gathering the Land of the Rus: in_game/common/international_organization_special_statuses/tatar_yoke.txt](../sources/steam-workshop/3652214415/in_game/common/international_organization_special_statuses/tatar_yoke.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organizations/northeast_rus.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/northeast_rus.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organizations/tatar_yoke.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/tatar_yoke.txt)
   [Historical Tweaks: in_game/common/advances/gunpowder_empire_governors.txt](../sources/steam-workshop/3603092142/in_game/common/advances/gunpowder_empire_governors.txt)
-  [Historical Tweaks: in_game/common/advances/lot_muzaffarid_advances.txt](../sources/steam-workshop/3603092142/in_game/common/advances/lot_muzaffarid_advances.txt)
   [Historical Tweaks: in_game/common/advances/lot_turkish_advances.txt](../sources/steam-workshop/3603092142/in_game/common/advances/lot_turkish_advances.txt)
-  [Historical Tweaks: in_game/common/auto_modifiers/htc_force_subjugation.txt](../sources/steam-workshop/3603092142/in_game/common/auto_modifiers/htc_force_subjugation.txt)
   [Historical Tweaks: in_game/common/building_types/lot_building_types.txt](../sources/steam-workshop/3603092142/in_game/common/building_types/lot_building_types.txt)
-  [Historical Tweaks: in_game/common/cabinet_actions/htc_estabilish_trade_post.txt](../sources/steam-workshop/3603092142/in_game/common/cabinet_actions/htc_estabilish_trade_post.txt)
-  [Historical Tweaks: in_game/common/country_interactions/htc_purchase_trade_port.txt](../sources/steam-workshop/3603092142/in_game/common/country_interactions/htc_purchase_trade_port.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_name_construction.txt)
-  90 additional source file(s) are listed in the JSON report.
+  [Historical Tweaks: in_game/common/generic_actions/fate_of_mesopotamia.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/fate_of_mesopotamia.txt)
+  [Historical Tweaks: in_game/common/generic_actions/htc_colonial_charters_generated.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_colonial_charters_generated.txt)
+  [Historical Tweaks: in_game/common/generic_actions/htc_explorers.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_explorers.txt)
+  [Historical Tweaks: in_game/common/generic_actions/lot_turkish_expansion.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/lot_turkish_expansion.txt)
+  [Historical Tweaks: in_game/common/government_reforms/historical_tweaks_reforms.txt](../sources/steam-workshop/3603092142/in_game/common/government_reforms/historical_tweaks_reforms.txt)
+  40 additional source file(s) are listed in the JSON report.
 
-<a id="finding-342"></a>
+<a id="finding-351"></a>
 
-- **#342** `system-overlap: Country-system overlap: gathering-land-rus / imperial-ambitions`:
-  **DECISION REQUIRED** — Both packages substantially reference 64 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `839c6d7d1f64daa9`
-  Symbols: `ARA`, `ATR`, `BOH`, `BOS`, `BRA`, `BUL`, `BYZ`, `CAS`, `CHG`, `CHI`, `CRI`, `DAN`, `DAU`, `DLH`, `ENG`, `FRA`, `GEN`, `GEO`, `GLH`, `GRA`, and 44 more
-  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
+- **#351** `system-interaction: Country-system interaction risk: gathering-land-rus / imperial-ambitions`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 25 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `269eab5c1d0b1f45`
+  Symbols: `ATR`, `BOH`, `BRA`, `CRI`, `GEO`, `GLH`, `HAB`, `HAL`, `HUN`, `KIE`, `KZN`, `LIT`, `MOS`, `NOG`, `NOV`, `PAP`, `PLC`, `POL`, `POM`, `RUS`, and 5 more
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Gathering the Land of the Rus: in_game/common/cabinet_actions/integrate_russian_steppe.txt](../sources/steam-workshop/3652214415/in_game/common/cabinet_actions/integrate_russian_steppe.txt)
   [Gathering the Land of the Rus: in_game/common/casus_belli/rus_gathering_cb.txt](../sources/steam-workshop/3652214415/in_game/common/casus_belli/rus_gathering_cb.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/countries.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/countries.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
   [Gathering the Land of the Rus: in_game/common/disasters/horde_civil_war.txt](../sources/steam-workshop/3652214415/in_game/common/disasters/horde_civil_war.txt)
   [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
+  [Gathering the Land of the Rus: in_game/common/generic_actions/tatar_yoke.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/tatar_yoke.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organization_special_statuses/tatar_yoke.txt](../sources/steam-workshop/3652214415/in_game/common/international_organization_special_statuses/tatar_yoke.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
   [Imperial Ambitions: in_game/common/advances/ia_ottoman_flavor_advances.txt](../sources/steam-workshop/3813524452/in_game/common/advances/ia_ottoman_flavor_advances.txt)
   [Imperial Ambitions: in_game/common/advances/ia_ottoman_flavor_p1_advances.txt](../sources/steam-workshop/3813524452/in_game/common/advances/ia_ottoman_flavor_p1_advances.txt)
   [Imperial Ambitions: in_game/common/advances/zz_ia_country_ATR.txt](../sources/steam-workshop/3813524452/in_game/common/advances/zz_ia_country_ATR.txt)
@@ -3642,145 +3728,130 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Imperial Ambitions: in_game/common/advances/zz_ia_country_NOG.txt](../sources/steam-workshop/3813524452/in_game/common/advances/zz_ia_country_NOG.txt)
   [Imperial Ambitions: in_game/common/advances/zz_ia_country_POM.txt](../sources/steam-workshop/3813524452/in_game/common/advances/zz_ia_country_POM.txt)
   [Imperial Ambitions: in_game/common/advances/zz_ia_country_SBR.txt](../sources/steam-workshop/3813524452/in_game/common/advances/zz_ia_country_SBR.txt)
-  169 additional source file(s) are listed in the JSON report.
+  138 additional source file(s) are listed in the JSON report.
 
-<a id="finding-343"></a>
+<a id="finding-352"></a>
 
-- **#343** `system-overlap: Country-system overlap: gathering-land-rus / just-goods`:
-  **DECISION REQUIRED** — Both packages substantially reference 25 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `a6ea0811e2da4f8d`
-  Symbols: `BOH`, `BRA`, `BRB`, `CAS`, `ENG`, `FLO`, `FRA`, `FRI`, `GEL`, `HAB`, `KOR`, `LDB`, `MAI`, `MLO`, `MOS`, `NED`, `PAP`, `POL`, `POR`, `RUS`, and 5 more
+- **#352** `system-interaction: Country-system interaction risk: gathering-land-rus / just-goods`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 8 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `ba9e7cf8f62ae588`
+  Symbols: `BOH`, `BRA`, `HAB`, `MOS`, `PAP`, `POL`, `RUS`, `TIR`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Gathering the Land of the Rus: in_game/common/cabinet_actions/integrate_russian_steppe.txt](../sources/steam-workshop/3652214415/in_game/common/cabinet_actions/integrate_russian_steppe.txt)
   [Gathering the Land of the Rus: in_game/common/casus_belli/rus_gathering_cb.txt](../sources/steam-workshop/3652214415/in_game/common/casus_belli/rus_gathering_cb.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
   [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
   [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
   [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
   [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_hardcode.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_hardcode.txt)
-  [Just Goods: in_game/common/advances/academies_extra_advances_b.txt](../sources/steam-workshop/3785316314/in_game/common/advances/academies_extra_advances_b.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_on_4yearpulse.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_on_4yearpulse.txt)
   [Just Goods: in_game/common/advances/academies_extra_advances_c.txt](../sources/steam-workshop/3785316314/in_game/common/advances/academies_extra_advances_c.txt)
-  [Just Goods: in_game/common/advances/cheese_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/cheese_advances.txt)
-  [Just Goods: in_game/common/advances/clocks_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/clocks_advances.txt)
-  [Just Goods: in_game/common/advances/meat_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/meat_advances.txt)
-  [Just Goods: in_game/common/laws/clocks_laws.txt](../sources/steam-workshop/3785316314/in_game/common/laws/clocks_laws.txt)
-  [Just Goods: in_game/common/town_rights/cheese_town_rights.txt](../sources/steam-workshop/3785316314/in_game/common/town_rights/cheese_town_rights.txt)
   [Just Goods: in_game/events/brass_events.txt](../sources/steam-workshop/3785316314/in_game/events/brass_events.txt)
-  22 additional source file(s) are listed in the JSON report.
+  [Just Goods: in_game/events/cheese_events.txt](../sources/steam-workshop/3785316314/in_game/events/cheese_events.txt)
+  [Just Goods: in_game/events/clocks_events.txt](../sources/steam-workshop/3785316314/in_game/events/clocks_events.txt)
+  [Just Goods: in_game/events/spices_events.txt](../sources/steam-workshop/3785316314/in_game/events/spices_events.txt)
+  12 additional source file(s) are listed in the JSON report.
 
-<a id="finding-344"></a>
+<a id="finding-353"></a>
 
-- **#344** `system-overlap: Country-system overlap: gathering-land-rus / more-unique-urban-rights`:
-  **DECISION REQUIRED** — Both packages substantially reference 10 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `cbaa736caac49bb8`
-  Symbols: `BUL`, `BYZ`, `CHI`, `LIT`, `MAL`, `PLC`, `POL`, `SER`, `TEU`, `TUR`
-  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
+- **#353** `system-interaction: Country-system interaction risk: gathering-land-rus / more-unique-urban-rights`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 5 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `8c1b0b8dacfb993a`
+  Symbols: `LIT`, `PLC`, `POL`, `TEU`, `TUR`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
   [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
   [Gathering the Land of the Rus: in_game/common/international_organizations/northeast_rus.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/northeast_rus.txt)
   [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
   [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_hardcode.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_hardcode.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_on_biyear_pulse.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_on_biyear_pulse.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rusgath_leash.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rusgath_leash.txt)
   [More Unique Urban Rights: in_game/common/town_rights/aga_town_rights.txt](../sources/steam-workshop/3745922649/in_game/common/town_rights/aga_town_rights.txt)
-  16 additional source file(s) are listed in the JSON report.
+  10 additional source file(s) are listed in the JSON report.
 
-<a id="finding-345"></a>
+<a id="finding-354"></a>
 
-- **#345** `system-overlap: Country-system overlap: gathering-land-rus / national-destinies`:
-  **DECISION REQUIRED** — Both packages substantially reference 26 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `146ca7d09f743af3`
-  Symbols: `ARA`, `BOH`, `BYZ`, `CAS`, `CHI`, `DLH`, `ETH`, `FRA`, `HAB`, `HUN`, `JAP`, `LIV`, `MAL`, `MOR`, `NED`, `PAP`, `PLC`, `POL`, `POM`, `POR`, and 6 more
-  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
+- **#354** `system-interaction: Country-system interaction risk: gathering-land-rus / national-destinies`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 10 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `06d2ac608fcf474b`
+  Symbols: `BOH`, `HAB`, `HUN`, `LIV`, `PAP`, `PLC`, `POL`, `POM`, `RUS`, `TUR`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Gathering the Land of the Rus: in_game/common/cabinet_actions/integrate_russian_steppe.txt](../sources/steam-workshop/3652214415/in_game/common/cabinet_actions/integrate_russian_steppe.txt)
   [Gathering the Land of the Rus: in_game/common/casus_belli/rus_gathering_cb.txt](../sources/steam-workshop/3652214415/in_game/common/casus_belli/rus_gathering_cb.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
   [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
   [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
   [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
-  [National Destinies: in_game/common/advances/99_nd_ara.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_ara.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_hardcode.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_hardcode.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_on_4yearpulse.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_on_4yearpulse.txt)
   [National Destinies: in_game/common/advances/99_nd_boh.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_boh.txt)
-  [National Destinies: in_game/common/advances/99_nd_byz.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_byz.txt)
-  [National Destinies: in_game/common/advances/99_nd_cas.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_cas.txt)
-  [National Destinies: in_game/common/advances/99_nd_chi.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_chi.txt)
-  [National Destinies: in_game/common/advances/99_nd_dlh.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_dlh.txt)
   [National Destinies: in_game/common/advances/99_nd_dnm.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_dnm.txt)
-  [National Destinies: in_game/common/advances/99_nd_eth.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_eth.txt)
-  216 additional source file(s) are listed in the JSON report.
+  [National Destinies: in_game/common/advances/99_nd_hab.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_hab.txt)
+  [National Destinies: in_game/common/advances/99_nd_liv.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_liv.txt)
+  [National Destinies: in_game/common/advances/99_nd_plc.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_plc.txt)
+  [National Destinies: in_game/common/advances/99_nd_pol.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_pol.txt)
+  [National Destinies: in_game/common/advances/99_nd_pom.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_pom.txt)
+  [National Destinies: in_game/common/advances/99_nd_rum.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_rum.txt)
+  76 additional source file(s) are listed in the JSON report.
 
-<a id="finding-346"></a>
+<a id="finding-355"></a>
 
-- **#346** `system-overlap: Country-system overlap: gathering-land-rus / prussian-destiny`:
-  **DECISION REQUIRED** — Both packages substantially reference 11 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `17bbce9b9e9d403c`
-  Symbols: `BOH`, `BRA`, `FRA`, `HAB`, `LIT`, `MAM`, `NED`, `POL`, `TEU`, `USA`, `VEN`
-  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
+- **#355** `system-interaction: Country-system interaction risk: gathering-land-rus / prussian-destiny`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 6 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `9218cd78a7df8782`
+  Symbols: `BOH`, `BRA`, `HAB`, `LIT`, `POL`, `TEU`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
   [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
   [Gathering the Land of the Rus: in_game/common/international_organizations/northeast_rus.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/northeast_rus.txt)
   [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
   [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_hardcode.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_hardcode.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_on_biyear_pulse.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_on_biyear_pulse.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rusgath_leash.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rusgath_leash.txt)
   [The Prussian Destiny: in_game/common/country_interactions/PD_hre_landfriede_block.txt](../sources/steam-workshop/3685755118/in_game/common/country_interactions/PD_hre_landfriede_block.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_name_construction.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_ranks.txt)
   [The Prussian Destiny: in_game/common/on_action/PD_on_actions.txt](../sources/steam-workshop/3685755118/in_game/common/on_action/PD_on_actions.txt)
   [The Prussian Destiny: in_game/common/peace_treaties/PD_peace_treaties.txt](../sources/steam-workshop/3685755118/in_game/common/peace_treaties/PD_peace_treaties.txt)
   [The Prussian Destiny: in_game/common/scripted_effects/PD_scripted_effects.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_effects/PD_scripted_effects.txt)
   [The Prussian Destiny: in_game/common/scripted_relations/PD_alliance_addon.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_relations/PD_alliance_addon.txt)
-  [The Prussian Destiny: in_game/common/scripted_triggers/PD_scripted_triggers.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_triggers/PD_scripted_triggers.txt)
-  23 additional source file(s) are listed in the JSON report.
+  [The Prussian Destiny: in_game/common/situations/brandenburg_rise.txt](../sources/steam-workshop/3685755118/in_game/common/situations/brandenburg_rise.txt)
+  [The Prussian Destiny: in_game/events/DHE/PD_bohemia_DHE_events.txt](../sources/steam-workshop/3685755118/in_game/events/DHE/PD_bohemia_DHE_events.txt)
+  [The Prussian Destiny: in_game/events/DHE/PD_brandenburg_DHE_events.txt](../sources/steam-workshop/3685755118/in_game/events/DHE/PD_brandenburg_DHE_events.txt)
+  12 additional source file(s) are listed in the JSON report.
 
-<a id="finding-347"></a>
+<a id="finding-356"></a>
 
-- **#347** `system-overlap: Country-system overlap: gathering-land-rus / ruthenia-steppe-fix`:
-  **DECISION REQUIRED** — Both packages substantially reference 15 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `052a70f8f9cfdbae`
-  Symbols: `CHI`, `CHR`, `CRI`, `ENG`, `GLH`, `HAL`, `KIE`, `LIT`, `MOS`, `PAP`, `PLC`, `POL`, `RUS`, `SWE`, `VOL`
-  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
+- **#356** `system-interaction: Country-system interaction risk: gathering-land-rus / ruthenia-steppe-fix`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 11 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `9e68591c98ffc526`
+  Symbols: `CRI`, `GLH`, `HAL`, `KIE`, `LIT`, `MOS`, `PAP`, `PLC`, `POL`, `RUS`, `VOL`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Gathering the Land of the Rus: in_game/common/cabinet_actions/integrate_russian_steppe.txt](../sources/steam-workshop/3652214415/in_game/common/cabinet_actions/integrate_russian_steppe.txt)
   [Gathering the Land of the Rus: in_game/common/casus_belli/rus_gathering_cb.txt](../sources/steam-workshop/3652214415/in_game/common/casus_belli/rus_gathering_cb.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/countries.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/countries.txt)
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
   [Gathering the Land of the Rus: in_game/common/disasters/horde_civil_war.txt](../sources/steam-workshop/3652214415/in_game/common/disasters/horde_civil_war.txt)
   [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
   [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
+  [Gathering the Land of the Rus: in_game/common/generic_actions/tatar_yoke.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/tatar_yoke.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organization_special_statuses/tatar_yoke.txt](../sources/steam-workshop/3652214415/in_game/common/international_organization_special_statuses/tatar_yoke.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_advances_changed.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_advances_changed.txt)
-  [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_CHR_NVS.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_CHR_NVS.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_CRI_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_CRI_added.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_GLH_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_GLH_added.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_HAL_VOL.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_HAL_VOL.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_KIE.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_KIE.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_LIT_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_LIT_added.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_unit_unlocks.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_unit_unlocks.txt)
-  46 additional source file(s) are listed in the JSON report.
+  [Ruthenia and Steppe Fix: in_game/common/formable_countries/RSF_formables.txt](../sources/git/ruthenia-steppe-fix/in_game/common/formable_countries/RSF_formables.txt)
+  34 additional source file(s) are listed in the JSON report.
 
-<a id="finding-348"></a>
+<a id="finding-357"></a>
 
-- **#348** `system-overlap: Country-system overlap: glorp-ui / imperial-ambitions`:
-  **DECISION REQUIRED** — Both packages substantially reference 3 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `362489b3d9cd27f8`
-  Symbols: `ENG`, `LIT`, `PRU`
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt](../sources/git/glorp-ui/in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt)
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt](../sources/git/glorp-ui/in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt)
-  [Imperial Ambitions: in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_ranks.txt)
-  [Imperial Ambitions: in_game/common/formable_countries/00_formable_countries.txt](../sources/steam-workshop/3813524452/in_game/common/formable_countries/00_formable_countries.txt)
-  [Imperial Ambitions: in_game/common/on_action/_hardcoded.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/_hardcoded.txt)
-  [Imperial Ambitions: in_game/common/on_action/zz_ia_check_pulses.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_check_pulses.txt)
-  [Imperial Ambitions: in_game/common/on_action/zz_ia_game_start.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_game_start.txt)
-  [Imperial Ambitions: in_game/common/on_action/zz_ia_runtime_pulses.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_runtime_pulses.txt)
-  [Imperial Ambitions: in_game/common/peace_treaties/zz_ia_decisive_historical_peace.txt](../sources/steam-workshop/3813524452/in_game/common/peace_treaties/zz_ia_decisive_historical_peace.txt)
-  7 additional source file(s) are listed in the JSON report.
-
-<a id="finding-349"></a>
-
-- **#349** `system-overlap: Country-system overlap: historical-tweaks / imperial-ambitions`:
-  **DECISION REQUIRED** — Both packages substantially reference 41 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `20382a986dfac529`
-  Symbols: `ABL`, `ALG`, `AQQ`, `ARA`, `BOH`, `BUL`, `BYZ`, `CAS`, `ENG`, `FRA`, `GBR`, `GEN`, `GEO`, `GLH`, `HAB`, `HAL`, `HUN`, `ILK`, `INJ`, `IRA`, and 21 more
+- **#357** `system-interaction: Country-system interaction risk: historical-tweaks / imperial-ambitions`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 40 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `ea7b4350b8aa1d4a`
+  Symbols: `ABL`, `ALG`, `AQQ`, `ARA`, `BOH`, `BUL`, `BYZ`, `CAS`, `ENG`, `FRA`, `GBR`, `GEN`, `GEO`, `GLH`, `HAB`, `HAL`, `HUN`, `ILK`, `INJ`, `IRA`, and 20 more
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Historical Tweaks: in_game/common/advances/gunpowder_empire_governors.txt](../sources/steam-workshop/3603092142/in_game/common/advances/gunpowder_empire_governors.txt)
   [Historical Tweaks: in_game/common/advances/lot_muzaffarid_advances.txt](../sources/steam-workshop/3603092142/in_game/common/advances/lot_muzaffarid_advances.txt)
   [Historical Tweaks: in_game/common/advances/lot_turkish_advances.txt](../sources/steam-workshop/3603092142/in_game/common/advances/lot_turkish_advances.txt)
@@ -3797,22 +3868,23 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Imperial Ambitions: in_game/common/area_preferences/zz_ia_area_preferences.txt](../sources/steam-workshop/3813524452/in_game/common/area_preferences/zz_ia_area_preferences.txt)
   [Imperial Ambitions: in_game/common/auto_modifiers/zz_ia_hidden_jochid_balance.txt](../sources/steam-workshop/3813524452/in_game/common/auto_modifiers/zz_ia_hidden_jochid_balance.txt)
   [Imperial Ambitions: in_game/common/building_types/ia_ottoman_flavor_p3_buildings.txt](../sources/steam-workshop/3813524452/in_game/common/building_types/ia_ottoman_flavor_p3_buildings.txt)
-  204 additional source file(s) are listed in the JSON report.
+  186 additional source file(s) are listed in the JSON report.
 
-<a id="finding-350"></a>
+<a id="finding-358"></a>
 
-- **#350** `system-overlap: Country-system overlap: historical-tweaks / just-goods`:
-  **DECISION REQUIRED** — Both packages substantially reference 15 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `e829d5ad519067e6`
+- **#358** `system-interaction: Country-system interaction risk: historical-tweaks / just-goods`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 15 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `805aac2ee596c31b`
   Symbols: `BOH`, `CAS`, `ENG`, `FLA`, `FRA`, `GBR`, `HAB`, `MOS`, `NED`, `PAP`, `POL`, `POR`, `SPA`, `USA`, `VEN`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Historical Tweaks: in_game/common/cabinet_actions/htc_estabilish_trade_post.txt](../sources/steam-workshop/3603092142/in_game/common/cabinet_actions/htc_estabilish_trade_post.txt)
   [Historical Tweaks: in_game/common/country_interactions/htc_purchase_trade_port.txt](../sources/steam-workshop/3603092142/in_game/common/country_interactions/htc_purchase_trade_port.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_name_construction.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_ranks.txt)
   [Historical Tweaks: in_game/common/generic_actions/ht_hundred_years_war.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/ht_hundred_years_war.txt)
   [Historical Tweaks: in_game/common/generic_actions/htc_colonial_charters_generated.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_colonial_charters_generated.txt)
   [Historical Tweaks: in_game/common/generic_actions/htc_explorers.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_explorers.txt)
   [Historical Tweaks: in_game/common/government_reforms/historical_tweaks_reforms.txt](../sources/steam-workshop/3603092142/in_game/common/government_reforms/historical_tweaks_reforms.txt)
+  [Historical Tweaks: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3603092142/in_game/common/on_action/historical_tweaks_on_actions.txt)
+  [Historical Tweaks: in_game/common/on_action/ht_iberia_on_action.txt](../sources/steam-workshop/3603092142/in_game/common/on_action/ht_iberia_on_action.txt)
   [Just Goods: in_game/common/advances/academies_extra_advances_c.txt](../sources/steam-workshop/3785316314/in_game/common/advances/academies_extra_advances_c.txt)
   [Just Goods: in_game/common/advances/clocks_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/clocks_advances.txt)
   [Just Goods: in_game/common/advances/meat_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/meat_advances.txt)
@@ -3821,31 +3893,33 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Just Goods: in_game/events/clocks_events.txt](../sources/steam-workshop/3785316314/in_game/events/clocks_events.txt)
   [Just Goods: in_game/events/meat_events.txt](../sources/steam-workshop/3785316314/in_game/events/meat_events.txt)
   [Just Goods: in_game/events/soap_events.txt](../sources/steam-workshop/3785316314/in_game/events/soap_events.txt)
-  29 additional source file(s) are listed in the JSON report.
+  25 additional source file(s) are listed in the JSON report.
 
-<a id="finding-351"></a>
+<a id="finding-359"></a>
 
-- **#351** `system-overlap: Country-system overlap: historical-tweaks / more-unique-urban-rights`:
-  **DECISION REQUIRED** — Both packages substantially reference 8 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `2d484740039c141e`
+- **#359** `system-interaction: Country-system interaction risk: historical-tweaks / more-unique-urban-rights`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 8 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `a2e923f3f98d55b0`
   Symbols: `BUL`, `BYZ`, `LIT`, `MAL`, `PLC`, `POL`, `SER`, `TUR`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Historical Tweaks: in_game/common/advances/gunpowder_empire_governors.txt](../sources/steam-workshop/3603092142/in_game/common/advances/gunpowder_empire_governors.txt)
   [Historical Tweaks: in_game/common/advances/lot_turkish_advances.txt](../sources/steam-workshop/3603092142/in_game/common/advances/lot_turkish_advances.txt)
   [Historical Tweaks: in_game/common/auto_modifiers/htc_force_subjugation.txt](../sources/steam-workshop/3603092142/in_game/common/auto_modifiers/htc_force_subjugation.txt)
   [Historical Tweaks: in_game/common/building_types/lot_building_types.txt](../sources/steam-workshop/3603092142/in_game/common/building_types/lot_building_types.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_name_construction.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_ranks.txt)
   [Historical Tweaks: in_game/common/disasters/curse_of_stefan_uros_iii.txt](../sources/steam-workshop/3603092142/in_game/common/disasters/curse_of_stefan_uros_iii.txt)
   [Historical Tweaks: in_game/common/generic_actions/fate_of_mesopotamia.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/fate_of_mesopotamia.txt)
+  [Historical Tweaks: in_game/common/generic_actions/htc_colonial_charters_generated.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_colonial_charters_generated.txt)
+  [Historical Tweaks: in_game/common/government_reforms/historical_tweaks_reforms.txt](../sources/steam-workshop/3603092142/in_game/common/government_reforms/historical_tweaks_reforms.txt)
   [More Unique Urban Rights: in_game/common/town_rights/aga_town_rights.txt](../sources/steam-workshop/3745922649/in_game/common/town_rights/aga_town_rights.txt)
-  15 additional source file(s) are listed in the JSON report.
+  12 additional source file(s) are listed in the JSON report.
 
-<a id="finding-352"></a>
+<a id="finding-360"></a>
 
-- **#352** `system-overlap: Country-system overlap: historical-tweaks / national-destinies`:
-  **DECISION REQUIRED** — Both packages substantially reference 25 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `5a66bb8a067229b8`
-  Symbols: `ALG`, `ARA`, `BOH`, `BYZ`, `CAS`, `FRA`, `GBR`, `HAB`, `HUN`, `ILK`, `INC`, `IRA`, `LAT`, `MAL`, `MEX`, `MUG`, `NED`, `PAP`, `PLC`, `POL`, and 5 more
+- **#360** `system-interaction: Country-system interaction risk: historical-tweaks / national-destinies`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 24 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `0c6bf147405651f8`
+  Symbols: `ALG`, `ARA`, `BOH`, `BYZ`, `CAS`, `FRA`, `GBR`, `HAB`, `HUN`, `ILK`, `INC`, `IRA`, `MAL`, `MEX`, `MUG`, `NED`, `PAP`, `PLC`, `POL`, `POR`, and 4 more
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Historical Tweaks: in_game/common/advances/gunpowder_empire_governors.txt](../sources/steam-workshop/3603092142/in_game/common/advances/gunpowder_empire_governors.txt)
   [Historical Tweaks: in_game/common/advances/lot_turkish_advances.txt](../sources/steam-workshop/3603092142/in_game/common/advances/lot_turkish_advances.txt)
   [Historical Tweaks: in_game/common/auto_modifiers/htc_force_subjugation.txt](../sources/steam-workshop/3603092142/in_game/common/auto_modifiers/htc_force_subjugation.txt)
@@ -3862,46 +3936,45 @@ The complete machine-readable evidence, including every source path and symbol, 
   [National Destinies: in_game/common/advances/99_nd_dnm.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_dnm.txt)
   [National Destinies: in_game/common/advances/99_nd_fra.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_fra.txt)
   [National Destinies: in_game/common/advances/99_nd_gbr.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_gbr.txt)
-  287 additional source file(s) are listed in the JSON report.
+  272 additional source file(s) are listed in the JSON report.
 
-<a id="finding-353"></a>
+<a id="finding-361"></a>
 
-- **#353** `system-overlap: Country-system overlap: historical-tweaks / prussian-destiny`:
-  **DECISION REQUIRED** — Both packages substantially reference 10 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `5ef0e48a0925917c`
-  Symbols: `BOH`, `FRA`, `HAB`, `LAT`, `LIT`, `MAM`, `NED`, `POL`, `USA`, `VEN`
+- **#361** `system-interaction: Country-system interaction risk: historical-tweaks / prussian-destiny`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 5 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `8a11627bdbf8ba27`
+  Symbols: `BOH`, `FRA`, `HAB`, `LIT`, `POL`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Historical Tweaks: in_game/common/cabinet_actions/htc_estabilish_trade_post.txt](../sources/steam-workshop/3603092142/in_game/common/cabinet_actions/htc_estabilish_trade_post.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_name_construction.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_ranks.txt)
-  [Historical Tweaks: in_game/common/disasters/decline_of_mamluks.txt](../sources/steam-workshop/3603092142/in_game/common/disasters/decline_of_mamluks.txt)
   [Historical Tweaks: in_game/common/generic_actions/ht_hundred_years_war.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/ht_hundred_years_war.txt)
   [Historical Tweaks: in_game/common/generic_actions/htc_colonial_charters_generated.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_colonial_charters_generated.txt)
   [Historical Tweaks: in_game/common/generic_actions/htc_explorers.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_explorers.txt)
-  [Historical Tweaks: in_game/common/generic_actions/lot_turkish_expansion.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/lot_turkish_expansion.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_name_construction.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_ranks.txt)
+  [Historical Tweaks: in_game/common/government_reforms/historical_tweaks_reforms.txt](../sources/steam-workshop/3603092142/in_game/common/government_reforms/historical_tweaks_reforms.txt)
+  [Historical Tweaks: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3603092142/in_game/common/on_action/historical_tweaks_on_actions.txt)
+  [Historical Tweaks: in_game/events/colonization/0_htc_colonial_charter_overrides.txt](../sources/steam-workshop/3603092142/in_game/events/colonization/0_htc_colonial_charter_overrides.txt)
+  [Historical Tweaks: in_game/events/DHE/flavor_pap_holy_league.txt](../sources/steam-workshop/3603092142/in_game/events/DHE/flavor_pap_holy_league.txt)
   [The Prussian Destiny: in_game/common/scripted_effects/PD_scripted_effects.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_effects/PD_scripted_effects.txt)
-  [The Prussian Destiny: in_game/common/scripted_triggers/PD_scripted_triggers.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_triggers/PD_scripted_triggers.txt)
   [The Prussian Destiny: in_game/common/situations/the_blood_and_iron.txt](../sources/steam-workshop/3685755118/in_game/common/situations/the_blood_and_iron.txt)
   [The Prussian Destiny: in_game/common/situations/the_prussian_ascension.txt](../sources/steam-workshop/3685755118/in_game/common/situations/the_prussian_ascension.txt)
   [The Prussian Destiny: in_game/events/DHE/PD_bohemia_DHE_events.txt](../sources/steam-workshop/3685755118/in_game/events/DHE/PD_bohemia_DHE_events.txt)
   [The Prussian Destiny: in_game/events/situations/PD_events.txt](../sources/steam-workshop/3685755118/in_game/events/situations/PD_events.txt)
-  21 additional source file(s) are listed in the JSON report.
+  8 additional source file(s) are listed in the JSON report.
 
-<a id="finding-354"></a>
+<a id="finding-362"></a>
 
-- **#354** `system-overlap: Country-system overlap: historical-tweaks / ruthenia-steppe-fix`:
-  **DECISION REQUIRED** — Both packages substantially reference 12 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `b73a2a57154c8733`
+- **#362** `system-interaction: Country-system interaction risk: historical-tweaks / ruthenia-steppe-fix`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 12 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `ec833ddff7e748fc`
   Symbols: `ENG`, `GBR`, `GLH`, `HAL`, `KIE`, `LIT`, `MOS`, `PAP`, `PLC`, `POL`, `TIM`, `VOL`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Historical Tweaks: in_game/common/building_types/lot_building_types.txt](../sources/steam-workshop/3603092142/in_game/common/building_types/lot_building_types.txt)
   [Historical Tweaks: in_game/common/cabinet_actions/htc_estabilish_trade_post.txt](../sources/steam-workshop/3603092142/in_game/common/cabinet_actions/htc_estabilish_trade_post.txt)
   [Historical Tweaks: in_game/common/casus_belli/lot_cbs.txt](../sources/steam-workshop/3603092142/in_game/common/casus_belli/lot_cbs.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_name_construction.txt)
-  [Historical Tweaks: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3603092142/in_game/common/customizable_localization/country_ranks.txt)
   [Historical Tweaks: in_game/common/disasters/lot_timurid_decline.txt](../sources/steam-workshop/3603092142/in_game/common/disasters/lot_timurid_decline.txt)
   [Historical Tweaks: in_game/common/generic_action_ai_lists/lot_rise_of_timur_extra.txt](../sources/steam-workshop/3603092142/in_game/common/generic_action_ai_lists/lot_rise_of_timur_extra.txt)
   [Historical Tweaks: in_game/common/generic_actions/ht_hundred_years_war.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/ht_hundred_years_war.txt)
+  [Historical Tweaks: in_game/common/generic_actions/htc_colonial_charters_generated.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_colonial_charters_generated.txt)
+  [Historical Tweaks: in_game/common/generic_actions/htc_explorers.txt](../sources/steam-workshop/3603092142/in_game/common/generic_actions/htc_explorers.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_advances_changed.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_advances_changed.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_GLH_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_GLH_added.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_HAL_VOL.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_HAL_VOL.txt)
@@ -3910,22 +3983,23 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_unit_unlocks.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_unit_unlocks.txt)
   [Ruthenia and Steppe Fix: in_game/common/formable_countries/RSF_formables.txt](../sources/git/ruthenia-steppe-fix/in_game/common/formable_countries/RSF_formables.txt)
   [Ruthenia and Steppe Fix: in_game/common/government_reforms/RSF_steppe_horde.txt](../sources/git/ruthenia-steppe-fix/in_game/common/government_reforms/RSF_steppe_horde.txt)
-  35 additional source file(s) are listed in the JSON report.
+  29 additional source file(s) are listed in the JSON report.
 
-<a id="finding-355"></a>
+<a id="finding-363"></a>
 
-- **#355** `system-overlap: Country-system overlap: imperial-ambitions / just-goods`:
-  **DECISION REQUIRED** — Both packages substantially reference 23 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `b3ecd4510691ece6`
+- **#363** `system-interaction: Country-system interaction risk: imperial-ambitions / just-goods`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 23 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `8ea31533adc7b298`
   Symbols: `BOH`, `BRA`, `CAS`, `ENG`, `FKN`, `FRA`, `GBR`, `HAB`, `HOL`, `ITA`, `MOS`, `NED`, `PAP`, `POL`, `POR`, `PRU`, `RUS`, `SAV`, `SAX`, `SPA`, and 3 more
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Imperial Ambitions: in_game/common/building_types/zz_ia_flavor_buildings.txt](../sources/steam-workshop/3813524452/in_game/common/building_types/zz_ia_flavor_buildings.txt)
   [Imperial Ambitions: in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt)
   [Imperial Ambitions: in_game/common/casus_belli/zz_ia_russia_sibir_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_russia_sibir_cb.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_name_construction.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_ranks.txt)
   [Imperial Ambitions: in_game/common/disasters/zz_ia_time_of_troubles.txt](../sources/steam-workshop/3813524452/in_game/common/disasters/zz_ia_time_of_troubles.txt)
   [Imperial Ambitions: in_game/common/formable_countries/00_formable_countries.txt](../sources/steam-workshop/3813524452/in_game/common/formable_countries/00_formable_countries.txt)
   [Imperial Ambitions: in_game/common/government_reforms/zz_ia_ai_reform_bans.txt](../sources/steam-workshop/3813524452/in_game/common/government_reforms/zz_ia_ai_reform_bans.txt)
+  [Imperial Ambitions: in_game/common/on_action/_hardcoded.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/_hardcoded.txt)
+  [Imperial Ambitions: in_game/common/on_action/zz_ia_check_pulses.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_check_pulses.txt)
   [Just Goods: in_game/common/advances/academies_extra_advances_c.txt](../sources/steam-workshop/3785316314/in_game/common/advances/academies_extra_advances_c.txt)
   [Just Goods: in_game/common/advances/cheese_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/cheese_advances.txt)
   [Just Goods: in_game/common/advances/clocks_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/clocks_advances.txt)
@@ -3934,14 +4008,15 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Just Goods: in_game/events/brass_events.txt](../sources/steam-workshop/3785316314/in_game/events/brass_events.txt)
   [Just Goods: in_game/events/cheese_events.txt](../sources/steam-workshop/3785316314/in_game/events/cheese_events.txt)
   [Just Goods: in_game/events/clocks_events.txt](../sources/steam-workshop/3785316314/in_game/events/clocks_events.txt)
-  33 additional source file(s) are listed in the JSON report.
+  28 additional source file(s) are listed in the JSON report.
 
-<a id="finding-356"></a>
+<a id="finding-364"></a>
 
-- **#356** `system-overlap: Country-system overlap: imperial-ambitions / more-unique-urban-rights`:
-  **DECISION REQUIRED** — Both packages substantially reference 11 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `b26e59cac045e80d`
+- **#364** `system-interaction: Country-system interaction risk: imperial-ambitions / more-unique-urban-rights`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 11 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `dcadfa1f4b4da51c`
   Symbols: `BUL`, `BYZ`, `CHI`, `LIT`, `PLC`, `POL`, `PRU`, `ROM`, `SER`, `TEU`, `TUR`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Imperial Ambitions: in_game/common/advances/ia_ottoman_flavor_advances.txt](../sources/steam-workshop/3813524452/in_game/common/advances/ia_ottoman_flavor_advances.txt)
   [Imperial Ambitions: in_game/common/advances/ia_ottoman_flavor_p1_advances.txt](../sources/steam-workshop/3813524452/in_game/common/advances/ia_ottoman_flavor_p1_advances.txt)
   [Imperial Ambitions: in_game/common/advances/zz_ia_country_TUR.txt](../sources/steam-workshop/3813524452/in_game/common/advances/zz_ia_country_TUR.txt)
@@ -3951,14 +4026,15 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Imperial Ambitions: in_game/common/building_types/zz_ia_ottoman_flavor_seljuk_mint.txt](../sources/steam-workshop/3813524452/in_game/common/building_types/zz_ia_ottoman_flavor_seljuk_mint.txt)
   [Imperial Ambitions: in_game/common/building_types/zz_ia_ottoman_sancak.txt](../sources/steam-workshop/3813524452/in_game/common/building_types/zz_ia_ottoman_sancak.txt)
   [More Unique Urban Rights: in_game/common/town_rights/aga_town_rights.txt](../sources/steam-workshop/3745922649/in_game/common/town_rights/aga_town_rights.txt)
-  72 additional source file(s) are listed in the JSON report.
+  64 additional source file(s) are listed in the JSON report.
 
-<a id="finding-357"></a>
+<a id="finding-365"></a>
 
-- **#357** `system-overlap: Country-system overlap: imperial-ambitions / national-destinies`:
-  **DECISION REQUIRED** — Both packages substantially reference 65 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `cb24d949ae1f0aac`
+- **#365** `system-interaction: Country-system interaction risk: imperial-ambitions / national-destinies`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 65 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `a9dbe9a8f5ac939c`
   Symbols: `ADU`, `AIA`, `ALG`, `ARA`, `BAV`, `BGP`, `BNG`, `BNO`, `BOH`, `BYZ`, `CAS`, `CAT`, `CHI`, `DLH`, `EGY`, `FKN`, `FRA`, `GBR`, `HAB`, `HUN`, and 45 more
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Imperial Ambitions: in_game/common/advances/ia_ottoman_flavor_advances.txt](../sources/steam-workshop/3813524452/in_game/common/advances/ia_ottoman_flavor_advances.txt)
   [Imperial Ambitions: in_game/common/advances/ia_ottoman_flavor_p1_advances.txt](../sources/steam-workshop/3813524452/in_game/common/advances/ia_ottoman_flavor_p1_advances.txt)
   [Imperial Ambitions: in_game/common/advances/zz_ia_country_ADU.txt](../sources/steam-workshop/3813524452/in_game/common/advances/zz_ia_country_ADU.txt)
@@ -3975,46 +4051,48 @@ The complete machine-readable evidence, including every source path and symbol, 
   [National Destinies: in_game/common/advances/99_nd_bgp.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_bgp.txt)
   [National Destinies: in_game/common/advances/99_nd_bng.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_bng.txt)
   [National Destinies: in_game/common/advances/99_nd_bno.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_bno.txt)
-  606 additional source file(s) are listed in the JSON report.
+  593 additional source file(s) are listed in the JSON report.
 
-<a id="finding-358"></a>
+<a id="finding-366"></a>
 
-- **#358** `system-overlap: Country-system overlap: imperial-ambitions / prussian-destiny`:
-  **DECISION REQUIRED** — Both packages substantially reference 13 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `1e6184356721415f`
-  Symbols: `BOH`, `BRA`, `FRA`, `HAB`, `LAT`, `LIT`, `MAM`, `NED`, `POL`, `PRU`, `TEU`, `USA`, `VEN`
+- **#366** `system-interaction: Country-system interaction risk: imperial-ambitions / prussian-destiny`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 8 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `a4a549929419474b`
+  Symbols: `BOH`, `BRA`, `FRA`, `HAB`, `LIT`, `POL`, `PRU`, `TEU`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Imperial Ambitions: in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt)
-  [Imperial Ambitions: in_game/common/casus_belli/zz_ia_ottoman_mamluk_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_ottoman_mamluk_cb.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_name_construction.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_ranks.txt)
   [Imperial Ambitions: in_game/common/formable_countries/00_formable_countries.txt](../sources/steam-workshop/3813524452/in_game/common/formable_countries/00_formable_countries.txt)
   [Imperial Ambitions: in_game/common/on_action/_hardcoded.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/_hardcoded.txt)
   [Imperial Ambitions: in_game/common/on_action/zz_ia_check_pulses.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_check_pulses.txt)
   [Imperial Ambitions: in_game/common/on_action/zz_ia_game_start.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_game_start.txt)
+  [Imperial Ambitions: in_game/common/on_action/zz_ia_runtime_pulses.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_runtime_pulses.txt)
+  [Imperial Ambitions: in_game/common/on_action/zz_ia_vienna_on_war_declared.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_vienna_on_war_declared.txt)
+  [Imperial Ambitions: in_game/common/peace_treaties/zz_ia_decisive_historical_peace.txt](../sources/steam-workshop/3813524452/in_game/common/peace_treaties/zz_ia_decisive_historical_peace.txt)
   [The Prussian Destiny: in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt](../sources/steam-workshop/3685755118/in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt)
   [The Prussian Destiny: in_game/common/country_interactions/PD_hre_landfriede_block.txt](../sources/steam-workshop/3685755118/in_game/common/country_interactions/PD_hre_landfriede_block.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_name_construction.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_ranks.txt)
   [The Prussian Destiny: in_game/common/on_action/PD_on_actions.txt](../sources/steam-workshop/3685755118/in_game/common/on_action/PD_on_actions.txt)
   [The Prussian Destiny: in_game/common/peace_treaties/PD_peace_treaties.txt](../sources/steam-workshop/3685755118/in_game/common/peace_treaties/PD_peace_treaties.txt)
-  [The Prussian Destiny: in_game/common/script_values/PD_script_values.txt](../sources/steam-workshop/3685755118/in_game/common/script_values/PD_script_values.txt)
   [The Prussian Destiny: in_game/common/scripted_effects/PD_scripted_effects.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_effects/PD_scripted_effects.txt)
-  36 additional source file(s) are listed in the JSON report.
+  [The Prussian Destiny: in_game/common/scripted_relations/PD_alliance_addon.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_relations/PD_alliance_addon.txt)
+  [The Prussian Destiny: in_game/common/situations/brandenburg_rise.txt](../sources/steam-workshop/3685755118/in_game/common/situations/brandenburg_rise.txt)
+  [The Prussian Destiny: in_game/common/situations/the_blood_and_iron.txt](../sources/steam-workshop/3685755118/in_game/common/situations/the_blood_and_iron.txt)
+  16 additional source file(s) are listed in the JSON report.
 
-<a id="finding-359"></a>
+<a id="finding-367"></a>
 
-- **#359** `system-overlap: Country-system overlap: imperial-ambitions / ruthenia-steppe-fix`:
-  **DECISION REQUIRED** — Both packages substantially reference 18 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `3c833d96cb6b269e`
+- **#367** `system-interaction: Country-system interaction risk: imperial-ambitions / ruthenia-steppe-fix`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 18 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `aff41670e210b10e`
   Symbols: `CHI`, `CRI`, `ENG`, `GBR`, `GLH`, `HAL`, `HSA`, `KIE`, `LIT`, `MOS`, `PAP`, `PLC`, `POL`, `RUS`, `SWE`, `TIM`, `VOL`, `ZAZ`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Imperial Ambitions: in_game/common/advances/zz_ia_country_CRI.txt](../sources/steam-workshop/3813524452/in_game/common/advances/zz_ia_country_CRI.txt)
   [Imperial Ambitions: in_game/common/auto_modifiers/zz_ia_hidden_jochid_balance.txt](../sources/steam-workshop/3813524452/in_game/common/auto_modifiers/zz_ia_hidden_jochid_balance.txt)
   [Imperial Ambitions: in_game/common/building_types/zz_ia_flavor_buildings.txt](../sources/steam-workshop/3813524452/in_game/common/building_types/zz_ia_flavor_buildings.txt)
   [Imperial Ambitions: in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt)
   [Imperial Ambitions: in_game/common/casus_belli/zz_ia_russia_sibir_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_russia_sibir_cb.txt)
   [Imperial Ambitions: in_game/common/casus_belli/zz_ia_timur_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_timur_cb.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_name_construction.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_ranks.txt)
+  [Imperial Ambitions: in_game/common/disasters/zz_ia_time_of_troubles.txt](../sources/steam-workshop/3813524452/in_game/common/disasters/zz_ia_time_of_troubles.txt)
+  [Imperial Ambitions: in_game/common/formable_countries/00_formable_countries.txt](../sources/steam-workshop/3813524452/in_game/common/formable_countries/00_formable_countries.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_advances_changed.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_advances_changed.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_CRI_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_CRI_added.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_GLH_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_GLH_added.txt)
@@ -4023,14 +4101,15 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_KIE.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_KIE.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_LIT_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_LIT_added.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_unit_unlocks.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_unit_unlocks.txt)
-  70 additional source file(s) are listed in the JSON report.
+  60 additional source file(s) are listed in the JSON report.
 
-<a id="finding-360"></a>
+<a id="finding-368"></a>
 
-- **#360** `system-overlap: Country-system overlap: just-goods / national-destinies`:
-  **DECISION REQUIRED** — Both packages substantially reference 16 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `ffceb132263ffc55`
+- **#368** `system-interaction: Country-system interaction risk: just-goods / national-destinies`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 16 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `03d8f46177c9f315`
   Symbols: `BOH`, `CAS`, `FKN`, `FRA`, `GBR`, `HAB`, `ITA`, `NED`, `PAP`, `POL`, `POR`, `PRU`, `RUS`, `SAX`, `SPA`, `USA`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Just Goods: in_game/common/advances/academies_extra_advances_c.txt](../sources/steam-workshop/3785316314/in_game/common/advances/academies_extra_advances_c.txt)
   [Just Goods: in_game/common/advances/meat_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/meat_advances.txt)
   [Just Goods: in_game/events/brass_events.txt](../sources/steam-workshop/3785316314/in_game/events/brass_events.txt)
@@ -4047,16 +4126,16 @@ The complete machine-readable evidence, including every source path and symbol, 
   [National Destinies: in_game/common/advances/99_nd_hab.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_hab.txt)
   [National Destinies: in_game/common/advances/99_nd_ita.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_ita.txt)
   [National Destinies: in_game/common/advances/99_nd_ned.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_ned.txt)
-  135 additional source file(s) are listed in the JSON report.
+  133 additional source file(s) are listed in the JSON report.
 
-<a id="finding-361"></a>
+<a id="finding-369"></a>
 
-- **#361** `system-overlap: Country-system overlap: just-goods / prussian-destiny`:
-  **DECISION REQUIRED** — Both packages substantially reference 9 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `6e4f66e6daac5b45`
-  Symbols: `BOH`, `BRA`, `FRA`, `HAB`, `NED`, `POL`, `PRU`, `USA`, `VEN`
+- **#369** `system-interaction: Country-system interaction risk: just-goods / prussian-destiny`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 6 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `9937ca39b4da4716`
+  Symbols: `BOH`, `BRA`, `FRA`, `HAB`, `POL`, `PRU`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Just Goods: in_game/common/advances/academies_extra_advances_c.txt](../sources/steam-workshop/3785316314/in_game/common/advances/academies_extra_advances_c.txt)
-  [Just Goods: in_game/common/advances/clocks_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/clocks_advances.txt)
   [Just Goods: in_game/events/brass_events.txt](../sources/steam-workshop/3785316314/in_game/events/brass_events.txt)
   [Just Goods: in_game/events/cheese_events.txt](../sources/steam-workshop/3785316314/in_game/events/cheese_events.txt)
   [Just Goods: in_game/events/clocks_events.txt](../sources/steam-workshop/3785316314/in_game/events/clocks_events.txt)
@@ -4065,20 +4144,21 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Just Goods: in_game/events/spices_events.txt](../sources/steam-workshop/3785316314/in_game/events/spices_events.txt)
   [The Prussian Destiny: in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt](../sources/steam-workshop/3685755118/in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt)
   [The Prussian Destiny: in_game/common/country_interactions/PD_hre_landfriede_block.txt](../sources/steam-workshop/3685755118/in_game/common/country_interactions/PD_hre_landfriede_block.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_name_construction.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_ranks.txt)
   [The Prussian Destiny: in_game/common/on_action/PD_on_actions.txt](../sources/steam-workshop/3685755118/in_game/common/on_action/PD_on_actions.txt)
   [The Prussian Destiny: in_game/common/peace_treaties/PD_peace_treaties.txt](../sources/steam-workshop/3685755118/in_game/common/peace_treaties/PD_peace_treaties.txt)
-  [The Prussian Destiny: in_game/common/script_values/PD_script_values.txt](../sources/steam-workshop/3685755118/in_game/common/script_values/PD_script_values.txt)
   [The Prussian Destiny: in_game/common/scripted_effects/PD_scripted_effects.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_effects/PD_scripted_effects.txt)
-  8 additional source file(s) are listed in the JSON report.
+  [The Prussian Destiny: in_game/common/scripted_relations/PD_alliance_addon.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_relations/PD_alliance_addon.txt)
+  [The Prussian Destiny: in_game/common/situations/brandenburg_rise.txt](../sources/steam-workshop/3685755118/in_game/common/situations/brandenburg_rise.txt)
+  [The Prussian Destiny: in_game/common/situations/the_blood_and_iron.txt](../sources/steam-workshop/3685755118/in_game/common/situations/the_blood_and_iron.txt)
+  4 additional source file(s) are listed in the JSON report.
 
-<a id="finding-362"></a>
+<a id="finding-370"></a>
 
-- **#362** `system-overlap: Country-system overlap: just-goods / ruthenia-steppe-fix`:
-  **DECISION REQUIRED** — Both packages substantially reference 6 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `fa58c109a6a770ec`
+- **#370** `system-interaction: Country-system interaction risk: just-goods / ruthenia-steppe-fix`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 6 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `aee235095d1f631c`
   Symbols: `ENG`, `GBR`, `MOS`, `PAP`, `POL`, `RUS`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [Just Goods: in_game/common/advances/academies_extra_advances_c.txt](../sources/steam-workshop/3785316314/in_game/common/advances/academies_extra_advances_c.txt)
   [Just Goods: in_game/common/advances/meat_advances.txt](../sources/steam-workshop/3785316314/in_game/common/advances/meat_advances.txt)
   [Just Goods: in_game/events/brass_events.txt](../sources/steam-workshop/3785316314/in_game/events/brass_events.txt)
@@ -4089,18 +4169,18 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Just Goods: in_game/events/spices_events.txt](../sources/steam-workshop/3785316314/in_game/events/spices_events.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_advances_changed.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_advances_changed.txt)
   [Ruthenia and Steppe Fix: in_game/common/formable_countries/RSF_formables.txt](../sources/git/ruthenia-steppe-fix/in_game/common/formable_countries/RSF_formables.txt)
-  [Ruthenia and Steppe Fix: in_game/common/scripted_triggers/RSF_religion_triggers_crusades.txt](../sources/git/ruthenia-steppe-fix/in_game/common/scripted_triggers/RSF_religion_triggers_crusades.txt)
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_kie.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_kie.txt)
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_LIT.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_LIT.txt)
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_RUS.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_RUS.txt)
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_zaz.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_zaz.txt)
 
-<a id="finding-363"></a>
+<a id="finding-371"></a>
 
-- **#363** `system-overlap: Country-system overlap: more-unique-urban-rights / national-destinies`:
-  **DECISION REQUIRED** — Both packages substantially reference 8 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `82b55714d2c82782`
+- **#371** `system-interaction: Country-system interaction risk: more-unique-urban-rights / national-destinies`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 8 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `1811638aea890464`
   Symbols: `BYZ`, `CHI`, `MAL`, `PLC`, `POL`, `PRU`, `ROM`, `TUR`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [More Unique Urban Rights: in_game/common/town_rights/aga_town_rights.txt](../sources/steam-workshop/3745922649/in_game/common/town_rights/aga_town_rights.txt)
   [National Destinies: in_game/common/advances/99_nd_byz.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_byz.txt)
   [National Destinies: in_game/common/advances/99_nd_chi.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_chi.txt)
@@ -4110,31 +4190,33 @@ The complete machine-readable evidence, including every source path and symbol, 
   [National Destinies: in_game/common/advances/99_nd_pol.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_pol.txt)
   [National Destinies: in_game/common/advances/99_nd_pru.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_pru.txt)
   [National Destinies: in_game/common/advances/99_nd_rom_byz.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_rom_byz.txt)
-  153 additional source file(s) are listed in the JSON report.
+  152 additional source file(s) are listed in the JSON report.
 
-<a id="finding-364"></a>
+<a id="finding-372"></a>
 
-- **#364** `system-overlap: Country-system overlap: more-unique-urban-rights / prussian-destiny`:
-  **DECISION REQUIRED** — Both packages substantially reference 4 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `f1d1221bfbb95361`
+- **#372** `system-interaction: Country-system interaction risk: more-unique-urban-rights / prussian-destiny`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 4 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `be2c646d21be48cb`
   Symbols: `LIT`, `POL`, `PRU`, `TEU`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [More Unique Urban Rights: in_game/common/town_rights/aga_town_rights.txt](../sources/steam-workshop/3745922649/in_game/common/town_rights/aga_town_rights.txt)
   [The Prussian Destiny: in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt](../sources/steam-workshop/3685755118/in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt)
   [The Prussian Destiny: in_game/common/country_interactions/PD_hre_landfriede_block.txt](../sources/steam-workshop/3685755118/in_game/common/country_interactions/PD_hre_landfriede_block.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_name_construction.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_ranks.txt)
   [The Prussian Destiny: in_game/common/on_action/PD_on_actions.txt](../sources/steam-workshop/3685755118/in_game/common/on_action/PD_on_actions.txt)
   [The Prussian Destiny: in_game/common/peace_treaties/PD_peace_treaties.txt](../sources/steam-workshop/3685755118/in_game/common/peace_treaties/PD_peace_treaties.txt)
-  [The Prussian Destiny: in_game/common/script_values/PD_script_values.txt](../sources/steam-workshop/3685755118/in_game/common/script_values/PD_script_values.txt)
   [The Prussian Destiny: in_game/common/scripted_effects/PD_scripted_effects.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_effects/PD_scripted_effects.txt)
-  7 additional source file(s) are listed in the JSON report.
+  [The Prussian Destiny: in_game/common/scripted_relations/PD_alliance_addon.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_relations/PD_alliance_addon.txt)
+  [The Prussian Destiny: in_game/common/situations/brandenburg_rise.txt](../sources/steam-workshop/3685755118/in_game/common/situations/brandenburg_rise.txt)
+  [The Prussian Destiny: in_game/common/situations/the_blood_and_iron.txt](../sources/steam-workshop/3685755118/in_game/common/situations/the_blood_and_iron.txt)
+  3 additional source file(s) are listed in the JSON report.
 
-<a id="finding-365"></a>
+<a id="finding-373"></a>
 
-- **#365** `system-overlap: Country-system overlap: more-unique-urban-rights / ruthenia-steppe-fix`:
-  **DECISION REQUIRED** — Both packages substantially reference 4 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `96d44892570f9372`
+- **#373** `system-interaction: Country-system interaction risk: more-unique-urban-rights / ruthenia-steppe-fix`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 4 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `950b80be5a3aaa3b`
   Symbols: `CHI`, `LIT`, `PLC`, `POL`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [More Unique Urban Rights: in_game/common/town_rights/aga_town_rights.txt](../sources/steam-workshop/3745922649/in_game/common/town_rights/aga_town_rights.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_advances_changed.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_advances_changed.txt)
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_country_LIT_added.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_country_LIT_added.txt)
@@ -4145,36 +4227,38 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_RUS.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_RUS.txt)
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_zaz.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_zaz.txt)
 
-<a id="finding-366"></a>
+<a id="finding-374"></a>
 
-- **#366** `system-overlap: Country-system overlap: national-destinies / prussian-destiny`:
-  **DECISION REQUIRED** — Both packages substantially reference 9 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `8977465f46f1dd35`
-  Symbols: `BOH`, `FRA`, `HAB`, `HRE`, `LAT`, `NED`, `POL`, `PRU`, `USA`
+- **#374** `system-interaction: Country-system interaction risk: national-destinies / prussian-destiny`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 6 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `74a03abfc9443695`
+  Symbols: `BOH`, `FRA`, `HAB`, `HRE`, `POL`, `PRU`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [National Destinies: in_game/common/advances/99_nd_boh.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_boh.txt)
   [National Destinies: in_game/common/advances/99_nd_fra.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_fra.txt)
   [National Destinies: in_game/common/advances/99_nd_hab.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_hab.txt)
   [National Destinies: in_game/common/advances/99_nd_hre.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_hre.txt)
-  [National Destinies: in_game/common/advances/99_nd_lat.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_lat.txt)
-  [National Destinies: in_game/common/advances/99_nd_ned.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_ned.txt)
   [National Destinies: in_game/common/advances/99_nd_pol.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_pol.txt)
   [National Destinies: in_game/common/advances/99_nd_pru.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_pru.txt)
+  [National Destinies: in_game/common/bureaucracies/99_nd_boh.txt](../sources/steam-workshop/3668193813/in_game/common/bureaucracies/99_nd_boh.txt)
+  [National Destinies: in_game/common/bureaucracies/99_nd_fra.txt](../sources/steam-workshop/3668193813/in_game/common/bureaucracies/99_nd_fra.txt)
   [The Prussian Destiny: in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt](../sources/steam-workshop/3685755118/in_game/common/bureaucracies/PD_bra_pru_bureaucracies.txt)
   [The Prussian Destiny: in_game/common/country_interactions/PD_hre_landfriede_block.txt](../sources/steam-workshop/3685755118/in_game/common/country_interactions/PD_hre_landfriede_block.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_name_construction.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_name_construction.txt)
-  [The Prussian Destiny: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3685755118/in_game/common/customizable_localization/country_ranks.txt)
   [The Prussian Destiny: in_game/common/on_action/PD_on_actions.txt](../sources/steam-workshop/3685755118/in_game/common/on_action/PD_on_actions.txt)
   [The Prussian Destiny: in_game/common/peace_treaties/PD_peace_treaties.txt](../sources/steam-workshop/3685755118/in_game/common/peace_treaties/PD_peace_treaties.txt)
-  [The Prussian Destiny: in_game/common/script_values/PD_script_values.txt](../sources/steam-workshop/3685755118/in_game/common/script_values/PD_script_values.txt)
   [The Prussian Destiny: in_game/common/scripted_effects/PD_scripted_effects.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_effects/PD_scripted_effects.txt)
-  87 additional source file(s) are listed in the JSON report.
+  [The Prussian Destiny: in_game/common/scripted_relations/PD_alliance_addon.txt](../sources/steam-workshop/3685755118/in_game/common/scripted_relations/PD_alliance_addon.txt)
+  [The Prussian Destiny: in_game/common/situations/brandenburg_rise.txt](../sources/steam-workshop/3685755118/in_game/common/situations/brandenburg_rise.txt)
+  [The Prussian Destiny: in_game/common/situations/the_blood_and_iron.txt](../sources/steam-workshop/3685755118/in_game/common/situations/the_blood_and_iron.txt)
+  58 additional source file(s) are listed in the JSON report.
 
-<a id="finding-367"></a>
+<a id="finding-375"></a>
 
-- **#367** `system-overlap: Country-system overlap: national-destinies / ruthenia-steppe-fix`:
-  **DECISION REQUIRED** — Both packages substantially reference 9 of the same country tags. Review whether their events, on-actions, and scripted effects implement competing systems.
-  Fingerprint: `4903ff12eb4eb63f`
+- **#375** `system-interaction: Country-system interaction risk: national-destinies / ruthenia-steppe-fix`:
+  **INTERACTION RISK** — Both packages actively implement gameplay involving 9 of the same country tags. Shared country scope alone does not prove a conflict; retain this as a runtime interaction audit while concrete path, definition, event, and state collisions are handled separately.
+  Fingerprint: `2f2cfb2cc871b80c`
   Symbols: `CHI`, `GBR`, `PAP`, `PLC`, `POL`, `RUS`, `SWE`, `TIM`, `UKR`
+  Resolution: Categorized as interaction risk: active gameplay overlap requires runtime review but is not independently a compatibility conflict.
   [National Destinies: in_game/common/advances/99_nd_chi.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_chi.txt)
   [National Destinies: in_game/common/advances/99_nd_fra.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_fra.txt)
   [National Destinies: in_game/common/advances/99_nd_gbr.txt](../sources/steam-workshop/3668193813/in_game/common/advances/99_nd_gbr.txt)
@@ -4188,107 +4272,45 @@ The complete machine-readable evidence, including every source path and symbol, 
   [Ruthenia and Steppe Fix: in_game/common/advances/RSF_unit_unlocks.txt](../sources/git/ruthenia-steppe-fix/in_game/common/advances/RSF_unit_unlocks.txt)
   [Ruthenia and Steppe Fix: in_game/common/formable_countries/RSF_formables.txt](../sources/git/ruthenia-steppe-fix/in_game/common/formable_countries/RSF_formables.txt)
   [Ruthenia and Steppe Fix: in_game/common/government_reforms/RSF_steppe_horde.txt](../sources/git/ruthenia-steppe-fix/in_game/common/government_reforms/RSF_steppe_horde.txt)
-  [Ruthenia and Steppe Fix: in_game/common/scripted_triggers/RSF_religion_triggers_crusades.txt](../sources/git/ruthenia-steppe-fix/in_game/common/scripted_triggers/RSF_religion_triggers_crusades.txt)
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_kie.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_kie.txt)
   [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_LIT.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_LIT.txt)
-  59 additional source file(s) are listed in the JSON report.
-
-<a id="finding-368"></a>
-
-- **#368** `path: File path: in_game/common/customizable_localization/countries.txt`:
-  **RESOLVED** — The Concordia merge keeps both packages' unique country definitions and combines Gathering the Rus conditional Golden Horde vassal names with Imperial Ambitions' fallback names for KZN and UZB.
-  Fingerprint: `b8968b26a0b56a67`
-  Symbols: `in_game/common/customizable_localization/countries.txt`
-  Resolution: Concordia override: integration/overrides/collision-2/in_game/common/customizable_localization/countries.txt
-  [Gathering the Land of the Rus: in_game/common/customizable_localization/countries.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/countries.txt)
-  [Imperial Ambitions: in_game/common/customizable_localization/countries.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/countries.txt)
-
-<a id="finding-369"></a>
-
-- **#369** `path: File path: in_game/common/on_action/historical_tweaks_on_actions.txt`:
-  **RESOLVED** — The standalone Historical Tweaks file is the newer superset and includes explicit Gathering of the Rus compatibility logic.
-  Fingerprint: `0e63766fe35762b2`
-  Symbols: `in_game/common/on_action/historical_tweaks_on_actions.txt`
-  Resolution: historical-tweaks
-  [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
-  [Historical Tweaks: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3603092142/in_game/common/on_action/historical_tweaks_on_actions.txt)
-
-<a id="finding-370"></a>
-
-- **#370** `path: File path: in_game/events/historical_tweaks_events.txt`:
-  **RESOLVED** — The standalone Historical Tweaks event file includes the Rus-bundled events plus newer events and explicit Gathering of the Rus compatibility behavior.
-  Fingerprint: `1860a40d706abca6`
-  Symbols: `in_game/events/historical_tweaks_events.txt`
-  Resolution: historical-tweaks
-  [Gathering the Land of the Rus: in_game/events/historical_tweaks_events.txt](../sources/steam-workshop/3652214415/in_game/events/historical_tweaks_events.txt)
-  [Historical Tweaks: in_game/events/historical_tweaks_events.txt](../sources/steam-workshop/3603092142/in_game/events/historical_tweaks_events.txt)
-
-<a id="finding-371"></a>
-
-- **#371** `path: File path: in_game/events/historical_tweaks_union_events.txt`:
-  **RESOLVED** — The standalone Historical Tweaks union events contain later trigger, AI-selection, and player-option fixes than the copy bundled with Gathering of the Rus.
-  Fingerprint: `4d9ab7419c50fa0b`
-  Symbols: `in_game/events/historical_tweaks_union_events.txt`
-  Resolution: historical-tweaks
-  [Gathering the Land of the Rus: in_game/events/historical_tweaks_union_events.txt](../sources/steam-workshop/3652214415/in_game/events/historical_tweaks_union_events.txt)
-  [Historical Tweaks: in_game/events/historical_tweaks_union_events.txt](../sources/steam-workshop/3603092142/in_game/events/historical_tweaks_union_events.txt)
-
-<a id="finding-372"></a>
-
-- **#372** `path: File path: in_game/gui/economy_lateralview.gui`:
-  **RESOLVED** — GH Exchequer intentionally replaces Glorp UI's economy panel when loaded later; the GH Exchequer - Glorp UI compatch restores the Trade tab in Glorp's left panel.
-  Fingerprint: `ea44f289c98fd024`
-  Symbols: `in_game/gui/economy_lateralview.gui`
-  Resolution: gh-exchequer
-  [GH: Exchequer: in_game/gui/economy_lateralview.gui](../sources/steam-workshop/3812701995/in_game/gui/economy_lateralview.gui)
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/economy_lateralview.gui](../sources/git/glorp-ui/in_game/gui/economy_lateralview.gui)
-
-<a id="finding-373"></a>
-
-- **#373** `path: File path: in_game/gui/location_window.gui`:
-  **RESOLVED** — Standard of Living supplies an upstream-generated copy of Glorp UI 04.10.26's location window with its living-standard tooltip added.
-  Fingerprint: `e323ff5940f2f48e`
-  Symbols: `in_game/gui/location_window.gui`
-  Resolution: standard-of-living
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/location_window.gui](../sources/git/glorp-ui/in_game/gui/location_window.gui)
-  [v1.4 beta Standard of Living: in_game/gui/location_window.gui](../sources/git/standard-of-living/in_game/gui/location_window.gui)
-
-<a id="finding-374"></a>
-
-- **#374** `path: File path: in_game/gui/panels/left_panel/glorpUI_left_panel.gui`:
-  **RESOLVED** — The upstream compatch explicitly replaces Glorp UI's left panel to add GH Exchequer's Trade tab.
-  Fingerprint: `8afe07dd2edfb9f9`
-  Symbols: `in_game/gui/panels/left_panel/glorpUI_left_panel.gui`
-  Resolution: gh-exchequer-glorp-ui-patch
-  [GH: Exchequer - Glorp UI compatch: in_game/gui/panels/left_panel/glorpUI_left_panel.gui](../sources/steam-workshop/3827095294/in_game/gui/panels/left_panel/glorpUI_left_panel.gui)
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/panels/left_panel/glorpUI_left_panel.gui](../sources/git/glorp-ui/in_game/gui/panels/left_panel/glorpUI_left_panel.gui)
-
-<a id="finding-375"></a>
-
-- **#375** `path: File path: in_game/gui/panels/situation/global_living_standard.gui`:
-  **RESOLVED** — The SOL-JTG compatibility submod supplies the integration replacement for Standard of Living's shared living-standard panel.
-  Fingerprint: `936fbfe1c8ee5991`
-  Symbols: `in_game/gui/panels/situation/global_living_standard.gui`
-  Resolution: sol-jtg-compatibility-submod
-  [SOL-JTG Compatibility Submod: in_game/gui/panels/situation/global_living_standard.gui](../sources/git/sol-jtg-compatibility-submod/in_game/gui/panels/situation/global_living_standard.gui)
-  [v1.4 beta Standard of Living: in_game/gui/panels/situation/global_living_standard.gui](../sources/git/standard-of-living/in_game/gui/panels/situation/global_living_standard.gui)
+  [Ruthenia and Steppe Fix: in_game/events/DHE/flavor_RUS.txt](../sources/git/ruthenia-steppe-fix/in_game/events/DHE/flavor_RUS.txt)
+  57 additional source file(s) are listed in the JSON report.
 
 <a id="finding-376"></a>
 
-- **#376** `path: File path: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui`:
-  **RESOLVED** — GH Exchequer documents that its extracted vanilla economy templates replace the copy supplied by UI mods such as Glorp UI when GH loads later.
-  Fingerprint: `c112d6fe9ce1010f`
-  Symbols: `in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui`
-  Resolution: gh-exchequer
-  [GH: Exchequer: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui](../sources/steam-workshop/3812701995/in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui)
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui](../sources/git/glorp-ui/in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui)
+- **#376** `system-observation: Non-conflicting country references: gathering-land-rus / glorp-ui`:
+  **NOT A CONFLICT** — The packages substantially reference 4 of the same country tags, but fewer than three tags have active gameplay references on both sides. The overlap is confined primarily to read-only observers or historical lookup data and does not constitute a system conflict.
+  Fingerprint: `c9f2a6db513bc24f`
+  Symbols: `ENG`, `LIT`, `NRM`, `PAL`
+  Resolution: Categorized as non-conflict: no substantial active gameplay ownership on both sides.
+  [Gathering the Land of the Rus: in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt](../sources/steam-workshop/3652214415/in_game/common/ai_scripted_expansion_score/rus_gathering_expansion_score.txt)
+  [Gathering the Land of the Rus: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3652214415/in_game/common/customizable_localization/country_ranks.txt)
+  [Gathering the Land of the Rus: in_game/common/formable_countries/rus_gathering_formable_countries.txt](../sources/steam-workshop/3652214415/in_game/common/formable_countries/rus_gathering_formable_countries.txt)
+  [Gathering the Land of the Rus: in_game/common/generic_actions/rus_gathering_genactions.txt](../sources/steam-workshop/3652214415/in_game/common/generic_actions/rus_gathering_genactions.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organizations/anti_tatar_coalition.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/anti_tatar_coalition.txt)
+  [Gathering the Land of the Rus: in_game/common/international_organizations/northeast_rus.txt](../sources/steam-workshop/3652214415/in_game/common/international_organizations/northeast_rus.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/historical_tweaks_on_actions.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/historical_tweaks_on_actions.txt)
+  [Gathering the Land of the Rus: in_game/common/on_action/rus_gathering_hardcode.txt](../sources/steam-workshop/3652214415/in_game/common/on_action/rus_gathering_hardcode.txt)
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt](../sources/git/glorp-ui/in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt)
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt](../sources/git/glorp-ui/in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt)
+  15 additional source file(s) are listed in the JSON report.
 
 <a id="finding-377"></a>
 
-- **#377** `path: File path: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui`:
-  **RESOLVED** — Standard of Living supplies the synchronized Glorp UI 04.10.26 location-window types used by its pre-merged location window.
-  Fingerprint: `2c3433cf7bc58dbf`
-  Symbols: `in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui`
-  Resolution: standard-of-living
-  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui](../sources/git/glorp-ui/in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui)
-  [v1.4 beta Standard of Living: in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui](../sources/git/standard-of-living/in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui)
+- **#377** `system-observation: Non-conflicting country references: glorp-ui / imperial-ambitions`:
+  **NOT A CONFLICT** — The packages substantially reference 3 of the same country tags, but fewer than three tags have active gameplay references on both sides. The overlap is confined primarily to read-only observers or historical lookup data and does not constitute a system conflict.
+  Fingerprint: `475a95ef3f9b8d64`
+  Symbols: `ENG`, `LIT`, `PRU`
+  Resolution: Categorized as non-conflict: no substantial active gameplay ownership on both sides.
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt](../sources/git/glorp-ui/in_game/common/customizable_localization/glorpui_generated_societal_value_hint_loc.txt)
+  [Glorp UI - 1.4.0 Río Salado Open Beta: in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt](../sources/git/glorp-ui/in_game/common/script_values/glorpui_generated_societal_value_hint_script_values.txt)
+  [Imperial Ambitions: in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt](../sources/steam-workshop/3813524452/in_game/common/casus_belli/zz_ia_decisive_historical_cb.txt)
+  [Imperial Ambitions: in_game/common/customizable_localization/country_ranks.txt](../sources/steam-workshop/3813524452/in_game/common/customizable_localization/country_ranks.txt)
+  [Imperial Ambitions: in_game/common/formable_countries/00_formable_countries.txt](../sources/steam-workshop/3813524452/in_game/common/formable_countries/00_formable_countries.txt)
+  [Imperial Ambitions: in_game/common/on_action/_hardcoded.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/_hardcoded.txt)
+  [Imperial Ambitions: in_game/common/on_action/zz_ia_check_pulses.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_check_pulses.txt)
+  [Imperial Ambitions: in_game/common/on_action/zz_ia_game_start.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_game_start.txt)
+  [Imperial Ambitions: in_game/common/on_action/zz_ia_runtime_pulses.txt](../sources/steam-workshop/3813524452/in_game/common/on_action/zz_ia_runtime_pulses.txt)
+  [Imperial Ambitions: in_game/common/peace_treaties/zz_ia_decisive_historical_peace.txt](../sources/steam-workshop/3813524452/in_game/common/peace_treaties/zz_ia_decisive_historical_peace.txt)
+  7 additional source file(s) are listed in the JSON report.
