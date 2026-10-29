@@ -22,6 +22,26 @@
       }
     },
     {
+      "id": "gathering-land-rus",
+      "name": "Gathering the Land of the Rus",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3652214415",
+        "snapshotChecksum": "sha256:41fffd457ffa86e24a72d885d149e6fcd53717943f2bbc1db8ce0754489a8d92",
+        "path": "sources/steam-workshop/3652214415"
+      },
+      "author": "Atanos",
+      "targetGameVersion": "1.4.5",
+      "version": "1.1.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3652214415. Upstream declares EU5 1.4 compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
       "id": "gh-exchequer",
       "name": "GH: Exchequer",
       "type": "upstream",
