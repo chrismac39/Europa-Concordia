@@ -20,9 +20,19 @@ finding. A semantic finding is resolved only when `config/conflict-rules.json`
 contains a matching `semanticResolutions` entry with the user-approved decision
 and reason. The analyzer never infers a semantic winner from package order.
 
-The initial tool detects path collisions only. It does not identify two files
-that define the same EU5 object under different paths, nor does it merge or
-interpret game scripting.
+Analysis covers exact output paths, cross-file EU5 definitions,
+`REPLACE:`/`INJECT:` targets, event IDs and on-actions, differing localization,
+shared global variables, and significant country-system overlap. This is
+conservative static analysis, not proof of runtime compatibility; engine
+ordering, scripted behavior, and save-game effects still require game testing.
+
+The generated `integration/decision-frontier.md` groups unresolved findings by
+package set and gameplay domain so system-level preservation choices can be
+made without reviewing hundreds of individual entries first. The generated
+`integration/deep-frontier.md` retains every numbered finding, fingerprint, and
+source link. A high-level vote authorizes implementation work but does not
+automatically resolve its underlying findings: each merge or coexistence result
+must still be verified and recorded by fingerprint.
 
 ## Recording decisions
 
@@ -37,5 +47,4 @@ Keep integration decisions outside imported sources in
 - attribution or redistribution constraints.
 
 Do not resolve conflicts by relying on arbitrary traversal or last-writer-wins
-ordering. Future definition-level detection should report unresolved conflicts
-and fail validation by default.
+ordering. Unresolved path and semantic findings fail the build by default.
