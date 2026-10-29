@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "steamAppId": 3450310,
+  "channels": {
+    "stable": {
+      "publishedFileId": null,
+      "visibility": "public",
+      "artifactDirectory": "dist/workshop/stable"
+    }
+  }
+}

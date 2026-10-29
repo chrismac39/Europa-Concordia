@@ -1,0 +1,12 @@
+node_modules/
+dist/
+reports/
+package-lock.json
+packages/**/in_game/
+packages/**/main_menu/
+integration/patches/**/in_game/
+integration/patches/**/main_menu/
+integration/overrides/**/in_game/
+integration/overrides/**/main_menu/
+sources/steam-workshop/**/in_game/
+sources/steam-workshop/**/main_menu/

@@ -1,0 +1,4 @@
+# EU5 vanilla scripts use UTF-8 BOM and LF; EditorConfig applies BOM only to game paths.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
