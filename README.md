@@ -67,3 +67,5 @@ For EU5-aware editor setup and vanilla-file safety rules, see
 [development setup](docs/development-setup.md).
 The planned, confirmation-gated Workshop release flow is described in
 [Workshop publishing](docs/workshop-publishing.md).
+The current local download comparison is tracked in
+[Workshop inventory](docs/workshop-inventory.md).

@@ -2,6 +2,386 @@
   "version": 1,
   "packages": [
     {
+      "id": "standard-of-living",
+      "name": "[v1.4 beta] Standard of Living",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3815438890",
+        "snapshotChecksum": "sha256:e865f8ecb6a64f6ad51a5019bc021e9d5f9daa87c6708b60e931efadf773e8e1",
+        "path": "sources/steam-workshop/3815438890"
+      },
+      "author": "猪",
+      "targetGameVersion": "1.4.5",
+      "version": "0.0.261024",
+      "enabled": false,
+      "dependencies": ["community-mod-framework"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3815438890, upstream version 261024. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "sol-jtg-compatibility-submod",
+      "name": "SOL-JTG Compatibility Submod",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3769566303",
+        "snapshotChecksum": "sha256:32e26ffb0b6adb15c1bb7ef8cd52451b59fc547277a7a21eb37891c13db6a4d4",
+        "path": "sources/steam-workshop/3769566303"
+      },
+      "author": "猪",
+      "targetGameVersion": "1.4.5",
+      "version": "0.0.260822",
+      "enabled": false,
+      "dependencies": ["just-goods", "standard-of-living"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3769566303, upstream version 260822. Upstream declares EU5 1.3.11 compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "better-road-builder",
+      "name": "Better Road Builder",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3605677866",
+        "snapshotChecksum": "sha256:ab6429a6386afb3f7766693fc85d64490c16ec0044517fdfdac176f14e2b3512",
+        "path": "sources/steam-workshop/3605677866"
+      },
+      "author": "GDI_JeffL",
+      "targetGameVersion": "1.4.5",
+      "version": "1.6.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3605677866. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "community-flavor-pack",
+      "name": "Community Flavor Pack",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3599543453",
+        "snapshotChecksum": "sha256:1afd0f6ce73e000b464540a4d7e959f5dff78dd978dac7a941d8de2e5445c60c",
+        "path": "sources/steam-workshop/3599543453"
+      },
+      "author": "El Tyranos",
+      "targetGameVersion": "1.4.5",
+      "version": "1.1.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3599543453. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "diverse-unit-models",
+      "name": "Diverse Unit Models",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3714859568",
+        "snapshotChecksum": "sha256:b32c4455f8e0d38bcb1ff7f5bd77c3c78ea4e0400f3ab71a41415140d26bb041",
+        "path": "sources/steam-workshop/3714859568"
+      },
+      "author": "Stefan",
+      "targetGameVersion": "1.4.5",
+      "version": "1.0.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3714859568. Upstream declares EU5 1.3.x compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "eurocentric-institutions",
+      "name": "Eurocentric Institutions",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3626542508",
+        "snapshotChecksum": "sha256:283b9d0741149efe939fb39f58e78bb0e938d8cef3ae19d8334df9353d23427b",
+        "path": "sources/steam-workshop/3626542508"
+      },
+      "author": "Exend",
+      "targetGameVersion": "1.4.5",
+      "version": "1.2.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3626542508. Upstream declares EU5 1.3.x compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "continental-hegemonies",
+      "name": "Continental Hegemonies",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3664577264",
+        "snapshotChecksum": "sha256:80e533e03d6ad884b90fd0804b3d2afcc7eba4964d4d098ab34c5845d985471b",
+        "path": "sources/steam-workshop/3664577264"
+      },
+      "author": "Trinedy",
+      "targetGameVersion": "1.4.5",
+      "version": "0.4.1",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3664577264. Upstream declares EU5 1.3.x compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "historical-tweaks",
+      "name": "Historical Tweaks",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3603092142",
+        "snapshotChecksum": "sha256:5c960d2cf194bb960914e1b3f80cebb8404e80f6bbf87b65519841b6723c755a",
+        "path": "sources/steam-workshop/3603092142"
+      },
+      "author": "Happyperson3796",
+      "targetGameVersion": "1.4.5",
+      "version": "1.0.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3603092142. Upstream declares EU5 1.3.11 compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "more-locations",
+      "name": "More locations Mod",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3809335454",
+        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd",
+        "path": "sources/steam-workshop/3809335454"
+      },
+      "author": "Naaku",
+      "targetGameVersion": "1.4.5",
+      "version": "2.10.2026",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3809335454. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "more-restricted-colonization",
+      "name": "More Restricted Colonization",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3691186720",
+        "snapshotChecksum": "sha256:c40c15c43213cecd2f9fe58cb426d84ac519111483fcf6c9a0b4c3db935f0557",
+        "path": "sources/steam-workshop/3691186720"
+      },
+      "author": "Aayom",
+      "targetGameVersion": "1.4.5",
+      "version": "1.4.0",
+      "enabled": false,
+      "dependencies": ["community-mod-framework"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3691186720. Upstream declares EU5 1.4.1 compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "more-unique-urban-rights",
+      "name": "More Unique Urban Rights",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3745922649",
+        "snapshotChecksum": "sha256:0890345be7f2114eef933edd2bbabc8c3c2193fdc8dd691989f4d40ede41ddeb",
+        "path": "sources/steam-workshop/3745922649"
+      },
+      "author": "Agamenton",
+      "targetGameVersion": "1.4.5",
+      "version": "1.1.9",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3745922649. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "sulphurs-rivers-expanded",
+      "name": "Sulphur's Rivers Expanded",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3617910693",
+        "snapshotChecksum": "sha256:f758eedca808e603fafe7754db1b9e083be6f52a761cccd1fa23a17ed6541fc9",
+        "path": "sources/steam-workshop/3617910693"
+      },
+      "author": "Sulphur",
+      "targetGameVersion": "1.4.5",
+      "version": "1.2.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3617910693. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "waterways-distance-rework",
+      "name": "Waterways Distance Rework",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3608489505",
+        "snapshotChecksum": "sha256:c3ed2572b2b1b78f098f7219e5a6148187541fbd2999ea5b143412a8d7c218fe",
+        "path": "sources/steam-workshop/3608489505"
+      },
+      "author": "Relandelon",
+      "targetGameVersion": "1.4.5",
+      "version": "1.8.2",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3608489505. Upstream declares EU5 1.0.x compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "ruthenia-steppe-fix",
+      "name": "Ruthenia and Steppe Fix",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3608237308",
+        "snapshotChecksum": "sha256:f86d666f1bc07afee816ba53d8ec0b5f7090bed3993fa00018cfd7769e3a0b05",
+        "path": "sources/steam-workshop/3608237308"
+      },
+      "author": "Dima_UA",
+      "targetGameVersion": "1.4.5",
+      "version": "11.3.1",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3608237308. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "national-destinies",
+      "name": "National Destinies",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3668193813",
+        "snapshotChecksum": "sha256:66ec97f094653af12c00a60c2ec8cc82a2546bcd9d790a128af7b6cb596f67e7",
+        "path": "sources/steam-workshop/3668193813"
+      },
+      "author": "Trinedy",
+      "targetGameVersion": "1.4.5",
+      "version": "1.4.1",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3668193813. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "prussian-destiny",
+      "name": "The Prussian Destiny",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3685755118",
+        "snapshotChecksum": "sha256:dc05341cd81dcb4e024dc90476d6dcd67f32421f81a98cf4bc3d796546c38cbd",
+        "path": "sources/steam-workshop/3685755118"
+      },
+      "author": "Emirke",
+      "targetGameVersion": "1.4.5",
+      "version": "5.1.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3685755118. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "urban-limit",
+      "name": "Urban limit",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3688963094",
+        "snapshotChecksum": "sha256:12a18e6ac5388ec9815f232e14f3f4a8718bf95a146365e19ae2d5fbb12dec74",
+        "path": "sources/steam-workshop/3688963094"
+      },
+      "author": "Emperor VI",
+      "targetGameVersion": "1.4.5",
+      "version": "1.2.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3688963094. Upstream declares EU5 1.2 compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "community-mod-framework",
+      "name": "Community Mod Framework",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:bc0f41f8d2eed1a15791d215d075d80a42d02a65f1e0662518709c91651a7000",
+        "path": "sources/steam-workshop/3692202776"
+      },
+      "author": "Conner",
+      "targetGameVersion": "1.4.5",
+      "version": "2.5.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3692202776. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "oikoumene",
+      "name": "Oikoumenē",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3721193233",
+        "snapshotChecksum": "sha256:2309652b27d881cfb3157b86760cc931b9e0e4e2f5de1f5e2218f83b68f04ee4",
+        "path": "sources/steam-workshop/3721193233"
+      },
+      "author": "Pontifex",
+      "targetGameVersion": "1.4.5",
+      "version": "0.19.0",
+      "enabled": false,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3721193233. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
       "id": "dynastic-bloodlines",
       "name": "Dynastic Bloodlines",
       "type": "maintained",
@@ -79,6 +459,31 @@
       "attribution": {
         "license": "No license provided",
         "notice": "Local snapshot of Steam Workshop item 3827095294. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "glorp-ui",
+      "name": "Glorp UI - 1.4.0 Río Salado Open Beta",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3812518640",
+        "snapshotChecksum": "sha256:4bb97bc917f235b938b55df168155528627decc2efca06712e43b7d8d2f47821",
+        "path": "sources/steam-workshop/3812518640"
+      },
+      "author": "glorp",
+      "targetGameVersion": "1.4.5",
+      "version": "04.10.26",
+      "enabled": false,
+      "dependencies": [
+        "autonomous-diplomats",
+        "community-mod-framework",
+        "construction-manager",
+        "smart-taxes"
+      ],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3812518640 for EU5 1.4.x. Obtain redistribution permission before enabling it for a distributed build."
       }
     },
     {
