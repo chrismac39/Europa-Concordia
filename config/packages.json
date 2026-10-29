@@ -14,7 +14,7 @@
       "author": "猪",
       "targetGameVersion": "1.4.5",
       "version": "0.0.261024",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -34,7 +34,7 @@
       "author": "猪",
       "targetGameVersion": "1.4.5",
       "version": "0.0.261024",
-      "enabled": false,
+      "enabled": true,
       "dependencies": ["just-goods", "standard-of-living"],
       "attribution": {
         "license": "No license provided",
@@ -54,7 +54,7 @@
       "author": "GDI_JeffL",
       "targetGameVersion": "1.4.5",
       "version": "1.6.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -74,7 +74,7 @@
       "author": "Stefan",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -94,7 +94,7 @@
       "author": "Exend",
       "targetGameVersion": "1.4.5",
       "version": "1.2.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -114,7 +114,7 @@
       "author": "Trinedy",
       "targetGameVersion": "1.4.5",
       "version": "0.4.1",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -134,11 +134,31 @@
       "author": "Happyperson3796",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
         "notice": "Local snapshot of Steam Workshop item 3603092142. Upstream declares EU5 1.3.11 compatibility. Obtain redistribution permission before enabling it for a distributed build."
+      }
+    },
+    {
+      "id": "imperial-ambitions",
+      "name": "Imperial Ambitions",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3813524452",
+        "snapshotChecksum": "sha256:92f2cae312fa94eba47d4073f4b3de3f41e9c77b351d776ebec87520b5480102",
+        "path": "sources/steam-workshop/3813524452"
+      },
+      "author": "Airdæ",
+      "targetGameVersion": "1.4.5",
+      "version": "1.1.0",
+      "enabled": true,
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3813524452. Upstream declares EU5 1.4.x compatibility. Obtain redistribution permission before enabling it for a distributed build."
       }
     },
     {
@@ -154,7 +174,7 @@
       "author": "Naaku",
       "targetGameVersion": "1.4.5",
       "version": "2.10.2026",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -174,7 +194,7 @@
       "author": "Aayom",
       "targetGameVersion": "1.4.5",
       "version": "1.4.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -194,7 +214,7 @@
       "author": "Agamenton",
       "targetGameVersion": "1.4.5",
       "version": "1.1.9",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -214,7 +234,7 @@
       "author": "Sulphur",
       "targetGameVersion": "1.4.5",
       "version": "1.2.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -234,7 +254,7 @@
       "author": "Relandelon",
       "targetGameVersion": "1.4.5",
       "version": "1.8.2",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -254,7 +274,7 @@
       "author": "Dima_UA",
       "targetGameVersion": "1.4.5",
       "version": "11.3.1",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -274,7 +294,7 @@
       "author": "Trinedy",
       "targetGameVersion": "1.4.5",
       "version": "1.4.1",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -294,7 +314,7 @@
       "author": "Emirke",
       "targetGameVersion": "1.4.5",
       "version": "5.1.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -314,7 +334,7 @@
       "author": "Emperor VI",
       "targetGameVersion": "1.4.5",
       "version": "1.2.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -334,7 +354,7 @@
       "author": "Pontifex",
       "targetGameVersion": "1.4.5",
       "version": "0.19.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -354,7 +374,7 @@
       "author": "bagetbaget",
       "targetGameVersion": "1.4.5",
       "version": "0.9.39",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -374,7 +394,7 @@
       "author": "Atanos",
       "targetGameVersion": "1.4.5",
       "version": "1.1.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -394,7 +414,7 @@
       "author": "IronPrats",
       "targetGameVersion": "1.4.5",
       "version": "1.2.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -414,7 +434,7 @@
       "author": "IronPrats",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": ["gh-exchequer", "glorp-ui"],
       "attribution": {
         "license": "No license provided",
@@ -434,12 +454,8 @@
       "author": "glorp",
       "targetGameVersion": "1.4.5",
       "version": "04.10.26",
-      "enabled": false,
-      "dependencies": [
-        "autonomous-diplomats",
-        "construction-manager",
-        "smart-taxes"
-      ],
+      "enabled": true,
+      "dependencies": [],
       "attribution": {
         "license": "No license provided",
         "notice": "Clean export from the pinned open-beta Git revision. Published as Steam Workshop item 3812518640. Obtain redistribution permission before enabling it for a distributed build."
@@ -458,7 +474,7 @@
       "author": "moveably",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "enabled": false,
+      "enabled": true,
       "dependencies": [],
       "attribution": {
         "license": "No license provided",

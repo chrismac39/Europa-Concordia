@@ -2,6 +2,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildProject } from "./pipeline.js";
 import { validateProject } from "./validation.js";
+import { analyzeProject } from "../analysis/analyzer.js";
+import { writeConflictReports } from "../analysis/report.js";
 
 interface CliArguments {
   command: "build" | "validate";
@@ -54,6 +56,18 @@ async function main(): Promise<void> {
       `Validated ${configuration.packages.length} enabled package(s) for EU5 ${configuration.build.targetGameVersion}.`,
     );
     return;
+  }
+
+  const configuration = await validateProject(rootDirectory, options);
+  const analysis = await analyzeProject(configuration);
+  await writeConflictReports(rootDirectory, analysis);
+  const unresolvedFindings = analysis.findings.filter(
+    (finding) => !finding.resolved,
+  );
+  if (unresolvedFindings.length > 0) {
+    throw new Error(
+      `Full-system analysis found ${unresolvedFindings.length} unresolved finding(s). Vote in integration/decision-frontier.md and inspect evidence in integration/deep-frontier.md; no build decisions were made automatically.`,
+    );
   }
 
   const outputDirectory = await buildProject(rootDirectory, options);

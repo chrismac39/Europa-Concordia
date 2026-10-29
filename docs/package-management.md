@@ -57,8 +57,9 @@ Treat upstream source snapshots as immutable. For a maintained package:
 3. Explain intent, upstream pin, game version, and tradeoffs in
    `integration/decisions/<package-id>.md`.
 
-The current build does not apply patches or overrides; these locations define
-the maintenance convention until that stage is implemented.
+The current build applies explicitly selected complete-file overrides recorded
+in `config/conflict-rules.json`. General patch-series application remains
+unimplemented.
 
 ## Onboarding a real package
 

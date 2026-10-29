@@ -1,5 +1,68 @@
 {
   "version": 1,
   "filePathCollisions": "error",
+  "filePathResolutions": [
+    {
+      "path": "in_game/gui/economy_lateralview.gui",
+      "packages": ["gh-exchequer", "glorp-ui"],
+      "winner": "gh-exchequer",
+      "reason": "GH Exchequer intentionally replaces Glorp UI's economy panel when loaded later; the GH Exchequer - Glorp UI compatch restores the Trade tab in Glorp's left panel."
+    },
+    {
+      "path": "in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui",
+      "packages": ["gh-exchequer", "glorp-ui"],
+      "winner": "gh-exchequer",
+      "reason": "GH Exchequer documents that its extracted vanilla economy templates replace the copy supplied by UI mods such as Glorp UI when GH loads later."
+    },
+    {
+      "path": "in_game/gui/panels/left_panel/glorpUI_left_panel.gui",
+      "packages": ["gh-exchequer-glorp-ui-patch", "glorp-ui"],
+      "winner": "gh-exchequer-glorp-ui-patch",
+      "reason": "The upstream compatch explicitly replaces Glorp UI's left panel to add GH Exchequer's Trade tab."
+    },
+    {
+      "path": "in_game/gui/panels/situation/global_living_standard.gui",
+      "packages": ["sol-jtg-compatibility-submod", "standard-of-living"],
+      "winner": "sol-jtg-compatibility-submod",
+      "reason": "The SOL-JTG compatibility submod supplies the integration replacement for Standard of Living's shared living-standard panel."
+    },
+    {
+      "path": "in_game/gui/location_window.gui",
+      "packages": ["glorp-ui", "standard-of-living"],
+      "winner": "standard-of-living",
+      "reason": "Standard of Living supplies an upstream-generated copy of Glorp UI 04.10.26's location window with its living-standard tooltip added."
+    },
+    {
+      "path": "in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui",
+      "packages": ["glorp-ui", "standard-of-living"],
+      "winner": "standard-of-living",
+      "reason": "Standard of Living supplies the synchronized Glorp UI 04.10.26 location-window types used by its pre-merged location window."
+    },
+    {
+      "path": "in_game/common/on_action/historical_tweaks_on_actions.txt",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "winner": "historical-tweaks",
+      "reason": "The standalone Historical Tweaks file is the newer superset and includes explicit Gathering of the Rus compatibility logic."
+    },
+    {
+      "path": "in_game/events/historical_tweaks_events.txt",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "winner": "historical-tweaks",
+      "reason": "The standalone Historical Tweaks event file includes the Rus-bundled events plus newer events and explicit Gathering of the Rus compatibility behavior."
+    },
+    {
+      "path": "in_game/events/historical_tweaks_union_events.txt",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "winner": "historical-tweaks",
+      "reason": "The standalone Historical Tweaks union events contain later trigger, AI-selection, and player-option fixes than the copy bundled with Gathering of the Rus."
+    },
+    {
+      "path": "in_game/common/customizable_localization/countries.txt",
+      "packages": ["gathering-land-rus", "imperial-ambitions"],
+      "override": "integration/overrides/collision-2/in_game/common/customizable_localization/countries.txt",
+      "reason": "The Concordia merge keeps both packages' unique country definitions and combines Gathering the Rus conditional Golden Horde vassal names with Imperial Ambitions' fallback names for KZN and UZB."
+    }
+  ],
+  "semanticResolutions": [],
   "definitionConflicts": "deferred"
 }

@@ -43,12 +43,34 @@ export interface BuildConfiguration {
   version: 1;
   targetGameVersion: string;
   packagesFile: string;
+  conflictRulesFile: string;
   outputDirectory: string;
+}
+
+export interface FilePathResolution {
+  path: string;
+  packages: string[];
+  winner?: string;
+  override?: string;
+  reason: string;
+}
+
+export interface ConflictRules {
+  version: 1;
+  filePathCollisions: "error";
+  filePathResolutions: FilePathResolution[];
+  semanticResolutions: Array<{
+    fingerprint: string;
+    decision: string;
+    reason: string;
+  }>;
+  definitionConflicts: "deferred";
 }
 
 export interface ProjectConfiguration {
   rootDirectory: string;
   build: BuildConfiguration;
+  conflictRules: ConflictRules;
   packages: ConcordiaPackage[];
 }
 

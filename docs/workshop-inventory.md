@@ -8,7 +8,7 @@ Compared on 2026-10-29 against `config/packages.json`.
 - Community Mod Framework is intentionally external and required at publish
   time rather than bundled into Concordia.
 
-**Progress: 23 of 37 downloaded Workshop items recorded**
+**Progress: 24 of 38 downloaded Workshop items recorded**
 
 | Added | Mod                                                       |  Workshop ID | Local version | Declared EU5 version | Package ID                     |
 | ----- | --------------------------------------------------------- | -----------: | ------------- | -------------------- | ------------------------------ |
@@ -30,6 +30,7 @@ Compared on 2026-10-29 against `config/packages.json`.
 | [ ]   | Halifelik - The Abbasid Caliphate                         | `3793474821` | `0.3.14`      | `1.4.*`              |                                |
 | [ ]   | Historical Landmarks                                      | `3826958931` | `1.1.0`       | `1.4.*`              |                                |
 | [x]   | Historical Tweaks                                         | `3603092142` | `1`           | `1.3.11`             | `historical-tweaks`            |
+| [x]   | Imperial Ambitions                                        | `3813524452` | `1.1.0`       | `1.4.*`              | `imperial-ambitions`           |
 | [ ]   | Improved Culture Dynamics                                 | `3729227153` | `1.3`         | `1.3`                |                                |
 | [x]   | Just Goods                                                | `3785316314` | `1.0`         | `1.3`                | `just-goods`                   |
 | [ ]   | Legacy of Timur: An Age of Gunpowder                      | `3604169106` | `3.2`         | `1.4.*`              |                                |

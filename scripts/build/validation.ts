@@ -3,6 +3,7 @@ import path from "node:path";
 import type {
   BuildConfiguration,
   ConcordiaPackage,
+  ConflictRules,
   PackageManifest,
   PackageSource,
   ProjectConfiguration,
@@ -191,14 +192,114 @@ function validateBuildConfiguration(value: unknown): BuildConfiguration {
     typeof value.targetGameVersion !== "string" ||
     !gameVersionPattern.test(value.targetGameVersion) ||
     typeof value.packagesFile !== "string" ||
+    typeof value.conflictRulesFile !== "string" ||
     typeof value.outputDirectory !== "string"
   ) {
     throw new Error(
-      "Build configuration must have version 1, targetGameVersion, packagesFile, and outputDirectory",
+      "Build configuration must have version 1, targetGameVersion, packagesFile, conflictRulesFile, and outputDirectory",
     );
   }
 
   return value as unknown as BuildConfiguration;
+}
+
+function validateConflictRules(value: unknown): ConflictRules {
+  if (
+    !isRecord(value) ||
+    value.version !== 1 ||
+    value.filePathCollisions !== "error" ||
+    !Array.isArray(value.filePathResolutions) ||
+    !Array.isArray(value.semanticResolutions) ||
+    value.definitionConflicts !== "deferred"
+  ) {
+    throw new Error(
+      "Conflict rules must have version 1, error file-path handling, filePathResolutions and semanticResolutions arrays, and deferred definition conflicts",
+    );
+  }
+
+  const errors: string[] = [];
+  const paths = new Set<string>();
+  value.filePathResolutions.forEach((resolution, index) => {
+    const label = `filePathResolutions[${index}]`;
+    if (!isRecord(resolution)) {
+      errors.push(`${label} must be an object`);
+      return;
+    }
+    const resolutionPath = resolution.path;
+    const pathIsValid = requiredString(resolutionPath, `${label}.path`, errors);
+    if (
+      pathIsValid &&
+      (path.isAbsolute(resolutionPath) ||
+        resolutionPath.includes("\\") ||
+        resolutionPath.split("/").includes(".."))
+    ) {
+      errors.push(`${label}.path must be a normalized relative POSIX path`);
+    }
+    const resolutionPackages = resolution.packages;
+    const packagesAreValid =
+      Array.isArray(resolutionPackages) &&
+      resolutionPackages.length >= 2 &&
+      resolutionPackages.every(
+        (packageId) =>
+          typeof packageId === "string" && packageIdPattern.test(packageId),
+      ) &&
+      new Set(resolutionPackages).size === resolutionPackages.length;
+    if (!packagesAreValid) {
+      errors.push(`${label}.packages must contain unique package identifiers`);
+    }
+    const hasWinner = resolution.winner !== undefined;
+    const hasOverride = resolution.override !== undefined;
+    if (hasWinner === hasOverride) {
+      errors.push(`${label} must specify exactly one of winner or override`);
+    } else if (
+      hasWinner &&
+      (typeof resolution.winner !== "string" ||
+        !packageIdPattern.test(resolution.winner) ||
+        (packagesAreValid && !resolutionPackages.includes(resolution.winner)))
+    ) {
+      errors.push(`${label}.winner must identify one of the listed packages`);
+    } else if (
+      hasOverride &&
+      (typeof resolution.override !== "string" ||
+        path.isAbsolute(resolution.override) ||
+        resolution.override.includes("\\") ||
+        resolution.override.split("/").includes(".."))
+    ) {
+      errors.push(`${label}.override must be a normalized relative POSIX path`);
+    }
+    requiredString(resolution.reason, `${label}.reason`, errors);
+    if (pathIsValid) {
+      const collisionKey = resolutionPath.toLocaleLowerCase("en-US");
+      if (paths.has(collisionKey)) {
+        errors.push(`${label}.path duplicates another resolution`);
+      }
+      paths.add(collisionKey);
+    }
+  });
+  const semanticFingerprints = new Set<string>();
+  value.semanticResolutions.forEach((resolution, index) => {
+    const label = `semanticResolutions[${index}]`;
+    if (!isRecord(resolution)) {
+      errors.push(`${label} must be an object`);
+      return;
+    }
+    if (
+      typeof resolution.fingerprint !== "string" ||
+      !/^[a-f0-9]{16}$/.test(resolution.fingerprint)
+    ) {
+      errors.push(`${label}.fingerprint must be 16 lowercase hex characters`);
+    } else if (semanticFingerprints.has(resolution.fingerprint)) {
+      errors.push(`${label}.fingerprint duplicates another resolution`);
+    } else {
+      semanticFingerprints.add(resolution.fingerprint);
+    }
+    requiredString(resolution.decision, `${label}.decision`, errors);
+    requiredString(resolution.reason, `${label}.reason`, errors);
+  });
+  if (errors.length > 0) {
+    throw new Error(`Invalid conflict rules:\n- ${errors.join("\n- ")}`);
+  }
+  return value as unknown as ConflictRules;
 }
 
 function resolveProjectPath(
@@ -310,6 +411,14 @@ export async function validateProject(
   const packageManifest = validateManifest(
     JSON.parse(await readFile(packageFile, "utf8")) as unknown,
   );
+  const conflictRulesFile = resolveProjectPath(
+    rootDirectory,
+    effectiveBuildConfiguration.conflictRulesFile,
+    "conflictRulesFile",
+  );
+  const conflictRules = validateConflictRules(
+    JSON.parse(await readFile(conflictRulesFile, "utf8")) as unknown,
+  );
   const outputDirectory = resolveProjectPath(
     rootDirectory,
     effectiveBuildConfiguration.outputDirectory,
@@ -327,6 +436,25 @@ export async function validateProject(
     .sort((left, right) =>
       left.id < right.id ? -1 : left.id > right.id ? 1 : 0,
     );
+
+  for (const resolution of conflictRules.filePathResolutions) {
+    if (resolution.override === undefined) {
+      continue;
+    }
+    const overridePath = resolveProjectPath(
+      rootDirectory,
+      resolution.override,
+      `Override for ${resolution.path}`,
+    );
+    if ((await lstat(overridePath).catch(() => undefined))?.isSymbolicLink()) {
+      throw new Error(
+        `Conflict override cannot be a symbolic link: ${overridePath}`,
+      );
+    }
+    if (!(await stat(overridePath).catch(() => undefined))?.isFile()) {
+      throw new Error(`Conflict override does not exist: ${overridePath}`);
+    }
+  }
 
   for (const packageValue of enabledPackages) {
     if (
@@ -359,6 +487,7 @@ export async function validateProject(
   return {
     rootDirectory,
     build: effectiveBuildConfiguration,
+    conflictRules,
     packages: enabledPackages,
   };
 }

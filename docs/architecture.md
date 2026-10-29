@@ -13,17 +13,19 @@ The initial implementation separates:
    Workshop snapshot (future work).
 2. **Validation** — checking manifest shape, package dependencies, source
    directories, and source-file safety.
-3. **Integration** — applying explicitly documented patches and overrides
-   (future work).
+3. **Integration** — applying explicitly documented conflict selections and
+   Concordia-owned merged overrides.
 4. **Packaging** — assembling files deterministically and emitting build
    metadata.
 5. **Publishing** — explicitly uploading a verified release artifact to the
    stable Steam Workshop item (future work).
 
-The current CLI implements validation and local file assembly only. It rejects
-duplicate paths rather than selecting a last writer. It does not parse EU5
-definitions, apply patches, or claim that the output layout is installable by
-EU5; that requires verification against actual game mod requirements.
+The CLI validates packages, performs full-system static conflict analysis, and
+assembles local files. It rejects unresolved paths rather than selecting a last
+writer, canonicalizes cross-file EU5 definitions and replacement/injection
+targets, and examines events, on-actions, localization, global variables, and
+country-system overlap. Static analysis cannot prove runtime compatibility or
+that the output is installable by EU5; those require in-game verification.
 
 Publishing will remain a separate operation from build, validation, and
 packaging. It must not be triggered by Git activity, a successful build, or a
@@ -42,6 +44,12 @@ directories and integration decisions remain separate. Packages are assembled
 in ascending package-ID order. The order is deterministic but is not a conflict
 resolution policy: duplicate output paths fail the build.
 
+Only EU5 content roots are assembled from packages: `dlc`, `in_game`,
+`loading_screen`, and `main_menu`. Package metadata, source-control files,
+documentation, thumbnails, generators, and other development files are
+excluded. Concordia will generate its own final metadata during a future
+packaging stage.
+
 The default project-wide EU5 target is stored as `targetGameVersion` in
 `config/build.json`. Validation and builds can override it with
 `--target-game-version MAJOR.MINOR.PATCH`. Every enabled package must declare
@@ -57,12 +65,14 @@ checksums. Source paths must resolve inside the repository and cannot contain
 symbolic links. Build output is generated under `dist/` and is not versioned.
 
 `build-metadata.json` records the target EU5 version and the enabled package
-IDs, versions, and source types. Build reports and semantic conflict detection
-are future extensions.
+IDs, versions, and source types. `npm run analyze` regenerates a high-level
+decision frontier, an exhaustive deep frontier, and the ignored
+machine-readable `reports/conflicts.json`. Builds run the same analysis and stop
+while any finding lacks a user-approved path or semantic resolution.
 
 ## Future decisions
 
 Before publishing a real build, confirm the expected EU5 mod directory layout,
 manifest requirements, and distribution restrictions for every imported
 package. Keep any implementation of source acquisition, patch application,
-and definition-level conflict checks in separate pipeline stages.
+and additional game-aware validation in separate pipeline stages.

@@ -5,7 +5,9 @@
   "type": "module",
   "description": "Reproducible integration tooling for Europa Universalis V mods",
   "scripts": {
+    "analyze": "tsx scripts/analysis/cli.ts",
     "build": "tsx scripts/build/cli.ts build",
+    "diff": "tsx scripts/diff/cli.ts",
     "validate": "tsx scripts/build/cli.ts validate",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

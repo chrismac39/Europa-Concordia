@@ -5,9 +5,10 @@ project. It combines separately sourced mods and original content into one
 traceable release while keeping imported source content distinct from local
 compatibility work.
 
-This repository currently provides the scaffolding and a minimal local build
-pipeline. It does not yet acquire upstream sources, apply integration changes,
-parse EU5 definitions, or verify the final directory against EU5's mod format.
+This repository currently provides the package inventory, pinned local source
+snapshots, and a local build pipeline. It does not yet acquire upstream sources
+automatically, parse EU5 definitions, or verify the final directory against
+EU5's mod format.
 
 ## Requirements
 
@@ -18,10 +19,25 @@ parse EU5 definitions, or verify the final directory against EU5's mod format.
 
 ```sh
 npm install
+npm run analyze
 npm run validate
 npm test
 npm run build
 ```
+
+Review numbered evidence from the
+[deep integration frontier](integration/deep-frontier.md) in VS Code's
+side-by-side diff editor without creating a branch or pull request:
+
+```sh
+npm run diff -- 1
+```
+
+`npm run analyze` regenerates the frontier using exact paths, cross-file EU5
+definitions, `REPLACE:`/`INJECT:` targets, event and on-action IDs,
+localization values, global variables, and shared country-system footprints.
+Unresolved semantic findings block builds and never select a winner
+automatically.
 
 The default EU5 release target is configured in `config/build.json`. Override
 it for a specific validation or build without editing the configuration:
@@ -46,9 +62,10 @@ record the effective target in `build-metadata.json`.
    `integration/overrides/`, with a decision in `integration/decisions/`.
 4. Run `npm run validate`, `npm test`, and `npm run build`.
 
-The current build only copies enabled package files, in package-ID order, and
-fails on case-insensitive path collisions. Integration patches and overrides
-are recorded for future build support but are not yet applied.
+The build copies enabled package content and fails on unresolved,
+case-insensitive path collisions. Exact compatibility and upstream load-order
+resolutions in `config/conflict-rules.json` are applied only when the complete
+set of colliding packages matches the recorded decision.
 
 ## Project layout
 
@@ -69,3 +86,7 @@ The planned, confirmation-gated Workshop release flow is described in
 [Workshop publishing](docs/workshop-publishing.md).
 The current local download comparison is tracked in
 [Workshop inventory](docs/workshop-inventory.md).
+Cast system-level preservation and base-mod votes in the
+[high-level decision frontier](integration/decision-frontier.md). The
+exhaustive source evidence remains in the
+[deep integration frontier](integration/deep-frontier.md).

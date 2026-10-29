@@ -15,6 +15,7 @@ import type {
   ProjectOptions,
 } from "./package-model.js";
 import { validateProject } from "./validation.js";
+import { analyzeProject } from "../analysis/analyzer.js";
 
 interface BuildMetadata {
   formatVersion: 1;
@@ -26,10 +27,23 @@ interface BuildMetadata {
   }>;
 }
 
+const packageContentRoots = new Set([
+  "dlc",
+  "in_game",
+  "loading_screen",
+  "main_menu",
+]);
+
 async function listFiles(directory: string, prefix = ""): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
   const files: string[] = [];
   for (const entry of entries) {
+    if (
+      prefix === "" &&
+      !packageContentRoots.has(entry.name.toLocaleLowerCase("en-US"))
+    ) {
+      continue;
+    }
     const relativePath = prefix
       ? path.posix.join(prefix, entry.name)
       : entry.name;
@@ -48,7 +62,10 @@ async function listFiles(directory: string, prefix = ""): Promise<string[]> {
 async function collectPackageFiles(
   configuration: ProjectConfiguration,
 ): Promise<Map<string, { packageId: string; sourcePath: string }>> {
-  const files = new Map<string, { packageId: string; sourcePath: string }>();
+  const candidates = new Map<
+    string,
+    Array<{ packageId: string; sourcePath: string; outputPath: string }>
+  >();
   for (const packageValue of configuration.packages) {
     const sourceDirectory = path.resolve(
       configuration.rootDirectory,
@@ -62,17 +79,66 @@ async function collectPackageFiles(
           `Package ${packageValue.id} uses reserved output path "build-metadata.json"`,
         );
       }
-      const previous = files.get(collisionKey);
-      if (previous) {
-        throw new Error(
-          `File path collision at "${normalizedPath}" between packages ${previous.packageId} and ${packageValue.id}`,
-        );
-      }
-      files.set(collisionKey, {
+      const pathCandidates = candidates.get(collisionKey) ?? [];
+      pathCandidates.push({
         packageId: packageValue.id,
         sourcePath: path.join(sourceDirectory, relativePath),
+        outputPath: normalizedPath,
       });
+      candidates.set(collisionKey, pathCandidates);
     }
+  }
+
+  const resolutions = new Map(
+    configuration.conflictRules.filePathResolutions.map((resolution) => [
+      resolution.path.toLocaleLowerCase("en-US"),
+      resolution,
+    ]),
+  );
+  const files = new Map<string, { packageId: string; sourcePath: string }>();
+  const unresolvedCollisions: string[] = [];
+  for (const [collisionKey, pathCandidates] of candidates) {
+    if (pathCandidates.length === 1) {
+      files.set(collisionKey, pathCandidates[0]);
+      continue;
+    }
+    const resolution = resolutions.get(collisionKey);
+    const packageIds = pathCandidates
+      .map((candidate) => candidate.packageId)
+      .sort();
+    const resolvedPackageIds = resolution?.packages.slice().sort();
+    if (
+      !resolution ||
+      JSON.stringify(packageIds) !== JSON.stringify(resolvedPackageIds)
+    ) {
+      const packageList = `${packageIds.slice(0, -1).join(", ")} and ${packageIds.at(-1)}`;
+      unresolvedCollisions.push(
+        `File path collision at "${pathCandidates.at(-1)?.outputPath}" between packages ${packageList}`,
+      );
+      continue;
+    }
+    if (resolution.override !== undefined) {
+      files.set(collisionKey, {
+        packageId: "concordia-integration",
+        sourcePath: path.resolve(
+          configuration.rootDirectory,
+          resolution.override,
+        ),
+      });
+      continue;
+    }
+    const winner = pathCandidates.find(
+      (candidate) => candidate.packageId === resolution.winner,
+    );
+    if (!winner) {
+      throw new Error(
+        `File path resolution for "${resolution.path}" selects unavailable package ${resolution.winner}`,
+      );
+    }
+    files.set(collisionKey, winner);
+  }
+  if (unresolvedCollisions.length > 0) {
+    throw new Error(unresolvedCollisions.join("\n"));
   }
   return files;
 }
@@ -98,6 +164,15 @@ export async function buildProject(
 ): Promise<string> {
   const configuration = await validateProject(rootDirectory, options);
   const files = await collectPackageFiles(configuration);
+  const analysis = await analyzeProject(configuration);
+  const unresolvedSemanticFindings = analysis.findings.filter(
+    (finding) => !finding.resolved && finding.type !== "path",
+  );
+  if (unresolvedSemanticFindings.length > 0) {
+    throw new Error(
+      `Semantic analysis found ${unresolvedSemanticFindings.length} unresolved finding(s). Run "npm run analyze", vote in integration/decision-frontier.md, and inspect integration/deep-frontier.md.`,
+    );
+  }
   const outputDirectory = path.resolve(
     configuration.rootDirectory,
     configuration.build.outputDirectory,

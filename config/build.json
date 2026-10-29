@@ -2,5 +2,6 @@
   "version": 1,
   "targetGameVersion": "1.4.5",
   "packagesFile": "config/packages.json",
+  "conflictRulesFile": "config/conflict-rules.json",
   "outputDirectory": "dist/europa-concordia"
 }
