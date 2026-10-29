@@ -1,24 +1,15 @@
 {
   "version": 1,
   "steamAppId": 3450310,
-  "requiredWorkshopItems": [
-    {
-      "workshopId": "3692202776",
-      "name": "Community Mod Framework"
-    },
-    {
-      "workshopId": "3736668860",
-      "name": "Construction Manager"
-    },
-    {
-      "workshopId": "3696243603",
-      "name": "Autonomous Diplomats"
-    },
-    {
-      "workshopId": "3647884749",
-      "name": "SmartTaxes"
-    }
-  ],
+  "metadata": {
+    "name": "Europa Concordia",
+    "id": "europa_concordia",
+    "version": "0.1.0",
+    "supportedGameVersion": "1.4.*",
+    "shortDescription": "A staged EU5 map pass combining More locations Mod and Sulphur's Rivers Expanded.",
+    "tags": ["Gameplay", "Map"]
+  },
+  "requiredWorkshopItems": [],
   "channels": {
     "stable": {
       "publishedFileId": null,

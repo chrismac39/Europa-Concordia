@@ -9,6 +9,7 @@
     "build": "tsx scripts/build/cli.ts build",
     "diff": "tsx scripts/diff/cli.ts",
     "validate": "tsx scripts/build/cli.ts validate",
+    "workshop:install": "tsx scripts/workshop/cli.ts install",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format:check": "prettier --check .",

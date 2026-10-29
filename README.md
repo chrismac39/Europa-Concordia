@@ -5,10 +5,9 @@ project. It combines separately sourced mods and original content into one
 traceable release while keeping imported source content distinct from local
 compatibility work.
 
-This repository currently provides the package inventory, pinned local source
-snapshots, and a local build pipeline. It does not yet acquire upstream sources
-automatically, parse EU5 definitions, or verify the final directory against
-EU5's mod format.
+This repository provides the package inventory, pinned local source snapshots,
+a local build pipeline, and a command to install the current pass in the EU5
+launcher for Workshop publishing and playtesting.
 
 ## Requirements
 
@@ -50,6 +49,15 @@ npm run build -- --target-game-version 1.4.5
 Only enabled packages declaring compatibility with the effective target are
 accepted. Builds write to the ignored `dist/europa-concordia/` directory and
 record the effective target in `build-metadata.json`.
+
+Prepare and install the current pass for the EU5 launcher with:
+
+```sh
+npm run workshop:install
+```
+
+This stages a clean Workshop folder and copies it to the local EU5 mod
+directory. Publish it from the Paradox Launcher; the command does not upload.
 
 ## Adding a package
 
