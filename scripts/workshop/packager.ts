@@ -7,14 +7,14 @@ import {
   readdir,
   rename,
   rm,
-  writeFile,
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { buildProject } from "../build/pipeline.js";
-import {
-  createWorkshopModMetadata,
-  type WorkshopMetadataConfiguration,
+import type { ProjectOptions } from "../build/package-model.js";
+import type {
+  WorkshopMetadataConfiguration,
+  WorkshopModMetadata,
 } from "./metadata.js";
 
 interface WorkshopConfiguration {
@@ -117,6 +117,44 @@ async function loadWorkshopConfiguration(
   return readWorkshopConfiguration(JSON.parse(contents) as unknown);
 }
 
+function validateBuiltMetadata(value: unknown): WorkshopModMetadata {
+  if (
+    !isRecord(value) ||
+    value.game_id !== "eu5" ||
+    typeof value.name !== "string" ||
+    typeof value.id !== "string" ||
+    typeof value.version !== "string" ||
+    typeof value.supported_game_version !== "string" ||
+    typeof value.short_description !== "string" ||
+    !Array.isArray(value.tags) ||
+    !value.tags.every((tag) => typeof tag === "string") ||
+    !Array.isArray(value.relationships) ||
+    !value.relationships.every(
+      (relationship) =>
+        isRecord(relationship) &&
+        relationship.rel_type === "dependency" &&
+        typeof relationship.id === "string" &&
+        typeof relationship.display_name === "string" &&
+        relationship.resource_type === "mod" &&
+        typeof relationship.version === "string",
+    ) ||
+    !isRecord(value.game_custom_data)
+  ) {
+    throw new Error("Generated patch has invalid EU5 launcher metadata");
+  }
+  return {
+    name: value.name,
+    id: value.id,
+    version: value.version,
+    game_id: "eu5",
+    supported_game_version: value.supported_game_version,
+    short_description: value.short_description,
+    tags: value.tags,
+    relationships: value.relationships,
+    game_custom_data: {},
+  };
+}
+
 function assertInsideDirectory(
   parentDirectory: string,
   targetDirectory: string,
@@ -132,16 +170,29 @@ function assertInsideDirectory(
   }
 }
 
-export async function packageWorkshopMod(rootDirectory: string): Promise<{
+export async function packageWorkshopMod(
+  rootDirectory: string,
+  options: ProjectOptions = {},
+): Promise<{
   artifactDirectory: string;
-  metadata: WorkshopMetadataConfiguration;
+  metadata: WorkshopModMetadata;
 }> {
   const workshopConfiguration = await loadWorkshopConfiguration(rootDirectory);
-  const buildDirectory = await buildProject(rootDirectory);
+  const buildDirectory = await buildProject(rootDirectory, options);
+  const metadata = validateBuiltMetadata(
+    JSON.parse(
+      await readFile(
+        path.join(buildDirectory, ".metadata", "metadata.json"),
+        "utf8",
+      ),
+    ) as unknown,
+  );
   const distDirectory = path.resolve(rootDirectory, "dist");
+  const profileId = path.basename(buildDirectory);
   const artifactDirectory = path.resolve(
     rootDirectory,
     workshopConfiguration.channels.stable.artifactDirectory,
+    profileId,
   );
   assertInsideDirectory(distDirectory, artifactDirectory);
   await mkdir(path.dirname(artifactDirectory), { recursive: true });
@@ -153,7 +204,11 @@ export async function packageWorkshopMod(rootDirectory: string): Promise<{
     for (const entry of await readdir(buildDirectory, {
       withFileTypes: true,
     })) {
-      if (entry.isDirectory() && contentRoots.has(entry.name.toLowerCase())) {
+      if (
+        entry.isDirectory() &&
+        (contentRoots.has(entry.name.toLowerCase()) ||
+          entry.name.toLowerCase() === ".metadata")
+      ) {
         await cp(
           path.join(buildDirectory, entry.name),
           path.join(stagingDirectory, entry.name),
@@ -161,18 +216,6 @@ export async function packageWorkshopMod(rootDirectory: string): Promise<{
         );
       }
     }
-
-    const metadataDirectory = path.join(stagingDirectory, ".metadata");
-    await mkdir(metadataDirectory, { recursive: true });
-    await writeFile(
-      path.join(metadataDirectory, "metadata.json"),
-      `${JSON.stringify(
-        createWorkshopModMetadata(workshopConfiguration.metadata),
-        null,
-        2,
-      )}\n`,
-      "utf8",
-    );
 
     await rm(artifactDirectory, { recursive: true, force: true });
     await rename(stagingDirectory, artifactDirectory);
@@ -182,15 +225,18 @@ export async function packageWorkshopMod(rootDirectory: string): Promise<{
 
   return {
     artifactDirectory,
-    metadata: workshopConfiguration.metadata,
+    metadata,
   };
 }
 
 export async function installWorkshopModLocally(
   rootDirectory: string,
+  options: ProjectOptions = {},
 ): Promise<string> {
-  const { artifactDirectory, metadata } =
-    await packageWorkshopMod(rootDirectory);
+  const { artifactDirectory, metadata } = await packageWorkshopMod(
+    rootDirectory,
+    options,
+  );
   const modDirectory = path.join(
     os.homedir(),
     "Documents",

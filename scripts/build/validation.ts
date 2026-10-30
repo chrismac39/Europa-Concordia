@@ -4,8 +4,10 @@ import type {
   BuildConfiguration,
   ConcordiaPackage,
   ConflictRules,
+  PlaysetProfile,
   PackageManifest,
   PackageSource,
+  ProfileMod,
   ProjectConfiguration,
   ProjectOptions,
 } from "./package-model.js";
@@ -15,6 +17,8 @@ const packageVersionPattern = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 const gameVersionPattern = /^\d+\.\d+\.\d+$/;
 const pinnedRevisionPattern = /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i;
 const snapshotChecksumPattern = /^sha256:[a-f0-9]{64}$/i;
+const profilePatchIdPattern = /^[a-z0-9][a-z0-9-]*$/;
+const profileModIdPattern = /^[a-z0-9][a-z0-9_-]*$/;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -123,9 +127,6 @@ function validatePackage(
   ) {
     errors.push(`${label}.version must use MAJOR.MINOR.PATCH format`);
   }
-  if (typeof value.enabled !== "boolean") {
-    errors.push(`${label}.enabled must be a boolean`);
-  }
   if (
     !Array.isArray(value.dependencies) ||
     !value.dependencies.every(
@@ -191,16 +192,225 @@ function validateBuildConfiguration(value: unknown): BuildConfiguration {
     value.version !== 1 ||
     typeof value.targetGameVersion !== "string" ||
     !gameVersionPattern.test(value.targetGameVersion) ||
+    typeof value.defaultProfile !== "string" ||
+    !profilePatchIdPattern.test(value.defaultProfile) ||
     typeof value.packagesFile !== "string" ||
     typeof value.conflictRulesFile !== "string" ||
     typeof value.outputDirectory !== "string"
   ) {
     throw new Error(
-      "Build configuration must have version 1, targetGameVersion, packagesFile, conflictRulesFile, and outputDirectory",
+      "Build configuration must have version 1, targetGameVersion, defaultProfile, packagesFile, conflictRulesFile, and outputDirectory",
     );
   }
 
   return value as unknown as BuildConfiguration;
+}
+
+function validateProfile(value: unknown): PlaysetProfile {
+  const errors: string[] = [];
+  if (
+    !isRecord(value) ||
+    value.version !== 1 ||
+    typeof value.id !== "string" ||
+    !profilePatchIdPattern.test(value.id) ||
+    typeof value.name !== "string" ||
+    value.name.trim() === "" ||
+    typeof value.targetGameVersion !== "string" ||
+    !gameVersionPattern.test(value.targetGameVersion) ||
+    !Array.isArray(value.mods) ||
+    !Array.isArray(value.loadOrder) ||
+    !Array.isArray(value.patches) ||
+    !isRecord(value.patchMod)
+  ) {
+    throw new Error("Playset profile has an invalid structure");
+  }
+
+  const mods: ProfileMod[] = [];
+  value.mods.forEach((mod, index) => {
+    const label = `profile.mods[${index}]`;
+    if (!isRecord(mod)) {
+      errors.push(`${label} must be an object`);
+      return;
+    }
+    if (
+      typeof mod.packageId !== "string" ||
+      !packageIdPattern.test(mod.packageId)
+    ) {
+      errors.push(`${label}.packageId must be a package identifier`);
+    }
+    requiredString(mod.name, `${label}.name`, errors);
+    if (
+      typeof mod.version !== "string" ||
+      !packageVersionPattern.test(mod.version)
+    ) {
+      errors.push(`${label}.version must use MAJOR.MINOR.PATCH format`);
+    }
+    if (!isRecord(mod.source)) {
+      errors.push(`${label}.source must be an object`);
+    } else if (mod.source.type === "steam-workshop") {
+      if (
+        typeof mod.source.workshopId !== "string" ||
+        !/^\d+$/.test(mod.source.workshopId)
+      ) {
+        errors.push(`${label}.source.workshopId must contain only digits`);
+      }
+      if (
+        typeof mod.source.snapshotChecksum !== "string" ||
+        !snapshotChecksumPattern.test(mod.source.snapshotChecksum)
+      ) {
+        errors.push(
+          `${label}.source.snapshotChecksum must be a sha256:<64 hex characters> value`,
+        );
+      }
+    } else if (mod.source.type === "git") {
+      if (
+        typeof mod.source.revision !== "string" ||
+        !pinnedRevisionPattern.test(mod.source.revision)
+      ) {
+        errors.push(`${label}.source.revision must be a full commit hash`);
+      }
+    } else if (mod.source.type !== "local") {
+      errors.push(`${label}.source.type must be git, steam-workshop, or local`);
+    }
+    if (
+      typeof mod.packageId === "string" &&
+      typeof mod.name === "string" &&
+      typeof mod.version === "string" &&
+      isRecord(mod.source) &&
+      (mod.source.type === "steam-workshop" ||
+        mod.source.type === "git" ||
+        mod.source.type === "local")
+    ) {
+      mods.push(mod as unknown as ProfileMod);
+    }
+  });
+  const modIds = mods.map((mod) => mod.packageId);
+  if (new Set(modIds).size !== modIds.length) {
+    errors.push("Profile package identifiers must be unique");
+  }
+
+  const patchModId = value.patchMod.id;
+  const loadOrder: unknown[] = Array.isArray(value.loadOrder)
+    ? value.loadOrder
+    : [];
+  const orderedModIds = loadOrder
+    .slice(0, -1)
+    .filter((entry): entry is string => typeof entry === "string");
+  if (
+    !loadOrder.every(
+      (entry, index) =>
+        typeof entry === "string" &&
+        (index === loadOrder.length - 1
+          ? entry === patchModId
+          : packageIdPattern.test(entry)),
+    )
+  ) {
+    errors.push(
+      "profile.loadOrder must contain package IDs followed by the Concordia patch ID",
+    );
+  } else if (
+    new Set(orderedModIds).size !== orderedModIds.length ||
+    orderedModIds.length !== modIds.length ||
+    orderedModIds.some((packageId) => !modIds.includes(packageId)) ||
+    loadOrder.at(-1) !== patchModId
+  ) {
+    errors.push(
+      "profile.loadOrder must list every selected mod once and the Concordia patch last",
+    );
+  }
+
+  const patchIds = new Set<string>();
+  const patchTargets = new Set<string>();
+  value.patches.forEach((patch, index) => {
+    const label = `profile.patches[${index}]`;
+    if (!isRecord(patch)) {
+      errors.push(`${label} must be an object`);
+      return;
+    }
+    const patchId = patch.id;
+    if (typeof patchId !== "string" || !profilePatchIdPattern.test(patchId)) {
+      errors.push(`${label}.id must be a patch identifier`);
+    } else if (patchIds.has(patchId)) {
+      errors.push(`${label}.id duplicates another patch`);
+    } else {
+      patchIds.add(patchId);
+    }
+    for (const field of ["sourcePath", "targetPath"] as const) {
+      const patchPath = patch[field];
+      const pathIsValid = requiredString(
+        patchPath,
+        `${label}.${field}`,
+        errors,
+      );
+      if (
+        typeof patchPath === "string" &&
+        pathIsValid &&
+        (path.isAbsolute(patchPath) ||
+          patchPath.includes("\\") ||
+          patchPath.split("/").includes(".."))
+      ) {
+        errors.push(
+          `${label}.${field} must be a normalized relative POSIX path`,
+        );
+      }
+    }
+    if (
+      typeof patch.targetPackageId !== "string" ||
+      !packageIdPattern.test(patch.targetPackageId)
+    ) {
+      errors.push(`${label}.targetPackageId must be a package identifier`);
+    }
+    if (patch.resolutionType !== "merged-patch") {
+      errors.push(`${label}.resolutionType must be merged-patch`);
+    }
+    requiredString(patch.reason, `${label}.reason`, errors);
+    for (const field of ["preserves", "suppresses"] as const) {
+      if (
+        !Array.isArray(patch[field]) ||
+        !patch[field].every(
+          (entry) => typeof entry === "string" && entry.trim() !== "",
+        )
+      ) {
+        errors.push(`${label}.${field} must be a non-empty string array`);
+      }
+    }
+    if (typeof patch.targetPath === "string") {
+      const collisionKey = patch.targetPath.toLocaleLowerCase("en-US");
+      if (patchTargets.has(collisionKey)) {
+        errors.push(`${label}.targetPath duplicates another patch target`);
+      }
+      patchTargets.add(collisionKey);
+    }
+  });
+
+  const patchMod = value.patchMod;
+  for (const field of ["name", "id", "version", "shortDescription"] as const) {
+    requiredString(patchMod[field], `profile.patchMod.${field}`, errors);
+  }
+  if (
+    typeof patchMod.id === "string" &&
+    !profileModIdPattern.test(patchMod.id)
+  ) {
+    errors.push(
+      "profile.patchMod.id must use lowercase letters, digits, _ or -",
+    );
+  }
+  if (
+    typeof patchMod.version === "string" &&
+    !packageVersionPattern.test(patchMod.version)
+  ) {
+    errors.push("profile.patchMod.version must use MAJOR.MINOR.PATCH format");
+  }
+  if (
+    !Array.isArray(patchMod.tags) ||
+    !patchMod.tags.every((tag) => typeof tag === "string" && tag.trim() !== "")
+  ) {
+    errors.push("profile.patchMod.tags must be a non-empty string array");
+  }
+  if (errors.length > 0) {
+    throw new Error(`Invalid playset profile:\n- ${errors.join("\n- ")}`);
+  }
+  return value as unknown as PlaysetProfile;
 }
 
 function validateConflictRules(value: unknown): ConflictRules {
@@ -249,6 +459,15 @@ function validateConflictRules(value: unknown): ConflictRules {
     if (!packagesAreValid) {
       errors.push(`${label}.packages must contain unique package identifiers`);
     }
+    if (
+      !["load-order", "merged-patch", "incompatible"].includes(
+        String(resolution.resolutionType),
+      )
+    ) {
+      errors.push(
+        `${label}.resolutionType must be load-order, merged-patch, or incompatible`,
+      );
+    }
     if (hasWinner === hasOverride) {
       errors.push(`${label} must specify exactly one of winner or override`);
     } else if (
@@ -268,6 +487,26 @@ function validateConflictRules(value: unknown): ConflictRules {
       errors.push(`${label}.override must be a normalized relative POSIX path`);
     }
     requiredString(resolution.reason, `${label}.reason`, errors);
+    if (resolution.sourceFingerprints !== undefined) {
+      if (!isRecord(resolution.sourceFingerprints)) {
+        errors.push(`${label}.sourceFingerprints must be an object`);
+      } else {
+        for (const [packageId, fingerprint] of Object.entries(
+          resolution.sourceFingerprints,
+        )) {
+          if (
+            !packageIdPattern.test(packageId) ||
+            typeof fingerprint !== "string" ||
+            !/^[a-f0-9]{64}$/i.test(fingerprint)
+          ) {
+            errors.push(
+              `${label}.sourceFingerprints must map package identifiers to SHA-256 hashes`,
+            );
+            break;
+          }
+        }
+      }
+    }
     if (pathIsValid) {
       const collisionKey = resolutionPath.toLocaleLowerCase("en-US");
       if (paths.has(collisionKey)) {
@@ -292,6 +531,15 @@ function validateConflictRules(value: unknown): ConflictRules {
       errors.push(`${label}.fingerprint duplicates another resolution`);
     } else {
       semanticFingerprints.add(resolution.fingerprint);
+    }
+    if (
+      !["merged-patch", "incompatible"].includes(
+        String(resolution.resolutionType),
+      )
+    ) {
+      errors.push(
+        `${label}.resolutionType must be merged-patch or incompatible`,
+      );
     }
     requiredString(resolution.decision, `${label}.decision`, errors);
     requiredString(resolution.reason, `${label}.reason`, errors);
@@ -337,13 +585,15 @@ async function assertNoSymlinks(directory: string): Promise<void> {
   }
 }
 
-function assertDependencies(packages: ConcordiaPackage[]): void {
+function assertDependencies(
+  packages: ConcordiaPackage[],
+  allPackages: ConcordiaPackage[],
+): void {
   const packageById = new Map(
-    packages.map((packageValue) => [packageValue.id, packageValue]),
+    allPackages.map((packageValue) => [packageValue.id, packageValue]),
   );
-  const enabled = packages.filter((packageValue) => packageValue.enabled);
-
-  for (const packageValue of enabled) {
+  const selectedIds = new Set(packages.map((packageValue) => packageValue.id));
+  for (const packageValue of packages) {
     for (const dependencyId of packageValue.dependencies) {
       const dependency = packageById.get(dependencyId);
       if (!dependency) {
@@ -351,9 +601,9 @@ function assertDependencies(packages: ConcordiaPackage[]): void {
           `${packageValue.id} depends on unknown package ${dependencyId}`,
         );
       }
-      if (!dependency.enabled) {
+      if (!selectedIds.has(dependencyId)) {
         throw new Error(
-          `${packageValue.id} depends on disabled package ${dependencyId}`,
+          `${packageValue.id} depends on unselected package ${dependencyId}`,
         );
       }
     }
@@ -371,7 +621,7 @@ function assertDependencies(packages: ConcordiaPackage[]): void {
     visiting.add(packageValue.id);
     for (const dependencyId of packageValue.dependencies) {
       const dependency = packageById.get(dependencyId);
-      if (dependency?.enabled) {
+      if (dependency) {
         visit(dependency);
       }
     }
@@ -379,7 +629,7 @@ function assertDependencies(packages: ConcordiaPackage[]): void {
     visited.add(packageValue.id);
   };
 
-  enabled.forEach(visit);
+  packages.forEach(visit);
 }
 
 export async function validateProject(
@@ -411,6 +661,28 @@ export async function validateProject(
   const packageManifest = validateManifest(
     JSON.parse(await readFile(packageFile, "utf8")) as unknown,
   );
+  const profileId =
+    options.profileId ?? effectiveBuildConfiguration.defaultProfile;
+  if (!profilePatchIdPattern.test(profileId)) {
+    throw new Error("profileId must be a lowercase profile identifier");
+  }
+  const profilePath = path.join(rootDirectory, "profiles", `${profileId}.json`);
+  const profile = validateProfile(
+    JSON.parse(await readFile(profilePath, "utf8")) as unknown,
+  );
+  if (profile.id !== profileId) {
+    throw new Error(
+      `Profile file ${profilePath} declares id ${profile.id}, not ${profileId}`,
+    );
+  }
+  const effectiveTargetGameVersion =
+    options.targetGameVersion ?? profile.targetGameVersion;
+  if (effectiveTargetGameVersion !== profile.targetGameVersion) {
+    throw new Error(
+      `Profile ${profile.id} targets EU5 ${profile.targetGameVersion}, but this build targets EU5 ${effectiveTargetGameVersion}`,
+    );
+  }
+  effectiveBuildConfiguration.targetGameVersion = profile.targetGameVersion;
   const conflictRulesFile = resolveProjectPath(
     rootDirectory,
     effectiveBuildConfiguration.conflictRulesFile,
@@ -430,12 +702,54 @@ export async function validateProject(
     throw new Error("outputDirectory must be a child directory inside dist/");
   }
 
-  assertDependencies(packageManifest.packages);
-  const enabledPackages = packageManifest.packages
-    .filter((packageValue) => packageValue.enabled)
-    .sort((left, right) =>
-      left.id < right.id ? -1 : left.id > right.id ? 1 : 0,
-    );
+  const packagesById = new Map(
+    packageManifest.packages.map((packageValue) => [
+      packageValue.id,
+      packageValue,
+    ]),
+  );
+  const selectedPackages = profile.mods.map((profileMod) => {
+    const packageValue = packagesById.get(profileMod.packageId);
+    if (!packageValue) {
+      throw new Error(
+        `Profile ${profile.id} selects unknown package ${profileMod.packageId}`,
+      );
+    }
+    if (
+      packageValue.name !== profileMod.name ||
+      packageValue.version !== profileMod.version ||
+      packageValue.source.type !== profileMod.source.type ||
+      (packageValue.source.type === "steam-workshop" &&
+        profileMod.source.type === "steam-workshop" &&
+        (packageValue.source.workshopId !== profileMod.source.workshopId ||
+          packageValue.source.snapshotChecksum !==
+            profileMod.source.snapshotChecksum)) ||
+      (packageValue.source.type === "git" &&
+        profileMod.source.type === "git" &&
+        packageValue.source.revision !== profileMod.source.revision)
+    ) {
+      throw new Error(
+        `Profile ${profile.id} has a stale version or source pin for ${profileMod.packageId}; update the profile and rerun analysis.`,
+      );
+    }
+    return packageValue;
+  });
+  assertDependencies(selectedPackages, packageManifest.packages);
+  const loadOrderPosition = new Map(
+    profile.loadOrder.map((packageId, index) => [packageId, index]),
+  );
+  for (const packageValue of selectedPackages) {
+    for (const dependencyId of packageValue.dependencies) {
+      if (
+        (loadOrderPosition.get(dependencyId) ?? Number.POSITIVE_INFINITY) >=
+        (loadOrderPosition.get(packageValue.id) ?? -1)
+      ) {
+        throw new Error(
+          `${dependencyId} must load before dependent mod ${packageValue.id}`,
+        );
+      }
+    }
+  }
 
   for (const resolution of conflictRules.filePathResolutions) {
     if (resolution.override === undefined) {
@@ -456,7 +770,7 @@ export async function validateProject(
     }
   }
 
-  for (const packageValue of enabledPackages) {
+  for (const packageValue of selectedPackages) {
     if (
       packageValue.targetGameVersion !==
       effectiveBuildConfiguration.targetGameVersion
@@ -484,10 +798,84 @@ export async function validateProject(
     await assertNoSymlinks(sourcePath);
   }
 
+  const selectedPackageIds = new Set(selectedPackages.map((value) => value.id));
+  const patchTargets = new Set<string>();
+  for (const patch of profile.patches) {
+    if (!selectedPackageIds.has(patch.targetPackageId)) {
+      throw new Error(
+        `Patch ${patch.id} targets unselected package ${patch.targetPackageId}`,
+      );
+    }
+    if (
+      !patch.sourcePath.startsWith("integration/patches/") &&
+      !patch.sourcePath.startsWith("integration/overrides/")
+    ) {
+      throw new Error(
+        `Patch ${patch.id} must be authored under integration/patches/ or integration/overrides/`,
+      );
+    }
+    const targetRoot = patch.targetPath
+      .split("/")[0]
+      .toLocaleLowerCase("en-US");
+    if (
+      !["dlc", "in_game", "loading_screen", "main_menu"].includes(targetRoot)
+    ) {
+      throw new Error(
+        `Patch ${patch.id} target must be inside an EU5 content root`,
+      );
+    }
+    const targetKey = patch.targetPath.toLocaleLowerCase("en-US");
+    if (patchTargets.has(targetKey)) {
+      throw new Error(`Multiple profile patches target ${patch.targetPath}`);
+    }
+    patchTargets.add(targetKey);
+    const sourcePath = resolveProjectPath(
+      rootDirectory,
+      patch.sourcePath,
+      `Patch ${patch.id}.sourcePath`,
+    );
+    if ((await lstat(sourcePath).catch(() => undefined))?.isSymbolicLink()) {
+      throw new Error(`Patch source cannot be a symbolic link: ${sourcePath}`);
+    }
+    if (!(await stat(sourcePath).catch(() => undefined))?.isFile()) {
+      throw new Error(`Patch source does not exist: ${sourcePath}`);
+    }
+    const packageValue = packagesById.get(patch.targetPackageId);
+    if (!packageValue) {
+      throw new Error(`Patch ${patch.id} targets an unknown package`);
+    }
+    const targetSourcePath = path.join(
+      rootDirectory,
+      packageValue.source.path,
+      ...patch.targetPath.split("/"),
+    );
+    if (!(await stat(targetSourcePath).catch(() => undefined))?.isFile()) {
+      throw new Error(
+        `Patch ${patch.id} target does not replace a file in ${patch.targetPackageId}: ${patch.targetPath}`,
+      );
+    }
+    const patchContents = await readFile(sourcePath, "utf8");
+    for (const definition of patch.preserves) {
+      if (!patchContents.includes(definition)) {
+        throw new Error(
+          `Patch ${patch.id} does not preserve required content "${definition}"`,
+        );
+      }
+    }
+    for (const definition of patch.suppresses) {
+      if (patchContents.includes(definition)) {
+        throw new Error(
+          `Patch ${patch.id} still contains suppressed content "${definition}"`,
+        );
+      }
+    }
+  }
+
   return {
     rootDirectory,
     build: effectiveBuildConfiguration,
+    profile,
     conflictRules,
-    packages: enabledPackages,
+    packages: selectedPackages,
   };
 }

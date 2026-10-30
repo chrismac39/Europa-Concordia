@@ -20,7 +20,7 @@ export function parseFrontierCollisions(
     const end = headings[index + 1]?.index ?? content.length;
     const section = content.slice(start, end);
     const sources = [
-      ...section.matchAll(/\[([^\]]+)\]\((\.\.\/sources\/[^)]+)\)/g),
+      ...section.matchAll(/\[([^\]]+)\]\(((?:\.\.\/)+sources\/[^)]+)\)/g),
     ].map((match) => ({ label: match[1], link: match[2] }));
 
     if (collisions.has(id)) {

@@ -8,43 +8,64 @@ import { writeConflictReports } from "../analysis/report.js";
 interface CliArguments {
   command: "build" | "validate";
   targetGameVersion?: string;
+  profileId?: string;
 }
 
 function parseArguments(argumentsValue: string[]): CliArguments {
   const [command, ...options] = argumentsValue;
   if (command !== "build" && command !== "validate") {
     throw new Error(
-      "Usage: npm run <build|validate> -- [--target-game-version MAJOR.MINOR.PATCH]",
+      "Usage: npm run <build|validate> -- [--profile PROFILE_ID] [--target-game-version MAJOR.MINOR.PATCH]",
     );
   }
 
   let targetGameVersion: string | undefined;
+  let profileId: string | undefined;
   for (let index = 0; index < options.length; index += 1) {
     const option = options[index];
     let value: string | undefined;
+    let optionName: "target-game-version" | "profile";
     if (option === "--target-game-version") {
+      optionName = "target-game-version";
       value = options[index + 1];
       index += 1;
     } else if (option.startsWith("--target-game-version=")) {
+      optionName = "target-game-version";
       value = option.slice("--target-game-version=".length);
+    } else if (option === "--profile") {
+      optionName = "profile";
+      value = options[index + 1];
+      index += 1;
+    } else if (option.startsWith("--profile=")) {
+      optionName = "profile";
+      value = option.slice("--profile=".length);
     } else {
       throw new Error(`Unknown option: ${option}`);
     }
     if (!value) {
-      throw new Error("--target-game-version requires a value");
+      throw new Error(`--${optionName} requires a value`);
     }
-    if (targetGameVersion !== undefined) {
-      throw new Error("--target-game-version may only be specified once");
+    if (optionName === "target-game-version") {
+      if (targetGameVersion !== undefined) {
+        throw new Error("--target-game-version may only be specified once");
+      }
+      targetGameVersion = value;
+    } else {
+      if (profileId !== undefined) {
+        throw new Error("--profile may only be specified once");
+      }
+      profileId = value;
     }
-    targetGameVersion = value;
   }
 
-  return { command, targetGameVersion };
+  return { command, targetGameVersion, profileId };
 }
 
 async function main(): Promise<void> {
-  const { command, targetGameVersion } = parseArguments(process.argv.slice(2));
-  const options = { targetGameVersion };
+  const { command, targetGameVersion, profileId } = parseArguments(
+    process.argv.slice(2),
+  );
+  const options = { targetGameVersion, profileId };
 
   const rootDirectory = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
@@ -53,7 +74,7 @@ async function main(): Promise<void> {
   if (command === "validate") {
     const configuration = await validateProject(rootDirectory, options);
     console.log(
-      `Validated ${configuration.packages.length} enabled package(s) for EU5 ${configuration.build.targetGameVersion}.`,
+      `Validated profile ${configuration.profile.id} with ${configuration.packages.length} selected mod(s) for EU5 ${configuration.build.targetGameVersion}.`,
     );
     return;
   }
@@ -66,15 +87,13 @@ async function main(): Promise<void> {
   );
   if (unresolvedFindings.length > 0) {
     throw new Error(
-      `Full-system analysis found ${unresolvedFindings.length} unresolved finding(s). Vote in integration/decision-frontier.md and inspect evidence in integration/deep-frontier.md; no build decisions were made automatically.`,
+      `Compatibility analysis found ${unresolvedFindings.length} unresolved finding(s). Review reports/${configuration.profile.id}/decision-frontier.md and reports/${configuration.profile.id}/deep-frontier.md.`,
     );
   }
 
   const outputDirectory = await buildProject(rootDirectory, options);
   console.log(
-    `Built ${path.relative(rootDirectory, outputDirectory)} for EU5 ${
-      targetGameVersion ?? "configured target"
-    }.`,
+    `Built profile ${configuration.profile.id} at ${path.relative(rootDirectory, outputDirectory)} for EU5 ${configuration.profile.targetGameVersion}.`,
   );
 }
 

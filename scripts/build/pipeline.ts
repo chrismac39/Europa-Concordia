@@ -2,178 +2,115 @@ import {
   copyFile,
   mkdir,
   mkdtemp,
-  readdir,
   rename,
   rm,
   stat,
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import type {
-  ConcordiaPackage,
-  ProjectConfiguration,
-  ProjectOptions,
-} from "./package-model.js";
+import type { ProjectOptions } from "./package-model.js";
 import { validateProject } from "./validation.js";
 import { analyzeProject } from "../analysis/analyzer.js";
+import { createWorkshopModMetadata } from "../workshop/metadata.js";
 
 interface BuildMetadata {
   formatVersion: 1;
+  profileId: string;
   targetGameVersion: string;
-  packages: Array<{
-    id: string;
+  loadOrder: string[];
+  mods: Array<{
+    packageId: string;
+    name: string;
     version: string;
-    sourceType: ConcordiaPackage["source"]["type"];
+    sourceIdentifier: string;
+  }>;
+  patches: Array<{
+    id: string;
+    targetPath: string;
+    resolutionType: string;
   }>;
 }
 
-const packageContentRoots = new Set([
-  "dlc",
-  "in_game",
-  "loading_screen",
-  "main_menu",
-]);
-
-async function listFiles(directory: string, prefix = ""): Promise<string[]> {
-  const entries = await readdir(directory, { withFileTypes: true });
-  const files: string[] = [];
-  for (const entry of entries) {
-    if (
-      prefix === "" &&
-      !packageContentRoots.has(entry.name.toLocaleLowerCase("en-US"))
-    ) {
-      continue;
-    }
-    const relativePath = prefix
-      ? path.posix.join(prefix, entry.name)
-      : entry.name;
-    const entryPath = path.join(directory, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await listFiles(entryPath, relativePath)));
-    } else if (entry.isFile()) {
-      files.push(relativePath);
-    }
-  }
-  return files.sort((left, right) =>
-    left < right ? -1 : left > right ? 1 : 0,
+function sourceIdentifier(
+  packageId: string,
+  configuration: Awaited<ReturnType<typeof validateProject>>,
+): string {
+  const mod = configuration.profile.mods.find(
+    (candidate) => candidate.packageId === packageId,
   );
+  if (!mod) {
+    throw new Error(
+      `Profile ${configuration.profile.id} is missing ${packageId}`,
+    );
+  }
+  if (mod.source.type === "steam-workshop") {
+    return `Steam Workshop ${mod.source.workshopId}`;
+  }
+  if (mod.source.type === "git") {
+    return `Git ${mod.source.revision}`;
+  }
+  return "Local source";
 }
 
-async function collectPackageFiles(
-  configuration: ProjectConfiguration,
-): Promise<Map<string, { packageId: string; sourcePath: string }>> {
-  const candidates = new Map<
-    string,
-    Array<{ packageId: string; sourcePath: string; outputPath: string }>
-  >();
-  for (const packageValue of configuration.packages) {
-    const sourceDirectory = path.resolve(
-      configuration.rootDirectory,
-      packageValue.source.path,
-    );
-    for (const relativePath of await listFiles(sourceDirectory)) {
-      const normalizedPath = relativePath.split(path.sep).join("/");
-      const collisionKey = normalizedPath.toLocaleLowerCase("en-US");
-      if (collisionKey === "build-metadata.json") {
-        throw new Error(
-          `Package ${packageValue.id} uses reserved output path "build-metadata.json"`,
-        );
-      }
-      const pathCandidates = candidates.get(collisionKey) ?? [];
-      pathCandidates.push({
-        packageId: packageValue.id,
-        sourcePath: path.join(sourceDirectory, relativePath),
-        outputPath: normalizedPath,
-      });
-      candidates.set(collisionKey, pathCandidates);
-    }
-  }
-
-  const resolutions = new Map(
-    configuration.conflictRules.filePathResolutions.map((resolution) => [
-      resolution.path.toLocaleLowerCase("en-US"),
-      resolution,
+function createLoadOrderGuide(
+  configuration: Awaited<ReturnType<typeof validateProject>>,
+): string {
+  const packages = new Map(
+    configuration.packages.map((packageValue) => [
+      packageValue.id,
+      packageValue,
     ]),
   );
-  const files = new Map<string, { packageId: string; sourcePath: string }>();
-  const unresolvedCollisions: string[] = [];
-  for (const [collisionKey, pathCandidates] of candidates) {
-    const resolution = resolutions.get(collisionKey);
-    if (pathCandidates.length === 1) {
-      if (resolution?.override !== undefined) {
-        const packageIds = pathCandidates
-          .map((candidate) => candidate.packageId)
-          .sort();
-        const resolvedPackageIds = resolution.packages.slice().sort();
-        if (JSON.stringify(packageIds) !== JSON.stringify(resolvedPackageIds)) {
-          unresolvedCollisions.push(
-            `File path resolution for "${resolution.path}" does not match package ${packageIds[0]}`,
-          );
-          continue;
-        }
-        files.set(collisionKey, {
-          packageId: "concordia-integration",
-          sourcePath: path.resolve(
-            configuration.rootDirectory,
-            resolution.override,
-          ),
-        });
-        continue;
+  const entries = configuration.profile.loadOrder
+    .filter((entry) => entry !== configuration.profile.patchMod.id)
+    .map((packageId, index) => {
+      const packageValue = packages.get(packageId);
+      if (!packageValue) {
+        throw new Error(
+          `Profile load order references unknown mod ${packageId}`,
+        );
       }
-      files.set(collisionKey, pathCandidates[0]);
-      continue;
-    }
-    const packageIds = pathCandidates
-      .map((candidate) => candidate.packageId)
-      .sort();
-    const resolvedPackageIds = resolution?.packages.slice().sort();
-    if (
-      !resolution ||
-      JSON.stringify(packageIds) !== JSON.stringify(resolvedPackageIds)
-    ) {
-      const packageList = `${packageIds.slice(0, -1).join(", ")} and ${packageIds.at(-1)}`;
-      unresolvedCollisions.push(
-        `File path collision at "${pathCandidates.at(-1)?.outputPath}" between packages ${packageList}`,
-      );
-      continue;
-    }
-    if (resolution.override !== undefined) {
-      files.set(collisionKey, {
-        packageId: "concordia-integration",
-        sourcePath: path.resolve(
-          configuration.rootDirectory,
-          resolution.override,
-        ),
-      });
-      continue;
-    }
-    const winner = pathCandidates.find(
-      (candidate) => candidate.packageId === resolution.winner,
-    );
-    if (!winner) {
-      throw new Error(
-        `File path resolution for "${resolution.path}" selects unavailable package ${resolution.winner}`,
-      );
-    }
-    files.set(collisionKey, winner);
-  }
-  if (unresolvedCollisions.length > 0) {
-    throw new Error(unresolvedCollisions.join("\n"));
-  }
-  return files;
+      return `${index + 1}. **${packageValue.name}** ${packageValue.version} - ${sourceIdentifier(packageId, configuration)}.`;
+    });
+  entries.push(
+    `${entries.length + 1}. **${configuration.profile.patchMod.name}** ${configuration.profile.patchMod.version} - generated Concordia compatibility patch; load last.`,
+  );
+  return [
+    `# ${configuration.profile.name} - EU5 load order`,
+    "",
+    `Target game version: **${configuration.profile.targetGameVersion}**.`,
+    "",
+    "Enable the following original mods separately in the EU5 playset, in this order:",
+    "",
+    ...entries,
+    "",
+    "The generated Concordia mod contains only Concordia-authored compatibility files and its launcher metadata. It does not bundle or replace any listed upstream mod.",
+    "",
+    "Update the profile and rerun `npm run analyze -- --profile " +
+      configuration.profile.id +
+      "` whenever a required mod version, Workshop item, source pin, or EU5 target changes.",
+    "",
+  ].join("\n");
 }
 
 function createBuildMetadata(
-  targetGameVersion: string,
-  packages: ConcordiaPackage[],
+  configuration: Awaited<ReturnType<typeof validateProject>>,
 ): BuildMetadata {
   return {
     formatVersion: 1,
-    targetGameVersion,
-    packages: packages.map((packageValue) => ({
-      id: packageValue.id,
-      version: packageValue.version,
-      sourceType: packageValue.source.type,
+    profileId: configuration.profile.id,
+    targetGameVersion: configuration.profile.targetGameVersion,
+    loadOrder: configuration.profile.loadOrder.slice(),
+    mods: configuration.profile.mods.map((mod) => ({
+      packageId: mod.packageId,
+      name: mod.name,
+      version: mod.version,
+      sourceIdentifier: sourceIdentifier(mod.packageId, configuration),
+    })),
+    patches: configuration.profile.patches.map((patch) => ({
+      id: patch.id,
+      targetPath: patch.targetPath,
+      resolutionType: patch.resolutionType,
     })),
   };
 }
@@ -183,44 +120,58 @@ export async function buildProject(
   options: ProjectOptions = {},
 ): Promise<string> {
   const configuration = await validateProject(rootDirectory, options);
-  const files = await collectPackageFiles(configuration);
   const analysis = await analyzeProject(configuration);
-  const unresolvedSemanticFindings = analysis.findings.filter(
-    (finding) => !finding.resolved && finding.type !== "path",
+  const unresolvedFindings = analysis.findings.filter(
+    (finding) => !finding.resolved,
   );
-  if (unresolvedSemanticFindings.length > 0) {
+  if (unresolvedFindings.length > 0) {
     throw new Error(
-      `Semantic analysis found ${unresolvedSemanticFindings.length} unresolved finding(s). Run "npm run analyze", vote in integration/decision-frontier.md, and inspect integration/deep-frontier.md.`,
+      `Compatibility analysis found ${unresolvedFindings.length} unresolved finding(s). Classify each conflict as load-order, merged-patch, or incompatible, and update its content-pinned decision before building.`,
     );
   }
-  const outputDirectory = path.resolve(
+
+  const outputBase = path.resolve(
     configuration.rootDirectory,
     configuration.build.outputDirectory,
   );
+  const outputDirectory = path.join(outputBase, configuration.profile.id);
   const outputParent = path.dirname(outputDirectory);
   await mkdir(outputParent, { recursive: true });
   const stagingDirectory = await mkdtemp(
     path.join(outputParent, ".europa-concordia-staging-"),
   );
-
   try {
-    for (const [normalizedPath, file] of [...files.entries()].sort(
-      ([left], [right]) => (left < right ? -1 : left > right ? 1 : 0),
-    )) {
+    for (const patch of configuration.profile.patches) {
+      const sourcePath = path.resolve(
+        configuration.rootDirectory,
+        patch.sourcePath,
+      );
       const targetPath = path.join(
         stagingDirectory,
-        ...normalizedPath.split("/"),
+        ...patch.targetPath.split("/"),
       );
       await mkdir(path.dirname(targetPath), { recursive: true });
-      await copyFile(file.sourcePath, targetPath);
+      await copyFile(sourcePath, targetPath);
     }
+
+    const metadataDirectory = path.join(stagingDirectory, ".metadata");
+    await mkdir(metadataDirectory, { recursive: true });
+    const patchMetadata = configuration.profile.patchMod;
+    const [targetMajor, targetMinor] =
+      configuration.profile.targetGameVersion.split(".");
+    const supportedGameVersion = `${targetMajor}.${targetMinor}.*`;
     await writeFile(
-      path.join(stagingDirectory, "build-metadata.json"),
+      path.join(metadataDirectory, "metadata.json"),
       `${JSON.stringify(
-        createBuildMetadata(
-          configuration.build.targetGameVersion,
-          configuration.packages,
-        ),
+        createWorkshopModMetadata({
+          name: patchMetadata.name,
+          id: patchMetadata.id,
+          version: patchMetadata.version,
+          supportedGameVersion,
+          shortDescription: patchMetadata.shortDescription,
+          tags: patchMetadata.tags,
+          relationships: [],
+        }),
         null,
         2,
       )}\n`,
@@ -235,6 +186,29 @@ export async function buildProject(
       await rm(stagingDirectory, { recursive: true, force: true });
     }
   }
+
+  const metadataDirectory = path.resolve(
+    configuration.rootDirectory,
+    "dist",
+    "build-metadata",
+  );
+  await mkdir(metadataDirectory, { recursive: true });
+  await writeFile(
+    path.join(metadataDirectory, `${configuration.profile.id}.json`),
+    `${JSON.stringify(createBuildMetadata(configuration), null, 2)}\n`,
+    "utf8",
+  );
+  const guideDirectory = path.resolve(
+    configuration.rootDirectory,
+    "dist",
+    "load-order",
+  );
+  await mkdir(guideDirectory, { recursive: true });
+  await writeFile(
+    path.join(guideDirectory, `${configuration.profile.id}.md`),
+    createLoadOrderGuide(configuration),
+    "utf8",
+  );
 
   return outputDirectory;
 }

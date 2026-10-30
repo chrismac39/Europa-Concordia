@@ -1,4 +1,5 @@
 import { createReadStream } from "node:fs";
+import { createHash } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
 import { createInterface } from "node:readline";
 import path from "node:path";
@@ -160,10 +161,18 @@ function finding(
     fingerprintParts: string[];
     sources: PackageFile[];
   },
+  profileId: string,
 ): ConflictFinding {
   const sources = uniqueSources(value.sources);
   return {
-    fingerprint: fingerprint(value.fingerprintParts),
+    fingerprint: fingerprint([
+      profileId,
+      ...value.fingerprintParts,
+      ...sources.map(
+        (source) =>
+          `${source.packageId}\u0000${source.relativePath}\u0000${source.contentHash}`,
+      ),
+    ]),
     type: value.type,
     title: value.title,
     summary: value.summary,
@@ -175,6 +184,7 @@ function finding(
       relativePath: source.relativePath,
       absolutePath: source.absolutePath,
     })),
+    resolutionType: value.resolutionType,
     definitionVariants: value.definitionVariants,
     resolved: value.resolved,
     resolution: value.resolution,
@@ -196,6 +206,9 @@ export async function analyzeProject(
         packageName: packageValue.name,
         relativePath: file.relativePath,
         absolutePath: file.absolutePath,
+        contentHash: createHash("sha256")
+          .update(await readFile(file.absolutePath))
+          .digest("hex"),
       });
     }
   }
@@ -209,6 +222,9 @@ export async function analyzeProject(
   }
 
   const findings: ConflictFinding[] = [];
+  const reportFinding = (
+    value: Parameters<typeof finding>[0],
+  ): ConflictFinding => finding(value, configuration.profile.id);
   const collidingPathKeys = new Set<string>();
   for (const [key, sources] of pathGroups) {
     if (new Set(sources.map((source) => source.packageId)).size < 2) {
@@ -224,17 +240,49 @@ export async function analyzeProject(
         JSON.stringify(candidate.packages.slice().sort()) ===
           JSON.stringify(packages),
     );
+    const sourceFingerprints = Object.fromEntries(
+      sources.map((source) => [source.packageId, source.contentHash]),
+    );
+    const fingerprintsMatch =
+      resolution?.sourceFingerprints !== undefined &&
+      JSON.stringify(
+        Object.entries(resolution.sourceFingerprints).sort(([left], [right]) =>
+          left.localeCompare(right, "en-US"),
+        ),
+      ) ===
+        JSON.stringify(
+          Object.entries(sourceFingerprints).sort(([left], [right]) =>
+            left.localeCompare(right, "en-US"),
+          ),
+        );
+    const lastLoadedPackage = configuration.profile.loadOrder
+      .filter((packageId) => packages.includes(packageId))
+      .at(-1);
+    const patchExists = configuration.profile.patches.some(
+      (patch) =>
+        patch.targetPath.toLocaleLowerCase("en-US") === key &&
+        packages.includes(patch.targetPackageId) &&
+        patch.resolutionType === "merged-patch",
+    );
+    const resolutionIsValid =
+      fingerprintsMatch &&
+      ((resolution?.resolutionType === "load-order" &&
+        resolution.winner === lastLoadedPackage) ||
+        (resolution?.resolutionType === "merged-patch" && patchExists));
     findings.push(
-      finding({
+      reportFinding({
         fingerprintParts: ["path", key, ...packages],
         type: "path",
         title: `File path: ${sources[0].relativePath}`,
-        summary: resolution
+        summary: resolutionIsValid
           ? resolution.reason
-          : "Multiple enabled packages write the same case-insensitive output path.",
+          : resolution?.resolutionType === "incompatible"
+            ? resolution.reason
+            : "Multiple selected mods write the same case-insensitive path. Add a content-pinned load-order rule, a tested merged patch, or mark the combination incompatible.",
         symbols: [sources[0].relativePath],
         sources,
-        resolved: resolution !== undefined,
+        resolutionType: resolution?.resolutionType,
+        resolved: resolutionIsValid,
         resolution:
           resolution?.winner ??
           (resolution?.override
@@ -452,7 +500,7 @@ export async function analyzeProject(
       },
     );
     findings.push(
-      finding({
+      reportFinding({
         fingerprintParts: ["definition", symbol, ...[...packages].sort()],
         type: "definition",
         title: `Definition: ${symbol}`,
@@ -504,7 +552,7 @@ export async function analyzeProject(
   }
   for (const group of localizationConflictGroups.values()) {
     findings.push(
-      finding({
+      reportFinding({
         fingerprintParts: [
           "localization",
           group.language,
@@ -526,7 +574,7 @@ export async function analyzeProject(
       continue;
     }
     findings.push(
-      finding({
+      reportFinding({
         fingerprintParts: [
           "global-variable",
           variable,
@@ -577,7 +625,7 @@ export async function analyzeProject(
           ...(rightTags.get(tag)?.files.values() ?? []),
         ]);
         findings.push(
-          finding({
+          reportFinding({
             fingerprintParts: [
               "system-observation",
               leftId,
@@ -601,7 +649,7 @@ export async function analyzeProject(
         ...(rightTags.get(tag)?.activeFiles.values() ?? []),
       ]);
       findings.push(
-        finding({
+        reportFinding({
           fingerprintParts: [
             "system-interaction",
             leftId,
@@ -633,7 +681,20 @@ export async function analyzeProject(
     }
     const resolution = semanticResolutions.get(currentFinding.fingerprint);
     if (resolution) {
-      currentFinding.resolved = true;
+      currentFinding.resolutionType = resolution.resolutionType;
+      const patchApplies =
+        resolution.resolutionType === "merged-patch" &&
+        configuration.profile.patches.some(
+          (patch) =>
+            currentFinding.packages.includes(patch.targetPackageId) &&
+            currentFinding.sources.some(
+              (source) =>
+                source.packageId === patch.targetPackageId &&
+                source.relativePath.toLocaleLowerCase("en-US") ===
+                  patch.targetPath.toLocaleLowerCase("en-US"),
+            ),
+        );
+      currentFinding.resolved = patchApplies;
       currentFinding.resolution = `${resolution.decision}: ${resolution.reason}`;
     }
   }
@@ -646,6 +707,7 @@ export async function analyzeProject(
   );
   return {
     formatVersion: 1,
+    profileId: configuration.profile.id,
     targetGameVersion: configuration.build.targetGameVersion,
     packageCount: configuration.packages.length,
     generatedAt: new Date().toISOString(),

@@ -10,11 +10,30 @@ interface CodeLauncher {
   environment?: NodeJS.ProcessEnv;
 }
 
-function parseCollisionId(argumentsValue: string[]): number {
-  if (argumentsValue.length !== 1 || !/^[1-9]\d*$/.test(argumentsValue[0])) {
-    throw new Error("Usage: npm run diff -- FRONTIER_NUMBER");
+function parseArguments(argumentsValue: string[]): {
+  profileId: string;
+  collisionId: number;
+} {
+  if (argumentsValue.length === 1 && /^[1-9]\d*$/.test(argumentsValue[0])) {
+    return {
+      profileId: "current-intended",
+      collisionId: Number(argumentsValue[0]),
+    };
   }
-  return Number(argumentsValue[0]);
+  if (
+    argumentsValue.length === 3 &&
+    argumentsValue[0] === "--profile" &&
+    /^[a-z0-9][a-z0-9-]*$/.test(argumentsValue[1]) &&
+    /^[1-9]\d*$/.test(argumentsValue[2])
+  ) {
+    return {
+      profileId: argumentsValue[1],
+      collisionId: Number(argumentsValue[2]),
+    };
+  }
+  throw new Error(
+    "Usage: npm run diff -- [--profile PROFILE_ID] FRONTIER_NUMBER",
+  );
 }
 
 function sanitizeFileName(value: string): string {
@@ -57,14 +76,15 @@ async function resolveCodeLauncher(): Promise<CodeLauncher> {
 }
 
 async function main(): Promise<void> {
-  const collisionId = parseCollisionId(process.argv.slice(2));
+  const { profileId, collisionId } = parseArguments(process.argv.slice(2));
   const rootDirectory = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../..",
   );
   const frontierFile = path.join(
     rootDirectory,
-    "integration",
+    "reports",
+    profileId,
     "deep-frontier.md",
   );
   const collisions = parseFrontierCollisions(
@@ -92,7 +112,7 @@ async function main(): Promise<void> {
     rootDirectory,
     "dist",
     "diff-review",
-    `frontier-${collisionId}`,
+    `frontier-${profileId}-${collisionId}`,
   );
   await rm(reviewDirectory, { recursive: true, force: true });
   await mkdir(reviewDirectory, { recursive: true });

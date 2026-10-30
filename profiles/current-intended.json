@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "id": "current-intended",
+  "name": "Current Intended Playset",
+  "targetGameVersion": "1.4.5",
+  "mods": [
+    {
+      "packageId": "better-road-builder",
+      "name": "Better Road Builder",
+      "version": "1.6.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3605677866",
+        "snapshotChecksum": "sha256:ab6429a6386afb3f7766693fc85d64490c16ec0044517fdfdac176f14e2b3512"
+      }
+    },
+    {
+      "packageId": "community-mod-framework",
+      "name": "Community Mod Framework",
+      "version": "2.5.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+      }
+    },
+    {
+      "packageId": "diverse-unit-models",
+      "name": "Diverse Unit Models",
+      "version": "1.0.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3714859568",
+        "snapshotChecksum": "sha256:b32c4455f8e0d38bcb1ff7f5bd77c3c78ea4e0400f3ab71a41415140d26bb041"
+      }
+    },
+    {
+      "packageId": "eurocentric-institutions",
+      "name": "Eurocentric Institutions",
+      "version": "1.2.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3626542508",
+        "snapshotChecksum": "sha256:283b9d0741149efe939fb39f58e78bb0e938d8cef3ae19d8334df9353d23427b"
+      }
+    },
+    {
+      "packageId": "continental-hegemonies",
+      "name": "Continental Hegemonies",
+      "version": "0.4.1",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3664577264",
+        "snapshotChecksum": "sha256:80e533e03d6ad884b90fd0804b3d2afcc7eba4964d4d098ab34c5845d985471b"
+      }
+    },
+    {
+      "packageId": "more-locations",
+      "name": "More locations Mod",
+      "version": "2.10.2026",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3809335454",
+        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd"
+      }
+    },
+    {
+      "packageId": "more-restricted-colonization",
+      "name": "More Restricted Colonization",
+      "version": "1.4.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3691186720",
+        "snapshotChecksum": "sha256:c40c15c43213cecd2f9fe58cb426d84ac519111483fcf6c9a0b4c3db935f0557"
+      }
+    },
+    {
+      "packageId": "sulphurs-rivers-expanded",
+      "name": "Sulphur's Rivers Expanded",
+      "version": "1.2.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3617910693",
+        "snapshotChecksum": "sha256:f758eedca808e603fafe7754db1b9e083be6f52a761cccd1fa23a17ed6541fc9"
+      }
+    },
+    {
+      "packageId": "waterways-distance-rework",
+      "name": "Waterways Distance Rework",
+      "version": "1.8.2",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3608489505",
+        "snapshotChecksum": "sha256:c3ed2572b2b1b78f098f7219e5a6148187541fbd2999ea5b143412a8d7c218fe"
+      }
+    }
+  ],
+  "loadOrder": [
+    "better-road-builder",
+    "community-mod-framework",
+    "diverse-unit-models",
+    "eurocentric-institutions",
+    "continental-hegemonies",
+    "more-locations",
+    "more-restricted-colonization",
+    "waterways-distance-rework",
+    "sulphurs-rivers-expanded",
+    "europa_concordia_current_intended"
+  ],
+  "patches": [
+    {
+      "id": "mrc-historical-defaults-no-cmm",
+      "sourcePath": "integration/overrides/more-restricted-colonization/in_game/common/on_action/MRC_cmm_on_actions.txt",
+      "targetPath": "in_game/common/on_action/MRC_cmm_on_actions.txt",
+      "targetPackageId": "more-restricted-colonization",
+      "resolutionType": "merged-patch",
+      "reason": "The EU5 on_action directory does not support database entry injection. This complete, authored replacement preserves MRC's historical-default initialization and removes only its CMF/CMM registration and callback hooks.",
+      "preserves": [
+        "on_game_start",
+        "on_game_load",
+        "MRC_init_safe_defaults",
+        "mrc_historical_bypass",
+        "mrc_tax_threshold"
+      ],
+      "suppresses": [
+        "cmf_on_mod_registration",
+        "cmf_on_callback",
+        "MRC_register_cmf_mod",
+        "MRC_sync_menu_to_globals"
+      ]
+    }
+  ],
+  "patchMod": {
+    "name": "Europa Concordia - Current Intended",
+    "id": "europa_concordia_current_intended",
+    "version": "0.2.0",
+    "shortDescription": "Playset-specific EU5 compatibility patch. Requires the listed mods separately.",
+    "tags": ["Gameplay", "Map"]
+  }
+}

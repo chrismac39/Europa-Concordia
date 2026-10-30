@@ -1,4 +1,5 @@
 import type { ProjectConfiguration } from "../build/package-model.js";
+import type { ConflictResolutionType } from "../build/package-model.js";
 
 export type FindingType =
   | "path"
@@ -42,6 +43,7 @@ export interface ConflictFinding {
   packages: string[];
   symbols: string[];
   sources: FindingSource[];
+  resolutionType?: ConflictResolutionType;
   definitionVariants?: DefinitionVariantAnalysis[];
   resolved: boolean;
   resolution?: string;
@@ -49,6 +51,7 @@ export interface ConflictFinding {
 
 export interface ConflictAnalysis {
   formatVersion: 1;
+  profileId: string;
   targetGameVersion: string;
   packageCount: number;
   generatedAt: string;
@@ -60,6 +63,7 @@ export interface PackageFile {
   packageName: string;
   relativePath: string;
   absolutePath: string;
+  contentHash: string;
 }
 
 export type AnalysisConfiguration = ProjectConfiguration;

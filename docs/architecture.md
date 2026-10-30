@@ -1,93 +1,89 @@
 # Architecture
 
-## Goals and boundaries
+## Product boundary
 
-Europa Concordia is a maintained, all-in-one EU5 mod assembled from pinned
-third-party sources and first-party packages. Its build tooling is intended to
-make inputs, integration choices, and output reproducible and reviewable.
-It is not a general-purpose mod manager, game engine, or web application.
+Europa Concordia is a playset compatibility patch builder, not an all-in-one
+EU5 mod or a general-purpose mod manager. The player's original Workshop mods
+remain separate. Concordia uses local source snapshots for analysis only and
+outputs a profile-specific mod containing Concordia-authored compatibility
+files and valid EU5 launcher metadata. Upstream files are never copied into the
+generated mod.
 
-The initial implementation separates:
+The pipeline has four stages:
 
-1. **Source acquisition** — obtaining or refreshing a Git checkout or immutable
-   Workshop snapshot (future work).
-2. **Validation** — checking manifest shape, package dependencies, source
-   directories, and source-file safety.
-3. **Integration** — applying explicitly documented conflict selections and
-   Concordia-owned merged overrides.
-4. **Packaging** — assembling files deterministically and emitting build
+1. **Source inventory** — `config/packages.json` records candidate mods and
+   immutable Workshop/Git source pins. Source acquisition and refreshing remain
+   separate operations.
+2. **Profile validation** — `profiles/<id>.json` selects mods, pins their
+   versions and external identifiers, sets the target EU5 release, and records
+   their order in the playset.
+3. **Analysis and decisions** — the analyzer scans only selected source
+   snapshots. Decisions are profile-specific and fingerprinted against the
+   exact source-file contents.
+4. **Patch generation** — the build emits only the profile's explicitly listed
+   Concordia-authored patches, launcher metadata, load-order guide, and build
    metadata.
-5. **Publishing** — explicitly uploading a verified release artifact to the
-   stable Steam Workshop item (future work).
 
-The CLI validates packages, performs full-system static conflict analysis, and
-assembles local files. It rejects unresolved paths rather than selecting a last
-writer, canonicalizes cross-file EU5 definitions and replacement/injection
-targets, and examines events, on-actions, localization, global variables, and
-country-system overlap. Static analysis cannot prove runtime compatibility or
-that the output is installable by EU5; those require in-game verification.
+## Profiles and inputs
 
-Publishing will remain a separate operation from build, validation, and
-packaging. It must not be triggered by Git activity, a successful build, or a
-version change. See [Workshop publishing](workshop-publishing.md) for the
-release gates, authentication boundary, and unimplemented configuration.
+The package manifest is an analysis-input catalog, not a build payload list.
+It can contain candidates that are not in any active profile. A profile stores
+each selected mod's manifest ID, display name, version, Workshop ID/checksum or
+Git revision, plus an ordered `loadOrder` list that ends with the generated
+Concordia patch mod ID. All selected mods must have a local source snapshot
+and target the profile's EU5 release.
 
-## Package categories
+The starter profile is `current-intended`, targeting EU5 1.4.5. More profiles
+can be added under `profiles/`; each builds into a separate output directory
+and gets separate analysis reports. Concordia is explicitly last in the
+profile's load order and the generated guide.
 
-- **Upstream**: actively maintained external sources.
-- **Maintained**: third-party source snapshots requiring local compatibility
-  maintenance. The snapshot is not edited in place.
-- **Original**: first-party content maintained directly in this repository.
+## Conflict model
 
-All package metadata is stored in `config/packages.json`; package source
-directories and integration decisions remain separate. Packages are assembled
-in ascending package-ID order. The order is deterministic but is not a conflict
-resolution policy: duplicate output paths fail the build.
+Conflicts are not resolved by copying whichever upstream file happens to win.
+Every exact-path conflict is explicitly classified as:
 
-Only EU5 content roots are assembled from packages: `dlc`, `in_game`,
-`loading_screen`, and `main_menu`. Package metadata, source-control files,
-documentation, thumbnails, generators, and other development files are
-excluded. Concordia will generate its own final metadata during a future
-packaging stage.
+- **Load-order** — a content-pinned rule names the intended winner, and the
+  selected profile must place that mod last among the conflicting mods.
+- **Merged patch** — a profile includes a Concordia-authored file whose intent
+  and retained content are recorded and validated.
+- **Incompatible** — the combination is explicitly blocked.
 
-The default project-wide EU5 target is stored as `targetGameVersion` in
-`config/build.json`. Validation and builds can override it with
-`--target-game-version MAJOR.MINOR.PATCH`. Every enabled package must declare
-the effective target game version; packages for another game version are
-rejected during validation.
+Unclassified or stale conflicts remain unresolved and block the build.
 
-## Compatibility-first inclusion
+EU5's [mod structure documentation](https://eu5.paradoxwikis.com/Mod_structure)
+states that a same-directory, same-name file overrides the vanilla or
+previously read mod file, including when the replacing file is empty. Database
+entry modes such as `REPLACE:` and `INJECT:` are distinct from whole-file
+overrides and are unavailable in `common/on_action`. Therefore a full
+`on_action` replacement must preserve every callback that still needs to run.
+The MRC compatibility file is an explicit Concordia-authored replacement that
+keeps MRC's historical default initialization and removes its CMF/CMM setting
+hooks; its source file is checked for both preserved and suppressed names.
 
-Concordia's purpose is to bring older and newer mods together on its chosen
-EU5 target. An upstream mod's declared game version is compatibility evidence,
-not an automatic exclusion rule. `targetGameVersion` in `config/packages.json`
-records Concordia's target for that package; it does not rewrite or claim to
-update the upstream declaration.
+The analyzer also tracks cross-file definitions, replacement/injection
+targets, event and on-action IDs, localization, global variables, and
+country-system overlap. Static analysis does not prove runtime compatibility;
+engine ordering, map generation, and save behavior still require in-game
+testing.
 
-Keep the pinned upstream snapshot and its metadata unchanged. Review older
-content against the current game files, then include it unchanged when it still
-works or add Concordia-owned compatibility patches and overrides when it does
-not. Record the upstream version, declared target, changes, and in-game
-verification in `integration/decisions/`. Do not change upstream version
-metadata merely to make validation pass.
+## Freshness and output
 
-## Reproducibility and generated files
+Profiles are checked against the package manifest's version and source
+identifier/checksum. Each analysis finding fingerprint includes the profile ID
+and SHA-256 digests of its source files. A source change therefore invalidates
+any matching path or semantic approval instead of silently reusing it. The
+analyzer runs on every build.
 
-Git sources require a full commit hash, and Workshop sources require an
-immutable local snapshot plus a SHA-256 checksum. The current CLI validates
-these pins as metadata but does not fetch sources or recompute Workshop
-checksums. Source paths must resolve inside the repository and cannot contain
-symbolic links. Build output is generated under `dist/` and is not versioned.
+`npm run build -- --profile <id>` writes:
 
-`build-metadata.json` records the target EU5 version and the enabled package
-IDs, versions, and source types. `npm run analyze` regenerates a high-level
-decision frontier, an exhaustive deep frontier, and the ignored
-machine-readable `reports/conflicts.json`. Builds run the same analysis and stop
-while any finding lacks a user-approved path or semantic resolution.
+- `dist/europa-concordia/<id>/` — only Concordia-authored patch files and
+  `.metadata/metadata.json`;
+- `dist/load-order/<id>.md` — required mod names, versions, Workshop IDs or Git
+  revisions, and order;
+- `dist/build-metadata/<id>.json` — selected input pins and generated patch
+  inventory.
 
-## Future decisions
-
-Before publishing a real build, confirm the expected EU5 mod directory layout,
-manifest requirements, and distribution restrictions for every imported
-package. Keep any implementation of source acquisition, patch application,
-and additional game-aware validation in separate pipeline stages.
+`npm run workshop:install -- --profile <id>` copies that generated patch to
+the local EU5 mod directory. No build, packaging, or install command uploads
+to Steam. Publishing remains an explicit, separate future operation.

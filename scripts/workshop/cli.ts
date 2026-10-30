@@ -3,18 +3,44 @@ import { fileURLToPath } from "node:url";
 import { installWorkshopModLocally } from "./packager.js";
 
 async function main(): Promise<void> {
-  const [command] = process.argv.slice(2);
+  const [command, ...argumentsValue] = process.argv.slice(2);
   if (command !== "install") {
-    throw new Error("Usage: npm run workshop:install");
+    throw new Error(
+      "Usage: npm run workshop:install -- [--profile PROFILE_ID]",
+    );
+  }
+  let profileId: string | undefined;
+  for (let index = 0; index < argumentsValue.length; index += 1) {
+    const option = argumentsValue[index];
+    if (
+      option === "--profile" &&
+      profileId === undefined &&
+      argumentsValue[index + 1]
+    ) {
+      profileId = argumentsValue[index + 1];
+      index += 1;
+    } else if (
+      option.startsWith("--profile=") &&
+      profileId === undefined &&
+      option.length > "--profile=".length
+    ) {
+      profileId = option.slice("--profile=".length);
+    } else {
+      throw new Error(
+        "Usage: npm run workshop:install -- [--profile PROFILE_ID]",
+      );
+    }
   }
 
   const rootDirectory = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../..",
   );
-  const modDirectory = await installWorkshopModLocally(rootDirectory);
+  const modDirectory = await installWorkshopModLocally(rootDirectory, {
+    profileId,
+  });
   console.log(
-    `Installed Europa Concordia for the EU5 launcher at ${modDirectory}`,
+    `Installed the generated Concordia patch for profile ${profileId ?? "current-intended"} at ${modDirectory}`,
   );
 }
 

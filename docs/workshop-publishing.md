@@ -1,43 +1,23 @@
-# Steam Workshop publishing
+# Local patch packaging and Workshop boundary
 
-## Current workflow
+The generated profile mod contains its EU5 launcher metadata at
+`.metadata/metadata.json`. The build also writes a load-order guide that names
+the required upstream mods, versions, Workshop IDs or Git revisions, and the
+order in which to enable them.
 
-EU5 uses `.metadata/metadata.json` for mod and Workshop details. Run:
+To install a generated profile locally:
 
 ```sh
-npm run workshop:install
+npm run workshop:install -- --profile current-intended
 ```
 
-This builds the enabled packages, creates the clean release folder at
-`dist/workshop/stable`, and installs it at
-`%USERPROFILE%/Documents/Paradox Interactive/Europa Universalis V/mod/europa_concordia`.
-The generated metadata comes from `config/workshop.json`.
+This command runs the deterministic patch build and copies the generated
+profile mod to the local EU5 mod directory. It does not publish or upload to
+Steam. The output excludes all upstream source files and contains only
+Concordia-authored compatibility files plus launcher metadata.
 
-In the Paradox Launcher, select **Europa Concordia** and use its Workshop
-upload action. Then open the new Steam Workshop page, subscribe to the item,
-enable it in the launcher, and test it in-game. After the item is created,
-record its ID in `config/workshop.json`.
-
-The current stage bundles Community Mod Framework (Workshop item
-`3692202776`) as an internal package. Concordia's generated launcher metadata
-does not declare CMF as an external dependency, and
-`config/workshop.json` has no required Workshop items. The bundled snapshot is
-version `2.5.0`; its redistribution permission is recorded in
-`config/packages.json`.
-
-No preview image is generated or included. Add a user-provided
-`.metadata/thumbnail.png` when one is ready.
-
-## Safety and scope
-
-- The install command does not upload or publish anything.
-- Workshop upload and visibility are controlled manually in the Paradox
-  Launcher.
-- Redistribution permission for enabled third-party sources, including CMF,
-  is recorded in `config/packages.json`.
-- Keep Steam credentials in Steam's own client/launcher; do not put them in
-  this repository.
-- Source snapshots and integration files are not included in the release
-  folder.
-
-EU5 metadata format: [Mod structure](https://eu5.paradoxwikis.com/Mod_structure).
+The historical `config/workshop.json` holds local packaging settings and
+placeholder Steam publishing metadata. A future publishing workflow must be a
+separate, explicit operation with confirmed upstream permissions, profile
+review, an in-game compatibility test, and user confirmation. No credentials
+or upload actions belong in the build or install pipeline.

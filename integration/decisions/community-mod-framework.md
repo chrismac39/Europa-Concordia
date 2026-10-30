@@ -1,4 +1,4 @@
-# Community Mod Framework integration
+# Community Mod Framework compatibility input
 
 - Workshop item: `3692202776`
 - Upstream version: `2.5.0`
@@ -9,16 +9,17 @@
 - Upstream license: no license file or license declaration was present in the
   installed Workshop snapshot
 
-CMF is included as an internal package for Concordia's framework and debug
-console functionality. Its 139 game-content files are copied from the local
-Workshop snapshot without editing. The per-mod CMF relationship and required
-Workshop item are removed from Concordia's root metadata.
+CMF remains a separate Workshop mod in the playset. Its 139 game-content
+files are retained only in the local analysis snapshot; none are copied into
+Concordia's generated compatibility patch. The load-order guide lists CMF as a
+required mod by its Workshop ID and version.
 
-More Restricted Colonization's CMM settings are not exposed. Concordia-owned
-overrides preserve the upstream safe-default initialization and disable MRC's
-CMF registration and callback effects.
+More Restricted Colonization's CMM settings are not exposed. The
+Concordia-authored MRC replacement preserves its historical safe-default
+initialization and removes the CMF setting-registration and callback hooks.
 
 Runtime compatibility remains under investigation. CMF plus the Group A
 packages loaded, while CMF plus Group B crashed during new-game generation.
 The isolated Sulphur's Rivers raster probe was not a valid map-pair test; use
 the More Locations plus Sulphur's Rivers combination for further diagnosis.
+Do not claim the crash is fixed without an in-game test.

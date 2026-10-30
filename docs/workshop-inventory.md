@@ -4,8 +4,10 @@ Compared on 2026-10-29 against `config/packages.json`.
 
 - `[x]` means the Workshop item is recorded as a Concordia package.
 - `[ ]` means it is downloaded locally but has not been added.
-- A checked item is not necessarily enabled or ready for redistribution.
-- Community Mod Framework is now recorded as an internal Concordia package.
+- A checked item is in the source catalog, not necessarily in a playset profile
+  or ready for redistribution.
+- Community Mod Framework is cataloged as an analysis input and remains a
+  separate playset mod; it is not bundled into Concordia.
 
 **Progress: 25 of 38 downloaded Workshop items recorded**
 

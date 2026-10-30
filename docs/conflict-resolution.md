@@ -1,80 +1,67 @@
 # Conflict resolution
 
-## Current behavior
+## What the analyzer does
 
-The build walks enabled package source directories in sorted package-ID order.
-Files under the supported EU5 content roots are considered for output. A
-duplicate relative path fails the build, including differences in path casing,
-unless `config/conflict-rules.json` contains an exact resolution naming the
-path, every package involved, the selected package or Concordia-owned merged
-override, and the reason. A resolution stops matching if another package later
-joins the collision, so no new participant can silently lose. Symbolic links
-are rejected.
+`npm run analyze -- --profile <id>` scans only the profile's selected source
+snapshots. It reports exact path collisions, cross-file EU5 definitions and
+`REPLACE:`/`INJECT:` targets, event and on-action IDs, differing localization,
+shared global variables, and country-system interactions. The analyzer is
+conservative static evidence, not proof of runtime compatibility.
 
-The build reports every unresolved file-path collision found in a pass, rather
-than stopping after the first, so integration work can be planned as a complete
-batch.
+Reports are written to `reports/<profile-id>/`:
 
-`npm run analyze` also assigns a deterministic fingerprint to every semantic
-finding. A semantic finding is resolved only when `config/conflict-rules.json`
-contains a matching `semanticResolutions` entry with the user-approved decision
-and reason. The analyzer never infers a semantic winner from package order.
+- `decision-frontier.md` groups unresolved findings by package set and domain;
+- `deep-frontier.md` retains every finding, fingerprint, and source link;
+- `conflicts.json` contains machine-readable evidence.
 
-Analysis covers exact output paths, cross-file EU5 definitions,
-`REPLACE:`/`INJECT:` targets, event IDs and on-actions, differing localization,
-shared global variables, and significant country-system overlap. This is
-conservative static analysis, not proof of runtime compatibility; engine
-ordering, scripted behavior, and save-game effects still require game testing.
+Use the profile-aware diff command to inspect numbered source conflicts:
 
-Country-system analysis classifies source files before creating decisions.
-Read-only observers such as UI hints, dynamic localization, scripted values,
-and scripted triggers are separated from active gameplay files. Generated
-historical-fragment lookup tables are classified as reference data. Observer or
-reference-data overlap remains visible in the deep report as a non-conflict
-observation. Active gameplay involving the same countries is retained as a
-non-blocking interaction risk because shared country scope alone does not prove
-incompatibility. Only concrete collisions in paths, definitions, events,
-localization, or shared state enter the decision frontier and block builds.
+```sh
+npm run diff -- --profile current-intended 1
+```
 
-The generated `integration/decision-frontier.md` groups unresolved findings by
-package set and gameplay domain so system-level preservation choices can be
-made without reviewing hundreds of individual entries first. The generated
-`integration/deep-frontier.md` retains every numbered finding, fingerprint, and
-source link. A high-level vote authorizes implementation work but does not
-automatically resolve its underlying findings: each merge or coexistence result
-must still be verified and recorded by fingerprint.
+## Resolution classes
 
-For customizable-localization collisions, the decision report parses each
-conditional text rule and compares localization keys and normalized trigger
-bodies across packages. It summarizes mod-specific keys, plain-English title
-themes, changed shared-rule counts, relevant state variables, and concise
-source-declared intent. This distinguishes mostly independent additions from
-the smaller set of shared rules that require an actual semantic merge. Exact
-source files remain linked for deeper inspection rather than duplicating the
-full technical comparison in the decision report.
+Every file-path decision must be explicit:
 
-For colliding scripted definitions, analysis records each package's important
-entry/end conditions, balance values, event calls, variable writes, and direct
-country outcomes. It follows package-local event and scripted-effect
-dependencies up to four levels to surface downstream country creation,
-release, annexation, destruction, or tag changes. Decision cards compare those
-outcomes explicitly and disclose when a chain leaves package-local evidence or
-uses an unrecognized engine command, rather than presenting an incomplete
-result as safe. Source-declared behavior is also checked against active code;
-for example, a claimed disabled system with a commented-out guard is reported
-as still active.
+| Class          | Meaning                                                                                                                                                                        | Build behavior                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| `load-order`   | EU5's exact-path replacement is acceptable and the chosen mod is last among participants. The decision pins each source file's SHA-256.                                        | Build proceeds only when the profile order and hashes match.  |
+| `merged-patch` | A Concordia-authored patch intentionally preserves or combines needed behavior. A profile lists its source file, output path, target mod, and preservation/suppression checks. | Build emits only that patch file, never either upstream copy. |
+| `incompatible` | The combination is known not to be safe.                                                                                                                                       | Finding stays blocking.                                       |
+| Unresolved     | No current decision applies, the participants changed, or a required content fingerprint is stale.                                                                             | Build stops for review.                                       |
 
-## Recording decisions
+EU5's [mod structure documentation](https://eu5.paradoxwikis.com/Mod_structure)
+describes same-path files as complete replacements, not text merges; an empty
+replacement also wins. `REPLACE:` and `INJECT:` operate at the database-entry
+level and cannot be used in `common/on_action`. Never create a whole-file
+replacement from one upstream winner merely to clear a collision. If a
+replacement is required, review its full contents and list the important
+retained and suppressed definitions in the profile.
 
-Keep integration decisions outside imported sources in
-`integration/decisions/`. Each decision should identify:
+The starter profile contains a load-order decision for the shared
+`in_game/map_data/rivers.png` path: More locations loads before Sulphur's Rivers
+Expanded, whose selected raster is the intended winner. The input file hashes
+are recorded so an upstream update requires a fresh decision.
 
-- affected package IDs and pinned source versions;
-- conflicting paths or definitions;
-- the chosen behavior and reason;
-- any files added under `integration/patches/` or
-  `integration/overrides/`;
-- attribution or redistribution constraints.
+The MRC patch replaces only MRC's `MRC_cmm_on_actions.txt`. Because EU5 does
+not support database-entry injection for on-actions, it retains MRC's
+`on_game_start` and `on_game_load` hooks and `MRC_init_safe_defaults`, while
+excluding the CMF registration and CMM callback hooks. It does not expose
+MRC's settings. Its defaults and gameplay still require an in-game check.
 
-Do not resolve conflicts by relying on arbitrary traversal or last-writer-wins
-ordering. Unresolved path and semantic findings fail the build by default.
+## Approval freshness
+
+Finding fingerprints contain the profile ID and the hashes of all source files
+that contributed to the finding. Semantic approvals must match the complete
+fingerprint. Path decisions additionally store hashes for each conflicting
+file and the intended last-loaded package. A mod version, Workshop ID, source
+pin, source file, or playset change must be reviewed through a new analysis;
+stale approvals do not fall back to package order.
+
+Country-system analysis keeps read-only observers and historical lookup data
+visible as non-conflict observations. Shared active country scope is reported
+as a non-blocking runtime interaction risk unless the analyzer finds concrete
+path, definition, event, localization, or state collisions. This avoids
+treating every shared country tag as a blocker while retaining the evidence
+for playtesting.

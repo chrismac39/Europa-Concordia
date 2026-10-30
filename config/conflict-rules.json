@@ -6,61 +6,71 @@
       "path": "in_game/gui/economy_lateralview.gui",
       "packages": ["gh-exchequer", "glorp-ui"],
       "winner": "gh-exchequer",
-      "reason": "GH Exchequer intentionally replaces Glorp UI's economy panel when loaded later; the GH Exchequer - Glorp UI compatch restores the Trade tab in Glorp's left panel."
+      "reason": "GH Exchequer intentionally replaces Glorp UI's economy panel when loaded later; the GH Exchequer - Glorp UI compatch restores the Trade tab in Glorp's left panel.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui",
       "packages": ["gh-exchequer", "glorp-ui"],
       "winner": "gh-exchequer",
-      "reason": "GH Exchequer documents that its extracted vanilla economy templates replace the copy supplied by UI mods such as Glorp UI when GH loads later."
+      "reason": "GH Exchequer documents that its extracted vanilla economy templates replace the copy supplied by UI mods such as Glorp UI when GH loads later.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/gui/panels/left_panel/glorpUI_left_panel.gui",
       "packages": ["gh-exchequer-glorp-ui-patch", "glorp-ui"],
       "winner": "gh-exchequer-glorp-ui-patch",
-      "reason": "The upstream compatch explicitly replaces Glorp UI's left panel to add GH Exchequer's Trade tab."
+      "reason": "The upstream compatch explicitly replaces Glorp UI's left panel to add GH Exchequer's Trade tab.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/gui/panels/situation/global_living_standard.gui",
       "packages": ["sol-jtg-compatibility-submod", "standard-of-living"],
       "winner": "sol-jtg-compatibility-submod",
-      "reason": "The SOL-JTG compatibility submod supplies the integration replacement for Standard of Living's shared living-standard panel."
+      "reason": "The SOL-JTG compatibility submod supplies the integration replacement for Standard of Living's shared living-standard panel.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/gui/location_window.gui",
       "packages": ["glorp-ui", "standard-of-living"],
       "winner": "standard-of-living",
-      "reason": "Standard of Living supplies an upstream-generated copy of Glorp UI 04.10.26's location window with its living-standard tooltip added."
+      "reason": "Standard of Living supplies an upstream-generated copy of Glorp UI 04.10.26's location window with its living-standard tooltip added.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui",
       "packages": ["glorp-ui", "standard-of-living"],
       "winner": "standard-of-living",
-      "reason": "Standard of Living supplies the synchronized Glorp UI 04.10.26 location-window types used by its pre-merged location window."
+      "reason": "Standard of Living supplies the synchronized Glorp UI 04.10.26 location-window types used by its pre-merged location window.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/on_action/historical_tweaks_on_actions.txt",
       "packages": ["gathering-land-rus", "historical-tweaks"],
       "winner": "historical-tweaks",
-      "reason": "The standalone Historical Tweaks file is the newer superset and includes explicit Gathering of the Rus compatibility logic."
+      "reason": "The standalone Historical Tweaks file is the newer superset and includes explicit Gathering of the Rus compatibility logic.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/events/historical_tweaks_events.txt",
       "packages": ["gathering-land-rus", "historical-tweaks"],
       "winner": "historical-tweaks",
-      "reason": "The standalone Historical Tweaks event file includes the Rus-bundled events plus newer events and explicit Gathering of the Rus compatibility behavior."
+      "reason": "The standalone Historical Tweaks event file includes the Rus-bundled events plus newer events and explicit Gathering of the Rus compatibility behavior.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/events/historical_tweaks_union_events.txt",
       "packages": ["gathering-land-rus", "historical-tweaks"],
       "winner": "historical-tweaks",
-      "reason": "The standalone Historical Tweaks union events contain later trigger, AI-selection, and player-option fixes than the copy bundled with Gathering of the Rus."
+      "reason": "The standalone Historical Tweaks union events contain later trigger, AI-selection, and player-option fixes than the copy bundled with Gathering of the Rus.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/customizable_localization/countries.txt",
       "packages": ["gathering-land-rus", "imperial-ambitions"],
       "override": "integration/overrides/collision-2/in_game/common/customizable_localization/countries.txt",
-      "reason": "The Concordia merge keeps both packages' unique country definitions and combines Gathering the Rus conditional Golden Horde vassal names with Imperial Ambitions' fallback names for KZN and UZB."
+      "reason": "The Concordia merge keeps both packages' unique country definitions and combines Gathering the Rus conditional Golden Horde vassal names with Imperial Ambitions' fallback names for KZN and UZB.",
+      "resolutionType": "merged-patch"
     },
     {
       "path": "in_game/common/customizable_localization/country_ranks.txt",
@@ -71,7 +81,8 @@
         "prussian-destiny"
       ],
       "override": "integration/overrides/dynamic-names/in_game/common/customizable_localization/country_ranks.txt",
-      "reason": "The Concordia merge keeps common rules once, preserves each package's unique rank/title rules across all country-flavor roots, and unions the nine differing shared-rule trigger variants."
+      "reason": "The Concordia merge keeps common rules once, preserves each package's unique rank/title rules across all country-flavor roots, and unions the nine differing shared-rule trigger variants.",
+      "resolutionType": "merged-patch"
     },
     {
       "path": "in_game/common/customizable_localization/country_name_construction.txt",
@@ -81,89 +92,108 @@
         "prussian-destiny"
       ],
       "override": "integration/overrides/dynamic-names/in_game/common/customizable_localization/country_name_construction.txt",
-      "reason": "The Concordia merge keeps common construction rules once, preserves package-specific name rules, and unions the four differing shared-rule trigger variants."
+      "reason": "The Concordia merge keeps common construction rules once, preserves package-specific name rules, and unions the four differing shared-rule trigger variants.",
+      "resolutionType": "merged-patch"
     },
     {
       "path": "in_game/common/languages/00_anatolia.txt",
       "packages": ["oikoumene", "ruthenia-steppe-fix"],
       "winner": "oikoumene",
-      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Anatolian language definitions at this colliding path."
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Anatolian language definitions at this colliding path.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/languages/00_caucasus.txt",
       "packages": ["oikoumene", "ruthenia-steppe-fix"],
       "winner": "oikoumene",
-      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Caucasian language definitions at this colliding path."
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Caucasian language definitions at this colliding path.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/languages/00_polish.txt",
       "packages": ["oikoumene", "ruthenia-steppe-fix"],
       "winner": "oikoumene",
-      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Polish language definitions at this colliding path."
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Polish language definitions at this colliding path.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/languages/00_russian.txt",
       "packages": ["oikoumene", "ruthenia-steppe-fix"],
       "winner": "oikoumene",
-      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Russian language definitions at this colliding path."
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Russian language definitions at this colliding path.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/languages/00_steppes.txt",
       "packages": ["oikoumene", "ruthenia-steppe-fix"],
       "winner": "oikoumene",
-      "reason": "Decision 3 selects Oikoumenē as the base; use its complete steppe language definitions at this colliding path."
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete steppe language definitions at this colliding path.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/languages/00_tartar.txt",
       "packages": ["oikoumene", "ruthenia-steppe-fix"],
       "winner": "oikoumene",
-      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Tartar language definitions at this colliding path."
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Tartar language definitions at this colliding path.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/common/languages/00_xinjiang.txt",
       "packages": ["oikoumene", "ruthenia-steppe-fix"],
       "winner": "oikoumene",
-      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Xinjiang language definitions at this colliding path."
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Xinjiang language definitions at this colliding path.",
+      "resolutionType": "load-order"
     },
     {
       "path": "in_game/map_data/rivers.png",
       "packages": ["more-locations", "sulphurs-rivers-expanded"],
       "winner": "sulphurs-rivers-expanded",
-      "reason": "Decision 36 selects Sulphur's Rivers Expanded as the river-layer base; its raster matches the selected More locations map canvas dimensions."
+      "reason": "Decision 36 selects Sulphur's Rivers Expanded as the river-layer base; its raster matches the selected More locations map canvas dimensions.",
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "more-locations": "c37a62f4e4e2d81eb1d48b734e310f7e1cceadf35e63ba8954f8ef2a7a66e18e",
+        "sulphurs-rivers-expanded": "9319b3e1145d68fb05b7ed6c0594210bd7011990e8f373b4171460ee17018bbf"
+      }
     },
     {
       "path": "in_game/common/on_action/mrc_cmm_on_actions.txt",
       "packages": ["more-restricted-colonization"],
       "override": "integration/overrides/more-restricted-colonization/in_game/common/on_action/MRC_cmm_on_actions.txt",
-      "reason": "Keep More Restricted Colonization's safe historical defaults while disabling its CMF setting registration and callback hooks."
+      "reason": "Keep More Restricted Colonization's safe historical defaults while disabling its CMF setting registration and callback hooks.",
+      "resolutionType": "merged-patch"
     },
     {
       "path": "in_game/common/scripted_effects/mrc_cmm_effects.txt",
       "packages": ["more-restricted-colonization"],
       "override": "integration/overrides/more-restricted-colonization/in_game/common/scripted_effects/MRC_cmm_effects.txt",
-      "reason": "Disable More Restricted Colonization's unused CMF/CMM setting registration and synchronization effects."
+      "reason": "Disable More Restricted Colonization's unused CMF/CMM setting registration and synchronization effects.",
+      "resolutionType": "merged-patch"
     }
   ],
   "semanticResolutions": [
     {
-      "fingerprint": "b79dd36c86e53e6d",
+      "fingerprint": "67b2f09417afc2bb",
       "decision": "Keep CMF's cmf_on_callback definition and omit MRC's CMM callback.",
-      "reason": "The Concordia MRC on-action override removes MRC's CMM callback while retaining its safe-default initialization hooks."
+      "reason": "The Concordia MRC on-action override removes MRC's CMM callback while retaining its safe-default initialization hooks.",
+      "resolutionType": "merged-patch"
     },
     {
-      "fingerprint": "5008de5ef56df04d",
+      "fingerprint": "e9a0d3ddf23fcad0",
       "decision": "Keep CMF's cmf_on_mod_registration definition and omit MRC's CMM registration hook.",
-      "reason": "The Concordia MRC on-action override disables MRC's CMF settings registration as requested."
+      "reason": "The Concordia MRC on-action override disables MRC's CMF settings registration as requested.",
+      "resolutionType": "merged-patch"
     },
     {
-      "fingerprint": "9a4aeda8be85c98e",
+      "fingerprint": "832729945153948e",
       "decision": "Merge on_game_load callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
-      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls."
+      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls.",
+      "resolutionType": "merged-patch"
     },
     {
-      "fingerprint": "5dd20d7dd57cc9c6",
+      "fingerprint": "05c2c0ea13a11260",
       "decision": "Merge on_game_start callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
-      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls."
+      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls.",
+      "resolutionType": "merged-patch"
     }
   ],
   "definitionConflicts": "deferred"

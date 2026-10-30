@@ -108,7 +108,6 @@ test("keeps country reference categorization non-blocking", async () => {
     author: "Test",
     targetGameVersion: "1.4.5",
     version: "1.0.0",
-    enabled: true,
     dependencies: [],
     attribution: { license: "MIT" },
   });
@@ -118,9 +117,31 @@ test("keeps country reference categorization non-blocking", async () => {
     build: {
       version: 1,
       targetGameVersion: "1.4.5",
+      defaultProfile: "test",
       packagesFile: "config/packages.json",
       conflictRulesFile: "config/conflict-rules.json",
       outputDirectory: "dist",
+    },
+    profile: {
+      version: 1,
+      id: "test",
+      name: "Test",
+      targetGameVersion: "1.4.5",
+      mods: ["active-left", "active-right", "observer"].map((id) => ({
+        packageId: id,
+        name: id,
+        version: "1.0.0",
+        source: { type: "local" as const },
+      })),
+      loadOrder: ["active-left", "active-right", "observer", "test_patch"],
+      patches: [],
+      patchMod: {
+        name: "Test Patch",
+        id: "test_patch",
+        version: "1.0.0",
+        shortDescription: "Test",
+        tags: ["Gameplay"],
+      },
     },
     conflictRules: {
       version: 1,
@@ -195,7 +216,6 @@ test("traces definition outcomes through package event chains", async () => {
     author: "Test",
     targetGameVersion: "1.4.5",
     version: "1.0.0",
-    enabled: true,
     dependencies: [],
     attribution: { license: "MIT" },
   });
@@ -204,9 +224,42 @@ test("traces definition outcomes through package event chains", async () => {
     build: {
       version: 1,
       targetGameVersion: "1.4.5",
+      defaultProfile: "test",
       packagesFile: "config/packages.json",
       conflictRulesFile: "config/conflict-rules.json",
       outputDirectory: "dist",
+    },
+    profile: {
+      version: 1,
+      id: "test",
+      name: "Test",
+      targetGameVersion: "1.4.5",
+      mods: ["left", "right"].map((id) => ({
+        packageId: id,
+        name: id,
+        version: "1.0.0",
+        source: { type: "local" as const },
+      })),
+      loadOrder: ["left", "right", "test_patch"],
+      patches: [
+        {
+          id: "disaster-merge",
+          sourcePath: "integration/patches/test.txt",
+          targetPath: "in_game/common/disasters/left.txt",
+          targetPackageId: "left",
+          resolutionType: "merged-patch",
+          reason: "Test a specific semantic merge.",
+          preserves: ["shared_disaster"],
+          suppresses: [],
+        },
+      ],
+      patchMod: {
+        name: "Test Patch",
+        id: "test_patch",
+        version: "1.0.0",
+        shortDescription: "Test",
+        tags: ["Gameplay"],
+      },
     },
     conflictRules: {
       version: 1,
@@ -259,6 +312,35 @@ test("traces definition outcomes through package event chains", async () => {
         },
       ],
     );
+
+    configuration.conflictRules.semanticResolutions = [
+      {
+        fingerprint: finding.fingerprint,
+        resolutionType: "merged-patch",
+        decision: "Merge both definitions",
+        reason: "The test patch retains both variants.",
+      },
+    ];
+    const approvedAnalysis = await analyzeProject(configuration);
+    const approvedFinding = approvedAnalysis.findings.find(
+      (candidate) =>
+        candidate.title === "Definition: common/disasters:shared_disaster",
+    );
+    assert.equal(approvedFinding?.resolved, true);
+
+    await writePackageFile(
+      "left",
+      "in_game/common/disasters/left.txt",
+      "shared_disaster = { trigger = { tag = AAA } }",
+    );
+    const refreshedAnalysis = await analyzeProject(configuration);
+    const refreshedFinding = refreshedAnalysis.findings.find(
+      (candidate) =>
+        candidate.title === "Definition: common/disasters:shared_disaster",
+    );
+    assert.ok(refreshedFinding);
+    assert.notEqual(refreshedFinding.fingerprint, finding.fingerprint);
+    assert.equal(refreshedFinding.resolved, false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

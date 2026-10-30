@@ -1,22 +1,21 @@
-# Package management
+# Analysis inputs and playset profiles
 
-## Manifest schema, version 1
+## Candidate source manifest
 
-`config/packages.json` is a JSON object with `version: 1` and a `packages`
-array. Each entry has:
+`config/packages.json` is a catalog of mods the analyzer can inspect. It does
+not enable files for output. Each entry records:
 
-| Field               | Type                                    | Meaning                                                              |
-| ------------------- | --------------------------------------- | -------------------------------------------------------------------- |
-| `id`                | string                                  | Unique lowercase ID using letters, digits, and hyphens               |
-| `name`              | string                                  | Display name                                                         |
-| `type`              | `upstream`, `maintained`, or `original` | Package category                                                     |
-| `source`            | object                                  | Source kind, immutable pin where applicable, and local snapshot path |
-| `author`            | string                                  | Original author or first-party author                                |
-| `targetGameVersion` | string                                  | EU5 release targeted by Concordia's integration of this package      |
-| `version`           | semver string                           | Europa Concordia package version                                     |
-| `enabled`           | boolean                                 | Whether the package participates in validation/build                 |
-| `dependencies`      | string array                            | IDs of required packages                                             |
-| `attribution`       | object                                  | Required `license` and optional `notice`                             |
+| Field               | Meaning                                                               |
+| ------------------- | --------------------------------------------------------------------- |
+| `id`                | Stable lowercase catalog ID                                           |
+| `name`              | Display name                                                          |
+| `type`              | `upstream`, `maintained`, or `original`                               |
+| `source`            | Local source path and immutable Git revision or Workshop snapshot pin |
+| `author`            | Original author or first-party author                                 |
+| `targetGameVersion` | EU5 version reviewed for the input                                    |
+| `version`           | Mod's upstream version                                                |
+| `dependencies`      | Required mod catalog IDs                                              |
+| `attribution`       | License and provenance/permission notice                              |
 
 Source forms:
 
@@ -24,64 +23,70 @@ Source forms:
 - Workshop: `{ "type": "steam-workshop", "workshopId": "...", "snapshotChecksum": "sha256:<64 hex characters>", "path": "..." }`
 - Local: `{ "type": "local", "path": "..." }`
 
-Git and Workshop source paths point to local snapshots used by the build. The
-manifest identifies how those snapshots were obtained; the initial tool does
-not download or update them. Paths must be relative to the repository root.
+The manifest source path points to an analysis snapshot. Keep snapshots
+unchanged when possible; never copy them into the generated Concordia patch.
+Git sources require a full commit hash, and Workshop sources require an
+immutable local snapshot and checksum. Source acquisition and refreshing are
+not performed by the build.
 
-For Git sources, export only the distributable mod paths from the pinned
-revision into `sources/git/<package-id>/`. Do not point a package at an entire
-development repository when it also contains tooling, reference data,
-documentation assets, or unrelated submods.
+## Playset profiles
 
-An empty `packages` array is valid. Do not invent compatibility versions,
-licenses, author details, or source pins to make an imported package fit.
+`profiles/<id>.json` is the authoritative selected playset. It records the
+target game version, mod IDs/names/versions and source identifiers, a
+`loadOrder` list from earliest to latest, profile-specific Concordia patch
+files, generated mod metadata, and the Concordia patch mod ID as the final
+load-order entry. The starter profile is
+[`current-intended`](../profiles/current-intended.json).
 
-The default build target is `targetGameVersion` in `config/build.json`. Supply
-`--target-game-version MAJOR.MINOR.PATCH` after `--` in an npm command to
-override it for one invocation. Enabled packages must match the effective
-target:
+Profile pins must exactly match their entries in `config/packages.json`.
+Change the profile when changing a mod version, Workshop ID, source checksum,
+Git revision, or game target. The analyzer includes profile identity and
+SHA-256 hashes of finding source files in approval fingerprints. Changes to
+relevant input content make old approvals stale and block a build until the
+updated evidence is reviewed.
+
+Add a profile without changing other playsets:
+
+1. Select catalog IDs and copy their current version and source identity pins
+   into `profiles/<id>.json`.
+2. Record every selected mod exactly once in `loadOrder`. Dependencies must be
+   selected and ordered before their dependents.
+3. Add only Concordia-authored patch files under `integration/patches/` or
+   `integration/overrides/`. Each patch declares a source path, game output
+   path, targeted input mod, conflict class, reason, and important content to
+   preserve or suppress.
+4. Analyze the profile, review every conflict, then validate and build:
 
 ```sh
-npm run validate -- --target-game-version 1.4.5
-npm run build -- --target-game-version 1.4.5
+npm run analyze -- --profile <id>
+npm run validate -- --profile <id>
+npm test
+npm run build -- --profile <id>
 ```
 
-An upstream package's `supported_game_version` is separate evidence and does
-not by itself prevent inclusion on a newer Concordia target. Review and test
-older content, preserving the upstream snapshot and recording any required
-port under `integration/`.
+Build output is isolated by profile under
+`dist/europa-concordia/<id>/`. The generated load-order guide lists every
+required mod's name, version, Workshop ID or Git revision, and order; it places
+the Concordia patch last. No upstream content is part of the output.
 
-## Keeping source and compatibility work separate
+## Decisions and source changes
 
-Treat upstream source snapshots as immutable. For a maintained package:
+`config/conflict-rules.json` records explicit conflict classifications:
 
-1. Keep the original snapshot at the declared `source.path`.
-2. Record compatibility edits as files under
-   `integration/patches/<package-id>/` or
-   `integration/overrides/<package-id>/`.
-3. Explain intent, upstream pin, game version, and tradeoffs in
-   `integration/decisions/<package-id>.md`.
+- `load-order` names an intended winner, records per-file source fingerprints,
+  and only resolves when the selected profile loads that mod last;
+- `merged-patch` refers to an explicitly authored profile patch;
+- `incompatible` remains blocking.
 
-The current build applies explicitly selected complete-file overrides recorded
-in `config/conflict-rules.json`, including intentional replacements of a
-single package's file. General patch-series application remains unimplemented.
+An unclassified finding, participant change, or fingerprint mismatch is
+unresolved. Do not select a winner from directory order, and do not resolve a
+conflict by copying a complete upstream file without checking what it replaces.
+See [conflict resolution](conflict-resolution.md) for EU5 file and database
+entry behavior.
 
-## Onboarding a real package
+## Local install and publishing boundary
 
-1. Check the upstream license and whether redistribution of its files is
-   permitted. Keep local-only imports in ignored `sources/steam-workshop/`
-   storage when redistribution is not allowed.
-2. Store or check out a pinned source snapshot; do not build from a floating
-   branch or a mutable Workshop directory.
-3. Add a complete manifest entry, including package type, author, target game
-   version, package version, dependencies, and attribution.
-4. For a maintained package, leave its snapshot untouched and describe each
-   local fix in a patch/override and decision record.
-5. Run `npm run validate`, `npm test`, and `npm run build`. Review the generated
-   output and resolve every file-path collision deliberately.
-6. Verify EU5-specific metadata and directory structure against the game before
-   describing the result as installable.
-
-Do not commit private imports, generated output, or temporary downloads by
-accident. The repository ignore rules exclude Workshop import storage and
-build artifacts by default.
+`npm run workshop:install -- --profile <id>` stages the generated patch and
+copies it into the local EU5 mod directory. This is a local install only. The
+repository does not upload to Steam; publishing requires a separate explicit
+workflow.

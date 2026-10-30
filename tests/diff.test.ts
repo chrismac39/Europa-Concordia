@@ -33,6 +33,18 @@ Explanation.
   assert.equal(collisions.get(2)?.sources.length, 3);
 });
 
+test("parses profile-scoped frontier source links", () => {
+  const collisions = parseFrontierCollisions(`
+- **#1** \`in_game/common/example.txt\`:
+  [First](../../../sources/first/in_game/common/example.txt),
+  [Second](../../../sources/second/in_game/common/example.txt)
+`);
+  assert.equal(
+    collisions.get(1)?.sources[0].link,
+    "../../../sources/first/in_game/common/example.txt",
+  );
+});
+
 test("rejects frontier collisions without both source links", () => {
   assert.throws(
     () =>
