@@ -1,6 +1,8 @@
 export type PackageType = "upstream" | "maintained" | "original";
 export type ConflictResolutionType =
   "load-order" | "merged-patch" | "incompatible";
+export type SemanticResolutionType =
+  ConflictResolutionType | "native-merge" | "shared-state";
 
 export type PackageSource =
   | {
@@ -56,8 +58,14 @@ export interface ProfileMod {
   source: ProfileSourcePin;
 }
 
+export interface ProfileExclusion {
+  packageId: string;
+  reason: string;
+}
+
 export interface ProfilePatch {
   id: string;
+  operation?: "add" | "replace";
   sourcePath: string;
   targetPath: string;
   targetPackageId: string;
@@ -73,6 +81,7 @@ export interface PlaysetProfile {
   name: string;
   targetGameVersion: string;
   mods: ProfileMod[];
+  excludedMods?: ProfileExclusion[];
   loadOrder: string[];
   patches: ProfilePatch[];
   patchMod: {
@@ -114,7 +123,7 @@ export interface ConflictRules {
   filePathResolutions: FilePathResolution[];
   semanticResolutions: Array<{
     fingerprint: string;
-    resolutionType: ConflictResolutionType;
+    resolutionType: SemanticResolutionType;
     decision: string;
     reason: string;
   }>;
@@ -127,6 +136,7 @@ export interface ProjectConfiguration {
   profile: PlaysetProfile;
   conflictRules: ConflictRules;
   packages: ConcordiaPackage[];
+  packageCatalog: ConcordiaPackage[];
 }
 
 export interface ProjectOptions {

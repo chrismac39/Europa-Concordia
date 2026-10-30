@@ -7,6 +7,7 @@ import type {
   PlaysetProfile,
   PackageManifest,
   PackageSource,
+  ProfileExclusion,
   ProfileMod,
   ProjectConfiguration,
   ProjectOptions,
@@ -218,6 +219,7 @@ function validateProfile(value: unknown): PlaysetProfile {
     typeof value.targetGameVersion !== "string" ||
     !gameVersionPattern.test(value.targetGameVersion) ||
     !Array.isArray(value.mods) ||
+    (value.excludedMods !== undefined && !Array.isArray(value.excludedMods)) ||
     !Array.isArray(value.loadOrder) ||
     !Array.isArray(value.patches) ||
     !isRecord(value.patchMod)
@@ -287,6 +289,38 @@ function validateProfile(value: unknown): PlaysetProfile {
   const modIds = mods.map((mod) => mod.packageId);
   if (new Set(modIds).size !== modIds.length) {
     errors.push("Profile package identifiers must be unique");
+  }
+
+  const excludedMods: ProfileExclusion[] = [];
+  const rawExcludedMods: unknown[] = Array.isArray(value.excludedMods)
+    ? value.excludedMods
+    : [];
+  rawExcludedMods.forEach((excludedMod, index) => {
+    const label = `profile.excludedMods[${index}]`;
+    if (!isRecord(excludedMod)) {
+      errors.push(`${label} must be an object`);
+      return;
+    }
+    if (
+      typeof excludedMod.packageId !== "string" ||
+      !packageIdPattern.test(excludedMod.packageId)
+    ) {
+      errors.push(`${label}.packageId must be a package identifier`);
+    }
+    requiredString(excludedMod.reason, `${label}.reason`, errors);
+    if (
+      typeof excludedMod.packageId === "string" &&
+      typeof excludedMod.reason === "string"
+    ) {
+      excludedMods.push(excludedMod as unknown as ProfileExclusion);
+    }
+  });
+  const excludedModIds = excludedMods.map((mod) => mod.packageId);
+  if (new Set(excludedModIds).size !== excludedModIds.length) {
+    errors.push("Excluded package identifiers must be unique");
+  }
+  if (excludedModIds.some((packageId) => modIds.includes(packageId))) {
+    errors.push("A package cannot be both selected and explicitly excluded");
   }
 
   const patchModId = value.patchMod.id;
@@ -362,6 +396,13 @@ function validateProfile(value: unknown): PlaysetProfile {
     }
     if (patch.resolutionType !== "merged-patch") {
       errors.push(`${label}.resolutionType must be merged-patch`);
+    }
+    if (
+      patch.operation !== undefined &&
+      patch.operation !== "add" &&
+      patch.operation !== "replace"
+    ) {
+      errors.push(`${label}.operation must be add or replace when provided`);
     }
     requiredString(patch.reason, `${label}.reason`, errors);
     for (const field of ["preserves", "suppresses"] as const) {
@@ -533,12 +574,15 @@ function validateConflictRules(value: unknown): ConflictRules {
       semanticFingerprints.add(resolution.fingerprint);
     }
     if (
-      !["merged-patch", "incompatible"].includes(
-        String(resolution.resolutionType),
-      )
+      ![
+        "merged-patch",
+        "native-merge",
+        "shared-state",
+        "incompatible",
+      ].includes(String(resolution.resolutionType))
     ) {
       errors.push(
-        `${label}.resolutionType must be merged-patch or incompatible`,
+        `${label}.resolutionType must be merged-patch, native-merge, shared-state, or incompatible`,
       );
     }
     requiredString(resolution.decision, `${label}.decision`, errors);
@@ -734,6 +778,13 @@ export async function validateProject(
     }
     return packageValue;
   });
+  for (const excludedMod of profile.excludedMods ?? []) {
+    if (!packagesById.has(excludedMod.packageId)) {
+      throw new Error(
+        `Profile ${profile.id} excludes unknown package ${excludedMod.packageId}`,
+      );
+    }
+  }
   assertDependencies(selectedPackages, packageManifest.packages);
   const loadOrderPosition = new Map(
     profile.loadOrder.map((packageId, index) => [packageId, index]),
@@ -844,15 +895,32 @@ export async function validateProject(
     if (!packageValue) {
       throw new Error(`Patch ${patch.id} targets an unknown package`);
     }
+    const operation = patch.operation ?? "replace";
     const targetSourcePath = path.join(
       rootDirectory,
       packageValue.source.path,
       ...patch.targetPath.split("/"),
     );
-    if (!(await stat(targetSourcePath).catch(() => undefined))?.isFile()) {
+    const targetExists =
+      (await stat(targetSourcePath).catch(() => undefined))?.isFile() ?? false;
+    if (operation === "replace" && !targetExists) {
       throw new Error(
         `Patch ${patch.id} target does not replace a file in ${patch.targetPackageId}: ${patch.targetPath}`,
       );
+    }
+    if (operation === "add") {
+      for (const selectedPackage of selectedPackages) {
+        const sourcePath = path.join(
+          rootDirectory,
+          selectedPackage.source.path,
+          ...patch.targetPath.split("/"),
+        );
+        if ((await stat(sourcePath).catch(() => undefined))?.isFile()) {
+          throw new Error(
+            `Patch ${patch.id} adds ${patch.targetPath}, but that path already exists in selected package ${selectedPackage.id}`,
+          );
+        }
+      }
     }
     const patchContents = await readFile(sourcePath, "utf8");
     for (const definition of patch.preserves) {
@@ -877,5 +945,6 @@ export async function validateProject(
     profile,
     conflictRules,
     packages: selectedPackages,
+    packageCatalog: packageManifest.packages,
   };
 }

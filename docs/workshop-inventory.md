@@ -8,6 +8,10 @@ Compared on 2026-10-29 against `config/packages.json`.
   or ready for redistribution.
 - Community Mod Framework is cataloged as an analysis input and remains a
   separate playset mod; it is not bundled into Concordia.
+- Diverse Unit Models (`3714859568`) is cataloged but excluded from the EU5
+  1.4.5 starter profile. Its 64x64 iron-metal texture overrides conflict with
+  the 128x128 vanilla texture-array assets and cause a frontend crash. No
+  Concordia texture patch is planned.
 
 **Progress: 25 of 38 downloaded Workshop items recorded**
 

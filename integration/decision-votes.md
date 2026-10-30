@@ -51,6 +51,36 @@ or resolve the underlying findings. All votes below were recorded on
 |       40 |  C   | Synthesize a Concordia merge                  |
 |       41 |  A   | Use SOL-JTG Compatibility Submod as the base  |
 
+### Clarification to Decisions 38 and 41 — SoL / Just Goods
+
+The user clarified that both Standard of Living and Just Goods remain separate
+active playset mods. Concordia subsumes the compatibility behavior into
+Concordia-authored patch files; the separate SOL-JTG compatibility mod is a
+behavioral reference only and must not be required by this profile. This
+clarification supersedes the literal “use as the base” interpretation without
+rewriting the historical votes.
+
+The implementation follows the pinned reference's demand scaling,
+market-accounting, and UI behavior while preserving SoL's existing content.
+Where the reference README says slave demand is unchanged but its data cancels
+native Just Goods slave demand, the user chose the implementation behavior:
+cancel it for the covered goods.
+
+### Current SoL / Just Goods / CMF integration
+
+The current profile applies the compatible-hook votes after verifying EU5's
+native on-action behavior: same-named on-action definitions contributed from
+different files accumulate their registrations. The SoL and Just Goods
+callbacks remain separate from CMF's dispatchers; Concordia does not copy an
+upstream on-action file to combine them. The MRC same-path replacement still
+removes MRC's CMM registration/callback hooks and retains its historical
+defaults.
+
+The shared `cmf_log_count` is treated as CMF-owned log state with SoL as an
+additional producer. SoL uses CMF's `_cmf_log_select_key`, the same log maps,
+the same 200-entry limit, and increments the shared counter once per entry.
+This is the intended shared log contract, not competing state ownership.
+
 ## Global implementation constraint: one coherent implementation per system
 
 Across the integration—not only for the Golden Horde (GLH)—do not leave
@@ -114,7 +144,9 @@ the vote does not decide whether the river image needs editing.
 ## Implementation status
 
 Decisions 1 and 2 have been implemented as Concordia-owned complete-file
-overrides under `integration/overrides/dynamic-names/`. Decision 3 is
+overrides under `integration/overrides/dynamic-names/`. The SoL/Just Goods
+clarification above is implemented as profile-specific Concordia compatibility
+files under `integration/patches/` and `integration/overrides/`. Decision 3 is
 implemented by selecting Oikoumenē's complete files for its seven language
 path collisions. Decision 36 selects Sulphur's Rivers Expanded raster for the
 shared river-map path. The source snapshots remain unchanged. The dynamic-name

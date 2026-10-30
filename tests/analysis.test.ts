@@ -155,6 +155,11 @@ test("keeps country reference categorization non-blocking", async () => {
       packageValue("active-right"),
       packageValue("observer"),
     ],
+    packageCatalog: [
+      packageValue("active-left"),
+      packageValue("active-right"),
+      packageValue("observer"),
+    ],
   };
 
   try {
@@ -269,6 +274,7 @@ test("traces definition outcomes through package event chains", async () => {
       definitionConflicts: "deferred",
     },
     packages: [packageValue("left"), packageValue("right")],
+    packageCatalog: [packageValue("left"), packageValue("right")],
   };
 
   try {
@@ -341,6 +347,269 @@ test("traces definition outcomes through package event chains", async () => {
     assert.ok(refreshedFinding);
     assert.notEqual(refreshedFinding.fingerprint, finding.fingerprint);
     assert.equal(refreshedFinding.resolved, false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("approves native merges only for content-pinned injected definitions", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "concordia-native-merge-"));
+  const writePackageFile = async (
+    packageId: string,
+    relativePath: string,
+    contents: string,
+  ): Promise<void> => {
+    const file = path.join(root, packageId, ...relativePath.split("/"));
+    await mkdir(path.dirname(file), { recursive: true });
+    await writeFile(file, contents);
+  };
+  const packageValue = (
+    id: string,
+  ): ProjectConfiguration["packages"][number] => ({
+    id,
+    name: id,
+    type: "original",
+    source: { type: "local", path: id },
+    author: "Test",
+    targetGameVersion: "1.4.5",
+    version: "1.0.0",
+    dependencies: [],
+    attribution: { license: "MIT" },
+  });
+  const configuration: ProjectConfiguration = {
+    rootDirectory: root,
+    build: {
+      version: 1,
+      targetGameVersion: "1.4.5",
+      defaultProfile: "test",
+      packagesFile: "config/packages.json",
+      conflictRulesFile: "config/conflict-rules.json",
+      outputDirectory: "dist",
+    },
+    profile: {
+      version: 1,
+      id: "test",
+      name: "Test",
+      targetGameVersion: "1.4.5",
+      mods: ["just-goods", "sol"].map((id) => ({
+        packageId: id,
+        name: id,
+        version: "1.0.0",
+        source: { type: "local" as const },
+      })),
+      loadOrder: ["just-goods", "sol", "test_patch"],
+      patches: [],
+      patchMod: {
+        name: "Test Patch",
+        id: "test_patch",
+        version: "1.0.0",
+        shortDescription: "Test",
+        tags: ["Gameplay"],
+      },
+    },
+    conflictRules: {
+      version: 1,
+      filePathCollisions: "error",
+      filePathResolutions: [],
+      semanticResolutions: [],
+      definitionConflicts: "deferred",
+    },
+    packages: [packageValue("just-goods"), packageValue("sol")],
+    packageCatalog: [packageValue("just-goods"), packageValue("sol")],
+  };
+
+  try {
+    await writePackageFile(
+      "just-goods",
+      "in_game/common/goods/jtg.txt",
+      "INJECT:cloves = { default_market_price = 6 }",
+    );
+    await writePackageFile(
+      "sol",
+      "in_game/common/goods/sol.txt",
+      "INJECT:cloves = { demand_add = { nobles = 0.1 } wealth_impact_threshold = { all = -1.1 } }",
+    );
+    const initialAnalysis = await analyzeProject(configuration);
+    const initialFinding = initialAnalysis.findings.find(
+      (finding) => finding.title === "Definition: common/goods:cloves",
+    );
+    assert.ok(initialFinding);
+    assert.equal(initialFinding.resolved, false);
+
+    configuration.conflictRules.semanticResolutions = [
+      {
+        fingerprint: initialFinding.fingerprint,
+        resolutionType: "native-merge",
+        decision: "Merge disjoint database-entry injections.",
+        reason: "The definitions write disjoint fields.",
+      },
+    ];
+    const approvedAnalysis = await analyzeProject(configuration);
+    const approvedFinding = approvedAnalysis.findings.find(
+      (finding) => finding.title === "Definition: common/goods:cloves",
+    );
+    assert.equal(approvedFinding?.resolved, true);
+
+    await writePackageFile(
+      "just-goods",
+      "in_game/common/goods/jtg.txt",
+      "INJECT:cloves = { default_market_price = 6 demand_add = { nobles = 1 } }",
+    );
+    const updatedAnalysis = await analyzeProject(configuration);
+    const updatedFinding = updatedAnalysis.findings.find(
+      (finding) => finding.title === "Definition: common/goods:cloves",
+    );
+    assert.ok(updatedFinding);
+    assert.notEqual(updatedFinding.fingerprint, initialFinding.fingerprint);
+    assert.equal(updatedFinding.resolved, false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("approves content-pinned on-action and shared-state merges", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "concordia-native-hooks-"));
+  const writePackageFile = async (
+    packageId: string,
+    relativePath: string,
+    contents: string,
+  ): Promise<void> => {
+    const file = path.join(root, packageId, ...relativePath.split("/"));
+    await mkdir(path.dirname(file), { recursive: true });
+    await writeFile(file, contents);
+  };
+  const packageValue = (
+    id: string,
+  ): ProjectConfiguration["packages"][number] => ({
+    id,
+    name: id,
+    type: "original",
+    source: { type: "local", path: id },
+    author: "Test",
+    targetGameVersion: "1.4.5",
+    version: "1.0.0",
+    dependencies: [],
+    attribution: { license: "MIT" },
+  });
+  const configuration: ProjectConfiguration = {
+    rootDirectory: root,
+    build: {
+      version: 1,
+      targetGameVersion: "1.4.5",
+      defaultProfile: "test",
+      packagesFile: "config/packages.json",
+      conflictRulesFile: "config/conflict-rules.json",
+      outputDirectory: "dist",
+    },
+    profile: {
+      version: 1,
+      id: "test",
+      name: "Test",
+      targetGameVersion: "1.4.5",
+      mods: ["left", "right"].map((id) => ({
+        packageId: id,
+        name: id,
+        version: "1.0.0",
+        source: { type: "local" as const },
+      })),
+      loadOrder: ["left", "right", "test_patch"],
+      patches: [],
+      patchMod: {
+        name: "Test Patch",
+        id: "test_patch",
+        version: "1.0.0",
+        shortDescription: "Test",
+        tags: ["Gameplay"],
+      },
+    },
+    conflictRules: {
+      version: 1,
+      filePathCollisions: "error",
+      filePathResolutions: [],
+      semanticResolutions: [],
+      definitionConflicts: "deferred",
+    },
+    packages: [packageValue("left"), packageValue("right")],
+    packageCatalog: [packageValue("left"), packageValue("right")],
+  };
+
+  try {
+    await writePackageFile(
+      "left",
+      "in_game/common/on_action/left.txt",
+      `monthly_country_pulse = { on_actions = { left_pulse } }
+set_global_variable = { name = shared_count value = 0 }`,
+    );
+    await writePackageFile(
+      "right",
+      "in_game/common/on_action/right.txt",
+      `monthly_country_pulse = { on_actions = { right_pulse } }
+change_global_variable = { name = shared_count add = 1 }`,
+    );
+
+    const initialAnalysis = await analyzeProject(configuration);
+    const initialHook = initialAnalysis.findings.find(
+      (finding) =>
+        finding.title === "Definition: common/on_action:monthly_country_pulse",
+    );
+    const initialState = initialAnalysis.findings.find(
+      (finding) => finding.title === "Global variable: shared_count",
+    );
+    assert.ok(initialHook);
+    assert.ok(initialState);
+    assert.equal(initialHook.resolved, false);
+    assert.equal(initialState.resolved, false);
+
+    configuration.conflictRules.semanticResolutions = [
+      {
+        fingerprint: initialHook.fingerprint,
+        resolutionType: "native-merge",
+        decision: "Keep both pulse registrations.",
+        reason: "EU5 accumulates same-named on-actions from separate files.",
+      },
+      {
+        fingerprint: initialState.fingerprint,
+        resolutionType: "shared-state",
+        decision: "Use one shared counter contract.",
+        reason: "Both packages use the same counter semantics.",
+      },
+    ];
+    const approvedAnalysis = await analyzeProject(configuration);
+    assert.equal(
+      approvedAnalysis.findings.find(
+        (finding) =>
+          finding.title ===
+          "Definition: common/on_action:monthly_country_pulse",
+      )?.resolved,
+      true,
+    );
+    assert.equal(
+      approvedAnalysis.findings.find(
+        (finding) => finding.title === "Global variable: shared_count",
+      )?.resolved,
+      true,
+    );
+
+    await writePackageFile(
+      "right",
+      "in_game/common/on_action/right.txt",
+      `monthly_country_pulse = { on_actions = { updated_right_pulse } }
+change_global_variable = { name = shared_count add = 2 }`,
+    );
+    const refreshedAnalysis = await analyzeProject(configuration);
+    const refreshedHook = refreshedAnalysis.findings.find(
+      (finding) =>
+        finding.title === "Definition: common/on_action:monthly_country_pulse",
+    );
+    const refreshedState = refreshedAnalysis.findings.find(
+      (finding) => finding.title === "Global variable: shared_count",
+    );
+    assert.ok(refreshedHook);
+    assert.ok(refreshedState);
+    assert.notEqual(refreshedHook.fingerprint, initialHook.fingerprint);
+    assert.notEqual(refreshedState.fingerprint, initialState.fingerprint);
+    assert.equal(refreshedHook.resolved, false);
+    assert.equal(refreshedState.resolved, false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }

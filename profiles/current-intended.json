@@ -25,13 +25,22 @@
       }
     },
     {
-      "packageId": "diverse-unit-models",
-      "name": "Diverse Unit Models",
+      "packageId": "just-goods",
+      "name": "Just Goods",
       "version": "1.0.0",
       "source": {
         "type": "steam-workshop",
-        "workshopId": "3714859568",
-        "snapshotChecksum": "sha256:b32c4455f8e0d38bcb1ff7f5bd77c3c78ea4e0400f3ab71a41415140d26bb041"
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
+      }
+    },
+    {
+      "packageId": "standard-of-living",
+      "name": "[v1.4 beta] Standard of Living",
+      "version": "0.0.261024",
+      "source": {
+        "type": "git",
+        "revision": "2c36654528de8cf03ce5a9d9d5a018342d781327"
       }
     },
     {
@@ -98,7 +107,8 @@
   "loadOrder": [
     "better-road-builder",
     "community-mod-framework",
-    "diverse-unit-models",
+    "just-goods",
+    "standard-of-living",
     "eurocentric-institutions",
     "continental-hegemonies",
     "more-locations",
@@ -107,9 +117,20 @@
     "sulphurs-rivers-expanded",
     "europa_concordia_current_intended"
   ],
+  "excludedMods": [
+    {
+      "packageId": "diverse-unit-models",
+      "reason": "Not compatible with EU5 1.4.5: its 64x64 iron-metal texture overrides conflict with the 128x128 vanilla texture-array assets and cause a frontend crash. Excluded pending upstream compatibility; Concordia will not patch these textures."
+    },
+    {
+      "packageId": "sol-jtg-compatibility-submod",
+      "reason": "Superseded in this playset by Concordia-authored SoL/Just Goods compatibility files. Keep the pinned source snapshot for behavioral reference and re-analysis only; do not enable this separate compatibility mod."
+    }
+  ],
   "patches": [
     {
       "id": "mrc-historical-defaults-no-cmm",
+      "operation": "replace",
       "sourcePath": "integration/overrides/more-restricted-colonization/in_game/common/on_action/MRC_cmm_on_actions.txt",
       "targetPath": "in_game/common/on_action/MRC_cmm_on_actions.txt",
       "targetPackageId": "more-restricted-colonization",
@@ -128,12 +149,83 @@
         "MRC_register_cmf_mod",
         "MRC_sync_menu_to_globals"
       ]
+    },
+    {
+      "id": "sol-jtg-demand-goods",
+      "operation": "add",
+      "sourcePath": "integration/patches/sol-jtg-compatibility/in_game/common/goods/zz_CONCORDIA_SOL_JTG_pop_goods.txt",
+      "targetPath": "in_game/common/goods/zz_CONCORDIA_SOL_JTG_pop_goods.txt",
+      "targetPackageId": "just-goods",
+      "resolutionType": "merged-patch",
+      "reason": "Add SoL-style pop-demand scaling and cancel the existing Just Goods slave demand for the 26 direct-demand goods, while preserving Just Goods good definitions, production, and non-pop behavior.",
+      "preserves": [
+        "INJECT:aromatics",
+        "demand_add",
+        "wealth_impact_threshold"
+      ],
+      "suppresses": ["INJECT:slaves ="]
+    },
+    {
+      "id": "sol-jtg-market-consumption",
+      "operation": "add",
+      "sourcePath": "integration/patches/sol-jtg-compatibility/in_game/common/script_values/zz_CONCORDIA_SOL_market_unit_consumption_values.txt",
+      "targetPath": "in_game/common/script_values/zz_CONCORDIA_SOL_market_unit_consumption_values.txt",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "Define the finalized Just Goods demand quantities required by SoL's market spending and demand-cache calculations.",
+      "preserves": [
+        "sol_unit_consumption_nobles_aromatics",
+        "sol_unit_consumption_burghers_whaleoil"
+      ],
+      "suppresses": ["sol_unit_consumption_nobles_wheat"]
+    },
+    {
+      "id": "sol-jtg-economy-effects",
+      "operation": "add",
+      "sourcePath": "integration/overrides/sol-jtg-compatibility/in_game/common/scripted_effects/zz_A_SOL_economy_effects.txt",
+      "targetPath": "in_game/common/scripted_effects/zz_A_SOL_economy_effects.txt",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "EU5 resolves scripted-effect definitions by database entry, but SoL hardcodes goods enumerations. These complete Concordia-authored replacement definitions preserve SoL's market cache, panel statistics, and substitute-spending flows while adding Just Goods entries.",
+      "preserves": [
+        "REPLACE:sol_refresh_market_pop_demand_maps",
+        "REPLACE:gls_accumulate_panel_stats",
+        "REPLACE:sol_compute_substitute_unit_spending",
+        "sol_market_unit_spending_nobles",
+        "sol_market_substitute_cache",
+        "gls_location_count",
+        "sol_market_good_spending_nobles_amber",
+        "sol_market_good_spending_nobles_aromatics"
+      ],
+      "suppresses": ["TRY_REPLACE:change_gold_effect"]
+    },
+    {
+      "id": "sol-jtg-global-panel",
+      "operation": "replace",
+      "sourcePath": "integration/overrides/sol-jtg-compatibility/in_game/gui/panels/situation/global_living_standard.gui",
+      "targetPath": "in_game/gui/panels/situation/global_living_standard.gui",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "EU5 GUI files at the same path are full-file overrides, not text merges. This complete file retains SoL's existing panel and adds the Just Goods rows.",
+      "preserves": ["situation_panel = {", "SOL_UI_SECTION overall_balance"],
+      "suppresses": ["sol_jtg_compatibility_submod"]
+    },
+    {
+      "id": "sol-jtg-economy-tooltip",
+      "operation": "add",
+      "sourcePath": "integration/overrides/sol-jtg-compatibility/in_game/gui/zz_SOL_economy_local.gui",
+      "targetPath": "in_game/gui/zz_SOL_economy_local.gui",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "Provide the complete SoL economy tooltip template with Just Goods demand entries; the zz_ filename ensures the merged GUI template is loaded after SoL's original template.",
+      "preserves": ["template StandardofLiving_tooltip", "SOL_UI_SECTION"],
+      "suppresses": ["sol_jtg_compatibility_submod"]
     }
   ],
   "patchMod": {
     "name": "Europa Concordia - Current Intended",
     "id": "europa_concordia_current_intended",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "shortDescription": "Playset-specific EU5 compatibility patch. Requires the listed mods separately.",
     "tags": ["Gameplay", "Map"]
   }

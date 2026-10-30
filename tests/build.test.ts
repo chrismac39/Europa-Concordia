@@ -9,6 +9,7 @@ import { validateProject } from "../scripts/build/validation.js";
 
 interface FixturePatch {
   id: string;
+  operation?: "add" | "replace";
   sourcePath: string;
   targetPath: string;
   targetPackageId: string;
@@ -27,6 +28,7 @@ interface Fixture {
     selectedIds?: string[],
     loadOrder?: string[],
     patches?: FixturePatch[],
+    excludedMods?: Array<{ packageId: string; reason: string }>,
   ): Promise<void>;
   writeRules(rules: {
     filePathResolutions?: Array<Record<string, unknown>>;
@@ -97,6 +99,7 @@ async function createFixture(): Promise<Fixture> {
       selectedIds = packages.map((packageValue) => String(packageValue.id)),
       loadOrder = selectedIds,
       patches = [],
+      excludedMods = [],
     ) {
       profileWritten = true;
       const selectedPackages = packages.filter((packageValue) =>
@@ -115,6 +118,7 @@ async function createFixture(): Promise<Fixture> {
             version: packageValue.version,
             source: { type: "local" },
           })),
+          excludedMods,
           loadOrder: [...loadOrder, "fixture_concordia_patch"],
           patches,
           patchMod: {
@@ -172,26 +176,38 @@ test("builds a profile-specific patch without copying upstream mod content", asy
   const fixture = await createFixture();
   try {
     fixture.addPackage("upstream");
+    fixture.addPackage("excluded");
     await fixture.writePackageFiles("upstream", {
       "in_game/common/example.txt": "upstream source",
       "in_game/common/keep.txt": "not copied",
     });
+
     await fixture.writePatchFile(
       "fixture/example.txt",
       "Concordia-authored fix\n",
     );
-    await fixture.writeProfile(undefined, undefined, [
-      {
-        id: "example-fix",
-        sourcePath: "integration/patches/fixture/example.txt",
-        targetPath: "in_game/common/example.txt",
-        targetPackageId: "upstream",
-        resolutionType: "merged-patch",
-        reason: "Test a targeted compatibility file.",
-        preserves: ["Concordia-authored fix"],
-        suppresses: ["not copied"],
-      },
-    ]);
+    await fixture.writeProfile(
+      ["upstream"],
+      ["upstream"],
+      [
+        {
+          id: "example-fix",
+          sourcePath: "integration/patches/fixture/example.txt",
+          targetPath: "in_game/common/example.txt",
+          targetPackageId: "upstream",
+          resolutionType: "merged-patch",
+          reason: "Test a targeted compatibility file.",
+          preserves: ["Concordia-authored fix"],
+          suppresses: ["not copied"],
+        },
+      ],
+      [
+        {
+          packageId: "excluded",
+          reason: "Not compatible with the fixture's target game.",
+        },
+      ],
+    );
     await fixture.writeManifest();
 
     const output = await buildProject(fixture.root);
@@ -219,6 +235,11 @@ test("builds a profile-specific patch without copying upstream mod content", asy
     );
     assert.match(guide, /upstream.*1\.0\.0.*Local source/);
     assert.match(guide, /load last/);
+    assert.match(guide, /Explicitly excluded from this profile/);
+    assert.match(
+      guide,
+      /excluded.*1\.0\.0.*Local source.*Not compatible with the fixture/,
+    );
     assert.match(guide, /does not bundle or replace any listed upstream mod/);
     const buildMetadata = JSON.parse(
       await readFile(
@@ -233,6 +254,119 @@ test("builds a profile-specific patch without copying upstream mod content", asy
   }
 });
 
+test("adds a new compatibility file without replacing upstream files", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("upstream");
+    await fixture.writePackageFiles("upstream", {
+      "in_game/common/original.txt": "upstream content",
+    });
+    await fixture.writePatchFile(
+      "fixture/additional.txt",
+      "Concordia-authored additive definitions\n",
+    );
+    await fixture.writeProfile(
+      ["upstream"],
+      ["upstream"],
+      [
+        {
+          id: "additive-definitions",
+          operation: "add",
+          sourcePath: "integration/patches/fixture/additional.txt",
+          targetPath: "in_game/common/additional.txt",
+          targetPackageId: "upstream",
+          resolutionType: "merged-patch",
+          reason: "Add new compatibility definitions without replacing data.",
+          preserves: ["Concordia-authored additive definitions"],
+          suppresses: ["not present in the authored patch"],
+        },
+      ],
+    );
+    await fixture.writeManifest();
+
+    const output = await buildProject(fixture.root);
+    assert.equal(
+      await readFile(
+        path.join(output, "in_game", "common", "additional.txt"),
+        "utf8",
+      ),
+      "Concordia-authored additive definitions\n",
+    );
+    await assert.rejects(
+      readFile(path.join(output, "in_game", "common", "original.txt")),
+    );
+    assert.equal(
+      await readFile(
+        path.join(
+          fixture.root,
+          "packages",
+          "upstream",
+          "in_game",
+          "common",
+          "original.txt",
+        ),
+        "utf8",
+      ),
+      "upstream content",
+    );
+    const buildMetadata = JSON.parse(
+      await readFile(
+        path.join(fixture.root, "dist", "build-metadata", "fixture.json"),
+        "utf8",
+      ),
+    ) as { patches: Array<{ operation: string }> };
+    assert.deepEqual(buildMetadata.patches, [
+      {
+        id: "additive-definitions",
+        targetPath: "in_game/common/additional.txt",
+        operation: "add",
+        resolutionType: "merged-patch",
+      },
+    ]);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("rejects additive patches that collide with selected source paths", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("upstream");
+    await fixture.writePackageFiles("upstream", {
+      "in_game/common/additional.txt": "existing source",
+    });
+    await fixture.writePatchFile(
+      "fixture/additional.txt",
+      "Concordia-authored additive definitions\n",
+    );
+    await fixture.writeProfile(
+      ["upstream"],
+      ["upstream"],
+      [
+        {
+          id: "additive-definitions",
+          operation: "add",
+          sourcePath: "integration/patches/fixture/additional.txt",
+          targetPath: "in_game/common/additional.txt",
+          targetPackageId: "upstream",
+          resolutionType: "merged-patch",
+          reason: "Add new compatibility definitions without replacing data.",
+          preserves: ["Concordia-authored additive definitions"],
+          suppresses: ["not present in the authored patch"],
+        },
+      ],
+    );
+    await fixture.writeManifest();
+
+    await assert.rejects(
+      buildProject(fixture.root),
+      /adds in_game\/common\/additional\.txt, but that path already exists/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("rejects unresolved path conflicts rather than copying either upstream file", async () => {
   const fixture = await createFixture();
   try {
@@ -241,6 +375,12 @@ test("rejects unresolved path conflicts rather than copying either upstream file
       buildProject(fixture.root),
       /1 unresolved finding.*content-pinned decision/,
     );
+    const guide = await readFile(
+      path.join(fixture.root, "dist", "load-order", "fixture.md"),
+      "utf8",
+    );
+    assert.match(guide, /Build status: BLOCKED.*1 unresolved conflict/);
+    assert.match(guide, /not compatibility approval/);
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }

@@ -694,7 +694,27 @@ export async function analyzeProject(
                   patch.targetPath.toLocaleLowerCase("en-US"),
             ),
         );
-      currentFinding.resolved = patchApplies;
+      const nativeMergeApplies =
+        resolution.resolutionType === "native-merge" &&
+        currentFinding.type === "definition" &&
+        currentFinding.definitionVariants !== undefined &&
+        new Set(
+          currentFinding.definitionVariants.map((variant) => variant.packageId),
+        ).size === currentFinding.packages.length &&
+        (currentFinding.definitionVariants.every(
+          (variant) => variant.mode === "inject",
+        ) ||
+          (currentFinding.symbols.every((symbol) =>
+            symbol.startsWith("common/on_action:"),
+          ) &&
+            currentFinding.definitionVariants.every(
+              (variant) => variant.mode === "define",
+            )));
+      const sharedStateApplies =
+        resolution.resolutionType === "shared-state" &&
+        currentFinding.type === "global-variable";
+      currentFinding.resolved =
+        patchApplies || nativeMergeApplies || sharedStateApplies;
       currentFinding.resolution = `${resolution.decision}: ${resolution.reason}`;
     }
   }

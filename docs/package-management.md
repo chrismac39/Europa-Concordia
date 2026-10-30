@@ -34,8 +34,10 @@ not performed by the build.
 `profiles/<id>.json` is the authoritative selected playset. It records the
 target game version, mod IDs/names/versions and source identifiers, a
 `loadOrder` list from earliest to latest, profile-specific Concordia patch
-files, generated mod metadata, and the Concordia patch mod ID as the final
-load-order entry. The starter profile is
+files, explicit `excludedMods` with reasons for known incompatible candidates,
+generated mod metadata, and the Concordia patch mod ID as the final load-order
+entry. The generated guide calls out exclusions separately so they are not
+mistaken for required playset mods. The starter profile is
 [`current-intended`](../profiles/current-intended.json).
 
 Profile pins must exactly match their entries in `config/packages.json`.
@@ -68,6 +70,12 @@ Build output is isolated by profile under
 `dist/europa-concordia/<id>/`. The generated load-order guide lists every
 required mod's name, version, Workshop ID or Git revision, and order; it places
 the Concordia patch last. No upstream content is part of the output.
+
+In the `current-intended` profile, Standard of Living and Just Goods remain
+separate required mods. The existing SOL-JTG compatibility submod is excluded
+because Concordia emits the compatibility behavior itself; it is retained as
+a pinned, catalogued behavior reference only and is not scanned as a selected
+playset mod.
 
 ## Decisions and source changes
 

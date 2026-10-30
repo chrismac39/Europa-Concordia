@@ -8,7 +8,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
-import type { ProjectOptions } from "./package-model.js";
+import type { ConcordiaPackage, ProjectOptions } from "./package-model.js";
 import { validateProject } from "./validation.js";
 import { analyzeProject } from "../analysis/analyzer.js";
 import { createWorkshopModMetadata } from "../workshop/metadata.js";
@@ -27,6 +27,7 @@ interface BuildMetadata {
   patches: Array<{
     id: string;
     targetPath: string;
+    operation: "add" | "replace";
     resolutionType: string;
   }>;
 }
@@ -52,11 +53,22 @@ function sourceIdentifier(
   return "Local source";
 }
 
+function packageSourceIdentifier(packageValue: ConcordiaPackage): string {
+  if (packageValue.source.type === "steam-workshop") {
+    return `Steam Workshop ${packageValue.source.workshopId}`;
+  }
+  if (packageValue.source.type === "git") {
+    return `Git ${packageValue.source.revision}`;
+  }
+  return "Local source";
+}
+
 function createLoadOrderGuide(
   configuration: Awaited<ReturnType<typeof validateProject>>,
+  unresolvedFindingCount: number,
 ): string {
   const packages = new Map(
-    configuration.packages.map((packageValue) => [
+    configuration.packageCatalog.map((packageValue) => [
       packageValue.id,
       packageValue,
     ]),
@@ -75,14 +87,46 @@ function createLoadOrderGuide(
   entries.push(
     `${entries.length + 1}. **${configuration.profile.patchMod.name}** ${configuration.profile.patchMod.version} - generated Concordia compatibility patch; load last.`,
   );
-  return [
+  const guide = [
     `# ${configuration.profile.name} - EU5 load order`,
     "",
     `Target game version: **${configuration.profile.targetGameVersion}**.`,
+  ];
+  if (unresolvedFindingCount > 0) {
+    guide.push(
+      "",
+      `**Build status: BLOCKED** — ${unresolvedFindingCount} unresolved conflict finding(s) remain.`,
+      "This guide records the requested order only; it is not compatibility approval. Resolve the findings before enabling this profile.",
+    );
+  }
+  guide.push(
     "",
     "Enable the following original mods separately in the EU5 playset, in this order:",
     "",
     ...entries,
+  );
+  const exclusions = (configuration.profile.excludedMods ?? []).map(
+    (excludedMod) => {
+      const packageValue = packages.get(excludedMod.packageId);
+      if (!packageValue) {
+        throw new Error(
+          `Profile excludes unknown mod ${excludedMod.packageId}`,
+        );
+      }
+      return `- **${packageValue.name}** ${packageValue.version} (${packageSourceIdentifier(packageValue)}) - ${excludedMod.reason}`;
+    },
+  );
+  if (exclusions.length > 0) {
+    guide.push(
+      "",
+      "## Explicitly excluded from this profile",
+      "",
+      "Do not enable these mods with this playset:",
+      "",
+      ...exclusions,
+    );
+  }
+  guide.push(
     "",
     "The generated Concordia mod contains only Concordia-authored compatibility files and its launcher metadata. It does not bundle or replace any listed upstream mod.",
     "",
@@ -90,7 +134,8 @@ function createLoadOrderGuide(
       configuration.profile.id +
       "` whenever a required mod version, Workshop item, source pin, or EU5 target changes.",
     "",
-  ].join("\n");
+  );
+  return guide.join("\n");
 }
 
 function createBuildMetadata(
@@ -110,6 +155,7 @@ function createBuildMetadata(
     patches: configuration.profile.patches.map((patch) => ({
       id: patch.id,
       targetPath: patch.targetPath,
+      operation: patch.operation ?? "replace",
       resolutionType: patch.resolutionType,
     })),
   };
@@ -124,9 +170,20 @@ export async function buildProject(
   const unresolvedFindings = analysis.findings.filter(
     (finding) => !finding.resolved,
   );
+  const guideDirectory = path.resolve(
+    configuration.rootDirectory,
+    "dist",
+    "load-order",
+  );
+  await mkdir(guideDirectory, { recursive: true });
+  await writeFile(
+    path.join(guideDirectory, `${configuration.profile.id}.md`),
+    createLoadOrderGuide(configuration, unresolvedFindings.length),
+    "utf8",
+  );
   if (unresolvedFindings.length > 0) {
     throw new Error(
-      `Compatibility analysis found ${unresolvedFindings.length} unresolved finding(s). Classify each conflict as load-order, merged-patch, or incompatible, and update its content-pinned decision before building.`,
+      `Compatibility analysis found ${unresolvedFindings.length} unresolved finding(s). Add a valid content-pinned decision (resolution or incompatibility) for each finding before building.`,
     );
   }
 
@@ -198,17 +255,5 @@ export async function buildProject(
     `${JSON.stringify(createBuildMetadata(configuration), null, 2)}\n`,
     "utf8",
   );
-  const guideDirectory = path.resolve(
-    configuration.rootDirectory,
-    "dist",
-    "load-order",
-  );
-  await mkdir(guideDirectory, { recursive: true });
-  await writeFile(
-    path.join(guideDirectory, `${configuration.profile.id}.md`),
-    createLoadOrderGuide(configuration),
-    "utf8",
-  );
-
   return outputDirectory;
 }

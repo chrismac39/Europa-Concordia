@@ -24,13 +24,6 @@
       "resolutionType": "load-order"
     },
     {
-      "path": "in_game/gui/panels/situation/global_living_standard.gui",
-      "packages": ["sol-jtg-compatibility-submod", "standard-of-living"],
-      "winner": "sol-jtg-compatibility-submod",
-      "reason": "The SOL-JTG compatibility submod supplies the integration replacement for Standard of Living's shared living-standard panel.",
-      "resolutionType": "load-order"
-    },
-    {
       "path": "in_game/gui/location_window.gui",
       "packages": ["glorp-ui", "standard-of-living"],
       "winner": "standard-of-living",
@@ -172,26 +165,50 @@
   ],
   "semanticResolutions": [
     {
-      "fingerprint": "67b2f09417afc2bb",
-      "decision": "Keep CMF's cmf_on_callback definition and omit MRC's CMM callback.",
-      "reason": "The Concordia MRC on-action override removes MRC's CMM callback while retaining its safe-default initialization hooks.",
+      "fingerprint": "00d0ab0dfee1e92f",
+      "decision": "Merge Just Goods and SoL's disjoint cloves injections.",
+      "reason": "Just Goods injects only the cloves default_market_price while SoL injects demand_add and wealth_impact_threshold. These database-entry injections affect distinct fields, so both active mods' behavior is retained without a Concordia replacement.",
+      "resolutionType": "native-merge"
+    },
+    {
+      "fingerprint": "287c328f8e967ce7",
+      "decision": "Keep CMF and SoL callback registrations while excluding MRC's CMM callback.",
+      "reason": "EU5 merges same-named on-action definitions from different files. The content-checked MRC replacement suppresses only MRC's CMM callback; CMF's core handler and SoL's independent handler remain active.",
       "resolutionType": "merged-patch"
     },
     {
-      "fingerprint": "e9a0d3ddf23fcad0",
-      "decision": "Keep CMF's cmf_on_mod_registration definition and omit MRC's CMM registration hook.",
-      "reason": "The Concordia MRC on-action override disables MRC's CMF settings registration as requested.",
+      "fingerprint": "8799017da9674b34",
+      "decision": "Keep the CMF, Just Goods, and SoL registration callbacks; exclude MRC's CMM registration.",
+      "reason": "EU5 merges same-named on-action definitions from different files. Just Goods and SoL register distinct settings through CMF; the content-checked MRC replacement disables MRC's CMM registration.",
       "resolutionType": "merged-patch"
+    },
+    {
+      "fingerprint": "6ec7c7c89b847830",
+      "decision": "Retain the independent monthly pulse registrations.",
+      "reason": "EU5 natively merges same-named on-action definitions from different files. CMF, Just Goods, and SoL register distinct monthly callbacks; no shared definition needs to be replaced.",
+      "resolutionType": "native-merge"
+    },
+    {
+      "fingerprint": "455da159c2d2af93",
+      "decision": "Retain all independent game-start callbacks and MRC historical defaults.",
+      "reason": "EU5 natively merges same-named on-action definitions from different files. The MRC replacement retains safe-default initialization while removing only its CMM hooks; CMF, Just Goods, and SoL callbacks remain separate.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "fingerprint": "e7fd4381905822be",
+      "decision": "Retain the independent yearly pulse registrations.",
+      "reason": "EU5 natively merges same-named on-action definitions from different files. CMF, Just Goods, and SoL yearly callbacks and event pools are distinct contributions.",
+      "resolutionType": "native-merge"
+    },
+    {
+      "fingerprint": "47ce920f8634de57",
+      "decision": "Keep CMF as the shared log-state owner and retain SoL as a producer.",
+      "reason": "SoL uses CMF's log key allocator and maps, applies the same 200-entry cap, and increments cmf_log_count once per entry. Both writers implement the same CMF log contract rather than competing state.",
+      "resolutionType": "shared-state"
     },
     {
       "fingerprint": "832729945153948e",
       "decision": "Merge on_game_load callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
-      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls.",
-      "resolutionType": "merged-patch"
-    },
-    {
-      "fingerprint": "05c2c0ea13a11260",
-      "decision": "Merge on_game_start callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
       "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls.",
       "resolutionType": "merged-patch"
     }

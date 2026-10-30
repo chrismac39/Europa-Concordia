@@ -82,14 +82,6 @@ async function main(): Promise<void> {
   const configuration = await validateProject(rootDirectory, options);
   const analysis = await analyzeProject(configuration);
   await writeConflictReports(rootDirectory, analysis);
-  const unresolvedFindings = analysis.findings.filter(
-    (finding) => !finding.resolved,
-  );
-  if (unresolvedFindings.length > 0) {
-    throw new Error(
-      `Compatibility analysis found ${unresolvedFindings.length} unresolved finding(s). Review reports/${configuration.profile.id}/decision-frontier.md and reports/${configuration.profile.id}/deep-frontier.md.`,
-    );
-  }
 
   const outputDirectory = await buildProject(rootDirectory, options);
   console.log(

@@ -1,5 +1,5 @@
 import type { ProjectConfiguration } from "../build/package-model.js";
-import type { ConflictResolutionType } from "../build/package-model.js";
+import type { SemanticResolutionType } from "../build/package-model.js";
 
 export type FindingType =
   | "path"
@@ -43,7 +43,7 @@ export interface ConflictFinding {
   packages: string[];
   symbols: string[];
   sources: FindingSource[];
-  resolutionType?: ConflictResolutionType;
+  resolutionType?: SemanticResolutionType;
   definitionVariants?: DefinitionVariantAnalysis[];
   resolved: boolean;
   resolution?: string;

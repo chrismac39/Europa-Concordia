@@ -54,9 +54,14 @@ Unclassified or stale conflicts remain unresolved and block the build.
 EU5's [mod structure documentation](https://eu5.paradoxwikis.com/Mod_structure)
 states that a same-directory, same-name file overrides the vanilla or
 previously read mod file, including when the replacing file is empty. Database
-entry modes such as `REPLACE:` and `INJECT:` are distinct from whole-file
-overrides and are unavailable in `common/on_action`. Therefore a full
-`on_action` replacement must preserve every callback that still needs to run.
+Database entry modes such as `REPLACE:` and `INJECT:` are distinct from
+whole-file overrides and are unavailable in `common/on_action`. As described
+in the [EU5 on-action documentation](https://eu5.paradoxwikis.com/On_action),
+same-named on-action definitions in different files are natively merged, so
+independent callbacks can remain in their upstream files. A Concordia
+replacement is only needed when replacing a same-path source file or
+intentionally suppressing a specific contribution; it must preserve every
+callback that still needs to run.
 The MRC compatibility file is an explicit Concordia-authored replacement that
 keeps MRC's historical default initialization and removes its CMF/CMM setting
 hooks; its source file is checked for both preserved and suppressed names.
