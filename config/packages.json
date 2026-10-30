@@ -379,7 +379,7 @@
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
-        "notice": "Local snapshot of Steam Workshop item 3790115532. Upstream declares EU5 1.3.x compatibility. Obtain redistribution permission before enabling it for a distributed build."
+        "notice": "Local immutable snapshot of Steam Workshop item 3790115532, version 0.9.39. Upstream declares EU5 1.3.x compatibility. The repository owner confirms permission to redistribute upstream files and maintained compatibility work."
       }
     },
     {

@@ -397,6 +397,12 @@
       "resolutionType": "native-merge"
     },
     {
+      "fingerprint": "2b65f6b23ed15ae2",
+      "resolutionType": "native-merge",
+      "decision": "Retain Dynastic Bloodlines' game-start initialization callback.",
+      "reason": "EU5 natively merges same-named on-action definitions from different files. Dynastic Bloodlines adds its independent one-time initialization and country synchronization callback; no Concordia replacement is needed."
+    },
+    {
       "fingerprint": "455da159c2d2af93",
       "decision": "Retain all independent game-start callbacks and MRC historical defaults.",
       "reason": "EU5 natively merges same-named on-action definitions from different files. The MRC replacement retains safe-default initialization while removing only its CMM hooks; CMF, Just Goods, and SoL callbacks remain separate.",

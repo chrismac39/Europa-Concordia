@@ -79,8 +79,11 @@ upstream GH/Glorp compatch. Concordia generates the Trade-tab integration from
 Glorp UI's pinned left panel. Two additional generated files restore
 Construction Manager 1.4's existing-building and unbuilt-building production
 controls, plus its food-RGO and RGO auto-expand controls in the SoL/Glorp
-location window. Each transformation is pinned to its selected input file;
-the profile still requires an in-game UI check.
+location window. Each transformation is pinned to its selected input file.
+In-game testing found a known issue where inactive Glorp left-panel colors are
+missing with Concordia's generated patch, although the standalone GH/Glorp
+patch restores them in the same playset. See the
+[GH/Glorp decision record](../integration/decisions/gh-exchequer-glorp-ui.md).
 
 ## Approval freshness
 

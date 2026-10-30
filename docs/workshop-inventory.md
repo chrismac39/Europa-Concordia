@@ -8,6 +8,9 @@ Compared on 2026-10-29 against `config/packages.json`.
   or ready for redistribution.
 - Community Mod Framework is cataloged as an analysis input and remains a
   separate playset mod; it is not bundled into Concordia.
+- Dynastic Bloodlines (`3790115532`, version `0.9.39`) is selected in
+  `current-intended` as a separate Workshop mod. It declares EU5 `1.3.*`;
+  compatibility with the profile's `1.4.5` target still needs in-game testing.
 - Diverse Unit Models (`3714859568`) is cataloged but excluded from the EU5
   1.4.5 starter profile. Its 64x64 iron-metal texture overrides conflict with
   the 128x128 vanilla texture-array assets and cause a frontend crash. No

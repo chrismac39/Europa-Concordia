@@ -160,6 +160,17 @@ The current-intended analysis reports 48 findings and no unresolved decisions
 for this pinned profile. This is static approval, not proof of runtime
 compatibility; the selected playset still needs in-game testing.
 
+Dynastic Bloodlines (`3790115532`, version `0.9.39`) is selected as a separate
+Workshop mod. Permission to redistribute the upstream files and maintained
+compatibility work was confirmed. Its metadata declares EU5 `1.3.*`; PdxL and
+the static analyzer report no blocking errors for the `1.4.5` profile, but
+runtime compatibility remains unverified. Its game-start callback is retained
+through a content-pinned native-merge decision. The upstream marriage
+predictions and bloodline-emblem UI remain in that separate mod; Concordia
+does not duplicate those GUI files. The header's `Character.ShowsStats`
+visibility difference versus the installed game UI is an accepted known issue
+pending upstream or runtime confirmation.
+
 ## Current Glorp UI / GH Exchequer integration
 
 Glorp UI, GH Exchequer, Construction Manager, and Autonomous Diplomats remain
@@ -183,5 +194,9 @@ The profile loads Autonomous Diplomats before Construction Manager to retain
 the latter's create-playset UI alongside the shared CMF dependency workflow.
 Glorp UI follows both, Standard of Living follows Glorp UI, GH Exchequer
 follows the UI mods, and Concordia loads last. These choices and the
-source-fingerprinted conflict rules are implemented; GUI and runtime behavior
-still require in-game testing.
+source-fingerprinted conflict rules are implemented. The user reports the
+playset runs and its other functionality works, but inactive Glorp left-panel
+colors are missing only with Concordia's generated patch; replacing it with
+the standalone GH/Glorp patch in the same playset restores them. See
+[the GH/Glorp decision record](decisions/gh-exchequer-glorp-ui.md) for the
+known issue and comparison evidence.

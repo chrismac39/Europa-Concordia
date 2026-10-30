@@ -65,6 +65,16 @@
       }
     },
     {
+      "packageId": "dynastic-bloodlines",
+      "name": "Dynastic Bloodlines",
+      "version": "0.9.39",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3790115532",
+        "snapshotChecksum": "sha256:20ef5af4452a48b47919f3643593fd04c8296243054dc692a55391423371e4b0"
+      }
+    },
+    {
       "packageId": "just-goods",
       "name": "Just Goods",
       "version": "1.0.0",
@@ -151,6 +161,7 @@
     "autonomous-diplomats",
     "construction-manager",
     "glorp-ui",
+    "dynastic-bloodlines",
     "just-goods",
     "standard-of-living",
     "gh-exchequer",
@@ -184,6 +195,10 @@
     {
       "packageId": "autonomous-diplomats",
       "reason": "The pinned upstream metadata declares EU5 1.3.* support and last updated for 1.3.10. This profile targets 1.4.5 at the user's request; compatibility remains unverified pending in-game testing."
+    },
+    {
+      "packageId": "dynastic-bloodlines",
+      "reason": "Pinned upstream version 0.9.39 declares EU5 1.3.* while this profile targets 1.4.5. Static analyzer and PdxL checks found no blocking errors, but in-game compatibility is unverified. Its header override also removes the Character.ShowsStats guard present in the installed game UI; both UI features remain supplied by the separate upstream mod."
     }
   ],
   "patches": [

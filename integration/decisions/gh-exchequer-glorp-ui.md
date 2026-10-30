@@ -63,6 +63,28 @@ dependency and test Glorp UI in-game.
 
 Autonomous Diplomats' pinned metadata declares EU5 `1.3.*` support and was
 last updated for `1.3.10`. The user chose to keep it for this `1.4.5` profile;
-compatibility remains unverified. GUI layout, GH Trade-tab behavior, the
-Construction Manager controls, launcher acceptance, and runtime behavior all
-still need an in-game test.
+compatibility remains unverified.
+
+## Known issue: inactive left-panel colors
+
+**Status:** Open; cosmetic; no fix confirmed.
+
+The user reports that the intended playset runs and its other functionality
+works, but inactive Glorp left-panel tabs show their default colors instead of
+the expected category colors. The selected Economy tab still shows its gold
+active-state tint. Both Glorp options for vanilla tab icons and backgrounds
+are unchecked, and toggling them did not resolve the appearance.
+
+The user confirmed the launcher order matches the load-order guide. Glorp UI
+1.4 with CMF alone displays the expected colors. In the same full playset,
+swapping Concordia's generated patch for the standalone GH/Glorp Workshop
+patch restores them.
+
+Comparison of Concordia's generated `glorpUI_left_panel.gui` against the
+pinned Glorp file and the standalone compatch found the expected custom icon
+and background references in the generated file. Its visible differences from
+the standalone compatch are Concordia-specific labels, a unique Trade-button
+name, and Trade-tab highlight blocks; no color-related difference explains
+the runtime result. The cause remains unresolved and should not be treated as
+a load-order issue or a confirmed fix. Track this against the generated
+patch/runtime behavior; do not copy Glorp's upstream textures into Concordia.
