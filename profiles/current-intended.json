@@ -25,6 +25,46 @@
       }
     },
     {
+      "packageId": "construction-manager",
+      "name": "Construction Manager",
+      "version": "2.2.13",
+      "source": {
+        "type": "git",
+        "revision": "d378769855725c05c55c750b1e92f0d17dbc0fe6",
+        "publishedWorkshopId": "3736668860"
+      }
+    },
+    {
+      "packageId": "autonomous-diplomats",
+      "name": "Autonomous Diplomats",
+      "version": "1.5.0",
+      "source": {
+        "type": "git",
+        "revision": "d423418cad1d095101adc410924af8d525784c0a",
+        "publishedWorkshopId": "3696243603"
+      }
+    },
+    {
+      "packageId": "glorp-ui",
+      "name": "Glorp UI - 1.4.0 Río Salado Open Beta",
+      "version": "04.10.26",
+      "source": {
+        "type": "git",
+        "revision": "7ef53888afca3d6febc4a25d17ee95ecbe9a499d",
+        "publishedWorkshopId": "3812518640"
+      }
+    },
+    {
+      "packageId": "gh-exchequer",
+      "name": "GH: Exchequer",
+      "version": "1.2.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3812701995",
+        "snapshotChecksum": "sha256:ced4bb79df25875e7361274a1d475a8746027943c8d462ca82daa5a1f7b8df80"
+      }
+    },
+    {
       "packageId": "just-goods",
       "name": "Just Goods",
       "version": "1.0.0",
@@ -40,7 +80,8 @@
       "version": "0.0.261024",
       "source": {
         "type": "git",
-        "revision": "2c36654528de8cf03ce5a9d9d5a018342d781327"
+        "revision": "2c36654528de8cf03ce5a9d9d5a018342d781327",
+        "publishedWorkshopId": "3815438890"
       }
     },
     {
@@ -107,8 +148,12 @@
   "loadOrder": [
     "better-road-builder",
     "community-mod-framework",
+    "autonomous-diplomats",
+    "construction-manager",
+    "glorp-ui",
     "just-goods",
     "standard-of-living",
+    "gh-exchequer",
     "eurocentric-institutions",
     "continental-hegemonies",
     "more-locations",
@@ -125,6 +170,20 @@
     {
       "packageId": "sol-jtg-compatibility-submod",
       "reason": "Superseded in this playset by Concordia-authored SoL/Just Goods compatibility files. Keep the pinned source snapshot for behavioral reference and re-analysis only; do not enable this separate compatibility mod."
+    },
+    {
+      "packageId": "gh-exchequer-glorp-ui-patch",
+      "reason": "Superseded by the Concordia-generated Glorp UI left-panel patch. Keep the pinned Workshop snapshot as a behavior reference only; do not enable the separate compatch."
+    }
+  ],
+  "knownRisks": [
+    {
+      "packageId": "glorp-ui",
+      "reason": "Glorp UI metadata declares SmartTaxes as a dependency, but SmartTaxes is intentionally omitted due to performance issues. The user chose to proceed; verify the launcher accepts the missing dependency and the UI works in-game."
+    },
+    {
+      "packageId": "autonomous-diplomats",
+      "reason": "The pinned upstream metadata declares EU5 1.3.* support and last updated for 1.3.10. This profile targets 1.4.5 at the user's request; compatibility remains unverified pending in-game testing."
     }
   ],
   "patches": [
@@ -220,13 +279,73 @@
       "reason": "Provide the complete SoL economy tooltip template with Just Goods demand entries; the zz_ filename ensures the merged GUI template is loaded after SoL's original template.",
       "preserves": ["template StandardofLiving_tooltip", "SOL_UI_SECTION"],
       "suppresses": ["sol_jtg_compatibility_submod"]
+    },
+    {
+      "id": "gh-exchequer-glorp-ui-left-panel",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "gh-exchequer-glorp-ui-left-panel",
+        "sourceFingerprint": "sha256:49879db505ef82c40a5d0b1e120050d102f840f06f5ba1190848d1fdec8296ce"
+      },
+      "targetPath": "in_game/gui/panels/left_panel/glorpUI_left_panel.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Generate a Concordia-owned GH Trade tab and distinct Economy/Trade states from the pinned Glorp UI source. The upstream compatch is reference-only; this anchored transform fails if the input changes and does not include SmartTaxes.",
+      "preserves": [
+        "GHTabTradeTooltip",
+        "concordia_gh_trade_tab_button",
+        "OpenLateralViewWithParams('trade', 'subtab = markets')",
+        "input_action = \"top_left_10\""
+      ],
+      "suppresses": []
+    },
+    {
+      "id": "glorp-ui-construction-manager-production",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-construction-manager-production",
+        "sourceFingerprint": "sha256:7746bc20e5351dc2e3aa1a25ce35f29cfa405713564558ea79b804ce08346fbf"
+      },
+      "targetPath": "in_game/gui/production_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Generate from pinned Glorp UI content, restoring Construction Manager 1.4's existing-building auto-expand control, hiding the competing vanilla control while CM is active, and centering the unbuilt-building control in the 1.4 layout.",
+      "preserves": [
+        "cm_auto_expand_existing_building_button = {",
+        "cm_mass_auto_expand_button_pl = {}",
+        "cm_auto_expand_new_building_button_pl = {",
+        "Not(GetScriptedGui('glorpui_is_cm_active')",
+        "position = { -271 0 }"
+      ],
+      "suppresses": [
+        "visible = \"[And(ObjectsEqual(Building.GetOwner, Player.Self), BuildingType.IsMultipleLevels)]\"",
+        "position = { -133 0 }"
+      ]
+    },
+    {
+      "id": "glorp-ui-construction-manager-location-window",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-construction-manager-location-window",
+        "sourceFingerprint": "sha256:cb173a52facca90025a62f894bac41bec661eecab2e44ee17c02524c793c6e60"
+      },
+      "targetPath": "in_game/gui/location_window.gui",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "Generate from the pinned SoL/Glorp location window, retaining its tooltip changes while restoring Construction Manager's food-RGO and RGO auto-expand controls.",
+      "preserves": [
+        "cm_auto_food_widget_location_window = {}",
+        "cm_auto_expand_rgo_widget_location_window = {}",
+        "using = location_rgo_button_tooltip"
+      ],
+      "suppresses": []
     }
   ],
   "patchMod": {
     "name": "Europa Concordia - Current Intended",
     "id": "europa_concordia_current_intended",
-    "version": "0.3.0",
+    "version": "0.5.0",
     "shortDescription": "Playset-specific EU5 compatibility patch. Requires the listed mods separately.",
-    "tags": ["Gameplay", "Map"]
+    "tags": ["Gameplay", "Map", "User Interface"]
   }
 }

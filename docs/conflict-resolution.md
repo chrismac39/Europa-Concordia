@@ -24,20 +24,23 @@ npm run diff -- --profile current-intended 1
 
 Every file-path decision must be explicit:
 
-| Class          | Meaning                                                                                                                                                                        | Build behavior                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
-| `load-order`   | EU5's exact-path replacement is acceptable and the chosen mod is last among participants. The decision pins each source file's SHA-256.                                        | Build proceeds only when the profile order and hashes match.  |
-| `merged-patch` | A Concordia-authored patch intentionally preserves or combines needed behavior. A profile lists its source file, output path, target mod, and preservation/suppression checks. | Build emits only that patch file, never either upstream copy. |
-| `native-merge` | EU5 natively combines compatible definitions from different files; a content-pinned decision records why the contributions coexist without a Concordia replacement.            | Build proceeds only while the source fingerprint matches.     |
-| `shared-state` | Packages intentionally use one shared state contract; a content-pinned decision records its owner and verified writers/readers.                                                | Build proceeds only while the source fingerprint matches.     |
-| `incompatible` | The combination is known not to be safe.                                                                                                                                       | Finding stays blocking.                                       |
-| Unresolved     | No current decision applies, the participants changed, or a required content fingerprint is stale.                                                                             | Build stops for review.                                       |
+| Class          | Meaning                                                                                                                                                                                                         | Build behavior                                                |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `load-order`   | EU5's exact-path replacement is acceptable and the chosen mod is last among participants. Localization decisions also name the winning package and require it last among contributors. Both pin source content. | Build proceeds only when the profile order and hashes match.  |
+| `merged-patch` | A Concordia-authored patch intentionally preserves or combines needed behavior. A profile lists its source file, output path, target mod, and preservation/suppression checks.                                  | Build emits only that patch file, never either upstream copy. |
+| `native-merge` | EU5 natively combines compatible definitions from different files; a content-pinned decision records why the contributions coexist without a Concordia replacement.                                             | Build proceeds only while the source fingerprint matches.     |
+| `shared-state` | Packages intentionally use one shared state contract; a content-pinned decision records its owner and verified writers/readers.                                                                                 | Build proceeds only while the source fingerprint matches.     |
+| `incompatible` | The combination is known not to be safe.                                                                                                                                                                        | Finding stays blocking.                                       |
+| Unresolved     | No current decision applies, the participants changed, or a required content fingerprint is stale.                                                                                                              | Build stops for review.                                       |
 
 Profile patch entries declare `add` or `replace` (`replace` is the backward
 compatible default). An `add` target must not already exist in any selected
 mod; a `replace` target must exist in the declared target package. This lets
 Concordia add new database-entry injections and script values without copying
-or replacing an upstream file.
+or replacing an upstream file. A generated replacement can instead apply an
+anchored transformation to a pinned selected source; validation checks the
+source hash and the transformation's expected anchors before it emits the
+complete runtime file.
 
 EU5's [mod structure documentation](https://eu5.paradoxwikis.com/Mod_structure)
 describes same-path files as complete replacements, not text merges; an empty
@@ -70,6 +73,14 @@ add Just Goods rows because EU5 does not merge same-path GUI text. Its three
 and extend those enumerations; the `INJECT:` goods definitions and added script
 values leave the upstream packages' other content in place. The compatibility
 source snapshot is a reference, not a playset dependency.
+
+The Glorp UI / GH Exchequer profile keeps both mods active and excludes the
+upstream GH/Glorp compatch. Concordia generates the Trade-tab integration from
+Glorp UI's pinned left panel. Two additional generated files restore
+Construction Manager 1.4's existing-building and unbuilt-building production
+controls, plus its food-RGO and RGO auto-expand controls in the SoL/Glorp
+location window. Each transformation is pinned to its selected input file;
+the profile still requires an in-game UI check.
 
 ## Approval freshness
 

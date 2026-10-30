@@ -54,8 +54,9 @@ Add a profile without changing other playsets:
 2. Record every selected mod exactly once in `loadOrder`. Dependencies must be
    selected and ordered before their dependents.
 3. Add only Concordia-authored patch files under `integration/patches/` or
-   `integration/overrides/`. Each patch declares a source path, game output
-   path, targeted input mod, conflict class, reason, and important content to
+   `integration/overrides/`. A patch declares either an authored source file
+   or a source-pinned generated transformation, plus its game output path,
+   targeted input mod, conflict class, reason, and important content to
    preserve or suppress.
 4. Analyze the profile, review every conflict, then validate and build:
 
@@ -82,13 +83,17 @@ playset mod.
 `config/conflict-rules.json` records explicit conflict classifications:
 
 - `load-order` names an intended winner, records per-file source fingerprints,
-  and only resolves when the selected profile loads that mod last;
+  and only resolves when the selected profile loads that mod last. Semantic
+  localization decisions also name their winner and require it last among the
+  participating mods;
 - `merged-patch` refers to an explicitly authored profile patch;
 - `incompatible` remains blocking.
 
 An unclassified finding, participant change, or fingerprint mismatch is
-unresolved. Do not select a winner from directory order, and do not resolve a
-conflict by copying a complete upstream file without checking what it replaces.
+unresolved. Generated transformations pin the selected input file's SHA-256
+and fail if an expected anchor changes. Do not select a winner from directory
+order, and do not resolve a conflict by copying a complete upstream file
+without checking what it replaces.
 See [conflict resolution](conflict-resolution.md) for EU5 file and database
 entry behavior.
 

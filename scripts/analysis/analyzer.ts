@@ -262,7 +262,8 @@ export async function analyzeProject(
       (patch) =>
         patch.targetPath.toLocaleLowerCase("en-US") === key &&
         packages.includes(patch.targetPackageId) &&
-        patch.resolutionType === "merged-patch",
+        patch.resolutionType === "merged-patch" &&
+        (resolution?.patchId === undefined || patch.id === resolution.patchId),
     );
     const resolutionIsValid =
       fingerprintsMatch &&
@@ -285,9 +286,11 @@ export async function analyzeProject(
         resolved: resolutionIsValid,
         resolution:
           resolution?.winner ??
-          (resolution?.override
-            ? `Concordia override: ${resolution.override}`
-            : undefined),
+          (resolution?.patchId
+            ? `Concordia patch: ${resolution.patchId}`
+            : resolution?.override
+              ? `Concordia override: ${resolution.override}`
+              : undefined),
       }),
     );
   }
@@ -713,8 +716,19 @@ export async function analyzeProject(
       const sharedStateApplies =
         resolution.resolutionType === "shared-state" &&
         currentFinding.type === "global-variable";
+      const loadOrderApplies =
+        resolution.resolutionType === "load-order" &&
+        currentFinding.type === "localization" &&
+        resolution.winner !== undefined &&
+        currentFinding.packages.includes(resolution.winner) &&
+        configuration.profile.loadOrder
+          .filter((packageId) => currentFinding.packages.includes(packageId))
+          .at(-1) === resolution.winner;
       currentFinding.resolved =
-        patchApplies || nativeMergeApplies || sharedStateApplies;
+        patchApplies ||
+        nativeMergeApplies ||
+        sharedStateApplies ||
+        loadOrderApplies;
       currentFinding.resolution = `${resolution.decision}: ${resolution.reason}`;
     }
   }

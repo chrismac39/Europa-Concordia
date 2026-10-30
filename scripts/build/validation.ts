@@ -1,5 +1,7 @@
+import { createHash } from "node:crypto";
 import { lstat, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
+import { generatePatchContents } from "./generated-patches.js";
 import type {
   BuildConfiguration,
   ConcordiaPackage,
@@ -55,6 +57,13 @@ function validateSource(
 
   if (value.type === "git") {
     const urlIsValid = requiredString(value.url, `${label}.url`, errors);
+    const publishedWorkshopIdIsValid =
+      value.publishedWorkshopId === undefined ||
+      (typeof value.publishedWorkshopId === "string" &&
+        /^\d+$/.test(value.publishedWorkshopId));
+    if (!publishedWorkshopIdIsValid) {
+      errors.push(`${label}.publishedWorkshopId must contain only digits`);
+    }
     if (
       typeof value.revision !== "string" ||
       !pinnedRevisionPattern.test(value.revision)
@@ -63,7 +72,7 @@ function validateSource(
         `${label}.revision must be a full 40- or 64-character commit hash`,
       );
     }
-    return pathIsValid && urlIsValid;
+    return pathIsValid && urlIsValid && publishedWorkshopIdIsValid;
   }
 
   if (value.type === "steam-workshop") {
@@ -220,6 +229,7 @@ function validateProfile(value: unknown): PlaysetProfile {
     !gameVersionPattern.test(value.targetGameVersion) ||
     !Array.isArray(value.mods) ||
     (value.excludedMods !== undefined && !Array.isArray(value.excludedMods)) ||
+    (value.knownRisks !== undefined && !Array.isArray(value.knownRisks)) ||
     !Array.isArray(value.loadOrder) ||
     !Array.isArray(value.patches) ||
     !isRecord(value.patchMod)
@@ -270,6 +280,15 @@ function validateProfile(value: unknown): PlaysetProfile {
         !pinnedRevisionPattern.test(mod.source.revision)
       ) {
         errors.push(`${label}.source.revision must be a full commit hash`);
+      }
+      if (
+        mod.source.publishedWorkshopId !== undefined &&
+        (typeof mod.source.publishedWorkshopId !== "string" ||
+          !/^\d+$/.test(mod.source.publishedWorkshopId))
+      ) {
+        errors.push(
+          `${label}.source.publishedWorkshopId must contain only digits`,
+        );
       }
     } else if (mod.source.type !== "local") {
       errors.push(`${label}.source.type must be git, steam-workshop, or local`);
@@ -323,6 +342,36 @@ function validateProfile(value: unknown): PlaysetProfile {
     errors.push("A package cannot be both selected and explicitly excluded");
   }
 
+  const knownRisks: Array<{ packageId: string; reason: string }> = [];
+  const rawKnownRisks: unknown[] = Array.isArray(value.knownRisks)
+    ? value.knownRisks
+    : [];
+  rawKnownRisks.forEach((risk, index) => {
+    const label = `profile.knownRisks[${index}]`;
+    if (!isRecord(risk)) {
+      errors.push(`${label} must be an object`);
+      return;
+    }
+    if (
+      typeof risk.packageId !== "string" ||
+      !packageIdPattern.test(risk.packageId)
+    ) {
+      errors.push(`${label}.packageId must be a package identifier`);
+    }
+    requiredString(risk.reason, `${label}.reason`, errors);
+    if (typeof risk.packageId === "string" && typeof risk.reason === "string") {
+      knownRisks.push(risk as { packageId: string; reason: string });
+    }
+  });
+  if (
+    new Set(knownRisks.map((risk) => risk.packageId)).size !== knownRisks.length
+  ) {
+    errors.push("Known compatibility risks must have unique package IDs");
+  }
+  if (knownRisks.some((risk) => !modIds.includes(risk.packageId))) {
+    errors.push("Known compatibility risks must refer to selected packages");
+  }
+
   const patchModId = value.patchMod.id;
   const loadOrder: unknown[] = Array.isArray(value.loadOrder)
     ? value.loadOrder
@@ -369,23 +418,69 @@ function validateProfile(value: unknown): PlaysetProfile {
     } else {
       patchIds.add(patchId);
     }
-    for (const field of ["sourcePath", "targetPath"] as const) {
-      const patchPath = patch[field];
-      const pathIsValid = requiredString(
-        patchPath,
-        `${label}.${field}`,
+    const targetPathIsValid = requiredString(
+      patch.targetPath,
+      `${label}.targetPath`,
+      errors,
+    );
+    if (
+      typeof patch.targetPath === "string" &&
+      targetPathIsValid &&
+      (path.isAbsolute(patch.targetPath) ||
+        patch.targetPath.includes("\\") ||
+        patch.targetPath.split("/").includes(".."))
+    ) {
+      errors.push(
+        `${label}.targetPath must be a normalized relative POSIX path`,
+      );
+    }
+    const staticSourcePath = patch.sourcePath;
+    const hasStaticSource = typeof staticSourcePath === "string";
+    const hasGeneratedSource = patch.generatedFrom !== undefined;
+    if (hasStaticSource === hasGeneratedSource) {
+      errors.push(
+        `${label} must specify exactly one of sourcePath or generatedFrom`,
+      );
+    }
+    if (hasStaticSource) {
+      const sourcePathIsValid = requiredString(
+        staticSourcePath,
+        `${label}.sourcePath`,
         errors,
       );
       if (
-        typeof patchPath === "string" &&
-        pathIsValid &&
-        (path.isAbsolute(patchPath) ||
-          patchPath.includes("\\") ||
-          patchPath.split("/").includes(".."))
+        typeof staticSourcePath === "string" &&
+        sourcePathIsValid &&
+        (path.isAbsolute(staticSourcePath) ||
+          staticSourcePath.includes("\\") ||
+          staticSourcePath.split("/").includes(".."))
       ) {
         errors.push(
-          `${label}.${field} must be a normalized relative POSIX path`,
+          `${label}.sourcePath must be a normalized relative POSIX path`,
         );
+      }
+    }
+    if (hasGeneratedSource) {
+      if (!isRecord(patch.generatedFrom)) {
+        errors.push(`${label}.generatedFrom must be an object`);
+      } else {
+        if (
+          ![
+            "gh-exchequer-glorp-ui-left-panel",
+            "glorp-ui-construction-manager-production",
+            "glorp-ui-construction-manager-location-window",
+          ].includes(String(patch.generatedFrom.strategy))
+        ) {
+          errors.push(`${label}.generatedFrom.strategy is not supported`);
+        }
+        if (
+          typeof patch.generatedFrom.sourceFingerprint !== "string" ||
+          !snapshotChecksumPattern.test(patch.generatedFrom.sourceFingerprint)
+        ) {
+          errors.push(
+            `${label}.generatedFrom.sourceFingerprint must be a sha256:<64 hex characters> value`,
+          );
+        }
       }
     }
     if (
@@ -489,9 +584,10 @@ function validateConflictRules(value: unknown): ConflictRules {
     const resolutionPackages = resolution.packages;
     const hasWinner = resolution.winner !== undefined;
     const hasOverride = resolution.override !== undefined;
+    const hasPatchId = resolution.patchId !== undefined;
     const packagesAreValid =
       Array.isArray(resolutionPackages) &&
-      resolutionPackages.length >= (hasOverride ? 1 : 2) &&
+      resolutionPackages.length >= (hasOverride || hasPatchId ? 1 : 2) &&
       resolutionPackages.every(
         (packageId) =>
           typeof packageId === "string" && packageIdPattern.test(packageId),
@@ -509,8 +605,10 @@ function validateConflictRules(value: unknown): ConflictRules {
         `${label}.resolutionType must be load-order, merged-patch, or incompatible`,
       );
     }
-    if (hasWinner === hasOverride) {
-      errors.push(`${label} must specify exactly one of winner or override`);
+    if (Number(hasWinner) + Number(hasOverride) + Number(hasPatchId) !== 1) {
+      errors.push(
+        `${label} must specify exactly one of winner, override, or patchId`,
+      );
     } else if (
       hasWinner &&
       (typeof resolution.winner !== "string" ||
@@ -526,6 +624,12 @@ function validateConflictRules(value: unknown): ConflictRules {
         resolution.override.split("/").includes(".."))
     ) {
       errors.push(`${label}.override must be a normalized relative POSIX path`);
+    } else if (
+      hasPatchId &&
+      (typeof resolution.patchId !== "string" ||
+        !profilePatchIdPattern.test(resolution.patchId))
+    ) {
+      errors.push(`${label}.patchId must identify a profile patch`);
     }
     requiredString(resolution.reason, `${label}.reason`, errors);
     if (resolution.sourceFingerprints !== undefined) {
@@ -575,6 +679,7 @@ function validateConflictRules(value: unknown): ConflictRules {
     }
     if (
       ![
+        "load-order",
         "merged-patch",
         "native-merge",
         "shared-state",
@@ -582,8 +687,18 @@ function validateConflictRules(value: unknown): ConflictRules {
       ].includes(String(resolution.resolutionType))
     ) {
       errors.push(
-        `${label}.resolutionType must be merged-patch, native-merge, shared-state, or incompatible`,
+        `${label}.resolutionType must be load-order, merged-patch, native-merge, shared-state, or incompatible`,
       );
+    }
+    if (resolution.resolutionType === "load-order") {
+      if (
+        typeof resolution.winner !== "string" ||
+        !packageIdPattern.test(resolution.winner)
+      ) {
+        errors.push(`${label}.winner must identify a package for load-order`);
+      }
+    } else if (resolution.winner !== undefined) {
+      errors.push(`${label}.winner is only valid for load-order resolutions`);
     }
     requiredString(resolution.decision, `${label}.decision`, errors);
     requiredString(resolution.reason, `${label}.reason`, errors);
@@ -770,7 +885,9 @@ export async function validateProject(
             profileMod.source.snapshotChecksum)) ||
       (packageValue.source.type === "git" &&
         profileMod.source.type === "git" &&
-        packageValue.source.revision !== profileMod.source.revision)
+        (packageValue.source.revision !== profileMod.source.revision ||
+          packageValue.source.publishedWorkshopId !==
+            profileMod.source.publishedWorkshopId))
     ) {
       throw new Error(
         `Profile ${profile.id} has a stale version or source pin for ${profileMod.packageId}; update the profile and rerun analysis.`,
@@ -857,14 +974,6 @@ export async function validateProject(
         `Patch ${patch.id} targets unselected package ${patch.targetPackageId}`,
       );
     }
-    if (
-      !patch.sourcePath.startsWith("integration/patches/") &&
-      !patch.sourcePath.startsWith("integration/overrides/")
-    ) {
-      throw new Error(
-        `Patch ${patch.id} must be authored under integration/patches/ or integration/overrides/`,
-      );
-    }
     const targetRoot = patch.targetPath
       .split("/")[0]
       .toLocaleLowerCase("en-US");
@@ -880,17 +989,6 @@ export async function validateProject(
       throw new Error(`Multiple profile patches target ${patch.targetPath}`);
     }
     patchTargets.add(targetKey);
-    const sourcePath = resolveProjectPath(
-      rootDirectory,
-      patch.sourcePath,
-      `Patch ${patch.id}.sourcePath`,
-    );
-    if ((await lstat(sourcePath).catch(() => undefined))?.isSymbolicLink()) {
-      throw new Error(`Patch source cannot be a symbolic link: ${sourcePath}`);
-    }
-    if (!(await stat(sourcePath).catch(() => undefined))?.isFile()) {
-      throw new Error(`Patch source does not exist: ${sourcePath}`);
-    }
     const packageValue = packagesById.get(patch.targetPackageId);
     if (!packageValue) {
       throw new Error(`Patch ${patch.id} targets an unknown package`);
@@ -922,7 +1020,53 @@ export async function validateProject(
         }
       }
     }
-    const patchContents = await readFile(sourcePath, "utf8");
+    let patchContents: string;
+    if (patch.sourcePath) {
+      if (
+        !patch.sourcePath.startsWith("integration/patches/") &&
+        !patch.sourcePath.startsWith("integration/overrides/")
+      ) {
+        throw new Error(
+          `Patch ${patch.id} must be authored under integration/patches/ or integration/overrides/`,
+        );
+      }
+      const sourcePath = resolveProjectPath(
+        rootDirectory,
+        patch.sourcePath,
+        `Patch ${patch.id}.sourcePath`,
+      );
+      if ((await lstat(sourcePath).catch(() => undefined))?.isSymbolicLink()) {
+        throw new Error(
+          `Patch source cannot be a symbolic link: ${sourcePath}`,
+        );
+      }
+      if (!(await stat(sourcePath).catch(() => undefined))?.isFile()) {
+        throw new Error(`Patch source does not exist: ${sourcePath}`);
+      }
+      patchContents = await readFile(sourcePath, "utf8");
+    } else {
+      if (!patch.generatedFrom || operation !== "replace") {
+        throw new Error(
+          `Generated patch ${patch.id} must replace a selected package file`,
+        );
+      }
+      const sourceContents = await readFile(targetSourcePath);
+      const actualFingerprint = `sha256:${createHash("sha256")
+        .update(sourceContents)
+        .digest("hex")}`;
+      if (
+        actualFingerprint.toLowerCase() !==
+        patch.generatedFrom.sourceFingerprint.toLowerCase()
+      ) {
+        throw new Error(
+          `Generated patch ${patch.id} has a stale source fingerprint; update its source pin and rerun analysis.`,
+        );
+      }
+      patchContents = generatePatchContents(
+        patch.generatedFrom.strategy,
+        sourceContents.toString("utf8"),
+      );
+    }
     for (const definition of patch.preserves) {
       if (!patchContents.includes(definition)) {
         throw new Error(

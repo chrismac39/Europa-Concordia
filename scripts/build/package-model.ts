@@ -10,6 +10,7 @@ export type PackageSource =
       url: string;
       revision: string;
       path: string;
+      publishedWorkshopId?: string;
     }
   | {
       type: "steam-workshop";
@@ -46,6 +47,7 @@ export type ProfileSourcePin =
   | {
       type: "git";
       revision: string;
+      publishedWorkshopId?: string;
     }
   | {
       type: "local";
@@ -63,10 +65,9 @@ export interface ProfileExclusion {
   reason: string;
 }
 
-export interface ProfilePatch {
+interface ProfilePatchMetadata {
   id: string;
   operation?: "add" | "replace";
-  sourcePath: string;
   targetPath: string;
   targetPackageId: string;
   resolutionType: "merged-patch";
@@ -75,6 +76,22 @@ export interface ProfilePatch {
   suppresses: string[];
 }
 
+export type ProfilePatch =
+  | (ProfilePatchMetadata & {
+      sourcePath: string;
+      generatedFrom?: never;
+    })
+  | (ProfilePatchMetadata & {
+      sourcePath?: never;
+      generatedFrom: {
+        strategy:
+          | "gh-exchequer-glorp-ui-left-panel"
+          | "glorp-ui-construction-manager-production"
+          | "glorp-ui-construction-manager-location-window";
+        sourceFingerprint: string;
+      };
+    });
+
 export interface PlaysetProfile {
   version: 1;
   id: string;
@@ -82,6 +99,10 @@ export interface PlaysetProfile {
   targetGameVersion: string;
   mods: ProfileMod[];
   excludedMods?: ProfileExclusion[];
+  knownRisks?: Array<{
+    packageId: string;
+    reason: string;
+  }>;
   loadOrder: string[];
   patches: ProfilePatch[];
   patchMod: {
@@ -114,6 +135,7 @@ export interface FilePathResolution {
   sourceFingerprints?: Record<string, string>;
   winner?: string;
   override?: string;
+  patchId?: string;
   reason: string;
 }
 
@@ -124,6 +146,7 @@ export interface ConflictRules {
   semanticResolutions: Array<{
     fingerprint: string;
     resolutionType: SemanticResolutionType;
+    winner?: string;
     decision: string;
     reason: string;
   }>;

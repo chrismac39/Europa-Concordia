@@ -5,37 +5,47 @@
     {
       "path": "in_game/gui/economy_lateralview.gui",
       "packages": ["gh-exchequer", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "gh-exchequer": "4e66abbb389bd5b3df228622ee30b0601e247df48b2151570f1a9bcf652e5887",
+        "glorp-ui": "aae6b3cd67bc4b727d87a02bc6c79d38a8529b6c739dd7147cb1258cb450faa5"
+      },
       "winner": "gh-exchequer",
-      "reason": "GH Exchequer intentionally replaces Glorp UI's economy panel when loaded later; the GH Exchequer - Glorp UI compatch restores the Trade tab in Glorp's left panel.",
-      "resolutionType": "load-order"
+      "reason": "GH Exchequer documents that it replaces UI mods' economy panel when loaded later; Concordia generates the separate Glorp left-panel Trade tab patch."
     },
     {
       "path": "in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui",
       "packages": ["gh-exchequer", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "gh-exchequer": "82a3e68d5b2fdd8da3456b61a69f524951d6aeecd2b58f79ae15fce99e4fe9ba",
+        "glorp-ui": "d84d8d1fee4b08deb896d8e142b827de8e2e5bf46010fbbb7645b31c92e327db"
+      },
       "winner": "gh-exchequer",
-      "reason": "GH Exchequer documents that its extracted vanilla economy templates replace the copy supplied by UI mods such as Glorp UI when GH loads later.",
-      "resolutionType": "load-order"
-    },
-    {
-      "path": "in_game/gui/panels/left_panel/glorpUI_left_panel.gui",
-      "packages": ["gh-exchequer-glorp-ui-patch", "glorp-ui"],
-      "winner": "gh-exchequer-glorp-ui-patch",
-      "reason": "The upstream compatch explicitly replaces Glorp UI's left panel to add GH Exchequer's Trade tab.",
-      "resolutionType": "load-order"
+      "reason": "GH Exchequer documents that its extracted vanilla economy templates replace the UI-mod copy when GH loads later."
     },
     {
       "path": "in_game/gui/location_window.gui",
-      "packages": ["glorp-ui", "standard-of-living"],
-      "winner": "standard-of-living",
-      "reason": "Standard of Living supplies an upstream-generated copy of Glorp UI 04.10.26's location window with its living-standard tooltip added.",
-      "resolutionType": "load-order"
+      "packages": ["construction-manager", "glorp-ui", "standard-of-living"],
+      "resolutionType": "merged-patch",
+      "sourceFingerprints": {
+        "construction-manager": "6c4e90de5bd3fb70d40f0441e7e6bf3af93c00eae4702ac7ded924a49f563e0a",
+        "glorp-ui": "9e1e3e534aa6a5bc939527e3e8b9fd3dbb91365bc4d38e459f2483f92350a0f8",
+        "standard-of-living": "cb173a52facca90025a62f894bac41bec661eecab2e44ee17c02524c793c6e60"
+      },
+      "patchId": "glorp-ui-construction-manager-location-window",
+      "reason": "A generated Concordia patch starts from the pinned SoL/Glorp file and restores Construction Manager's food-RGO and RGO auto-expand controls without losing SoL's location tooltip."
     },
     {
       "path": "in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui",
       "packages": ["glorp-ui", "standard-of-living"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "glorp-ui": "a47c8617917a7aeb1d2730b23bcf5878652f8b8f44f4adfc6619ec08f3f50149",
+        "standard-of-living": "46a632288d94fb8072db5e34bcd5062dfa86241a87bbf45532556649f6c1b359"
+      },
       "winner": "standard-of-living",
-      "reason": "Standard of Living supplies the synchronized Glorp UI 04.10.26 location-window types used by its pre-merged location window.",
-      "resolutionType": "load-order"
+      "reason": "Standard of Living's generated vanilla location types are synchronized to the pinned Glorp UI 04.10.26 source and include SoL's tooltip addition."
     },
     {
       "path": "in_game/common/on_action/historical_tweaks_on_actions.txt",
@@ -161,6 +171,204 @@
       "override": "integration/overrides/more-restricted-colonization/in_game/common/scripted_effects/MRC_cmm_effects.txt",
       "reason": "Disable More Restricted Colonization's unused CMF/CMM setting registration and synchronization effects.",
       "resolutionType": "merged-patch"
+    },
+    {
+      "path": "in_game/common/script_values/glorpui_rgo_script_values.txt",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "0f772e7825e81e91c7cc77eb19c1c6262127c16409d9df9ff904ca2abe233c42",
+        "glorp-ui": "0f772e7825e81e91c7cc77eb19c1c6262127c16409d9df9ff904ca2abe233c42"
+      },
+      "winner": "glorp-ui",
+      "reason": "These Construction Manager and Glorp UI source files are byte-identical; retain Glorp UI as the later, content-pinned copy."
+    },
+    {
+      "path": "in_game/common/scripted_guis/glorpui_build_location_scripted_gui.txt",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "52472772da2836012606d9d85ba70913aa7f19e7fd5f10594b631e153fc777d8",
+        "glorp-ui": "52472772da2836012606d9d85ba70913aa7f19e7fd5f10594b631e153fc777d8"
+      },
+      "winner": "glorp-ui",
+      "reason": "These Construction Manager and Glorp UI source files are byte-identical; retain Glorp UI as the later, content-pinned copy."
+    },
+    {
+      "path": "in_game/common/scripted_guis/glorpui_construction_manager_scripted_gui.txt",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "61b53af77f3783d3590020a0041a7c6ee1137056a84b15c9bbfe1b4f3e873b00",
+        "glorp-ui": "61b53af77f3783d3590020a0041a7c6ee1137056a84b15c9bbfe1b4f3e873b00"
+      },
+      "winner": "glorp-ui",
+      "reason": "These Construction Manager and Glorp UI source files are byte-identical; retain Glorp UI as the later, content-pinned copy."
+    },
+    {
+      "path": "in_game/gui/expand_raw_goods_lateralview.gui",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "e2aa3b756b80e9e49b0172ec09690c9147b80d93f95d4f39d4b6e4c238fd570d",
+        "glorp-ui": "e40f7c6c1165dbf98f2e37049cf29d191ab93cb2cd83b8913c0a31a0dde0c169"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Glorp UI file retains Construction Manager's RGO auto-expand control and differs from its copy only in formatting; use the later Glorp UI copy."
+    },
+    {
+      "path": "in_game/gui/outliner_entries.gui",
+      "packages": ["autonomous-diplomats", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "autonomous-diplomats": "5fe3553d89334bd40760e2e939cacc16b52e6e63ee731c647adce50610cb6f5c",
+        "glorp-ui": "d913208df6b66e9cc4f6e5767e452b04d0ea09c37bd935681b20e05f4b55dc18"
+      },
+      "winner": "glorp-ui",
+      "reason": "Glorp UI's later outliner layout instantiates both Autonomous Diplomats widgets; the widget definitions remain in the selected Autonomous Diplomats package."
+    },
+    {
+      "path": "in_game/gui/production_lateralview.gui",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "merged-patch",
+      "sourceFingerprints": {
+        "construction-manager": "e78f14c75cea12dfc2985a2f3327cad96fbdbc89fed455e31456e65ae324b2c9",
+        "glorp-ui": "7746bc20e5351dc2e3aa1a25ce35f29cfa405713564558ea79b804ce08346fbf"
+      },
+      "patchId": "glorp-ui-construction-manager-production",
+      "reason": "A generated Concordia patch starts from pinned Glorp UI content, restores Construction Manager's existing-building auto-expand control, hides the competing vanilla control while CM is active, and updates the unbuilt-building button for the 1.4 layout."
+    },
+    {
+      "path": "main_menu/gui/cmf_dependency_check.gui",
+      "packages": ["autonomous-diplomats", "construction-manager"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "autonomous-diplomats": "d594b500b48db8c0b7aeecc03fe2fc2ebb97dd7761d25d7b4655be3e5fcf99ff",
+        "construction-manager": "f3e67cb1b6bf28bdf051517b536511a7585aa4aa52d8a07d44b5edf17b1c5ed0"
+      },
+      "winner": "construction-manager",
+      "reason": "The Construction Manager version retains the shared CMF dependency and auto-enable flow while adding its create-playset UI; load Autonomous Diplomats first and pin both file contents."
+    },
+    {
+      "path": "main_menu/localization/braz_por/glorpui_shared_l_braz_por.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "9fdb239e4a6bed01b15628927d8c4b22f3958ea0dd7e4e5bde361b53753ec74d",
+        "glorp-ui": "71a60bd8d23a0b85097e366e4d73e282ddf8f98570332f6cd247eb6c5f563617"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/english/glorpui_shared_l_english.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "2e5d7799ef7f3cfef37a843cc8b3c67a871af193f1de40b4ef57c9e3282e7d61",
+        "glorp-ui": "2e5d7799ef7f3cfef37a843cc8b3c67a871af193f1de40b4ef57c9e3282e7d61"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/french/glorpui_shared_l_french.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "d1a9f39bdd996801609366d9c7cb26162098cbc42f89e91cf25a6e18781eba01",
+        "glorp-ui": "eed9c1d903891cfce32b7f8bbe84f0cf070315ba8c38421256ec5d4c4a5ad221"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/german/glorpui_shared_l_german.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "c320588534bb2e3371b5a07fe27ff0cae3821cf02c6beac2d29d4ce0782a4366",
+        "glorp-ui": "2e374b654d3c00c8ef650b0eda3a9d72fd16271e8e59907f722b2e2a16c07398"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/japanese/glorpui_shared_l_japanese.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "5552d1b531a007ea2cec5e09e8d2c26cb5ca87ef62ed3aa139d4fe680cf38bcc",
+        "glorp-ui": "eff5ed35be19a6540452a5942f5ecadd8a26f38441615094163dbb5579011f8c"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/korean/glorpui_shared_l_korean.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "2853731a47e08d8b87628a3e823ca5b41d786a4978d0afdad8bf18f0c7922c01",
+        "glorp-ui": "6d379753c2762b815989dd79c62884a12c2f041a6f257f4c2ae7f9fa073edfcc"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/polish/glorpui_shared_l_polish.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "2516eb3efaa1b53a295f040c285dc104edecc36c89765789c5a615117040142b",
+        "glorp-ui": "7e7115fd3b2cc585db458e00440ecd18f6d443d8cedb26abb53a1e508b156d34"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/russian/glorpui_shared_l_russian.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "8d641d8e9733e59d8063ef62be6a1ea58efb80ef15cb21103e265005dd767c94",
+        "glorp-ui": "e4eee4b4d56f8c3df563770ac9be4d824d3adbeb7e23e49e0deb581ef7c0dc64"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/simp_chinese/glorpui_shared_l_simp_chinese.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "1cfdc90a004618275faf74fd6c86cbcd56ea694fdab9c9b836c3721f384325e2",
+        "glorp-ui": "6ed4d45ec6515254636af2caa27ef49da48f63274e1501f82c201102f40fa292"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/spanish/glorpui_shared_l_spanish.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "8181a1eaace5a52febadfe8e6c9ea71ee3358c36c6402b4fa36be0bee39ff348",
+        "glorp-ui": "ee3b1c3634a8fc0b8f34cacdc9fa89333b6886bbddf97e5d73d70ccb631161c0"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/turkish/glorpui_shared_l_turkish.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "d4996a52655d44150b11a16b87323093ab6b0a4309fb240d0c0ef8bed576921b",
+        "glorp-ui": "8a2cde6bc90b49df5ed227142813e43a7be8a251f78f4d4dfcb4be7e3fdace62"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
     }
   ],
   "semanticResolutions": [
@@ -211,6 +419,136 @@
       "decision": "Merge on_game_load callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
       "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls.",
       "resolutionType": "merged-patch"
+    },
+    {
+      "fingerprint": "576e12aab930a899",
+      "resolutionType": "native-merge",
+      "decision": "Keep Construction Manager and Autonomous Diplomats monthly human-country callbacks.",
+      "reason": "The CMF pulse contributions are independent: Construction Manager runs its unified auto-expand/list updates, while Autonomous Diplomats runs its own monthly diplomacy handler."
+    },
+    {
+      "fingerprint": "18ce1f4b943da852",
+      "resolutionType": "native-merge",
+      "decision": "Keep Glorp UI's lobby-banner registration.",
+      "reason": "CMF provides the registration hook and Glorp UI contributes its independent lobby banner callback."
+    },
+    {
+      "fingerprint": "29de47dafd098460",
+      "resolutionType": "merged-patch",
+      "decision": "Keep the independent CMF, Construction Manager, Autonomous Diplomats, Glorp UI, and SoL callbacks; suppress MRC's CMM callback.",
+      "reason": "EU5 merges these same-named on-actions across files. The profile's content-checked MRC replacement removes only MRC's CMM hook; all remaining callbacks are distinct package handlers."
+    },
+    {
+      "fingerprint": "c9546b12d571396e",
+      "resolutionType": "native-merge",
+      "decision": "Keep Construction Manager's country-transfer handler.",
+      "reason": "CMF's same-named extension point and Construction Manager's transfer callback are natively merged; the CM callback performs its own state transfer."
+    },
+    {
+      "fingerprint": "a3a5afae3a1bdfb5",
+      "resolutionType": "merged-patch",
+      "decision": "Keep CMF, Construction Manager, Autonomous Diplomats, Glorp UI, Just Goods, and SoL registration callbacks; suppress MRC registration.",
+      "reason": "EU5 merges registration callbacks across files. The profile's content-checked MRC replacement removes only MRC's CMM registration; each retained package registers its own distinct CMF settings."
+    },
+    {
+      "fingerprint": "cf8952ff3ef76f2c",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent monthly-pulse registrations.",
+      "reason": "CMF, Glorp UI, GH Exchequer's trade and finance systems, Just Goods, and SoL register distinct monthly callbacks; no same-system duplicate was identified."
+    },
+    {
+      "fingerprint": "d673b1dda5a4951c",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent human-country load callbacks.",
+      "reason": "CMF registration, Construction Manager initialization, and Glorp UI value synchronization are separate contributions to the merged on-action."
+    },
+    {
+      "fingerprint": "9d60230b5535b511",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF and Construction Manager game-load callbacks.",
+      "reason": "CMF's load handling and Construction Manager's lobby-global initialization are separate callbacks and are natively merged."
+    },
+    {
+      "fingerprint": "bff4c09d8e38d6ab",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent human-country game-start callbacks.",
+      "reason": "CMF registration, Construction Manager initialization, and Glorp UI value synchronization are distinct callbacks on the natively merged on-action."
+    },
+    {
+      "fingerprint": "b737f1129b0a73df",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF and Construction Manager game-start callbacks.",
+      "reason": "CMF's game-start handling and Construction Manager's lobby-global initialization are separate callbacks and are natively merged."
+    },
+    {
+      "fingerprint": "49123aa0063b0745",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "f4ae781223ae312d",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "7a2bfb1b1c31c31c",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "40dcc516d795b8fd",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "39991546fbedb846",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "898699790181e98a",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "1bd9d69acb45a24d",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "b7b9daa0d8fb41e5",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "4989633fb2aa5703",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "10ecba49f5b46723",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
     }
   ],
   "definitionConflicts": "deferred"

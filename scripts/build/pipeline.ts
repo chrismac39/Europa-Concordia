@@ -2,6 +2,7 @@ import {
   copyFile,
   mkdir,
   mkdtemp,
+  readFile,
   rename,
   rm,
   stat,
@@ -9,6 +10,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import type { ConcordiaPackage, ProjectOptions } from "./package-model.js";
+import { generatePatchContents } from "./generated-patches.js";
 import { validateProject } from "./validation.js";
 import { analyzeProject } from "../analysis/analyzer.js";
 import { createWorkshopModMetadata } from "../workshop/metadata.js";
@@ -48,7 +50,9 @@ function sourceIdentifier(
     return `Steam Workshop ${mod.source.workshopId}`;
   }
   if (mod.source.type === "git") {
-    return `Git ${mod.source.revision}`;
+    return mod.source.publishedWorkshopId
+      ? `Steam Workshop ${mod.source.publishedWorkshopId}; Git ${mod.source.revision}`
+      : `Git ${mod.source.revision}`;
   }
   return "Local source";
 }
@@ -58,7 +62,9 @@ function packageSourceIdentifier(packageValue: ConcordiaPackage): string {
     return `Steam Workshop ${packageValue.source.workshopId}`;
   }
   if (packageValue.source.type === "git") {
-    return `Git ${packageValue.source.revision}`;
+    return packageValue.source.publishedWorkshopId
+      ? `Steam Workshop ${packageValue.source.publishedWorkshopId}; Git ${packageValue.source.revision}`
+      : `Git ${packageValue.source.revision}`;
   }
   return "Local source";
 }
@@ -125,6 +131,18 @@ function createLoadOrderGuide(
       "",
       ...exclusions,
     );
+  }
+  const knownRisks = (configuration.profile.knownRisks ?? []).map((risk) => {
+    const packageValue = packages.get(risk.packageId);
+    if (!packageValue) {
+      throw new Error(
+        `Profile risk references unknown mod ${risk.packageId}`,
+      );
+    }
+    return `- **${packageValue.name}** — ${risk.reason}`;
+  });
+  if (knownRisks.length > 0) {
+    guide.push("", "## Known compatibility risks", "", ...knownRisks);
   }
   guide.push(
     "",
@@ -199,16 +217,36 @@ export async function buildProject(
   );
   try {
     for (const patch of configuration.profile.patches) {
-      const sourcePath = path.resolve(
-        configuration.rootDirectory,
-        patch.sourcePath,
-      );
       const targetPath = path.join(
         stagingDirectory,
         ...patch.targetPath.split("/"),
       );
       await mkdir(path.dirname(targetPath), { recursive: true });
-      await copyFile(sourcePath, targetPath);
+      if (patch.sourcePath) {
+        const sourcePath = path.resolve(
+          configuration.rootDirectory,
+          patch.sourcePath,
+        );
+        await copyFile(sourcePath, targetPath);
+      } else {
+        const packageValue = configuration.packages.find(
+          (candidate) => candidate.id === patch.targetPackageId,
+        );
+        if (!packageValue || !patch.generatedFrom) {
+          throw new Error(`Generated patch ${patch.id} has no selected base`);
+        }
+        const sourcePath = path.join(
+          configuration.rootDirectory,
+          packageValue.source.path,
+          ...patch.targetPath.split("/"),
+        );
+        const sourceContents = await readFile(sourcePath, "utf8");
+        const generatedContents = generatePatchContents(
+          patch.generatedFrom.strategy,
+          sourceContents,
+        );
+        await writeFile(targetPath, generatedContents, "utf8");
+      }
     }
 
     const metadataDirectory = path.join(stagingDirectory, ".metadata");

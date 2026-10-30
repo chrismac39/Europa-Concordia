@@ -1,30 +1,68 @@
 # GH Exchequer and Glorp UI
 
-## Sources
+## Selected playset
 
-- GH: Exchequer package: `gh-exchequer`
-- Glorp UI package: `glorp-ui`
-- Upstream compatch package: `gh-exchequer-glorp-ui-patch`
-- Concordia target EU5 version: `1.4.5`
+- EU5 target: `1.4.5`
+- Glorp UI: Workshop `3812518640`, pinned source version `04.10.26`
+- GH: Exchequer: Workshop `3812701995`, version `1.2.0`
+- Construction Manager: Workshop `3736668860`, version `2.2.13`
+- Autonomous Diplomats: Workshop `3696243603`, version `1.5.0`
 
-## Economy panel resolution
+These are separate required playset mods. The upstream GH Exchequer / Glorp UI
+compatibility mod (`3827095294`) is excluded; its behavior is a reference for
+the Concordia-generated Trade-tab integration, not an enabled or copied
+package.
 
-Both primary packages provide `in_game/gui/economy_lateralview.gui`. GH:
-Exchequer documents that it should load after UI mods such as Glorp UI and
-replace their copy so its HSO Finances hooks remain available. Concordia
-therefore selects the GH: Exchequer file for this exact two-package collision.
-The same declared replacement applies to
-`in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui`.
+## GH Exchequer and Glorp UI
 
-## Upstream compatch
+GH Exchequer documents that it should load after UI mods such as Glorp UI and
+replace their `in_game/gui/economy_lateralview.gui` and
+`in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui` files. Those
+exact path resolutions are pinned to the current source hashes and load order.
+The profile keeps Glorp UI's left panel and generates a Concordia-owned
+`glorpUI_left_panel.gui` from its pinned source. The anchored transform creates
+separate Economy and GH Trade tab states, assigns GH's Trade tooltip and icon,
+and shifts the later keyboard shortcuts. Changed source anchors fail
+validation instead of silently reusing the old approval.
 
-Concordia reuses the upstream `GH: Exchequer - Glorp UI patch` package unchanged
-instead of maintaining a separate GH/Glorp compatibility implementation. Its
-`glorpUI_left_panel.gui` adds GH: Exchequer's Trade tab to Glorp UI's left
-panel, so Concordia selects that file over Glorp UI's original.
+## Construction Manager integration
 
-The compatch declares both primary packages as dependencies. The explicit
-economy-panel selections reproduce the load order documented by GH: Exchequer;
-they are not replacement compatibility code. Any additional package colliding
-at these paths invalidates the exact resolutions and fails the build for a new
-integration decision.
+Glorp UI and Standard of Living each replace Construction Manager's
+`production_lateralview.gui` and `location_window.gui` integrations. The
+current Glorp UI source omits Construction Manager's existing-building
+auto-expand control and still positions its unbuilt-building button for the
+older layout. The selected SoL/Glorp location window also omits Construction
+Manager's food-RGO and RGO auto-expand controls.
+
+Concordia therefore generates two focused replacements from pinned selected
+sources:
+
+- The Glorp production view restores the Construction Manager 1.4
+  existing-building control, hides the competing vanilla control while
+  Construction Manager is active, and updates the unbuilt-building control's
+  position, while retaining Glorp UI's remaining production layout.
+- The SoL/Glorp location window restores Construction Manager's food-RGO and
+  RGO auto-expand controls while retaining SoL's tooltip and the rest of the
+  synchronized location-window content.
+
+These generated files are fingerprinted and their anchors are validated on
+every build. They do not add a static copy of either upstream source to the
+repository. Construction Manager's identical shared script files and the
+RGO lateral view use the later Glorp UI files. Glorp UI's outliner file
+instantiates both Autonomous Diplomats widgets, whose definitions remain in
+Autonomous Diplomats. Autonomous Diplomats loads before Construction Manager
+so Construction Manager's CMF dependency-check GUI can add its create-playset
+flow without dropping the shared dependency and auto-enable behavior.
+
+## Dependency and runtime risks
+
+Glorp UI's metadata declares SmartTaxes as a dependency. SmartTaxes is
+intentionally excluded because of its known performance issues; the user
+accepted proceeding without it. Verify the launcher accepts the missing
+dependency and test Glorp UI in-game.
+
+Autonomous Diplomats' pinned metadata declares EU5 `1.3.*` support and was
+last updated for `1.3.10`. The user chose to keep it for this `1.4.5` profile;
+compatibility remains unverified. GUI layout, GH Trade-tab behavior, the
+Construction Manager controls, launcher acceptance, and runtime behavior all
+still need an in-game test.

@@ -4,13 +4,19 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { analyzeProject } from "../scripts/analysis/analyzer.js";
+import { generatePatchContents } from "../scripts/build/generated-patches.js";
 import { buildProject } from "../scripts/build/pipeline.js";
 import { validateProject } from "../scripts/build/validation.js";
 
 interface FixturePatch {
   id: string;
   operation?: "add" | "replace";
-  sourcePath: string;
+  sourcePath?: string;
+  generatedFrom?: {
+    strategy: "glorp-ui-construction-manager-location-window";
+    sourceFingerprint: string;
+  };
   targetPath: string;
   targetPackageId: string;
   resolutionType: "merged-patch";
@@ -497,6 +503,224 @@ test("requires a profile patch for a merged path resolution", async () => {
         "utf8",
       ),
       "Merged sources\n",
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("binds merged path resolutions to the referenced profile patch", async () => {
+  const fixture = await createFixture();
+  try {
+    await writeSharedPathMods(fixture);
+    await fixture.writePatchFile("fixture/merged.txt", "Merged sources\n");
+    const patch: FixturePatch = {
+      id: "merge-shared",
+      sourcePath: "integration/patches/fixture/merged.txt",
+      targetPath: "in_game/common/shared.txt",
+      targetPackageId: "first",
+      resolutionType: "merged-patch",
+      reason: "Retain both sources.",
+      preserves: ["Merged sources"],
+      suppresses: ["never match"],
+    };
+    await fixture.writeRules({
+      filePathResolutions: [
+        {
+          path: "in_game/common/shared.txt",
+          packages: ["first", "second"],
+          resolutionType: "merged-patch",
+          sourceFingerprints: {
+            first: hash("first source"),
+            second: hash("second source"),
+          },
+          patchId: "merge-shared",
+          reason: "The named Concordia patch merges this path.",
+        },
+      ],
+    });
+    await fixture.writeProfile(
+      ["first", "second"],
+      ["first", "second"],
+      [patch],
+    );
+    await fixture.writeManifest();
+
+    await buildProject(fixture.root);
+    await fixture.writeProfile(
+      ["first", "second"],
+      ["first", "second"],
+      [{ ...patch, id: "different-patch" }],
+    );
+    await assert.rejects(
+      buildProject(fixture.root),
+      /1 unresolved finding\(s\).*content-pinned decision/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("resolves localization conflicts only when the approved winner loads last", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("first");
+    fixture.addPackage("second");
+    const firstLocalization = 'l_english:\n fixture_key:0 "First text"\n';
+    const secondLocalization = 'l_english:\n fixture_key:0 "Second text"\n';
+    const localizationPath =
+      "main_menu/localization/english/shared_l_english.yml";
+    await fixture.writePackageFiles("first", {
+      [localizationPath]: firstLocalization,
+    });
+    await fixture.writePackageFiles("second", {
+      [localizationPath]: secondLocalization,
+    });
+    await fixture.writeProfile(["first", "second"], ["first", "second"]);
+    await fixture.writeManifest();
+
+    const configuration = await validateProject(fixture.root);
+    const analysis = await analyzeProject(configuration);
+    const localizationFinding = analysis.findings.find(
+      (finding) => finding.type === "localization",
+    );
+    assert.ok(localizationFinding);
+
+    await fixture.writeRules({
+      filePathResolutions: [
+        {
+          path: localizationPath,
+          packages: ["first", "second"],
+          resolutionType: "load-order",
+          sourceFingerprints: {
+            first: hash(firstLocalization),
+            second: hash(secondLocalization),
+          },
+          winner: "second",
+          reason: "The second package supplies the intended shared file.",
+        },
+      ],
+      semanticResolutions: [
+        {
+          fingerprint: localizationFinding.fingerprint,
+          resolutionType: "load-order",
+          winner: "second",
+          decision: "Prefer the second package's shared localization values.",
+          reason: "The selected language files have matching key sets.",
+        },
+      ],
+    });
+
+    await buildProject(fixture.root);
+    await fixture.writeProfile(["first", "second"], ["second", "first"]);
+    await assert.rejects(
+      buildProject(fixture.root),
+      /2 unresolved finding\(s\).*content-pinned decision/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("generates Construction Manager controls into pinned Glorp UI layouts", () => {
+  const productionSource = [
+    "lateralview = {",
+    "\tbutton_square_checkbox = {",
+    '\t\tvisible = "[And(ObjectsEqual(Building.GetOwner, Player.Self), BuildingType.IsMultipleLevels)]"',
+    "\t}",
+    "\tcm_auto_expand_new_building_button_pl = {",
+    "\t\tposition = { -133 0 }",
+    "\t}",
+    "}",
+  ].join("\n");
+  const patchedProduction = generatePatchContents(
+    "glorp-ui-construction-manager-production",
+    productionSource,
+  );
+  assert.equal(
+    patchedProduction.match(/cm_auto_expand_existing_building_button = \{/g)
+      ?.length,
+    1,
+  );
+  assert.match(
+    patchedProduction,
+    /Not\(GetScriptedGui\('glorpui_is_cm_active'\)/,
+  );
+  assert.match(patchedProduction, /position = \{ -271 0 \}/);
+  assert.doesNotMatch(patchedProduction, /position = \{ -133 0 \}/);
+
+  const locationSource = [
+    "header_button_left = {",
+    '\tname = "location_rgo"',
+    '\tdatacontext = "[LocationView.GetLocation]"',
+    "\ttooltipwidget = {}",
+    "}",
+  ].join("\n");
+  const patchedLocation = generatePatchContents(
+    "glorp-ui-construction-manager-location-window",
+    locationSource,
+  );
+  assert.match(patchedLocation, /cm_auto_food_widget_location_window = \{\}/);
+  assert.match(
+    patchedLocation,
+    /cm_auto_expand_rgo_widget_location_window = \{\}/,
+  );
+  assert.throws(
+    () =>
+      generatePatchContents(
+        "glorp-ui-construction-manager-location-window",
+        'header_button_left = { name = "location_rgo" }',
+      ),
+    /location RGO context changed/,
+  );
+});
+
+test("rejects generated compatibility patches after their source changes", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("upstream");
+    const source = [
+      "header_button_left = {",
+      '\tname = "location_rgo"',
+      '\tdatacontext = "[LocationView.GetLocation]"',
+      "\ttooltipwidget = {}",
+      "}",
+    ].join("\n");
+    const targetPath = "in_game/gui/location_window.gui";
+    await fixture.writePackageFiles("upstream", {
+      [targetPath]: source,
+    });
+    await fixture.writeProfile(
+      ["upstream"],
+      ["upstream"],
+      [
+        {
+          id: "generated-location-fix",
+          generatedFrom: {
+            strategy: "glorp-ui-construction-manager-location-window",
+            sourceFingerprint: `sha256:${hash(source)}`,
+          },
+          targetPath,
+          targetPackageId: "upstream",
+          resolutionType: "merged-patch",
+          reason: "Add the missing Construction Manager location controls.",
+          preserves: [
+            "cm_auto_food_widget_location_window = {}",
+            "cm_auto_expand_rgo_widget_location_window = {}",
+          ],
+          suppresses: [],
+        },
+      ],
+    );
+    await fixture.writeManifest();
+
+    await buildProject(fixture.root);
+    await fixture.writePackageFiles("upstream", {
+      [targetPath]: `${source}\n# upstream update\n`,
+    });
+    await assert.rejects(
+      buildProject(fixture.root),
+      /stale source fingerprint/,
     );
   } finally {
     await rm(fixture.root, { recursive: true, force: true });

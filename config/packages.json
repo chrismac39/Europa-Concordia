@@ -9,7 +9,8 @@
         "type": "git",
         "url": "https://github.com/HLJSXK/eu5-modding-project.git",
         "revision": "2c36654528de8cf03ce5a9d9d5a018342d781327",
-        "path": "sources/git/standard-of-living"
+        "path": "sources/git/standard-of-living",
+        "publishedWorkshopId": "3815438890"
       },
       "author": "猪",
       "targetGameVersion": "1.4.5",
@@ -439,6 +440,46 @@
       }
     },
     {
+      "id": "construction-manager",
+      "name": "Construction Manager",
+      "type": "upstream",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/romaimperator/eu5_construction_manager.git",
+        "revision": "d378769855725c05c55c750b1e92f0d17dbc0fe6",
+        "path": "sources/git/construction-manager",
+        "publishedWorkshopId": "3736668860"
+      },
+      "author": "romaimperator",
+      "targetGameVersion": "1.4.5",
+      "version": "2.2.13",
+      "dependencies": ["community-mod-framework"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Analysis snapshot at the pinned Git revision; published as Steam Workshop item 3736668860. Keep the Workshop mod separate from Concordia."
+      }
+    },
+    {
+      "id": "autonomous-diplomats",
+      "name": "Autonomous Diplomats",
+      "type": "maintained",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/conner-olsen/eu5-autonomous-diplomats.git",
+        "revision": "d423418cad1d095101adc410924af8d525784c0a",
+        "path": "sources/git/autonomous-diplomats",
+        "publishedWorkshopId": "3696243603"
+      },
+      "author": "Conner Olsen",
+      "targetGameVersion": "1.4.5",
+      "version": "1.5.0",
+      "dependencies": ["community-mod-framework"],
+      "attribution": {
+        "license": "GPL-3.0",
+        "notice": "Pinned upstream source declares EU5 1.3.* support and was last updated for 1.3.10. Concordia targets 1.4.5 by explicit user choice; runtime compatibility remains unverified. Keep the Workshop mod separate."
+      }
+    },
+    {
       "id": "glorp-ui",
       "name": "Glorp UI - 1.4.0 Río Salado Open Beta",
       "type": "upstream",
@@ -446,15 +487,20 @@
         "type": "git",
         "url": "https://github.com/clickypoo/EU5.Glorp.UI.git",
         "revision": "7ef53888afca3d6febc4a25d17ee95ecbe9a499d",
-        "path": "sources/git/glorp-ui"
+        "path": "sources/git/glorp-ui",
+        "publishedWorkshopId": "3812518640"
       },
       "author": "glorp",
       "targetGameVersion": "1.4.5",
       "version": "04.10.26",
-      "dependencies": [],
+      "dependencies": [
+        "community-mod-framework",
+        "construction-manager",
+        "autonomous-diplomats"
+      ],
       "attribution": {
         "license": "No license provided",
-        "notice": "Clean export from the pinned open-beta Git revision. Published as Steam Workshop item 3812518640. Obtain redistribution permission before enabling it for a distributed build."
+        "notice": "Clean analysis export from the pinned open-beta Git revision; published as Steam Workshop item 3812518640. Glorp UI declares SmartTaxes as a dependency, but SmartTaxes is intentionally excluded from this profile due to performance issues."
       }
     },
     {

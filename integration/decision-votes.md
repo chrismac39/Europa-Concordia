@@ -156,7 +156,32 @@ resolutions are recorded in `config/conflict-rules.json`, with details in
 `integration/decisions/oikoumene-language-base.md`, and
 `integration/decisions/sulphur-rivers.md`.
 
-The latest analysis recognizes these ten path resolutions. All other voted
-implementation work remains pending. The full assembly build remains gated
-by unresolved findings in other systems; no unresolved gameplay behavior was
-silently selected or combined.
+The current-intended analysis reports 48 findings and no unresolved decisions
+for this pinned profile. This is static approval, not proof of runtime
+compatibility; the selected playset still needs in-game testing.
+
+## Current Glorp UI / GH Exchequer integration
+
+Glorp UI, GH Exchequer, Construction Manager, and Autonomous Diplomats remain
+separate selected mods. Concordia generates the GH Trade-tab integration from
+the pinned Glorp UI source; the upstream GH/Glorp compatibility mod is
+reference-only and excluded from the playset. Concordia also generates focused
+Construction Manager UI fixes from pinned Glorp UI and Standard of Living
+sources so the existing-building auto-expand, unbuilt-building, food-RGO, and
+RGO auto-expand controls survive those full-file GUI replacements. The
+generated production view also hides the competing vanilla auto-expand
+control while Construction Manager is active.
+
+SmartTaxes is intentionally excluded due to its known performance issues even
+though Glorp UI declares it as a dependency. This accepted omission is a
+launcher/runtime risk, not an assertion that Glorp UI works without it.
+Autonomous Diplomats remains selected at the user's direction despite its
+pinned metadata declaring only EU5 `1.3.*` support. Its compatibility with
+EU5 `1.4.5` is unverified.
+
+The profile loads Autonomous Diplomats before Construction Manager to retain
+the latter's create-playset UI alongside the shared CMF dependency workflow.
+Glorp UI follows both, Standard of Living follows Glorp UI, GH Exchequer
+follows the UI mods, and Concordia loads last. These choices and the
+source-fingerprinted conflict rules are implemented; GUI and runtime behavior
+still require in-game testing.
