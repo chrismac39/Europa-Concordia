@@ -11,6 +11,15 @@ test("creates EU5 launcher metadata from Workshop configuration", () => {
       supportedGameVersion: "1.4.*",
       shortDescription: "A staged EU5 map pass.",
       tags: ["Gameplay", "Map"],
+      relationships: [
+        {
+          rel_type: "dependency",
+          id: "community_mod_framework",
+          display_name: "Community Mod Framework",
+          resource_type: "mod",
+          version: "2.*",
+        },
+      ],
     }),
     {
       name: "Europa Concordia",
@@ -20,7 +29,15 @@ test("creates EU5 launcher metadata from Workshop configuration", () => {
       supported_game_version: "1.4.*",
       short_description: "A staged EU5 map pass.",
       tags: ["Gameplay", "Map"],
-      relationships: [],
+      relationships: [
+        {
+          rel_type: "dependency",
+          id: "community_mod_framework",
+          display_name: "Community Mod Framework",
+          resource_type: "mod",
+          version: "2.*",
+        },
+      ],
       game_custom_data: {},
     },
   );

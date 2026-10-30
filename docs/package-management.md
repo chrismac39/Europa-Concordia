@@ -12,7 +12,7 @@ array. Each entry has:
 | `type`              | `upstream`, `maintained`, or `original` | Package category                                                     |
 | `source`            | object                                  | Source kind, immutable pin where applicable, and local snapshot path |
 | `author`            | string                                  | Original author or first-party author                                |
-| `targetGameVersion` | string                                  | Compatible EU5 release in `MAJOR.MINOR.PATCH` format                 |
+| `targetGameVersion` | string                                  | EU5 release targeted by Concordia's integration of this package      |
 | `version`           | semver string                           | Europa Concordia package version                                     |
 | `enabled`           | boolean                                 | Whether the package participates in validation/build                 |
 | `dependencies`      | string array                            | IDs of required packages                                             |
@@ -46,6 +46,11 @@ npm run validate -- --target-game-version 1.4.5
 npm run build -- --target-game-version 1.4.5
 ```
 
+An upstream package's `supported_game_version` is separate evidence and does
+not by itself prevent inclusion on a newer Concordia target. Review and test
+older content, preserving the upstream snapshot and recording any required
+port under `integration/`.
+
 ## Keeping source and compatibility work separate
 
 Treat upstream source snapshots as immutable. For a maintained package:
@@ -58,8 +63,8 @@ Treat upstream source snapshots as immutable. For a maintained package:
    `integration/decisions/<package-id>.md`.
 
 The current build applies explicitly selected complete-file overrides recorded
-in `config/conflict-rules.json`. General patch-series application remains
-unimplemented.
+in `config/conflict-rules.json`, including intentional replacements of a
+single package's file. General patch-series application remains unimplemented.
 
 ## Onboarding a real package
 

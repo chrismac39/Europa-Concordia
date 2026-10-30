@@ -6,8 +6,16 @@ export interface WorkshopModMetadata {
   supported_game_version: string;
   short_description: string;
   tags: string[];
-  relationships: [];
+  relationships: WorkshopRelationship[];
   game_custom_data: Record<string, never>;
+}
+
+export interface WorkshopRelationship {
+  rel_type: "dependency";
+  id: string;
+  display_name: string;
+  resource_type: "mod";
+  version: string;
 }
 
 export interface WorkshopMetadataConfiguration {
@@ -17,6 +25,7 @@ export interface WorkshopMetadataConfiguration {
   supportedGameVersion: string;
   shortDescription: string;
   tags: string[];
+  relationships: WorkshopRelationship[];
 }
 
 export function createWorkshopModMetadata(
@@ -30,7 +39,7 @@ export function createWorkshopModMetadata(
     supported_game_version: configuration.supportedGameVersion,
     short_description: configuration.shortDescription,
     tags: configuration.tags,
-    relationships: [],
+    relationships: configuration.relationships,
     game_custom_data: {},
   };
 }

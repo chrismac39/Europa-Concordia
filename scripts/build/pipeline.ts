@@ -98,11 +98,31 @@ async function collectPackageFiles(
   const files = new Map<string, { packageId: string; sourcePath: string }>();
   const unresolvedCollisions: string[] = [];
   for (const [collisionKey, pathCandidates] of candidates) {
+    const resolution = resolutions.get(collisionKey);
     if (pathCandidates.length === 1) {
+      if (resolution?.override !== undefined) {
+        const packageIds = pathCandidates
+          .map((candidate) => candidate.packageId)
+          .sort();
+        const resolvedPackageIds = resolution.packages.slice().sort();
+        if (JSON.stringify(packageIds) !== JSON.stringify(resolvedPackageIds)) {
+          unresolvedCollisions.push(
+            `File path resolution for "${resolution.path}" does not match package ${packageIds[0]}`,
+          );
+          continue;
+        }
+        files.set(collisionKey, {
+          packageId: "concordia-integration",
+          sourcePath: path.resolve(
+            configuration.rootDirectory,
+            resolution.override,
+          ),
+        });
+        continue;
+      }
       files.set(collisionKey, pathCandidates[0]);
       continue;
     }
-    const resolution = resolutions.get(collisionKey);
     const packageIds = pathCandidates
       .map((candidate) => candidate.packageId)
       .sort();

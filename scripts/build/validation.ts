@@ -236,9 +236,11 @@ function validateConflictRules(value: unknown): ConflictRules {
       errors.push(`${label}.path must be a normalized relative POSIX path`);
     }
     const resolutionPackages = resolution.packages;
+    const hasWinner = resolution.winner !== undefined;
+    const hasOverride = resolution.override !== undefined;
     const packagesAreValid =
       Array.isArray(resolutionPackages) &&
-      resolutionPackages.length >= 2 &&
+      resolutionPackages.length >= (hasOverride ? 1 : 2) &&
       resolutionPackages.every(
         (packageId) =>
           typeof packageId === "string" && packageIdPattern.test(packageId),
@@ -247,8 +249,6 @@ function validateConflictRules(value: unknown): ConflictRules {
     if (!packagesAreValid) {
       errors.push(`${label}.packages must contain unique package identifiers`);
     }
-    const hasWinner = resolution.winner !== undefined;
-    const hasOverride = resolution.override !== undefined;
     if (hasWinner === hasOverride) {
       errors.push(`${label} must specify exactly one of winner or override`);
     } else if (

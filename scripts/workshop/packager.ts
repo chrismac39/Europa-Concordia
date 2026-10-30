@@ -20,6 +20,7 @@ import {
 interface WorkshopConfiguration {
   version: 1;
   metadata: WorkshopMetadataConfiguration;
+  requiredWorkshopItems: string[];
   channels: {
     stable: {
       artifactDirectory: string;
@@ -54,6 +55,32 @@ function readWorkshopConfiguration(value: unknown): WorkshopConfiguration {
       "config/workshop.json metadata.tags must be a string array",
     );
   }
+  if (
+    !Array.isArray(metadata.relationships) ||
+    !metadata.relationships.every(
+      (relationship) =>
+        isRecord(relationship) &&
+        relationship.rel_type === "dependency" &&
+        typeof relationship.id === "string" &&
+        typeof relationship.display_name === "string" &&
+        relationship.resource_type === "mod" &&
+        typeof relationship.version === "string",
+    )
+  ) {
+    throw new Error(
+      "config/workshop.json metadata.relationships must contain mod dependency relationships",
+    );
+  }
+  if (
+    !Array.isArray(value.requiredWorkshopItems) ||
+    !value.requiredWorkshopItems.every(
+      (item): item is string => typeof item === "string" && /^\d+$/.test(item),
+    )
+  ) {
+    throw new Error(
+      "config/workshop.json requiredWorkshopItems must be a string array of numeric Workshop IDs",
+    );
+  }
   if (!isRecord(value.channels) || !isRecord(value.channels.stable)) {
     throw new Error("config/workshop.json must define a stable channel");
   }
@@ -73,7 +100,9 @@ function readWorkshopConfiguration(value: unknown): WorkshopConfiguration {
       supportedGameVersion: requiredString(metadata, "supportedGameVersion"),
       shortDescription: requiredString(metadata, "shortDescription"),
       tags: metadata.tags,
+      relationships: metadata.relationships,
     },
+    requiredWorkshopItems: value.requiredWorkshopItems,
     channels: { stable: { artifactDirectory } },
   };
 }

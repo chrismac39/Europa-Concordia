@@ -56,6 +56,21 @@ The default project-wide EU5 target is stored as `targetGameVersion` in
 the effective target game version; packages for another game version are
 rejected during validation.
 
+## Compatibility-first inclusion
+
+Concordia's purpose is to bring older and newer mods together on its chosen
+EU5 target. An upstream mod's declared game version is compatibility evidence,
+not an automatic exclusion rule. `targetGameVersion` in `config/packages.json`
+records Concordia's target for that package; it does not rewrite or claim to
+update the upstream declaration.
+
+Keep the pinned upstream snapshot and its metadata unchanged. Review older
+content against the current game files, then include it unchanged when it still
+works or add Concordia-owned compatibility patches and overrides when it does
+not. Record the upstream version, declared target, changes, and in-game
+verification in `integration/decisions/`. Do not change upstream version
+metadata merely to make validation pass.
+
 ## Reproducibility and generated files
 
 Git sources require a full commit hash, and Workshop sources require an

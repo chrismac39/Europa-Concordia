@@ -18,9 +18,12 @@ upload action. Then open the new Steam Workshop page, subscribe to the item,
 enable it in the launcher, and test it in-game. After the item is created,
 record its ID in `config/workshop.json`.
 
-The current stage contains More locations Mod and Sulphur's Rivers Expanded;
-neither declares a Workshop dependency. Add required Workshop relationships
-when later stages introduce them.
+The current stage bundles Community Mod Framework (Workshop item
+`3692202776`) as an internal package. Concordia's generated launcher metadata
+does not declare CMF as an external dependency, and
+`config/workshop.json` has no required Workshop items. The bundled snapshot is
+version `2.5.0`; its redistribution permission is recorded in
+`config/packages.json`.
 
 No preview image is generated or included. Add a user-provided
 `.metadata/thumbnail.png` when one is ready.
@@ -30,8 +33,8 @@ No preview image is generated or included. Add a user-provided
 - The install command does not upload or publish anything.
 - Workshop upload and visibility are controlled manually in the Paradox
   Launcher.
-- Redistribution permission for the two currently enabled sources was
-  confirmed by the repository owner and recorded in `config/packages.json`.
+- Redistribution permission for enabled third-party sources, including CMF,
+  is recorded in `config/packages.json`.
 - Keep Steam credentials in Steam's own client/launcher; do not put them in
   this repository.
 - Source snapshots and integration files are not included in the release

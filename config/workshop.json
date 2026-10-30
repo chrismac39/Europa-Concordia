@@ -6,8 +6,9 @@
     "id": "europa_concordia",
     "version": "0.1.0",
     "supportedGameVersion": "1.4.*",
-    "shortDescription": "A staged EU5 map pass combining More locations Mod and Sulphur's Rivers Expanded.",
-    "tags": ["Gameplay", "Map"]
+    "shortDescription": "Expanded EU5 content with integrated Community Mod Framework utilities.",
+    "tags": ["Gameplay", "Map"],
+    "relationships": []
   },
   "requiredWorkshopItems": [],
   "channels": {

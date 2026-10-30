@@ -130,8 +130,41 @@
       "packages": ["more-locations", "sulphurs-rivers-expanded"],
       "winner": "sulphurs-rivers-expanded",
       "reason": "Decision 36 selects Sulphur's Rivers Expanded as the river-layer base; its raster matches the selected More locations map canvas dimensions."
+    },
+    {
+      "path": "in_game/common/on_action/mrc_cmm_on_actions.txt",
+      "packages": ["more-restricted-colonization"],
+      "override": "integration/overrides/more-restricted-colonization/in_game/common/on_action/MRC_cmm_on_actions.txt",
+      "reason": "Keep More Restricted Colonization's safe historical defaults while disabling its CMF setting registration and callback hooks."
+    },
+    {
+      "path": "in_game/common/scripted_effects/mrc_cmm_effects.txt",
+      "packages": ["more-restricted-colonization"],
+      "override": "integration/overrides/more-restricted-colonization/in_game/common/scripted_effects/MRC_cmm_effects.txt",
+      "reason": "Disable More Restricted Colonization's unused CMF/CMM setting registration and synchronization effects."
     }
   ],
-  "semanticResolutions": [],
+  "semanticResolutions": [
+    {
+      "fingerprint": "b79dd36c86e53e6d",
+      "decision": "Keep CMF's cmf_on_callback definition and omit MRC's CMM callback.",
+      "reason": "The Concordia MRC on-action override removes MRC's CMM callback while retaining its safe-default initialization hooks."
+    },
+    {
+      "fingerprint": "5008de5ef56df04d",
+      "decision": "Keep CMF's cmf_on_mod_registration definition and omit MRC's CMM registration hook.",
+      "reason": "The Concordia MRC on-action override disables MRC's CMF settings registration as requested."
+    },
+    {
+      "fingerprint": "9a4aeda8be85c98e",
+      "decision": "Merge on_game_load callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
+      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls."
+    },
+    {
+      "fingerprint": "5dd20d7dd57cc9c6",
+      "decision": "Merge on_game_start callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
+      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls."
+    }
+  ],
   "definitionConflicts": "deferred"
 }

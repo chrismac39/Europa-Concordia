@@ -324,6 +324,53 @@ test("applies a Concordia file-path override", async () => {
   }
 });
 
+test("applies a Concordia override to a single package file", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("source", "packages/source");
+    await fixture.writePackageFiles("source", {
+      "in_game/common/file.txt": "upstream",
+    });
+    await fixture.writeManifest();
+    const overridePath = path.join(
+      fixture.root,
+      "integration",
+      "overrides",
+      "file.txt",
+    );
+    await mkdir(path.dirname(overridePath), { recursive: true });
+    await writeFile(overridePath, "Concordia default");
+    await writeFile(
+      path.join(fixture.root, "config", "conflict-rules.json"),
+      JSON.stringify({
+        version: 1,
+        filePathCollisions: "error",
+        filePathResolutions: [
+          {
+            path: "in_game/common/file.txt",
+            packages: ["source"],
+            override: "integration/overrides/file.txt",
+            reason: "Fixture verifies a single-package replacement.",
+          },
+        ],
+        semanticResolutions: [],
+        definitionConflicts: "deferred",
+      }),
+    );
+
+    const output = await buildProject(fixture.root);
+    assert.equal(
+      await readFile(
+        path.join(output, "in_game", "common", "file.txt"),
+        "utf8",
+      ),
+      "Concordia default",
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("excludes package metadata and development files", async () => {
   const fixture = await createFixture();
   try {

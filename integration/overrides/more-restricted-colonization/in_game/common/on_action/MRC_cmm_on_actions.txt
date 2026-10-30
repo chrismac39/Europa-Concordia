@@ -1,0 +1,30 @@
+on_game_start = { on_actions = { MRC_init_safe_defaults } }
+on_game_load = { on_actions = { MRC_init_safe_defaults } }
+
+MRC_init_safe_defaults = {
+    effect = {
+        if = {
+            limit = { NOT = { has_global_variable = mrc_tax_threshold } }
+
+            set_global_variable = { name = mrc_tax_threshold value = 1000 }
+            set_global_variable = { name = mrc_harbor_threshold value = 0.25 }
+            set_global_variable = { name = mrc_historical_bypass value = 1 }
+            set_global_variable = { name = mrc_ottoman_allow value = 0 }
+
+            set_global_variable = { name = mrc_europe value = 1 }
+            set_global_variable = { name = mrc_asia value = 1 }
+            set_global_variable = { name = mrc_africa value = 1 }
+            set_global_variable = { name = mrc_americas value = 1 }
+            set_global_variable = { name = mrc_oceania value = 1 }
+
+            set_global_variable = { name = mrc_cn_allow_colonization value = 1 }
+            set_global_variable = { name = mrc_cn_region_restrict value = 1 }
+            set_global_variable = { name = mrc_cn_bypass_tax value = 1 }
+            set_global_variable = { name = mrc_cn_bypass_continent value = 1 }
+
+            set_global_variable = { name = mrc_cn_africa value = 1 }
+            set_global_variable = { name = mrc_cn_africa_allow_colonization value = 1 }
+            set_global_variable = { name = mrc_africa_historical_areas value = 1 }
+        }
+    }
+}
