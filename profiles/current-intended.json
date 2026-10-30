@@ -115,6 +115,16 @@
       }
     },
     {
+      "packageId": "more-unique-urban-rights",
+      "name": "More Unique Urban Rights",
+      "version": "1.1.9",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3745922649",
+        "snapshotChecksum": "sha256:0890345be7f2114eef933edd2bbabc8c3c2193fdc8dd691989f4d40ede41ddeb"
+      }
+    },
+    {
       "packageId": "more-locations",
       "name": "More locations Mod",
       "version": "2.10.2026",
@@ -167,6 +177,7 @@
     "gh-exchequer",
     "eurocentric-institutions",
     "continental-hegemonies",
+    "more-unique-urban-rights",
     "more-locations",
     "more-restricted-colonization",
     "waterways-distance-rework",
@@ -354,6 +365,21 @@
         "using = location_rgo_button_tooltip"
       ],
       "suppresses": []
+    },
+    {
+      "id": "more-unique-urban-rights-textile-exclusivity",
+      "operation": "add",
+      "sourcePath": "integration/patches/more-unique-urban-rights/in_game/common/town_rights/zz_CONCORDIA_MUR_royal_textile_rights.txt",
+      "targetPath": "in_game/common/town_rights/zz_CONCORDIA_MUR_royal_textile_rights.txt",
+      "targetPackageId": "more-unique-urban-rights",
+      "resolutionType": "merged-patch",
+      "reason": "Inject the complete existing Royal Textile Rights allow block plus exclusions for More Unique Urban Rights' Bengali muslin and Indo-Aryan jamdani rights. EU5 replaces an existing nested block during INJECT, so the vanilla Flemish cloth-industry exclusion is explicitly retained.",
+      "preserves": [
+        "has_town_rights = town_rights_type:flemish_cloth_industries_right"
+      ],
+      "suppresses": [
+        "No vanilla town-right conditions or upstream content are suppressed."
+      ]
     }
   ],
   "patchMod": {
