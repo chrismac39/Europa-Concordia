@@ -87,5 +87,7 @@ The local install and no-upload boundary is described in
 [local patch packaging](docs/workshop-publishing.md).
 The current local download comparison is tracked in
 [Workshop inventory](docs/workshop-inventory.md).
+Deferred follow-up work is recorded in
+[future improvements](docs/future-improvements.md).
 Review the generated [high-level decision frontier](reports/current-intended/decision-frontier.md).
 Exhaustive source evidence is in the profile's `deep-frontier.md`.
