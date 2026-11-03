@@ -85,20 +85,64 @@ test("current profile replaces the separate SOL-JTG mod with Concordia files", a
   }
 });
 
-test("demand patch covers 26 Just Goods and cancels native slave demand", async () => {
+test("demand patch follows the latest Workshop targets without changing slave demand", async () => {
   const goodsContents = await readRepositoryFile(
     "integration/patches/sol-jtg-compatibility/in_game/common/goods/zz_CONCORDIA_SOL_JTG_pop_goods.txt",
   );
-  const goods = [
-    ...goodsContents.matchAll(/^\s*INJECT:([a-z0-9_]+)\s*=\s*\{/gm),
-  ].map((match) => match[1]);
-  assert.equal(goods.length, 26);
-  assert.equal(new Set(goods).size, 26);
-  assert.match(goodsContents, /\bslaves\s*=\s*-\d/);
+  const referenceGoods = extractDefinitions(
+    "in_game/common/goods/zz_SOL_JTG_pop_goods.txt",
+    await readRepositoryFile(
+      "sources/steam-workshop/3769566303/in_game/common/goods/zz_SOL_JTG_pop_goods.txt",
+    ),
+  );
+  const patchedGoods = extractDefinitions(
+    "in_game/common/goods/zz_CONCORDIA_SOL_JTG_pop_goods.txt",
+    goodsContents,
+  );
+  assert.equal(referenceGoods.length, 26);
+  assert.deepEqual(
+    patchedGoods.map((definition) => definition.key).sort(),
+    referenceGoods.map((definition) => definition.key).sort(),
+  );
+  const patchedGoodsByKey = new Map(
+    patchedGoods.map((definition) => [definition.key, definition]),
+  );
+  for (const referenceGood of referenceGoods) {
+    assert.equal(
+      patchedGoodsByKey.get(referenceGood.key)?.normalizedBody,
+      referenceGood.normalizedBody,
+      `Demand integration for ${referenceGood.key} is stale`,
+    );
+  }
+  assert.doesNotMatch(goodsContents, /\bslaves\s*=/);
 
   const marketValues = await readRepositoryFile(
     "integration/patches/sol-jtg-compatibility/in_game/common/script_values/zz_CONCORDIA_SOL_market_unit_consumption_values.txt",
   );
+  const referenceMarketValues = await readRepositoryFile(
+    "sources/steam-workshop/3769566303/in_game/common/script_values/zz_SOL_market_unit_consumption_values.txt",
+  );
+  const marketValueEntries = (contents: string) =>
+    new Map(
+      [
+        ...contents.matchAll(
+          /^\s*(sol_unit_consumption_[\w]+)\s*=\s*\{\s*value\s*=\s*([\d.eE+-]+)\s*\}/gm,
+        ),
+      ].map((match) => [match[1], match[2]]),
+    );
+  const patchedMarketValues = marketValueEntries(marketValues);
+  const latestMarketValues = marketValueEntries(referenceMarketValues);
+  assert.equal(latestMarketValues.size, 100);
+  assert.deepEqual(
+    [...patchedMarketValues].sort(([left], [right]) =>
+      left.localeCompare(right),
+    ),
+    [...latestMarketValues].sort(([left], [right]) =>
+      left.localeCompare(right),
+    ),
+  );
+
+  const goods = patchedGoods.map((definition) => definition.key);
   for (const good of goods) {
     assert.match(
       marketValues,

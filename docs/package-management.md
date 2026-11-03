@@ -23,6 +23,13 @@ Source forms:
 - Workshop: `{ "type": "steam-workshop", "workshopId": "...", "snapshotChecksum": "sha256:<64 hex characters>", "path": "..." }`
 - Local: `{ "type": "local", "path": "..." }`
 
+When a matching local Workshop download exists, use its content as the
+authoritative source rather than assuming a Git mirror is current. To compute a
+Workshop tree checksum, sort slash-separated relative file paths ordinally and
+hash each UTF-8 path, a NUL byte, the raw file bytes, and another NUL byte;
+exclude nested `.git` directories but include `.metadata` and other snapshot
+files.
+
 The manifest source path points to an analysis snapshot. Keep snapshots
 unchanged when possible; never copy them into the generated Concordia patch.
 Git sources require a full commit hash, and Workshop sources require an

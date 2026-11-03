@@ -84,7 +84,7 @@
         "prussian-destiny"
       ],
       "override": "integration/overrides/dynamic-names/in_game/common/customizable_localization/country_ranks.txt",
-      "reason": "The Concordia merge keeps common rules once, preserves each package's unique rank/title rules across all country-flavor roots, and unions the nine differing shared-rule trigger variants.",
+      "reason": "The archived Concordia merge keeps current source rules once, preserves package-specific rank/title rules, unions shared trigger variants, and omits superseded Gathering Muslim-dynasty keys absent from the current Workshop inputs.",
       "resolutionType": "merged-patch"
     },
     {
@@ -391,9 +391,9 @@
       "resolutionType": "merged-patch"
     },
     {
-      "fingerprint": "6ec7c7c89b847830",
-      "decision": "Retain the independent monthly pulse registrations.",
-      "reason": "EU5 natively merges same-named on-action definitions from different files. CMF, Just Goods, and SoL register distinct monthly callbacks; no shared definition needs to be replaced.",
+      "fingerprint": "7291d3730396ab54",
+      "decision": "Retain every independent monthly pulse registration.",
+      "reason": "EU5 natively merges same-named on-action definitions from separate files. CMF, GH Trade Desk, HSO Finances, Glorp UI, Just Goods, and SoL register distinct callbacks; preserve all six definitions without replacing the shared pulse.",
       "resolutionType": "native-merge"
     },
     {

@@ -22,6 +22,14 @@ The merge includes Gathering the Land of the Rus, Historical Tweaks, Imperial
 Ambitions, and The Prussian Destiny. The union policy was confirmed by the user
 on 2026-10-29 after reviewing the different activation conditions.
 
+The archived rank merge has been refreshed against the latest downloaded
+Gathering Workshop snapshot (1.1.0) and the other current Workshop inputs.
+Its 12 Muslim-dynasty rank keys for the Hafsids, Marinids, Nasrids, and
+Zayyanids were removed because they are absent from every current source.
+Gathering's newly added keys and revised trigger variants are represented in
+the merge. This remains an archived integration and is not activated by
+`current-intended`.
+
 All nine shared rules with different triggers are represented in the override.
 The union intentionally preserves the broader eligibility in the Rus variant
 where it differs from the other three packages, including:

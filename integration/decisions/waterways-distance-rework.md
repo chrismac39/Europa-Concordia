@@ -2,11 +2,12 @@
 
 - Workshop item: `3608489505`
 - Upstream author: `Relandelon`
-- Upstream version: `1.8.2`
-- Upstream-declared EU5 version: `1.0.x`
+- Upstream version: `1.10.0`
+- Upstream-declared EU5 version: `1.3.*`
 - Concordia target EU5 version: `1.4.5`
 
-The source snapshot contains one game-content file:
+The refreshed local Workshop snapshot is version `1.10.0`; its game-content
+file is unchanged from the prior snapshot:
 `in_game/common/auto_modifiers/country_relandelon.txt`. It adds
 `country_base_values_relandelon` with upstream, downstream, and maritime
 distance-cost modifiers.

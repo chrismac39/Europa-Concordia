@@ -5,13 +5,15 @@
 - Standard of Living: `standard-of-living` (Workshop item `3815438890`)
 - Just Goods: `just-goods` (Workshop item `3785316314`)
 - Existing compatibility mod: `sol-jtg-compatibility-submod` (Workshop item
-  `3769566303`)
+  `3769566303`, local version `260822`)
 - Concordia target EU5 version reviewed: `1.4.5`
 
 The `current-intended` profile selects Just Goods and Standard of Living as
 separate mods. The SOL-JTG compatibility submod is explicitly excluded from
-the playset; its pinned source snapshot remains in the package catalog as
-behavioral reference material only. Community Mod Framework, Just Goods, and
+the playset; its latest downloaded Workshop snapshot remains in the package
+catalog as the behavior and data reference for Concordia's compatibility
+files, not as a payload to bundle. It declares EU5 `1.3.11` compatibility,
+below Concordia's `1.4.5` target. Community Mod Framework, Just Goods, and
 Standard of Living retain their relative order, followed by the other selected
 mods and Concordia last.
 
@@ -27,17 +29,18 @@ package or a payload to bundle. The selected behavior is:
   those goods;
 - add their final quantities to SoL's market unit-spending cache;
 - display the 81 SoL + Just Goods demand goods in both SoL goods panels;
-- cancel Just Goods slave demand for the covered goods, as the reference
-  implementation's negative `slaves` adjustments do.
+- leave native slave demand unchanged, matching the latest Workshop version.
 
-The reference README says slave demand is unchanged, but its data explicitly
-cancels native slave demand on several goods. The user chose the actual
-implementation behavior: zero those slave-demand quantities. The README also
-describes two replacement effects, while the pinned source contains three
-`REPLACE:` definitions: `sol_refresh_market_pop_demand_maps`,
-`gls_accumulate_panel_stats`, and `sol_compute_substitute_unit_spending`.
-Concordia retains all three because each contains hardcoded goods
-enumerations that must include Just Goods.
+The earlier Git export's README says slave demand is unchanged, but its data
+explicitly cancels native slave demand on several goods. The latest local
+Workshop version resolves that discrepancy by leaving slave demand untouched.
+Per the user's source-freshness rule, Concordia's 26 demand blocks and 100
+market-consumption constants now follow that Workshop snapshot. The reference
+defines only `sol_refresh_market_pop_demand_maps` and
+`gls_accumulate_panel_stats` as replacements because it declares EU5 `1.3.11`.
+Concordia targets `1.4.5`; the active SoL source still defines
+`sol_compute_substitute_unit_spending`, so the compatibility output retains
+all three complete SoL replacements based on the active source.
 
 The only direct SoL/Just Goods definition collision remaining after excluding
 the compatibility submod is `cloves`. Just Goods injects only
@@ -65,11 +68,12 @@ The two GUI files are whole-file replacements/additions, not text-level GUI
 merges. Their complete SoL sections are retained because EU5 replaces a
 same-path GUI file rather than merging its text. Upstream SoL and Just Goods
 definitions remain separate playset mods; Concordia emits only these
-compatibility files and metadata. The compatibility source snapshot and both
-upstream source snapshots remain unchanged.
+compatibility files and metadata. The latest local Workshop compatibility
+snapshot remains an analysis-only reference and is not included in the output.
 
-The pinned compatibility source says SOL-JTG and SOL-PP compatibility mods
-replace the same SoL scripted effects and are mutually exclusive. A future
+The earlier Git export says SOL-JTG and SOL-PP compatibility mods replace the
+same SoL scripted effects and are mutually exclusive. Treat this as a
+historical warning until it is confirmed against a current source. A future
 profile combining Just Goods and Population Politics therefore needs a
 separately analyzed combined target.
 

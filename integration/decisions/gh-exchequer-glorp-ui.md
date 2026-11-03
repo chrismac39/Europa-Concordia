@@ -4,7 +4,7 @@
 
 - EU5 target: `1.4.5`
 - Glorp UI: Workshop `3812518640`, pinned source version `04.10.26`
-- GH: Exchequer: Workshop `3812701995`, version `1.2.0`
+- GH: Exchequer: Workshop `3812701995`, upstream version `1.3` (Concordia pin `1.3.0`)
 - Construction Manager: Workshop `3736668860`, version `2.2.13`
 - Autonomous Diplomats: Workshop `3696243603`, version `1.5.0`
 
@@ -53,6 +53,13 @@ instantiates both Autonomous Diplomats widgets, whose definitions remain in
 Autonomous Diplomats. Autonomous Diplomats loads before Construction Manager
 so Construction Manager's CMF dependency-check GUI can add its create-playset
 flow without dropping the shared dependency and auto-enable behavior.
+
+The refreshed local Workshop snapshot is GH: Exchequer `1.3` (catalog pin
+`1.3.0`). It removes the previous monthly home-rank callback and changes the
+daily goods-fill flow. A content-pinned native-merge decision retains all six
+`monthly_country_pulse` definitions from CMF, GH Trade Desk, HSO Finances,
+Glorp UI, Just Goods, and SoL; their callbacks are distinct, and EU5 merges
+same-named on-actions across separate files.
 
 ## Dependency and runtime risks
 

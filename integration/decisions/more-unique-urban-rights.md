@@ -8,7 +8,7 @@
 - Upstream-supported EU5 version: `1.4.*`
 - Concordia target EU5 version: `1.4.5`
 - EU5 metadata ID: `aga_urban_rights`
-- Source checksum: `sha256:0890345be7f2114eef933edd2bbabc8c3c2193fdc8dd691989f4d40ede41ddeb`
+- Source checksum: `sha256:b5a3db6230fc2f067c4d76f42d8a759f4c96e94b333d4840464de5cffa803bd3`
 
 The profile keeps More Unique Urban Rights as a separate Workshop mod. Its
 source is an analysis input only; Concordia does not bundle its definitions,
@@ -28,6 +28,11 @@ already reject Royal Textile Rights and each other. Vanilla
 vanilla right could still be granted after one of the new rights. The user
 approved a focused Concordia-authored patch to make this restriction
 bidirectional.
+
+The local Workshop snapshot was refreshed on 2026-11-03. It remains version
+`1.1.9`; its updated town-rights file adds market-upgrade building-level
+modifiers and uses the newer food-preservation modifier. Neither change
+affects the Royal Textile Rights eligibility patch.
 
 The patch uses `INJECT:royal_textile_rights` and replaces only its nested
 `allow` block. Because nested blocks are not deep-merged, the patch repeats
