@@ -555,6 +555,510 @@
       "winner": "glorp-ui",
       "decision": "Use Glorp UI's shared localization values.",
       "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "0086dc6ac1fd1470",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "02afce684057fa7e",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "20c48dc33349b27f",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "2bf67cf6b993f9ce",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "5259f0080e382b2d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "bbc5c6cccb0ee9bc",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "c9366094cbca5a29",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "cd3ae19a24508567",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "fb9b9b91e127192d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "161fe0bcb75c7392",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "18e2f55e9e441b4e",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "65e57c72ff6b317e",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "70241994d9573a93",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "721c9ba3f85f7fc9",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "7e980b5e386d84e6",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b518a2ff408a06c3",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "db7e1d1da75e985b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "e04c2373b60520a9",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "3ed148d943333ce5",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "758c34dae103a45f",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "818bb674c358d7ad",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "8a66e03e6147dffe",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "ae2d49b457e813d2",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b95448072125bcc0",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "d3aac13a288ba886",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "d3b2c1a57568c560",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "fb675ada3571d2ac",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "016e3b5c993074db",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "48133ae1197734c1",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "48f60414212a33ad",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6188786dfe9841b5",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6d892a4fecc02d6b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "80a8d4200a090e09",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "a720bc65c01382ce",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "bea997f3e1f3a92d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "bfc4999ac9c1c3a7",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "0fab8926c57b09ed",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "382221ca2ca1d030",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "3de24d2e5adaa1b8",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "448cad9690964964",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "552264bb50893fa2",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "5d211b90de3aba47",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "7267312ed986df69",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "746659b50626594f",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "80be2a92a89ace49",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "2753487a27a65471",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "30740f0b12cf56a4",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "3f72d36ee5ca1d72",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "58624dafdbdb4a08",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "9dd3a8da4a3196cc",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b9778ee5e7622e67",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "e345b5ff4f347965",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f1f18c3d9556b135",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f455f9b205bdce62",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6563372228092869",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6e0d72ad552b3e21",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "7728512a6b668301",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "91e4808937a5666b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "cd6e4e863db518c3",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "ceef8f3c0ae0f855",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "d5295eb860dc4df6",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f6c1c1d3712a732a",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f7ceb09c73cc8613",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "079707e39292ce4b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "1d80562b8580828d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "50bfc115529a70b0",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "79952beebe2f3332",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "960df67afeb718fb",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b794a101c8d4c440",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "e008ebb89d86f9bf",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "ecd069ee99cd8550",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f550943d2754441b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
     }
   ],
   "definitionConflicts": "deferred"

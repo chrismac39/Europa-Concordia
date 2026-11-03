@@ -352,6 +352,7 @@
         "type": "git",
         "url": "https://github.com/Zatzarinny/Oikoumene-EU5.git",
         "revision": "c246398bf3e3984f27be2731c86c1bef9a313f05",
+        "publishedWorkshopId": "3721193233",
         "path": "sources/git/oikoumene"
       },
       "author": "Pontifex",

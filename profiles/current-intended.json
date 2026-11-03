@@ -135,6 +135,16 @@
       }
     },
     {
+      "packageId": "oikoumene",
+      "name": "Oikoumenē",
+      "version": "0.19.0",
+      "source": {
+        "type": "git",
+        "revision": "c246398bf3e3984f27be2731c86c1bef9a313f05",
+        "publishedWorkshopId": "3721193233"
+      }
+    },
+    {
       "packageId": "more-restricted-colonization",
       "name": "More Restricted Colonization",
       "version": "1.4.0",
@@ -179,6 +189,7 @@
     "continental-hegemonies",
     "more-unique-urban-rights",
     "more-locations",
+    "oikoumene",
     "more-restricted-colonization",
     "waterways-distance-rework",
     "sulphurs-rivers-expanded",
@@ -210,6 +221,10 @@
     {
       "packageId": "dynastic-bloodlines",
       "reason": "Pinned upstream version 0.9.39 declares EU5 1.3.* while this profile targets 1.4.5. Static analyzer and PdxL checks found no blocking errors, but in-game compatibility is unverified. Its header override also removes the Character.ShowsStats guard present in the installed game UI; both UI features remain supplied by the separate upstream mod."
+    },
+    {
+      "packageId": "oikoumene",
+      "reason": "Pinned upstream version 0.19.0 declares EU5 1.* support. Static localization analysis is clean, but dynamic names on EU5 1.4.5, including locations added by More locations, still need in-game verification."
     }
   ],
   "patches": [
