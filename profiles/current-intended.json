@@ -65,6 +65,16 @@
       }
     },
     {
+      "packageId": "global-historical-rgos",
+      "name": "Global Historical RGOs",
+      "version": "1.4.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3602513956",
+        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b"
+      }
+    },
+    {
       "packageId": "standard-of-living",
       "name": "[v1.4 beta] Standard of Living",
       "version": "0.0.261024",
@@ -181,6 +191,7 @@
     "glorp-ui",
     "dynastic-bloodlines",
     "just-goods",
+    "global-historical-rgos",
     "standard-of-living",
     "gh-exchequer",
     "eurocentric-institutions",
@@ -551,6 +562,24 @@
         "ht_rank_tsardom"
       ],
       "suppresses": []
+    },
+    {
+      "id": "just-goods-more-locations-global-historical-rgos",
+      "operation": "replace",
+      "sourcePath": "integration/patches/just-goods-more-locations-global-historical-rgos/in_game/map_data/location_templates.txt",
+      "targetPath": "in_game/map_data/location_templates.txt",
+      "targetPackageId": "more-locations",
+      "resolutionType": "merged-patch",
+      "reason": "Preserve More Locations as the complete map-template base, apply Global Historical RGO values to the 1,269 approved direct disagreements and 48 qualifying single-parent descendants, and leave Just Goods' fixed-location effects authoritative.",
+      "preserves": [
+        "russian_wastelands_9",
+        "kolguyev",
+        "borneo_jungle12"
+      ],
+      "suppresses": [
+        "More Locations RGO values at the 1,269 direct Global Historical RGO disagreements without a fixed Just Goods setter",
+        "Duplicated Vanilla RGO values on the 48 approved descendants whose single parent has a changed Global Historical RGO"
+      ]
     }
   ],
   "patchMod": {

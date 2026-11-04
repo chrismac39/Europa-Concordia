@@ -146,7 +146,7 @@ function createLoadOrderGuide(
   }
   guide.push(
     "",
-    "The generated Concordia mod contains only Concordia-authored compatibility files and its launcher metadata. It does not bundle or replace any listed upstream mod.",
+    "The generated mod contains its declared compatibility files and launcher metadata. It does not bundle or replace any listed upstream mod wholesale; complete-file patches may preserve upstream data when required. Confirm redistribution permission for any included upstream-derived content before publishing.",
     "",
     "Update the profile and rerun `npm run analyze -- --profile " +
       configuration.profile.id +

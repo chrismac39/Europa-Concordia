@@ -368,6 +368,17 @@
       },
       "winner": "glorp-ui",
       "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "in_game/map_data/location_templates.txt",
+      "packages": ["global-historical-rgos", "more-locations"],
+      "resolutionType": "merged-patch",
+      "sourceFingerprints": {
+        "global-historical-rgos": "01d18e2e207c1e168e4ab1984b7b917361680636918d95957665c91b4690deca",
+        "more-locations": "7062be86b7c7b76fb74da9f641f8fa74fd6d84ab2a4149b81d05bb93724281f7"
+      },
+      "patchId": "just-goods-more-locations-global-historical-rgos",
+      "reason": "Use the shared, content-pinned merged template patch: Global Historical RGOs wins the 1,269 approved direct disagreements and 48 qualifying descendants, while Just Goods' fixed-location effects remain authoritative."
     }
   ],
   "semanticResolutions": [

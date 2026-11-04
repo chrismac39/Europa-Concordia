@@ -82,8 +82,9 @@ analyzer runs on every build.
 
 `npm run build -- --profile <id>` writes:
 
-- `dist/europa-concordia/<id>/` — only Concordia-authored patch files and
-  `.metadata/metadata.json`;
+- `dist/europa-concordia/<id>/` — the profile's compatibility payload and
+  `.metadata/metadata.json`. Complete-file patches may preserve upstream data
+  when required; confirm permission before distributing those outputs;
 - `dist/load-order/<id>.md` — required mod names, versions, Workshop IDs or Git
   revisions, and order;
 - `dist/build-metadata/<id>.json` — selected input pins and generated patch

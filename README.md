@@ -2,9 +2,10 @@
 
 Europa Concordia is a playset compatibility patch builder for Europa
 Universalis V. Upstream mods stay separate in the player's playset; Concordia
-analyzes their pinned source snapshots and generates only Concordia-authored
-compatibility files, launcher metadata, and a profile-specific load-order
-guide.
+analyzes their pinned source snapshots and generates profile-specific
+compatibility files, launcher metadata, and a load-order guide. A complete-file
+patch may preserve selected upstream data when the game requires a full-file
+override, so check the package permission records before distributing builds.
 
 ## Requirements
 
@@ -40,6 +41,16 @@ EU5 1.4.5. Build output goes to
 `dist/europa-concordia/<profile-id>/`; its generated load-order guide and
 machine-readable build metadata are written beside it under `dist/`.
 
+The [standalone Just Goods / More Locations / Global Historical RGOs
+profile](profiles/just-goods-more-locations-global-historical-rgos-standalone.json)
+builds the same shared RGO patch source without Concordia's unrelated patches:
+
+```sh
+npm run analyze -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
+```
+
 Install the generated patch locally for the EU5 launcher with:
 
 ```sh
@@ -58,13 +69,13 @@ directory. It does not upload or publish anything to Steam.
    checked.
 3. Add a profile under `profiles/` that pins the mod version, external
    identifier, target EU5 version, and load order.
-4. Put only authored compatibility files in `integration/patches/` or
-   `integration/overrides/`, and document the reasoning in
-   `integration/decisions/`.
+4. Put compatibility payloads in `integration/patches/` or
+   `integration/overrides/`, and document the reasoning and any required
+   upstream-content permissions in `integration/decisions/`.
 5. Run `npm run analyze -- --profile <id>`, `npm test`, and
    `npm run build -- --profile <id>`.
 
-The build never copies upstream mod content. It stops on unresolved or
+The build does not bundle upstream mods wholesale. It stops on unresolved or
 incompatible conflicts and verifies that a load-order decision matches the
 profile's order and source-file fingerprints.
 
@@ -91,3 +102,5 @@ Deferred follow-up work is recorded in
 [future improvements](docs/future-improvements.md).
 Review the generated [high-level decision frontier](reports/current-intended/decision-frontier.md).
 Exhaustive source evidence is in the profile's `deep-frontier.md`.
+The planned [Just Goods / More Locations / Global Historical RGOs compatibility design](integration/decisions/just-goods-more-locations-global-historical-rgos-design.md)
+documents its location audit and the shared-source, two-profile release design.

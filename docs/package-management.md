@@ -60,11 +60,12 @@ Add a profile without changing other playsets:
    into `profiles/<id>.json`.
 2. Record every selected mod exactly once in `loadOrder`. Dependencies must be
    selected and ordered before their dependents.
-3. Add only Concordia-authored patch files under `integration/patches/` or
-   `integration/overrides/`. A patch declares either an authored source file
-   or a source-pinned generated transformation, plus its game output path,
-   targeted input mod, conflict class, reason, and important content to
-   preserve or suppress.
+3. Add compatibility payloads under `integration/patches/` or
+   `integration/overrides/`. A patch declares either a source file or a
+   source-pinned generated transformation, plus its game output path, targeted
+   input mod, conflict class, reason, and important content to preserve or
+   suppress. If a complete-file patch includes upstream-derived data, record
+   the permission status before distributing it.
 4. Analyze the profile, review every conflict, then validate and build:
 
 ```sh
