@@ -88,10 +88,10 @@ function createLoadOrderGuide(
           `Profile load order references unknown mod ${packageId}`,
         );
       }
-      return `${index + 1}. **${packageValue.name}** ${packageValue.version} - ${sourceIdentifier(packageId, configuration)}.`;
+      return `${index}. **${packageValue.name}** ${packageValue.version} - ${sourceIdentifier(packageId, configuration)}.`;
     });
   entries.push(
-    `${entries.length + 1}. **${configuration.profile.patchMod.name}** ${configuration.profile.patchMod.version} - generated Concordia compatibility patch; load last.`,
+    `${entries.length}. **${configuration.profile.patchMod.name}** ${configuration.profile.patchMod.version} - generated Concordia compatibility patch; load last.`,
   );
   const guide = [
     `# ${configuration.profile.name} - EU5 load order`,

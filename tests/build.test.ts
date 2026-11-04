@@ -239,6 +239,8 @@ test("builds a profile-specific patch without copying upstream mod content", asy
       path.join(fixture.root, "dist", "load-order", "fixture.md"),
       "utf8",
     );
+    assert.match(guide, /\n0\. \*\*upstream\*\*/);
+    assert.match(guide, /\n1\. \*\*Fixture Concordia Patch\*\*/);
     assert.match(guide, /upstream.*1\.0\.0.*Local source/);
     assert.match(guide, /load last/);
     assert.match(guide, /Explicitly excluded from this profile/);
