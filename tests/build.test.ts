@@ -35,6 +35,7 @@ interface Fixture {
     loadOrder?: string[],
     patches?: FixturePatch[],
     excludedMods?: Array<{ packageId: string; reason: string }>,
+    patchModOptions?: { thumbnailPath?: string },
   ): Promise<void>;
   writeRules(rules: {
     filePathResolutions?: Array<Record<string, unknown>>;
@@ -106,6 +107,7 @@ async function createFixture(): Promise<Fixture> {
       loadOrder = selectedIds,
       patches = [],
       excludedMods = [],
+      patchModOptions = {},
     ) {
       profileWritten = true;
       const selectedPackages = packages.filter((packageValue) =>
@@ -133,6 +135,7 @@ async function createFixture(): Promise<Fixture> {
             version: "1.0.0",
             shortDescription: "Fixture compatibility patch.",
             tags: ["Gameplay"],
+            ...patchModOptions,
           },
         }),
       );
@@ -192,6 +195,11 @@ test("builds a profile-specific patch without copying upstream mod content", asy
       "fixture/example.txt",
       "Concordia-authored fix\n",
     );
+    const thumbnailPath = "integration/assets/fixture-thumbnail.png";
+    const thumbnail = Buffer.from("fixture thumbnail");
+    const thumbnailSourcePath = path.join(fixture.root, thumbnailPath);
+    await mkdir(path.dirname(thumbnailSourcePath), { recursive: true });
+    await writeFile(thumbnailSourcePath, thumbnail);
     await fixture.writeProfile(
       ["upstream"],
       ["upstream"],
@@ -213,6 +221,7 @@ test("builds a profile-specific patch without copying upstream mod content", asy
           reason: "Not compatible with the fixture's target game.",
         },
       ],
+      { thumbnailPath },
     );
     await fixture.writeManifest();
 
@@ -226,6 +235,10 @@ test("builds a profile-specific patch without copying upstream mod content", asy
     );
     await assert.rejects(
       readFile(path.join(output, "in_game", "common", "keep.txt")),
+    );
+    assert.deepEqual(
+      await readFile(path.join(output, ".metadata", "thumbnail.png")),
+      thumbnail,
     );
     const metadata = JSON.parse(
       await readFile(path.join(output, ".metadata", "metadata.json"), "utf8"),

@@ -272,6 +272,15 @@ export async function buildProject(
       )}\n`,
       "utf8",
     );
+    if (patchMetadata.thumbnailPath) {
+      await copyFile(
+        path.resolve(
+          configuration.rootDirectory,
+          patchMetadata.thumbnailPath,
+        ),
+        path.join(metadataDirectory, "thumbnail.png"),
+      );
+    }
 
     await rm(outputDirectory, { recursive: true, force: true });
     await rename(stagingDirectory, outputDirectory);

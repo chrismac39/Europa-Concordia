@@ -120,6 +120,7 @@ export interface PlaysetProfile {
     version: string;
     shortDescription: string;
     tags: string[];
+    thumbnailPath?: string;
   };
 }
 

@@ -532,6 +532,13 @@ function validateProfile(value: unknown): PlaysetProfile {
   for (const field of ["name", "id", "version", "shortDescription"] as const) {
     requiredString(patchMod[field], `profile.patchMod.${field}`, errors);
   }
+  if (patchMod.thumbnailPath !== undefined) {
+    requiredString(
+      patchMod.thumbnailPath,
+      "profile.patchMod.thumbnailPath",
+      errors,
+    );
+  }
   if (
     typeof patchMod.id === "string" &&
     !profileModIdPattern.test(patchMod.id)

@@ -5,13 +5,13 @@
   "targetGameVersion": "1.4.5",
   "mods": [
     {
-      "packageId": "just-goods",
-      "name": "Just Goods",
-      "version": "1.0.0",
+      "packageId": "more-locations",
+      "name": "More locations Mod",
+      "version": "2.10.2026",
       "source": {
         "type": "steam-workshop",
-        "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
+        "workshopId": "3809335454",
+        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd"
       }
     },
     {
@@ -25,20 +25,20 @@
       }
     },
     {
-      "packageId": "more-locations",
-      "name": "More locations Mod",
-      "version": "2.10.2026",
+      "packageId": "just-goods",
+      "name": "Just Goods",
+      "version": "1.0.0",
       "source": {
         "type": "steam-workshop",
-        "workshopId": "3809335454",
-        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd"
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
       }
     }
   ],
   "loadOrder": [
-    "just-goods",
-    "global-historical-rgos",
     "more-locations",
+    "global-historical-rgos",
+    "just-goods",
     "jg_ml_gh_rgos_compat_standalone"
   ],
   "patches": [
@@ -62,10 +62,11 @@
     }
   ],
   "patchMod": {
-    "name": "Just Goods + More Locations + Global Historical RGOs Compatibility",
+    "name": "RGO Harmony: Just Goods + More Locations + Global Historical RGOs",
     "id": "jg_ml_gh_rgos_compat_standalone",
     "version": "0.1.0",
-    "shortDescription": "Standalone RGO compatibility patch. Requires Just Goods, More Locations, and Global Historical RGOs separately.",
-    "tags": ["Gameplay", "Map"]
+    "shortDescription": "RGO compatibility for Just Goods, More Locations, and Global Historical RGOs. Requires all three separately.",
+    "tags": ["Gameplay", "Map"],
+    "thumbnailPath": "integration/assets/rgo-harmony/thumbnail.png"
   }
 }

@@ -148,16 +148,21 @@ profile must select and pin all three upstream mods so analysis and validation
 run against the same combination the patch is intended to support. Keep the
 master patch's existing profile identity, output name, and unrelated patches.
 
-The `current-intended` profile now selects and pins all three upstream mods,
-with Global Historical RGOs before More Locations in the load order, and
-includes the shared patch entry.
+The `current-intended` profile selects and pins all three upstream mods and
+includes the shared patch entry. It loads More Locations early as the map
+base, followed by Global Historical RGOs and Just Goods; Just Goods remains
+before Standard of Living. The Concordia patch loads last and supplies the
+final merged map-template file, based on More Locations and incorporating the
+approved Global Historical RGO values. The standalone profile uses the same
+three-mod ordering.
 
 ### Standalone output
 
 The dedicated
 [standalone profile](../../profiles/just-goods-more-locations-global-historical-rgos-standalone.json)
 selects only the three required upstream mods, their pinned source revisions,
-and the intended load order, followed by the standalone compatibility mod. Its
+in More Locations → Global Historical RGOs → Just Goods order, followed by the
+standalone compatibility mod. Its
 `patches` list contains only the shared RGO compatibility entry. Its
 `patchMod` uses a distinct display name and mod ID so it can be enabled
 independently from the Concordia master patch.
