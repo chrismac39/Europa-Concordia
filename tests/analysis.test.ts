@@ -352,7 +352,7 @@ test("traces definition outcomes through package event chains", async () => {
   }
 });
 
-test("approves native merges only for content-pinned injected definitions", async () => {
+test("approves native merges only for supported content-pinned definitions", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "concordia-native-merge-"));
   const writePackageFile = async (
     packageId: string,
@@ -610,6 +610,145 @@ change_global_variable = { name = shared_count add = 2 }`,
     assert.notEqual(refreshedState.fingerprint, initialState.fingerprint);
     assert.equal(refreshedHook.resolved, false);
     assert.equal(refreshedState.resolved, false);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("approves named-color native merges only when every key is unique", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "concordia-named-colors-"));
+  const writePackageFile = async (
+    packageId: string,
+    relativePath: string,
+    contents: string,
+  ): Promise<void> => {
+    const file = path.join(root, packageId, ...relativePath.split("/"));
+    await mkdir(path.dirname(file), { recursive: true });
+    await writeFile(file, contents);
+  };
+  const packageValue = (
+    id: string,
+  ): ProjectConfiguration["packages"][number] => ({
+    id,
+    name: id,
+    type: "original",
+    source: { type: "local", path: id },
+    author: "Test",
+    targetGameVersion: "1.4.5",
+    version: "1.0.0",
+    dependencies: [],
+    attribution: { license: "MIT" },
+  });
+  const configuration: ProjectConfiguration = {
+    rootDirectory: root,
+    build: {
+      version: 1,
+      targetGameVersion: "1.4.5",
+      defaultProfile: "test",
+      packagesFile: "config/packages.json",
+      conflictRulesFile: "config/conflict-rules.json",
+      outputDirectory: "dist",
+    },
+    profile: {
+      version: 1,
+      id: "test",
+      name: "Test",
+      targetGameVersion: "1.4.5",
+      mods: ["left", "right"].map((id) => ({
+        packageId: id,
+        name: id,
+        version: "1.0.0",
+        source: { type: "local" as const },
+      })),
+      loadOrder: ["left", "right", "test_patch"],
+      patches: [],
+      patchMod: {
+        name: "Test Patch",
+        id: "test_patch",
+        version: "1.0.0",
+        shortDescription: "Test",
+        tags: ["Gameplay"],
+      },
+    },
+    conflictRules: {
+      version: 1,
+      filePathCollisions: "error",
+      filePathResolutions: [],
+      semanticResolutions: [],
+      definitionConflicts: "deferred",
+    },
+    packages: [packageValue("left"), packageValue("right")],
+    packageCatalog: [packageValue("left"), packageValue("right")],
+  };
+
+  try {
+    await writePackageFile(
+      "left",
+      "main_menu/common/named_colors/left.txt",
+      "colors = { left_color = rgb { 1 2 3 } }",
+    );
+    await writePackageFile(
+      "right",
+      "main_menu/common/named_colors/right.txt",
+      "colors = { right_color = rgb { 4 5 6 } }",
+    );
+
+    const initialAnalysis = await analyzeProject(configuration);
+    const initialFinding = initialAnalysis.findings.find(
+      (finding) =>
+        finding.title === "Definition: main_menu/named_colors:colors",
+    );
+    assert.ok(initialFinding);
+    assert.equal(initialFinding.resolved, false);
+
+    configuration.conflictRules.semanticResolutions = [
+      {
+        fingerprint: initialFinding.fingerprint,
+        resolutionType: "native-merge",
+        decision: "Merge distinct named-color keys.",
+        reason: "Every definition uses unique top-level RGB or HSV keys.",
+      },
+    ];
+    const approvedAnalysis = await analyzeProject(configuration);
+    assert.equal(
+      approvedAnalysis.findings.find(
+        (finding) =>
+          finding.title === "Definition: main_menu/named_colors:colors",
+      )?.resolved,
+      true,
+    );
+
+    await writePackageFile(
+      "right",
+      "main_menu/common/named_colors/right.txt",
+      "colors = { left_color = rgb { 4 5 6 } }",
+    );
+    const duplicateAnalysis = await analyzeProject(configuration);
+    const duplicateFinding = duplicateAnalysis.findings.find(
+      (finding) =>
+        finding.title === "Definition: main_menu/named_colors:colors",
+    );
+    assert.ok(duplicateFinding);
+    assert.notEqual(duplicateFinding.fingerprint, initialFinding.fingerprint);
+    assert.equal(duplicateFinding.resolved, false);
+
+    configuration.conflictRules.semanticResolutions = [
+      {
+        fingerprint: duplicateFinding.fingerprint,
+        resolutionType: "native-merge",
+        decision: "Attempt a duplicate-key merge.",
+        reason:
+          "Duplicate named-color keys must not be approved automatically.",
+      },
+    ];
+    const duplicateApprovedAnalysis = await analyzeProject(configuration);
+    assert.equal(
+      duplicateApprovedAnalysis.findings.find(
+        (finding) =>
+          finding.title === "Definition: main_menu/named_colors:colors",
+      )?.resolved,
+      false,
+    );
   } finally {
     await rm(root, { recursive: true, force: true });
   }

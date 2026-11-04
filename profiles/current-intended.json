@@ -25,26 +25,6 @@
       }
     },
     {
-      "packageId": "construction-manager",
-      "name": "Construction Manager",
-      "version": "2.2.13",
-      "source": {
-        "type": "git",
-        "revision": "d378769855725c05c55c750b1e92f0d17dbc0fe6",
-        "publishedWorkshopId": "3736668860"
-      }
-    },
-    {
-      "packageId": "autonomous-diplomats",
-      "name": "Autonomous Diplomats",
-      "version": "1.5.0",
-      "source": {
-        "type": "git",
-        "revision": "d423418cad1d095101adc410924af8d525784c0a",
-        "publishedWorkshopId": "3696243603"
-      }
-    },
-    {
       "packageId": "glorp-ui",
       "name": "Glorp UI - 1.4.0 Río Salado Open Beta",
       "version": "04.10.26",
@@ -115,6 +95,26 @@
       }
     },
     {
+      "packageId": "gathering-land-rus",
+      "name": "Gathering the Land of the Rus",
+      "version": "1.1.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3652214415",
+        "snapshotChecksum": "sha256:5a9e71ec9a70e55c069a084c479994b4a9884960692da44f371cfcf841d96037"
+      }
+    },
+    {
+      "packageId": "historical-tweaks",
+      "name": "Historical Tweaks",
+      "version": "1.0.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3603092142",
+        "snapshotChecksum": "sha256:5c960d2cf194bb960914e1b3f80cebb8404e80f6bbf87b65519841b6723c755a"
+      }
+    },
+    {
       "packageId": "more-unique-urban-rights",
       "name": "More Unique Urban Rights",
       "version": "1.1.9",
@@ -178,8 +178,6 @@
   "loadOrder": [
     "better-road-builder",
     "community-mod-framework",
-    "autonomous-diplomats",
-    "construction-manager",
     "glorp-ui",
     "dynastic-bloodlines",
     "just-goods",
@@ -187,6 +185,8 @@
     "gh-exchequer",
     "eurocentric-institutions",
     "continental-hegemonies",
+    "gathering-land-rus",
+    "historical-tweaks",
     "more-unique-urban-rights",
     "more-locations",
     "oikoumene",
@@ -196,6 +196,14 @@
     "europa_concordia_current_intended"
   ],
   "excludedMods": [
+    {
+      "packageId": "autonomous-diplomats",
+      "reason": "The user does not use this mod. Glorp UI's pinned outliner references two of its widgets; a generated Concordia patch removes those references so Autonomous Diplomats can remain disabled. Its auto-cancel and synchronization widgets are intentionally omitted."
+    },
+    {
+      "packageId": "construction-manager",
+      "reason": "The user does not use this mod. It was added as a Glorp UI companion; current-intended removes its direct UI integrations from the pinned Glorp UI and Standard of Living files. Upstream Glorp UI metadata still declares it as a dependency, so the launcher may report that omission."
+    },
     {
       "packageId": "diverse-unit-models",
       "reason": "Not compatible with EU5 1.4.5: its 64x64 iron-metal texture overrides conflict with the 128x128 vanilla texture-array assets and cause a frontend crash. Excluded pending upstream compatibility; Concordia will not patch these textures."
@@ -212,11 +220,7 @@
   "knownRisks": [
     {
       "packageId": "glorp-ui",
-      "reason": "Glorp UI metadata declares SmartTaxes as a dependency, but SmartTaxes is intentionally omitted due to performance issues. The user chose to proceed; verify the launcher accepts the missing dependency and the UI works in-game."
-    },
-    {
-      "packageId": "autonomous-diplomats",
-      "reason": "The pinned upstream metadata declares EU5 1.3.* support and last updated for 1.3.10. This profile targets 1.4.5 at the user's request; compatibility remains unverified pending in-game testing."
+      "reason": "Glorp UI metadata declares SmartTaxes, Construction Manager, and Autonomous Diplomats as dependencies. SmartTaxes is intentionally omitted due to performance issues; content-pinned Concordia patches remove the direct Construction Manager and Autonomous Diplomats UI references. The upstream Workshop metadata is unchanged, so verify launcher acceptance and the adjusted UI in-game."
     },
     {
       "packageId": "dynastic-bloodlines",
@@ -225,6 +229,14 @@
     {
       "packageId": "oikoumene",
       "reason": "Pinned upstream version 0.19.0 declares EU5 1.* support. Static localization analysis is clean, but dynamic names on EU5 1.4.5, including locations added by More locations, still need in-game verification."
+    },
+    {
+      "packageId": "gathering-land-rus",
+      "reason": "Static analysis found active country-tag overlap with Just Goods (8 tags) and More Unique Urban Rights (5 tags). No direct path or definition conflict was found from these overlaps alone; verify their combined gameplay in a Rus campaign."
+    },
+    {
+      "packageId": "historical-tweaks",
+      "reason": "The pinned Workshop metadata declares EU5 1.3.11 compatibility while current-intended targets 1.4.5. Static compatibility is unverified. Static analysis also found active country-tag overlap with Gathering the Land of the Rus (15 tags), Just Goods (15 tags), and More Unique Urban Rights (8 tags); shared scope alone does not establish a conflict, so audit the combinations in-game."
     }
   ],
   "patches": [
@@ -257,13 +269,13 @@
       "targetPath": "in_game/common/goods/zz_CONCORDIA_SOL_JTG_pop_goods.txt",
       "targetPackageId": "just-goods",
       "resolutionType": "merged-patch",
-      "reason": "Add SoL-style pop-demand scaling and cancel the existing Just Goods slave demand for the 26 direct-demand goods, while preserving Just Goods good definitions, production, and non-pop behavior.",
+      "reason": "Add SoL-style pop-demand scaling for the 26 direct-demand goods while preserving Just Goods good definitions, production, non-pop behavior, and native slave demand.",
       "preserves": [
         "INJECT:aromatics",
         "demand_add",
         "wealth_impact_threshold"
       ],
-      "suppresses": ["INJECT:slaves ="]
+      "suppresses": []
     },
     {
       "id": "sol-jtg-market-consumption",
@@ -341,45 +353,171 @@
       "suppresses": []
     },
     {
-      "id": "glorp-ui-construction-manager-production",
+      "id": "glorp-ui-without-autonomous-diplomats",
       "operation": "replace",
       "generatedFrom": {
-        "strategy": "glorp-ui-construction-manager-production",
+        "strategy": "glorp-ui-without-autonomous-diplomats",
+        "sourceFingerprint": "sha256:d913208df6b66e9cc4f6e5767e452b04d0ea09c37bd935681b20e05f4b55dc18"
+      },
+      "targetPath": "in_game/gui/outliner_entries.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Glorp UI's two direct Autonomous Diplomats widget instances so the user can keep that mod disabled while retaining the rest of the pinned outliner layout.",
+      "preserves": [
+        "blockoverride \"icon_content\"",
+        "using = diplomacy_icon_content"
+      ],
+      "suppresses": [
+        "atd_outliner_auto_cancel_widget = {}",
+        "atd_outliner_sync_widget = {}"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-building-location",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-building-location",
+        "sourceFingerprint": "sha256:78b9c6447c5b08a9c22a7026d1f8873541f556a11b34c9fc02f859b1cc8940f6"
+      },
+      "targetPath": "in_game/gui/glorpUI_build_location_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Construction Manager-only building auto-expand widgets and their active-mod visibility check while preserving Glorp UI's native building controls.",
+      "preserves": [
+        "AutoExpand_Building_Tooltip",
+        "BUILDING_BEST_IN_LOCATION_ACTION_BUTTON"
+      ],
+      "suppresses": [
+        "cm_auto_expand_building_button_bll = {",
+        "cm_mass_auto_expand_button_bll = {",
+        "cm_mass_auto_expand_overlay_no_upgrade = {",
+        "cm_mass_auto_expand_overlay_upgrade = {",
+        "glorpui_is_cm_active"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-food-production",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-food-production",
+        "sourceFingerprint": "sha256:1e835d4f92d41e8b52e37d7fe8c3d189c6a193958570e84a4acbc0371e3d9091"
+      },
+      "targetPath": "in_game/gui/glorpUI_food_production_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Glorp UI's Construction Manager food-RGO widget reference while retaining the vanilla food-production controls.",
+      "preserves": ["FoodLocationItem.HasFoodGoods"],
+      "suppresses": ["cm_auto_food_widget_food_production_lateralview = {}"]
+    },
+    {
+      "id": "glorp-ui-no-cm-raw-goods",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-raw-goods",
+        "sourceFingerprint": "sha256:e40f7c6c1165dbf98f2e37049cf29d191ab93cb2cd83b8913c0a31a0dde0c169"
+      },
+      "targetPath": "in_game/gui/expand_raw_goods_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Construction Manager's RGO automation widgets and show Glorp UI's native auto-expand control without a Construction Manager state check.",
+      "preserves": ["AutoExpand_RGO_Tooltip", "IsAutoExpandRGO(Location.Self)"],
+      "suppresses": [
+        "cm_mass_auto_expand_rgo_button = {}",
+        "cm_auto_expand_rgo_widget_expand_raw_goods_lateralview = {}",
+        "glorpui_is_cm_active"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-pause-menu",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-pause-menu",
+        "sourceFingerprint": "sha256:2d789f924b5cc0d71829d0d29bfe8fd8aa3d582b9796204a65d708abb5f0eeb0"
+      },
+      "targetPath": "in_game/gui/glorpUI_ingame_menu.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove the two CMM pause-menu buttons that call Construction Manager registration GUIs; preserve Glorp UI's normal settings menu.",
+      "preserves": ["SETTINGS_HEADER"],
+      "suppresses": [
+        "CMM_PAUSE_MENU_BUTTON",
+        "CMM_SetHostAndRegisterCoreMod",
+        "CMM_RegisterCoreMod"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-production",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-production",
         "sourceFingerprint": "sha256:7746bc20e5351dc2e3aa1a25ce35f29cfa405713564558ea79b804ce08346fbf"
       },
       "targetPath": "in_game/gui/production_lateralview.gui",
       "targetPackageId": "glorp-ui",
       "resolutionType": "merged-patch",
-      "reason": "Generate from pinned Glorp UI content, restoring Construction Manager 1.4's existing-building auto-expand control, hiding the competing vanilla control while CM is active, and centering the unbuilt-building control in the 1.4 layout.",
+      "reason": "Remove Construction Manager production widgets and keep Glorp UI's native auto-expand checkbox visible without a Construction Manager state check.",
       "preserves": [
-        "cm_auto_expand_existing_building_button = {",
-        "cm_mass_auto_expand_button_pl = {}",
-        "cm_auto_expand_new_building_button_pl = {",
-        "Not(GetScriptedGui('glorpui_is_cm_active')",
-        "position = { -271 0 }"
+        "AutoExpand_Building_Tooltip",
+        "And3(BuildingItem.HasBuildings, BuildingItem.GetBuildingType.IsMultipleLevels, Not(BuildingItem.GetBuildingType.OnlyEstatesCanBuild))"
       ],
       "suppresses": [
-        "visible = \"[And(ObjectsEqual(Building.GetOwner, Player.Self), BuildingType.IsMultipleLevels)]\"",
-        "position = { -133 0 }"
+        "cm_mass_auto_expand_button_pl = {}",
+        "cm_auto_expand_new_building_button_pl = {",
+        "glorpui_is_cm_active"
       ]
     },
     {
-      "id": "glorp-ui-construction-manager-location-window",
+      "id": "glorp-ui-no-cm-warning-suppression",
       "operation": "replace",
       "generatedFrom": {
-        "strategy": "glorp-ui-construction-manager-location-window",
+        "strategy": "glorp-ui-without-construction-manager-warning-suppression",
+        "sourceFingerprint": "sha256:d6ec256f08f5bcc7d28a7ac635870b2ad164afb2e888a8e622421ce1faee3bba"
+      },
+      "targetPath": "in_game/common/scripted_effects/glorpui_cmm_warning_suppression.txt",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Stop Glorp UI's fallback warning-suppression effect from registering Construction Manager as an active CMF mod.",
+      "preserves": ["target = flag:smart_taxes"],
+      "suppresses": ["target = flag:cm"]
+    },
+    {
+      "id": "glorp-ui-no-cm-scripted-gui",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-scripted-gui",
+        "sourceFingerprint": "sha256:61b53af77f3783d3590020a0041a7c6ee1137056a84b15c9bbfe1b4f3e873b00"
+      },
+      "targetPath": "in_game/common/scripted_guis/glorpui_construction_manager_scripted_gui.txt",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Replace the unused Construction Manager-active scripted GUI with a harmless comment after removing its UI call sites.",
+      "preserves": [
+        "# Concordia: Construction Manager integration is excluded."
+      ],
+      "suppresses": ["glorpui_is_cm_active = {", "target = flag:cm"]
+    },
+    {
+      "id": "sol-no-cm-location-window",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "standard-of-living-without-construction-manager-location-window",
         "sourceFingerprint": "sha256:cb173a52facca90025a62f894bac41bec661eecab2e44ee17c02524c793c6e60"
       },
       "targetPath": "in_game/gui/location_window.gui",
       "targetPackageId": "standard-of-living",
       "resolutionType": "merged-patch",
-      "reason": "Generate from the pinned SoL/Glorp location window, retaining its tooltip changes while restoring Construction Manager's food-RGO and RGO auto-expand controls.",
+      "reason": "Remove Construction Manager map-mode, auto-expand status, and upgrade-check hooks from the selected SoL location window while preserving its native actions.",
       "preserves": [
-        "cm_auto_food_widget_location_window = {}",
-        "cm_auto_expand_rgo_widget_location_window = {}",
-        "using = location_rgo_button_tooltip"
+        "visible = \"[IsAutoExpand(LocationBuildingItem.GetBuilding.Self)]\"",
+        "GrantLocationTownRights(Location.Self)",
+        "UpgradeBuildingDefault(BuildingType.Self, Location.Self)"
       ],
-      "suppresses": []
+      "suppresses": [
+        "cm_best_town_right",
+        "glorpui_is_cm_active",
+        "cm_is_auto_expand_on_icon",
+        "cm_check_for_auto_expand_when_upgrading_building"
+      ]
     },
     {
       "id": "more-unique-urban-rights-textile-exclusivity",
@@ -395,6 +533,24 @@
       "suppresses": [
         "No vanilla town-right conditions or upstream content are suppressed."
       ]
+    },
+    {
+      "id": "gathering-historical-tweaks-ranks",
+      "operation": "replace",
+      "sourcePath": "integration/overrides/dynamic-names/current-intended/in_game/common/customizable_localization/country_ranks.txt",
+      "targetPath": "in_game/common/customizable_localization/country_ranks.txt",
+      "targetPackageId": "historical-tweaks",
+      "resolutionType": "merged-patch",
+      "reason": "Use the previously approved dynamic-rank union for the selected Gathering and Historical Tweaks sources only; keep Historical Tweaks' unique rules, add Gathering's khagan and ulus rules, and preserve both Lithuania rank branches.",
+      "preserves": [
+        "rank_kingdom_khagan",
+        "rank_kingdom_ulus",
+        "rank_kingdom_grand_duchy_LIT",
+        "ht_rank_despotate",
+        "ht_rank_dual_monarchy",
+        "ht_rank_tsardom"
+      ],
+      "suppresses": []
     }
   ],
   "patchMod": {

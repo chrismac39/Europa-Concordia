@@ -27,8 +27,8 @@ Gathering Workshop snapshot (1.1.0) and the other current Workshop inputs.
 Its 12 Muslim-dynasty rank keys for the Hafsids, Marinids, Nasrids, and
 Zayyanids were removed because they are absent from every current source.
 Gathering's newly added keys and revised trigger variants are represented in
-the merge. This remains an archived integration and is not activated by
-`current-intended`.
+the four-mod merge. That artifact remains archived; `current-intended` uses
+the profile-specific Gathering + Historical Tweaks merge described below.
 
 All nine shared rules with different triggers are represented in the override.
 The union intentionally preserves the broader eligibility in the Rus variant
@@ -49,6 +49,17 @@ where it differs from the other three packages, including:
 
 The union also keeps The Prussian Destiny's NGC confederation title. The other
 package-specific rank and title rules are retained rather than dropped.
+
+### Current-intended rank merge
+
+The current profile selects only Gathering the Land of the Rus and Historical
+Tweaks from the four rank sources. Its separate override starts from the pinned
+Historical Tweaks file, adds Gathering's `rank_kingdom_khagan` and
+`rank_kingdom_ulus` entries, and retains both Lithuania grand-duchy branches:
+Gathering's kingdom-rank rule and Historical Tweaks' duchy-rank rule. It does
+not include Imperial Ambitions or The Prussian Destiny rules while those mods
+are unselected. The focused test verifies that the output contains all and
+only the selected sources' rank keys.
 
 ## Decision 2 — Country-name construction
 
@@ -71,7 +82,8 @@ differences:
 
 ## Verification
 
-The exact package sets and overrides are registered in
-`config/conflict-rules.json`. Re-run analysis and the final build after
-additional integrations; other unresolved collisions or semantic findings
-remain independent of these two path resolutions.
+The current-intended pair-specific rank override and its exact source pins are
+registered in `config/conflict-rules.json`. The archived four-source rank
+override is retained as a reference but is not active or registered for the
+current profile. Recreate an exact resolution if Imperial Ambitions or The
+Prussian Destiny is selected later.

@@ -26,15 +26,14 @@
     },
     {
       "path": "in_game/gui/location_window.gui",
-      "packages": ["construction-manager", "glorp-ui", "standard-of-living"],
-      "resolutionType": "merged-patch",
+      "packages": ["glorp-ui", "standard-of-living"],
+      "resolutionType": "load-order",
       "sourceFingerprints": {
-        "construction-manager": "6c4e90de5bd3fb70d40f0441e7e6bf3af93c00eae4702ac7ded924a49f563e0a",
         "glorp-ui": "9e1e3e534aa6a5bc939527e3e8b9fd3dbb91365bc4d38e459f2483f92350a0f8",
         "standard-of-living": "cb173a52facca90025a62f894bac41bec661eecab2e44ee17c02524c793c6e60"
       },
-      "patchId": "glorp-ui-construction-manager-location-window",
-      "reason": "A generated Concordia patch starts from the pinned SoL/Glorp file and restores Construction Manager's food-RGO and RGO auto-expand controls without losing SoL's location tooltip."
+      "winner": "standard-of-living",
+      "reason": "With Construction Manager excluded, retain the later pinned Standard of Living location window; a Concordia patch removes the leftover Construction Manager hooks."
     },
     {
       "path": "in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui",
@@ -50,6 +49,10 @@
     {
       "path": "in_game/common/on_action/historical_tweaks_on_actions.txt",
       "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "f67288b074de9d523d1800738af424949446ac4e38755115fa5a2e19a363f13c",
+        "historical-tweaks": "d2e5493fa96bbb43d5d8589138b90bb5f6978c4c542d918aa1a0b3f72f16474a"
+      },
       "winner": "historical-tweaks",
       "reason": "The standalone Historical Tweaks file is the newer superset and includes explicit Gathering of the Rus compatibility logic.",
       "resolutionType": "load-order"
@@ -57,6 +60,10 @@
     {
       "path": "in_game/events/historical_tweaks_events.txt",
       "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "1102db6efcc424da453bdec41af8060dd5e3bd84d408c5149278590a54c4f277",
+        "historical-tweaks": "5e86e7c5bb1ba10ad955156bf1919c1804894a5bc0d72f587e486612d2820d09"
+      },
       "winner": "historical-tweaks",
       "reason": "The standalone Historical Tweaks event file includes the Rus-bundled events plus newer events and explicit Gathering of the Rus compatibility behavior.",
       "resolutionType": "load-order"
@@ -64,6 +71,10 @@
     {
       "path": "in_game/events/historical_tweaks_union_events.txt",
       "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "acfaa3e2f3f74238ba42cfe48e5671ca92475e5e66343eb483cb6d5e8fb1c1ea",
+        "historical-tweaks": "0e39e15ebd95a219092949d571cbc91423c03db21e9e7a7e2fd34044ad184869"
+      },
       "winner": "historical-tweaks",
       "reason": "The standalone Historical Tweaks union events contain later trigger, AI-selection, and player-option fixes than the copy bundled with Gathering of the Rus.",
       "resolutionType": "load-order"
@@ -77,14 +88,13 @@
     },
     {
       "path": "in_game/common/customizable_localization/country_ranks.txt",
-      "packages": [
-        "gathering-land-rus",
-        "historical-tweaks",
-        "imperial-ambitions",
-        "prussian-destiny"
-      ],
-      "override": "integration/overrides/dynamic-names/in_game/common/customizable_localization/country_ranks.txt",
-      "reason": "The archived Concordia merge keeps current source rules once, preserves package-specific rank/title rules, unions shared trigger variants, and omits superseded Gathering Muslim-dynasty keys absent from the current Workshop inputs.",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "dce3e5f77488985377e87497e15eb2ed08c75dc3f2d96c51194cbe505a758e55",
+        "historical-tweaks": "b6421b68bc0548a042d85643bcd800be309dbfac78b3ff8707f411a04ea809d5"
+      },
+      "override": "integration/overrides/dynamic-names/current-intended/in_game/common/customizable_localization/country_ranks.txt",
+      "reason": "The current-intended merge starts from Historical Tweaks, preserves its unique rank rules, adds Gathering's khagan and ulus rules, and unions Gathering's kingdom-rank Lithuania branch with Historical Tweaks' duchy-rank branch without importing inactive Imperial Ambitions or Prussian Destiny rules.",
       "resolutionType": "merged-patch"
     },
     {
@@ -225,18 +235,7 @@
         "glorp-ui": "d913208df6b66e9cc4f6e5767e452b04d0ea09c37bd935681b20e05f4b55dc18"
       },
       "winner": "glorp-ui",
-      "reason": "Glorp UI's later outliner layout instantiates both Autonomous Diplomats widgets; the widget definitions remain in the selected Autonomous Diplomats package."
-    },
-    {
-      "path": "in_game/gui/production_lateralview.gui",
-      "packages": ["construction-manager", "glorp-ui"],
-      "resolutionType": "merged-patch",
-      "sourceFingerprints": {
-        "construction-manager": "e78f14c75cea12dfc2985a2f3327cad96fbdbc89fed455e31456e65ae324b2c9",
-        "glorp-ui": "7746bc20e5351dc2e3aa1a25ce35f29cfa405713564558ea79b804ce08346fbf"
-      },
-      "patchId": "glorp-ui-construction-manager-production",
-      "reason": "A generated Concordia patch starts from pinned Glorp UI content, restores Construction Manager's existing-building auto-expand control, hides the competing vanilla control while CM is active, and updates the unbuilt-building button for the 1.4 layout."
+      "reason": "For profiles selecting both mods, Glorp UI's later outliner layout instantiates both Autonomous Diplomats widgets. The current-intended profile excludes Autonomous Diplomats and removes those instances with a generated patch."
     },
     {
       "path": "main_menu/gui/cmf_dependency_check.gui",
@@ -247,7 +246,7 @@
         "construction-manager": "f3e67cb1b6bf28bdf051517b536511a7585aa4aa52d8a07d44b5edf17b1c5ed0"
       },
       "winner": "construction-manager",
-      "reason": "The Construction Manager version retains the shared CMF dependency and auto-enable flow while adding its create-playset UI; load Autonomous Diplomats first and pin both file contents."
+      "reason": "For profiles selecting both mods, the Construction Manager version retains the shared CMF dependency and auto-enable flow while adding its create-playset UI; load Autonomous Diplomats first and pin both file contents."
     },
     {
       "path": "main_menu/localization/braz_por/glorpui_shared_l_braz_por.yml",
@@ -427,10 +426,10 @@
       "resolutionType": "merged-patch"
     },
     {
-      "fingerprint": "576e12aab930a899",
+      "fingerprint": "9d26f08affb71ccf",
       "resolutionType": "native-merge",
-      "decision": "Keep Construction Manager and Autonomous Diplomats monthly human-country callbacks.",
-      "reason": "The CMF pulse contributions are independent: Construction Manager runs its unified auto-expand/list updates, while Autonomous Diplomats runs its own monthly diplomacy handler."
+      "decision": "Keep the CMF and Construction Manager monthly human-country callbacks.",
+      "reason": "CMF provides an empty extension point and Construction Manager contributes its unified auto-expand and list-visibility updates; EU5 natively merges the distinct callback contributions."
     },
     {
       "fingerprint": "18ce1f4b943da852",
@@ -439,9 +438,9 @@
       "reason": "CMF provides the registration hook and Glorp UI contributes its independent lobby banner callback."
     },
     {
-      "fingerprint": "29de47dafd098460",
+      "fingerprint": "6ace8e5e7f38ce23",
       "resolutionType": "merged-patch",
-      "decision": "Keep the independent CMF, Construction Manager, Autonomous Diplomats, Glorp UI, and SoL callbacks; suppress MRC's CMM callback.",
+      "decision": "Keep the independent CMF, Construction Manager, Glorp UI, and SoL callbacks; suppress MRC's CMM callback.",
       "reason": "EU5 merges these same-named on-actions across files. The profile's content-checked MRC replacement removes only MRC's CMM hook; all remaining callbacks are distinct package handlers."
     },
     {
@@ -451,9 +450,9 @@
       "reason": "CMF's same-named extension point and Construction Manager's transfer callback are natively merged; the CM callback performs its own state transfer."
     },
     {
-      "fingerprint": "a3a5afae3a1bdfb5",
+      "fingerprint": "b11531186a6f225d",
       "resolutionType": "merged-patch",
-      "decision": "Keep CMF, Construction Manager, Autonomous Diplomats, Glorp UI, Just Goods, and SoL registration callbacks; suppress MRC registration.",
+      "decision": "Keep CMF, Construction Manager, Glorp UI, Just Goods, and SoL registration callbacks; suppress MRC registration.",
       "reason": "EU5 merges registration callbacks across files. The profile's content-checked MRC replacement removes only MRC's CMM registration; each retained package registers its own distinct CMF settings."
     },
     {
@@ -1059,6 +1058,126 @@
       "winner": "oikoumene",
       "decision": "Use Oikoumene's shared location-name values.",
       "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "69c76fc1f04910cf",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct game-start callbacks.",
+      "reason": "CMF, Dynastic Bloodlines, Gathering the Land of the Rus, Just Goods, MRC's safe-default initialization, and SoL contribute distinct callbacks. The profile's MRC replacement still removes only its CMM registration hooks."
+    },
+    {
+      "fingerprint": "0c26ba94849268ab",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct monthly-pulse callbacks.",
+      "reason": "Gathering's Rus international-organization bootstrap is separate from the existing monthly registrations, so all callbacks remain active."
+    },
+    {
+      "fingerprint": "ec8e73a96366bb0c",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct yearly-pulse callbacks.",
+      "reason": "Gathering's anti-Tatar/unifier, leash, and ulus-repair callbacks are distinct from the existing CMF, Just Goods, and SoL callbacks and event pools."
+    },
+    {
+      "fingerprint": "c82d3eba395cab23",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct biyearly-pulse callbacks.",
+      "reason": "Dynastic Bloodlines' dynasty flavor callback and Gathering's down-with-yoke and Rus-area-preference callbacks are independent registrations."
+    },
+    {
+      "fingerprint": "92af6e23afea34ec",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct new-ruler callbacks.",
+      "reason": "Dynastic Bloodlines and Gathering register separate new-ruler behavior; neither callback replaces the other."
+    },
+    {
+      "fingerprint": "5477ed5abddf265b",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct four-yearly-pulse callbacks.",
+      "reason": "Gathering's Tatar-border cleanup and AI-Russia correction are separate from Just Goods' bison-depletion event pool."
+    },
+    {
+      "fingerprint": "25ee09d87bea7f03",
+      "resolutionType": "native-merge",
+      "decision": "Merge all unique named-color keys.",
+      "reason": "Gathering's borderland and Chernorus colors and Just Goods' goods colors use disjoint top-level keys; the analyzer approves this only while every named-color key is unique."
+    },
+    {
+      "fingerprint": "51c65b0d60920f9d",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct game-start callbacks.",
+      "reason": "The earlier callback decision applies: existing package registrations and Historical Tweaks' game-start callbacks have distinct registration names."
+    },
+    {
+      "fingerprint": "c06a59f5212df438",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct monthly-pulse callbacks.",
+      "reason": "The earlier callback decision applies: Historical Tweaks adds distinct monthly callbacks alongside Gathering's Rus bootstrap and the existing mod registrations."
+    },
+    {
+      "fingerprint": "67fa285f719e7c9a",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct yearly-pulse callbacks.",
+      "reason": "The earlier callback decision applies: Historical Tweaks' yearly, Iberian, and nation-spawning callbacks remain alongside the existing callbacks."
+    },
+    {
+      "fingerprint": "5b3233da78253f13",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct biyearly-pulse callbacks.",
+      "reason": "The earlier callback decision applies: Historical Tweaks' force-war callbacks are distinct from Gathering's Rus-area preferences and Dynastic Bloodlines' dynasty flavor callback."
+    },
+    {
+      "fingerprint": "b2441e4cae3ab611",
+      "resolutionType": "native-merge",
+      "decision": "Merge all unique named-color keys.",
+      "reason": "Historical Tweaks adds map_ht_dual_monarchy and map_lupijaki; both are unique across the selected Gathering and Just Goods color definitions. The analyzer verifies key uniqueness before applying this resolution."
+    },
+    {
+      "fingerprint": "779b39991ade4e18",
+      "resolutionType": "shared-state",
+      "decision": "Retain Gathering's rus_gathering_intact compatibility flag.",
+      "reason": "Gathering sets the flag at game start, and Historical Tweaks tests for its absence to gate duplicate Rus-related behavior. This producer-consumer contract is intentional."
+    },
+    {
+      "fingerprint": "f31519e33c7371b6",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct ending-war callbacks.",
+      "reason": "Gathering's borderland, Chernorus, and Orthodox-call cleanup callbacks are distinct from Historical Tweaks' situation-gated Holy League callback."
+    },
+    {
+      "fingerprint": "e7a5a659f76e4f46",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct location-occupied callbacks.",
+      "reason": "Gathering's Rus location behavior and Historical Tweaks' Timurid and Iberian callbacks are separate registrations with distinct scopes."
+    },
+    {
+      "fingerprint": "cdf641b1c1cebadc",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct siege-won callbacks.",
+      "reason": "Gathering's Rus siege behavior and Historical Tweaks' situation-momentum and Iberian callbacks are separate registrations with distinct scopes."
+    },
+    {
+      "fingerprint": "8b13d59d668649b9",
+      "resolutionType": "merged-patch",
+      "decision": "Keep CMF, Glorp UI, and SoL callbacks; suppress MRC's CMM callback.",
+      "reason": "Construction Manager is excluded. The profile's content-checked MRC replacement removes only its CMM callback; CMF, Glorp UI, and SoL retain their distinct handlers."
+    },
+    {
+      "fingerprint": "6daa232dead684f0",
+      "resolutionType": "merged-patch",
+      "decision": "Keep CMF, Glorp UI, Just Goods, and SoL registration callbacks; suppress MRC registration.",
+      "reason": "Construction Manager is excluded. EU5 merges the remaining independent settings registrations, while the profile's content-checked MRC replacement removes only MRC's CMM registration."
+    },
+    {
+      "fingerprint": "b53ce8ac5a22d9ab",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent CMF and Glorp UI game-load callbacks.",
+      "reason": "Construction Manager is excluded. CMF's load handling and Glorp UI's value synchronization remain distinct callbacks on the natively merged on-action."
+    },
+    {
+      "fingerprint": "285f3cc6a7fd3fd8",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent CMF and Glorp UI game-start callbacks.",
+      "reason": "Construction Manager is excluded. CMF's game-start handling and Glorp UI's value synchronization remain distinct callbacks on the natively merged on-action."
     }
   ],
   "definitionConflicts": "deferred"

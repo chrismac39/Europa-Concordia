@@ -675,6 +675,161 @@ test("generates Construction Manager controls into pinned Glorp UI layouts", () 
   );
 });
 
+test("removes Autonomous Diplomats widgets from the pinned Glorp UI outliner", () => {
+  const source = [
+    'blockoverride "icon_content" {',
+    "\t\tusing = diplomacy_icon_content",
+    "\t\t# GlorpUI: Autonomous Diplomats auto-cancel widget",
+    "\t\tatd_outliner_auto_cancel_widget = {}",
+    "\t\t# GlorpUI: Autonomous Diplomats sync widget",
+    "\t\tatd_outliner_sync_widget = {}",
+    "\t}",
+  ].join("\n");
+  const patched = generatePatchContents(
+    "glorp-ui-without-autonomous-diplomats",
+    source,
+  );
+  assert.match(patched, /using = diplomacy_icon_content/);
+  assert.match(patched, /blockoverride "icon_content"/);
+  assert.doesNotMatch(patched, /atd_outliner_(auto_cancel|sync)_widget/);
+  assert.throws(
+    () =>
+      generatePatchContents(
+        "glorp-ui-without-autonomous-diplomats",
+        source.replace("\t\tatd_outliner_sync_widget = {}\n", ""),
+      ),
+    /Glorp UI Autonomous Diplomats outliner widgets expected 1 occurrence/,
+  );
+});
+
+test("removes Construction Manager integrations from selected UI files", () => {
+  const buildingLocationSource = [
+    "native_button = {}",
+    'cm_auto_expand_building_button_bll = { tooltip = "}" }',
+    ...Array.from(
+      { length: 4 },
+      () => "cm_mass_auto_expand_button_bll = { action = {} }",
+    ),
+    "cm_mass_auto_expand_overlay_no_upgrade = { }",
+    "cm_mass_auto_expand_overlay_upgrade = { }",
+    `visible = "[Not(GetScriptedGui('glorpui_is_cm_active').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End))]"`,
+  ].join("\r\n");
+  const patchedBuildingLocation = generatePatchContents(
+    "glorp-ui-without-construction-manager-building-location",
+    buildingLocationSource,
+  );
+  assert.match(patchedBuildingLocation, /native_button = \{\}/);
+  assert.doesNotMatch(patchedBuildingLocation, /cm_|glorpui_is_cm_active/);
+  assert.match(patchedBuildingLocation, /\r\n/);
+
+  const patchedFoodProduction = generatePatchContents(
+    "glorp-ui-without-construction-manager-food-production",
+    [
+      "food_control = {}",
+      "cm_auto_food_widget_food_production_lateralview = {}",
+    ].join("\n"),
+  );
+  assert.match(patchedFoodProduction, /food_control = \{\}/);
+  assert.doesNotMatch(patchedFoodProduction, /cm_auto_food_widget/);
+
+  const patchedRawGoods = generatePatchContents(
+    "glorp-ui-without-construction-manager-raw-goods",
+    [
+      "native_auto_expand_button = {}",
+      "cm_mass_auto_expand_rgo_button = {}",
+      "cm_auto_expand_rgo_widget_expand_raw_goods_lateralview = {}",
+      `visible = "[Not(GetScriptedGui('glorpui_is_cm_active').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End))]"`,
+    ].join("\n"),
+  );
+  assert.match(patchedRawGoods, /native_auto_expand_button = \{\}/);
+  assert.doesNotMatch(patchedRawGoods, /cm_|glorpui_is_cm_active/);
+
+  const patchedPauseMenu = generatePatchContents(
+    "glorp-ui-without-construction-manager-pause-menu",
+    [
+      "# GlorpUI: CMM menu button",
+      "button_wax = {",
+      '\ttext = "CMM_PAUSE_MENU_BUTTON"',
+      '\tbutton_action = "[CMM_SetHostAndRegisterCoreMod]"',
+      "}",
+      "# GlorpUI: CMM menu button",
+      "button_wax = {",
+      '\ttext = "CMM_PAUSE_MENU_BUTTON"',
+      '\tbutton_action = "[CMM_RegisterCoreMod]"',
+      "}",
+      "normal_pause_button = {}",
+    ].join("\n"),
+  );
+  assert.match(patchedPauseMenu, /normal_pause_button = \{\}/);
+  assert.doesNotMatch(patchedPauseMenu, /CMM_|CMM_PAUSE_MENU_BUTTON/);
+
+  const patchedProduction = generatePatchContents(
+    "glorp-ui-without-construction-manager-production",
+    [
+      "native_control = {}",
+      "cm_mass_auto_expand_button_pl = {}",
+      "cm_auto_expand_new_building_button_pl = { tooltip = {} }",
+      `visible = "[And4(BuildingItem.HasBuildings, BuildingItem.GetBuildingType.IsMultipleLevels, Not(GetScriptedGui('glorpui_is_cm_active').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End)), Not(BuildingItem.GetBuildingType.OnlyEstatesCanBuild))]"`,
+    ].join("\n"),
+  );
+  assert.match(patchedProduction, /native_control = \{\}/);
+  assert.match(
+    patchedProduction,
+    /visible = "\[And3\(BuildingItem\.HasBuildings, BuildingItem\.GetBuildingType\.IsMultipleLevels, Not\(BuildingItem\.GetBuildingType\.OnlyEstatesCanBuild\)\)\]"/,
+  );
+  assert.doesNotMatch(patchedProduction, /cm_|glorpui_is_cm_active/);
+
+  const patchedWarningSuppression = generatePatchContents(
+    "glorp-ui-without-construction-manager-warning-suppression",
+    [
+      "add_to_global_variable_list = { name = cmf_active_mod_ids target = flag:cm }",
+      "add_to_global_variable_list = { name = cmf_active_mod_ids target = flag:smart_taxes }",
+    ].join("\n"),
+  );
+  assert.doesNotMatch(patchedWarningSuppression, /target = flag:cm\b/);
+  assert.match(patchedWarningSuppression, /target = flag:smart_taxes/);
+
+  const patchedScriptedGui = generatePatchContents(
+    "glorp-ui-without-construction-manager-scripted-gui",
+    "glorpui_is_cm_active = { effect = { target = flag:cm } }\n",
+  );
+  assert.doesNotMatch(
+    patchedScriptedGui,
+    /glorpui_is_cm_active|target = flag:cm/,
+  );
+
+  const patchedLocationWindow = generatePatchContents(
+    "standard-of-living-without-construction-manager-location-window",
+    [
+      ...Array.from(
+        { length: 3 },
+        () =>
+          `onmousehierarchyenter = "[PdxGuiWidget.PushMapModeOverride('cm_best_town_right')]"`,
+      ),
+      `on_action = "[GetMapMode('cm_best_town_right').SetMapMode]" # GlorpUI: Construction Manager best urban rights mapmode on grant`,
+      `visible = "[And(IsAutoExpand(LocationBuildingItem.GetBuilding.Self), Not(GetScriptedGui('glorpui_is_cm_active').IsShown(GuiScope.SetRoot(GetPlayer.MakeScope).End)))]"`,
+      "cm_is_auto_expand_on_icon = { icon = {} }",
+      ...Array.from(
+        { length: 3 },
+        () =>
+          `on_action = "[GetScriptedGui('cm_check_for_auto_expand_when_upgrading_building').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope('building', BuildingType.Self).AddScope('location', Location.Self).End )]"`,
+      ),
+      "GrantLocationTownRights(Location.Self)",
+      "UpgradeBuildingDefault(BuildingType.Self, Location.Self)",
+    ].join("\n"),
+  );
+  assert.match(
+    patchedLocationWindow,
+    /visible = "\[IsAutoExpand\(LocationBuildingItem\.GetBuilding\.Self\)\]"/,
+  );
+  assert.match(patchedLocationWindow, /GrantLocationTownRights/);
+  assert.match(patchedLocationWindow, /UpgradeBuildingDefault/);
+  assert.doesNotMatch(
+    patchedLocationWindow,
+    /cm_best_town_right|glorpui_is_cm_active|cm_is_auto_expand_on_icon|cm_check_for_auto_expand_when_upgrading_building/,
+  );
+});
+
 test("rejects generated compatibility patches after their source changes", async () => {
   const fixture = await createFixture();
   try {

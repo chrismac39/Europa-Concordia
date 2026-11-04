@@ -5,10 +5,8 @@
 - EU5 target: `1.4.5`
 - Glorp UI: Workshop `3812518640`, pinned source version `04.10.26`
 - GH: Exchequer: Workshop `3812701995`, upstream version `1.3` (Concordia pin `1.3.0`)
-- Construction Manager: Workshop `3736668860`, version `2.2.13`
-- Autonomous Diplomats: Workshop `3696243603`, version `1.5.0`
 
-These are separate required playset mods. The upstream GH Exchequer / Glorp UI
+These are separate selected playset mods. The upstream GH Exchequer / Glorp UI
 compatibility mod (`3827095294`) is excluded; its behavior is a reference for
 the Concordia-generated Trade-tab integration, not an enabled or copied
 package.
@@ -25,34 +23,33 @@ separate Economy and GH Trade tab states, assigns GH's Trade tooltip and icon,
 and shifts the later keyboard shortcuts. Changed source anchors fail
 validation instead of silently reusing the old approval.
 
-## Construction Manager integration
+## Construction Manager exclusion
 
-Glorp UI and Standard of Living each replace Construction Manager's
-`production_lateralview.gui` and `location_window.gui` integrations. The
-current Glorp UI source omits Construction Manager's existing-building
-auto-expand control and still positions its unbuilt-building button for the
-older layout. The selected SoL/Glorp location window also omits Construction
-Manager's food-RGO and RGO auto-expand controls.
+Construction Manager was added to current-intended during the October 30
+Glorp UI/GH integration because Glorp UI declares it as an upstream dependency
+and its GUI source contains Construction Manager widgets. The user has
+confirmed they do not use it; the earlier notes treating it as a selected mod
+were incorrect.
 
-Concordia therefore generates two focused replacements from pinned selected
-sources:
+Current-intended excludes Construction Manager and removes Concordia's
+Construction Manager-specific production and location-window patches. It also
+uses fingerprinted generated patches to strip the remaining direct CM widgets,
+pause-menu buttons, town-rights map-mode hooks, and active-mod checks from the
+selected Glorp UI and Standard of Living files. The source snapshots remain
+unchanged. Native Glorp UI auto-expand controls remain visible; Construction
+Manager-only automation and status features are omitted.
 
-- The Glorp production view restores the Construction Manager 1.4
-  existing-building control, hides the competing vanilla control while
-  Construction Manager is active, and updates the unbuilt-building control's
-  position, while retaining Glorp UI's remaining production layout.
-- The SoL/Glorp location window restores Construction Manager's food-RGO and
-  RGO auto-expand controls while retaining SoL's tooltip and the rest of the
-  synchronized location-window content.
+Glorp UI's upstream Workshop metadata still declares Construction Manager as
+a dependency. Concordia does not alter or repackage that upstream metadata, so
+the launcher may still report the missing dependency even though the direct
+references are removed from the current-intended output. Verify launcher
+acceptance and the adjusted UI in-game.
 
-These generated files are fingerprinted and their anchors are validated on
-every build. They do not add a static copy of either upstream source to the
-repository. Construction Manager's identical shared script files and the
-RGO lateral view use the later Glorp UI files. Glorp UI's outliner file
-instantiates both Autonomous Diplomats widgets, whose definitions remain in
-Autonomous Diplomats. Autonomous Diplomats loads before Construction Manager
-so Construction Manager's CMF dependency-check GUI can add its create-playset
-flow without dropping the shared dependency and auto-enable behavior.
+Glorp UI's outliner file also instantiates two Autonomous Diplomats widgets.
+Because the user does not use that mod, a fingerprinted generated patch
+removes those two instances while retaining the rest of Glorp UI's outliner.
+Autonomous Diplomats' auto-cancel and synchronization widget behavior is
+therefore omitted from this profile.
 
 The refreshed local Workshop snapshot is GH: Exchequer `1.3` (catalog pin
 `1.3.0`). It removes the previous monthly home-rank callback and changes the
@@ -63,24 +60,26 @@ same-named on-actions across separate files.
 
 ## Dependency and runtime risks
 
-Glorp UI's metadata declares SmartTaxes as a dependency. SmartTaxes is
-intentionally excluded because of its known performance issues; the user
-accepted proceeding without it. Verify the launcher accepts the missing
-dependency and test Glorp UI in-game.
+Glorp UI's upstream metadata also declares Autonomous Diplomats as a
+dependency. The current-intended package metadata omits that dependency
+because the generated outliner patch removes Glorp UI's only direct references
+to its widgets. Verify the adjusted outliner in-game.
 
-Autonomous Diplomats' pinned metadata declares EU5 `1.3.*` support and was
-last updated for `1.3.10`. The user chose to keep it for this `1.4.5` profile;
-compatibility remains unverified.
+Glorp UI declares SmartTaxes as a dependency. SmartTaxes is intentionally
+excluded because of its known performance issues; verify the launcher accepts
+that omission and test Glorp UI in-game.
 
 ## Known issue: inactive left-panel colors
 
 **Status:** Open; cosmetic; no fix confirmed.
 
-The user reports that the intended playset runs and its other functionality
-works, but inactive Glorp left-panel tabs show their default colors instead of
-the expected category colors. The selected Economy tab still shows its gold
-active-state tint. Both Glorp options for vanilla tab icons and backgrounds
-are unchecked, and toggling them did not resolve the appearance.
+Before Construction Manager was excluded, the user reported that the playset
+ran and its other functionality worked, but inactive Glorp left-panel tabs
+showed their default colors instead of the expected category colors. The
+selected Economy tab still showed its gold active-state tint. Both Glorp
+options for vanilla tab icons and backgrounds were unchecked, and toggling
+them did not resolve the appearance. The profile changes that exclude
+Construction Manager still need fresh in-game verification.
 
 The user confirmed the launcher order matches the load-order guide. Glorp UI
 1.4 with CMF alone displays the expected colors. In the same full playset,

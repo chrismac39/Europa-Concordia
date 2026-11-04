@@ -53,6 +53,31 @@ function mergeBehaviorProfiles(
   return merged;
 }
 
+function extractNamedColorKeys(body: string): string[] | undefined {
+  const root = /^\s*colors\s*=\s*\{([\s\S]*)\}\s*$/.exec(body);
+  if (!root) {
+    return undefined;
+  }
+
+  const contents = root[1];
+  const entryPattern = /\s*([A-Za-z0-9_.-]+)\s*=\s*(?:rgb|hsv)\s*\{[^{}]*\}/gy;
+  const keys: string[] = [];
+  let offset = 0;
+  while (offset < contents.length) {
+    if (contents.slice(offset).trim() === "") {
+      break;
+    }
+    entryPattern.lastIndex = offset;
+    const match = entryPattern.exec(contents);
+    if (!match) {
+      return undefined;
+    }
+    keys.push(match[1]);
+    offset = entryPattern.lastIndex;
+  }
+  return keys.length > 0 ? keys : undefined;
+}
+
 function scriptBehaviorProfile(
   body: string,
   scriptedEffectKeys: Set<string>,
@@ -466,6 +491,7 @@ export async function analyzeProject(
     return mergeBehaviorProfiles(profiles);
   };
 
+  const nativelyMergeableNamedColorSymbols = new Set<string>();
   for (const [symbol, occurrences] of definitionGroups) {
     const packages = new Set(
       occurrences.map((occurrence) => occurrence.source.packageId),
@@ -480,6 +506,20 @@ export async function analyzeProject(
     );
     if (paths.size === 1 && collidingPathKeys.has([...paths][0])) {
       continue;
+    }
+    if (
+      symbol === "main_menu/named_colors:colors" &&
+      occurrences.every((occurrence) => occurrence.mode === "define")
+    ) {
+      const colorKeyGroups = occurrences.map((occurrence) =>
+        extractNamedColorKeys(occurrence.body),
+      );
+      if (colorKeyGroups.every((keys) => keys !== undefined)) {
+        const colorKeys = colorKeyGroups.flatMap((keys) => keys ?? []);
+        if (new Set(colorKeys).size === colorKeys.length) {
+          nativelyMergeableNamedColorSymbols.add(symbol);
+        }
+      }
     }
     const modes = [
       ...new Set(occurrences.map((occurrence) => occurrence.mode)),
@@ -709,6 +749,12 @@ export async function analyzeProject(
         ) ||
           (currentFinding.symbols.every((symbol) =>
             symbol.startsWith("common/on_action:"),
+          ) &&
+            currentFinding.definitionVariants.every(
+              (variant) => variant.mode === "define",
+            )) ||
+          (currentFinding.symbols.every((symbol) =>
+            nativelyMergeableNamedColorSymbols.has(symbol),
           ) &&
             currentFinding.definitionVariants.every(
               (variant) => variant.mode === "define",

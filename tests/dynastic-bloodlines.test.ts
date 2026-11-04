@@ -44,7 +44,7 @@ test("selects Dynastic Bloodlines separately and pins its game-start merge", asy
 
   const analysis = await analyzeProject(configuration);
   const gameStartFinding = analysis.findings.find(
-    (finding) => finding.fingerprint === "2b65f6b23ed15ae2",
+    (finding) => finding.fingerprint === "51c65b0d60920f9d",
   );
   assert.ok(gameStartFinding);
   assert.equal(gameStartFinding.resolved, true);

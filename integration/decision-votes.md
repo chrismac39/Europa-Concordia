@@ -156,9 +156,11 @@ resolutions are recorded in `config/conflict-rules.json`, with details in
 `integration/decisions/oikoumene-language-base.md`, and
 `integration/decisions/sulphur-rivers.md`.
 
-The current-intended analysis reports 48 findings and no unresolved decisions
-for this pinned profile. This is static approval, not proof of runtime
-compatibility; the selected playset still needs in-game testing.
+The current-intended analysis after selecting Historical Tweaks and excluding
+Autonomous Diplomats and Construction Manager reports 106 findings, zero
+unresolved decisions, and five non-blocking active interaction risks. This is
+static approval, not proof of runtime compatibility; the updated playset still
+needs in-game testing.
 
 Dynastic Bloodlines (`3790115532`, version `0.9.39`) is selected as a separate
 Workshop mod. Permission to redistribute the upstream files and maintained
@@ -173,30 +175,38 @@ pending upstream or runtime confirmation.
 
 ## Current Glorp UI / GH Exchequer integration
 
-Glorp UI, GH Exchequer, Construction Manager, and Autonomous Diplomats remain
-separate selected mods. Concordia generates the GH Trade-tab integration from
-the pinned Glorp UI source; the upstream GH/Glorp compatibility mod is
-reference-only and excluded from the playset. Concordia also generates focused
-Construction Manager UI fixes from pinned Glorp UI and Standard of Living
-sources so the existing-building auto-expand, unbuilt-building, food-RGO, and
-RGO auto-expand controls survive those full-file GUI replacements. The
-generated production view also hides the competing vanilla auto-expand
-control while Construction Manager is active.
+Glorp UI and GH Exchequer remain separate selected mods. Autonomous Diplomats
+and Construction Manager are excluded from current-intended. Concordia
+generates the GH Trade-tab integration from the pinned Glorp UI source; the
+upstream GH/Glorp compatibility mod is reference-only and excluded from the
+playset. The former Construction Manager-specific production and location
+patches have been removed. Content-pinned generated patches strip its
+remaining direct widget, pause-menu, town-rights map-mode, and active-state
+references from the selected Glorp UI and Standard of Living files.
 
 SmartTaxes is intentionally excluded due to its known performance issues even
 though Glorp UI declares it as a dependency. This accepted omission is a
 launcher/runtime risk, not an assertion that Glorp UI works without it.
-Autonomous Diplomats remains selected at the user's direction despite its
-pinned metadata declaring only EU5 `1.3.*` support. Its compatibility with
-EU5 `1.4.5` is unverified.
+Autonomous Diplomats was added to current-intended during the October 30
+Glorp UI/GH integration because Glorp UI's outliner instantiated two of its
+widgets. The user has confirmed they do not use Autonomous Diplomats; the
+earlier note attributing its inclusion to the user's direction was incorrect.
+It is now excluded, and a content-pinned generated patch removes those two
+widget references from Glorp UI's outliner.
 
-The profile loads Autonomous Diplomats before Construction Manager to retain
-the latter's create-playset UI alongside the shared CMF dependency workflow.
-Glorp UI follows both, Standard of Living follows Glorp UI, GH Exchequer
-follows the UI mods, and Concordia loads last. These choices and the
-source-fingerprinted conflict rules are implemented. The user reports the
-playset runs and its other functionality works, but inactive Glorp left-panel
-colors are missing only with Concordia's generated patch; replacing it with
-the standalone GH/Glorp patch in the same playset restores them. See
+Construction Manager was added during the same October 30 integration as a
+Glorp UI companion because its upstream metadata declares the dependency and
+the pinned UI files contain its widgets. The user confirmed they do not use
+it; prior notes describing it as selected were inaccurate. It is now excluded
+and the selected Glorp UI and Standard of Living files have content-pinned
+patches removing those direct integrations. The upstream Workshop metadata
+still declares the dependency, so launcher acceptance needs verification.
+
+The profile loads Glorp UI after CMF, Standard of Living after Glorp UI, GH
+Exchequer after the UI mods, and Concordia last. Before these exclusions, the
+user reported the playset ran and its other functionality worked, but inactive
+Glorp left-panel colors were missing only with Concordia's generated patch;
+replacing it with the standalone GH/Glorp patch in that prior playset restored
+them. The current profile changes need fresh in-game verification. See
 [the GH/Glorp decision record](decisions/gh-exchequer-glorp-ui.md) for the
 known issue and comparison evidence.

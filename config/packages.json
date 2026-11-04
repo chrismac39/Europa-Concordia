@@ -494,14 +494,10 @@
       "author": "glorp",
       "targetGameVersion": "1.4.5",
       "version": "04.10.26",
-      "dependencies": [
-        "community-mod-framework",
-        "construction-manager",
-        "autonomous-diplomats"
-      ],
+      "dependencies": ["community-mod-framework"],
       "attribution": {
         "license": "No license provided",
-        "notice": "Clean analysis export from the pinned open-beta Git revision; published as Steam Workshop item 3812518640. Glorp UI declares SmartTaxes as a dependency, but SmartTaxes is intentionally excluded from this profile due to performance issues."
+        "notice": "Clean analysis export from the pinned open-beta Git revision; published as Steam Workshop item 3812518640. Glorp UI declares SmartTaxes, Construction Manager, and Autonomous Diplomats as dependencies. Concordia's current-intended patches remove the direct Construction Manager and Autonomous Diplomats UI references. SmartTaxes is intentionally excluded due to performance issues."
       }
     },
     {

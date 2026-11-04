@@ -469,6 +469,15 @@ function validateProfile(value: unknown): PlaysetProfile {
             "gh-exchequer-glorp-ui-left-panel",
             "glorp-ui-construction-manager-production",
             "glorp-ui-construction-manager-location-window",
+            "glorp-ui-without-autonomous-diplomats",
+            "glorp-ui-without-construction-manager-building-location",
+            "glorp-ui-without-construction-manager-food-production",
+            "glorp-ui-without-construction-manager-raw-goods",
+            "glorp-ui-without-construction-manager-pause-menu",
+            "glorp-ui-without-construction-manager-production",
+            "glorp-ui-without-construction-manager-warning-suppression",
+            "glorp-ui-without-construction-manager-scripted-gui",
+            "standard-of-living-without-construction-manager-location-window",
           ].includes(String(patch.generatedFrom.strategy))
         ) {
           errors.push(`${label}.generatedFrom.strategy is not supported`);
