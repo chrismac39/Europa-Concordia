@@ -19,6 +19,7 @@ export interface CmtWorkspaceOptions {
   toolkitDirectory: string;
   workshopItemId: number;
   version: string;
+  syncGallery?: boolean;
 }
 
 export interface CmtWorkspaceResult {
@@ -198,11 +199,48 @@ export async function prepareCmtWorkspace(
   );
   const toolkitSteamworksPath = path.join(toolkitToolsDirectory, "steamworks");
   const descriptionPath = path.join(workshopDirectory, "STEAM_PAGE.bbcode");
+  const galleryDirectory = path.join(workshopDirectory, "gallery");
   const changeNotesPath = path.join(
     workshopDirectory,
     "change-notes",
     `${options.version}.bbcode`,
   );
+
+  let galleryImages: string[] = [];
+  if (options.syncGallery) {
+    let galleryEntries;
+    try {
+      galleryEntries = await readdir(galleryDirectory, {
+        withFileTypes: true,
+      });
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        "code" in error &&
+        error.code === "ENOENT"
+      ) {
+        throw new Error(
+          `Gallery synchronization requested, but the directory does not exist: ${galleryDirectory}`,
+        );
+      }
+      throw error;
+    }
+    if (galleryEntries.length === 0) {
+      throw new Error(
+        `Gallery synchronization requested, but no images were found in ${galleryDirectory}`,
+      );
+    }
+    for (const entry of galleryEntries) {
+      if (!entry.isFile() || !/\.(?:jpe?g|png)$/i.test(entry.name)) {
+        throw new Error(
+          `Unsupported gallery entry: ${path.join(galleryDirectory, entry.name)} (expected JPG, JPEG, or PNG files)`,
+        );
+      }
+    }
+    galleryImages = galleryEntries
+      .map((entry) => entry.name)
+      .sort((left, right) => (left < right ? -1 : left > right ? 1 : 0));
+  }
 
   const [
     uploadScript,
@@ -314,6 +352,19 @@ export async function prepareCmtWorkspace(
       formatChangeNotes(options.version, changeNotes),
       "utf8",
     );
+    if (galleryImages.length > 0) {
+      const stagedGalleryDirectory = path.join(
+        workshopAssetsDirectory,
+        "gallery",
+      );
+      await mkdir(stagedGalleryDirectory, { recursive: true });
+      for (const imageName of galleryImages) {
+        await cp(
+          path.join(galleryDirectory, imageName),
+          path.join(stagedGalleryDirectory, imageName),
+        );
+      }
+    }
 
     const existingUploadVersionPath = path.join(
       workspaceDirectory,

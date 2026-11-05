@@ -7,7 +7,7 @@ A compatibility patch for these three mods:
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3785316314]Just Goods[/url]
 [/list]
 
-Development note: We are beginning the scaffolding to include the Fruits Expanded mod in a future update. This release does not add Fruits Expanded compatibility changes.
+Development note: We are beginning the scaffolding to include the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3821883489]Fruits Expanded[/url] mod in a future update. This release does not add Fruits Expanded compatibility changes.
 
 All three mods are required. Load them in this order, with RGO Harmony last:
 [list=1]
@@ -17,4 +17,8 @@ All three mods are required. Load them in this order, with RGO Harmony last:
 [*]RGO Harmony
 [/list]
 
-Precedence follows the chosen conflict rules: Just Goods' explicit RGO changes win at its fixed locations; Global Historical RGOs wins over More Locations for the 1,269 agreed conflicts and 48 qualifying single-parent split locations. More Locations remains the map and RGO base everywhere else.
+RGO Harmony keeps More Locations as the base map and default RGO assignments. At the 1,269 locations where More Locations and Global Historical RGOs directly assign different RGO values, it uses Global Historical RGOs' value. It also carries historical RGO values forward to 48 additional child locations created by More Locations' splits: each child has a single original parent, and RGO Harmony gives the child the Global Historical RGOs value assigned to that parent. Just Goods' game-start replacement scripts still run and apply Just Goods' values at its selected locations; all other conflict free locations retain More Locations' RGO values.
+
+Mechanically, RGO Harmony replaces one `location_templates.txt` file with the compatibility-adjusted values. Just Goods' game-start replacement scripts remain intact and still replace RGO values at their selected locations.
+
+Compatibility: Not tested with any other mods and I cannot guarantee correct behavior if additional mods are enabled. However, it should work correctly as long as the three required mods are loaded in the specified order and no other mods modify the same `location_templates.txt` file or the same RGO assignments.

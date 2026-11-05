@@ -55,17 +55,19 @@ function parseArguments(argumentsValue: string[]): {
   profileId: string;
   toolkitDirectory: string;
   pythonCommand: string;
+  syncGallery: boolean;
   confirmation?: string;
 } {
   const [command, ...options] = argumentsValue;
   if (command !== "prepare" && command !== "publish") {
     throw new Error(
-      "Usage: npm run workshop:cmt -- <prepare|publish> --profile PROFILE_ID --toolkit-dir PATH [--python PATH] [--confirm-publish PHRASE]",
+      "Usage: npm run workshop:cmt -- <prepare|publish> --profile PROFILE_ID --toolkit-dir PATH [--python PATH] [--sync-gallery] [--confirm-publish PHRASE]",
     );
   }
   let profileId: string | undefined;
   let toolkitDirectory: string | undefined;
   let pythonCommand: string | undefined;
+  let syncGallery = false;
   let confirmation: string | undefined;
   for (let index = 0; index < options.length; index += 1) {
     const option = options[index];
@@ -127,6 +129,11 @@ function parseArguments(argumentsValue: string[]): {
       if (!confirmation) {
         throw new Error("--confirm-publish requires a value");
       }
+    } else if (option === "--sync-gallery") {
+      if (syncGallery) {
+        throw new Error("--sync-gallery may only be specified once");
+      }
+      syncGallery = true;
     } else {
       throw new Error(`Unknown option: ${option}`);
     }
@@ -144,6 +151,7 @@ function parseArguments(argumentsValue: string[]): {
     profileId,
     toolkitDirectory,
     pythonCommand: pythonCommand ?? "python",
+    syncGallery,
     confirmation,
   };
 }
@@ -153,6 +161,7 @@ async function confirmPublication(
   modName: string,
   version: string,
   workshopItemId: number,
+  syncGallery: boolean,
   confirmation?: string,
 ): Promise<boolean> {
   const action = workshopItemId === 0 ? "CREATE" : "UPDATE";
@@ -164,7 +173,7 @@ async function confirmPublication(
     `Target Workshop item ID: ${workshopItemId === 0 ? "0 (creates a new item)" : workshopItemId}.`,
   );
   console.log(
-    "Confirm build and conflict checks passed, permissions and attribution are documented, and the thumbnail, page, release notes, and required-item plan are reviewed.",
+    `Confirm build and conflict checks passed, permissions and attribution are documented, and the thumbnail, ${syncGallery ? "gallery, " : ""}page, release notes, and required-item plan are reviewed.`,
   );
   if (confirmation !== undefined) {
     if (confirmation !== expectedConfirmation) {
@@ -197,13 +206,19 @@ async function confirmPublication(
 async function runCmtUpload(
   pythonCommand: string,
   scriptPath: string,
+  syncGallery: boolean,
 ): Promise<number> {
   return new Promise((resolve, reject) => {
-    const child = spawn(
-      pythonCommand,
-      [scriptPath, "--mod", "--workshop-pages", "--change-notes"],
-      { stdio: "inherit" },
-    );
+    const argumentsValue = [
+      scriptPath,
+      "--mod",
+      "--workshop-pages",
+      "--change-notes",
+    ];
+    if (syncGallery) {
+      argumentsValue.push("--sync-gallery");
+    }
+    const child = spawn(pythonCommand, argumentsValue, { stdio: "inherit" });
     child.once("error", reject);
     child.once("close", (code, signal) => {
       if (signal) {
@@ -265,8 +280,14 @@ async function persistCreatedWorkshopItemId(
 }
 
 async function main(): Promise<void> {
-  const { command, profileId, toolkitDirectory, pythonCommand, confirmation } =
-    parseArguments(process.argv.slice(2));
+  const {
+    command,
+    profileId,
+    toolkitDirectory,
+    pythonCommand,
+    syncGallery,
+    confirmation,
+  } = parseArguments(process.argv.slice(2));
   const rootDirectory = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../..",
@@ -290,6 +311,7 @@ async function main(): Promise<void> {
     toolkitDirectory: path.resolve(toolkitDirectory),
     workshopItemId: cmtProfile.workshopItemId,
     version: metadata.version,
+    syncGallery,
   });
   console.log(
     `Prepared CMT workspace for ${metadata.name} at ${path.relative(rootDirectory, result.workspaceDirectory)}.`,
@@ -315,6 +337,7 @@ async function main(): Promise<void> {
         metadata.name,
         metadata.version,
         result.workshopItemId,
+        syncGallery,
         confirmation,
       ))
     ) {
@@ -327,6 +350,7 @@ async function main(): Promise<void> {
       uploadExitCode = await runCmtUpload(
         pythonCommand,
         path.join(result.workspaceDirectory, "tools", "upload.py"),
+        syncGallery,
       );
     } finally {
       await persistCreatedWorkshopItemId(

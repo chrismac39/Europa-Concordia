@@ -69,6 +69,30 @@ If you intentionally want to create a different item for an already-used
 profile, remove only that profile's generated project directory under
 `dist/cmt-workspaces/` before preparing it again with ID `0`.
 
+## Workshop gallery images
+
+Put additional gallery images in the profile's Workshop directory under
+`gallery/`. For RGO Harmony, use
+`integration/workshop/rgo-harmony/gallery/`. JPG, JPEG, and PNG files are
+supported; each file must be smaller than 1,000,000 bytes. CMT does not resize
+or recompress images. 1280 × 720 (16:9) is a recommended size, but other
+dimensions are accepted.
+
+Gallery images are not synchronized during ordinary publishing. To stage the
+images for review, prepare with `--sync-gallery`:
+
+```powershell
+npm run workshop:cmt -- prepare --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --sync-gallery
+```
+
+Only an explicit `--sync-gallery` publish changes the Workshop gallery. CMT
+replaces existing image previews with the local files in alphabetical order;
+it preserves the primary thumbnail and non-image previews such as videos.
+Repeated syncs rebuild the image previews instead of adding duplicates. A
+missing or empty local gallery is rejected before upload to prevent accidental
+deletion. After publishing, verify the images and their order on the Workshop
+page.
+
 The `current-intended` Concordia profile is not yet registered for CMT: it
 needs its own reviewed Workshop description and version-matched change notes.
 Add those assets and a profile entry to `config/cmt-workshop.json` before
@@ -78,8 +102,8 @@ preparing it. Do not reuse RGO Harmony's description or Workshop ID.
 
 CMT's upload tool requires Steam to be running and signed in. Review the
 generated files, the Workshop title, thumbnail, description, required items,
-permissions, and release notes before running it. In particular, do not run
-the upload tool with item ID `0` unless you intend to create a new Workshop
+gallery when synchronizing, permissions, and release notes before running it.
+In particular, do not run the upload tool with item ID `0` unless you intend to create a new Workshop
 item. CMT does not configure Steam required items or visibility. After a first
 upload, verify both on the Workshop page and keep the item private until the
 release is ready to make public.
@@ -98,13 +122,21 @@ For a non-interactive terminal, provide the exact confirmation token as
 The command checks it against the current profile ID and configured Workshop
 item before starting CMT.
 
+For an explicit gallery synchronization, add `--sync-gallery` to the publish
+command as well. For example:
+
+```powershell
+npm run workshop:cmt -- publish --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --sync-gallery --confirm-publish "PUBLISH just-goods-more-locations-global-historical-rgos-standalone UPDATE"
+```
+
 The command also persists a newly-created Workshop item ID to
 `config/cmt-workshop.json`, including when CMT reports a later upload failure.
 For updates to that same item, use the same command after updating the versioned file
-[`change-notes/0.1.0.bbcode`](../integration/workshop/rgo-harmony/change-notes/0.1.0.bbcode)
+[`change-notes/0.1.2.bbcode`](../integration/workshop/rgo-harmony/change-notes/0.1.2.bbcode)
 and the version in the selected profile. The adapter stages the notes as
 CMT's expected version-header format. This wrapper always uploads the mod,
-Workshop page, and current version's change notes together.
+Workshop page, and current version's change notes together. With
+`--sync-gallery`, it also synchronizes the staged gallery image set.
 
 Add these upstream items as Steam Workshop **Required Items** on RGO Harmony:
 
