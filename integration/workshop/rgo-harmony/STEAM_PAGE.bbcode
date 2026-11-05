@@ -3,7 +3,7 @@
 A compatibility patch for these three mods:
 [list]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3809335454]More locations Mod[/url]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3602513956]Global Historical RGOs[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3602513956]Historical RGOs - Global[/url]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3785316314]Just Goods[/url]
 [/list]
 
@@ -12,12 +12,12 @@ Development note: We are beginning the scaffolding to include the [url=https://s
 All three mods are required. Load them in this order, with RGO Harmony last:
 [list=1]
 [*]More locations Mod
-[*]Global Historical RGOs
+[*]Historical RGOs - Global
 [*]Just Goods
 [*]RGO Harmony
 [/list]
 
-RGO Harmony keeps More Locations as the base map and default RGO assignments. At the 1,269 locations where More Locations and Global Historical RGOs directly assign different RGO values, it uses Global Historical RGOs' value. It also carries historical RGO values forward to 48 additional child locations created by More Locations' splits: each child has a single original parent, and RGO Harmony gives the child the Global Historical RGOs value assigned to that parent. Just Goods' game-start replacement scripts still run and apply Just Goods' values at its selected locations; all other conflict free locations retain More Locations' RGO values.
+RGO Harmony keeps More Locations as the base map and default RGO assignments. At the 1,269 locations where More Locations and Historical RGOs - Global directly assign different RGO values, it uses Historical RGOs - Global's value. It also carries Historical RGOs - Global's RGO values forward to 48 additional child locations created by More Locations' splits: each child has a single original parent, and RGO Harmony gives the child the Historical RGOs - Global value assigned to that parent. Just Goods' game-start replacement scripts still run and apply Just Goods' values at its selected locations; all other conflict free locations retain More Locations' RGO values.
 
 Mechanically, RGO Harmony replaces one `location_templates.txt` file with the compatibility-adjusted values. Just Goods' game-start replacement scripts remain intact and still replace RGO values at their selected locations.
 

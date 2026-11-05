@@ -60,7 +60,7 @@
   "patchMod": {
     "name": "RGO Harmony: Just Goods + More Locations + Global Historical RGOs",
     "id": "jg_ml_gh_rgos_compat_standalone",
-    "version": "0.1.2",
+    "version": "0.1.5",
     "shortDescription": "RGO compatibility for Just Goods, More Locations, and Global Historical RGOs. Requires all three separately.",
     "tags": ["Gameplay", "Map"],
     "thumbnailPath": "integration/assets/rgo-harmony/thumbnail.png"
