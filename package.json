@@ -10,6 +10,7 @@
     "diff": "tsx scripts/diff/cli.ts",
     "validate": "tsx scripts/build/cli.ts validate",
     "workshop:install": "tsx scripts/workshop/cli.ts install",
+    "workshop:cmt": "tsx scripts/workshop/cmt-cli.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format:check": "prettier --check .",

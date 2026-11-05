@@ -60,6 +60,11 @@ npm run workshop:install -- --profile current-intended
 This only builds and copies the selected profile to the local EU5 mod
 directory. It does not upload or publish anything to Steam.
 
+To prepare a profile for the Community Mod Toolkit (CMT), see
+[Workshop publishing](docs/workshop-publishing.md). Each profile gets an
+isolated CMT project; CMT setup and uploads never run against the Concordia
+repository root.
+
 ## Adding a package
 
 1. Read [package management](docs/package-management.md) and add an analysis

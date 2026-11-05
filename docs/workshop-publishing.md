@@ -1,93 +1,112 @@
-# Local packaging and Steam Workshop publishing
+# Steam Workshop publishing with Community Mod Toolkit
 
-## Current project boundary
+## Project boundary
 
-The standalone profile is
-[just-goods-more-locations-global-historical-rgos-standalone.json](../profiles/just-goods-more-locations-global-historical-rgos-standalone.json).
-Its generated mod metadata is at `.metadata/metadata.json`; the build copies
-the user-provided thumbnail from
-`integration/assets/rgo-harmony/thumbnail.png` to `.metadata/thumbnail.png`.
-The Workshop description and versioned change notes are maintained in
+Europa Concordia builds independent EU5 mods from profiles. For example, the
+standalone RGO compatibility profile is
+[just-goods-more-locations-global-historical-rgos-standalone](../profiles/just-goods-more-locations-global-historical-rgos-standalone.json);
+the larger Concordia playset patch is
+[current-intended](../profiles/current-intended.json). Each profile must have
+its own Workshop item ID, description, release notes, and CMT workspace.
+Upstream Workshop mods remain separate.
+
+The standalone profile's Workshop page and versioned change notes are in
 [`integration/workshop/rgo-harmony/`](../integration/workshop/rgo-harmony/).
-The shared map-template payload preserves More Locations data, and the
-repository records the owner's confirmation of author permission for
-distributing this compatibility patch.
+Its source image is
+[`thumbnail.png`](../integration/assets/rgo-harmony/thumbnail.png). The
+shared map-template payload preserves More Locations data, and the repository
+records the owner's confirmation of author permission for distributing this
+compatibility patch.
 
-Build and install the standalone patch locally:
+## Install CMT outside the repository
 
-```sh
-npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run workshop:install -- --profile just-goods-more-locations-global-historical-rgos-standalone
+CMT's [setup script](https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit)
+is designed to merge toolkit history and files into a single-mod Git
+repository. Do **not** run it at the root of this multi-profile repository.
+Instead, keep a separate local checkout and Python environment:
+
+```powershell
+New-Item -ItemType Directory -Force .local | Out-Null
+git clone --branch main --single-branch https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit.git .local\community-mod-toolkit
+python -m venv .local\cmt-venv
+.local\cmt-venv\Scripts\python.exe -m pip install -r .local\community-mod-toolkit\tools\dependencies\requirements.txt
 ```
 
-The install command packages the profile under
-`dist/workshop/stable/<profile-id>` and copies it to
-`Documents/Paradox Interactive/Europa Universalis V/mod/<mod-id>`. It does
-**not** upload to Steam. The repository currently has no `workshop:publish`
-command; `config/workshop.json` controls local packaging, not Steam submission.
+`.local/` is ignored by Git. The CMT upload script and its dependencies are
+copied from that checkout into generated, profile-specific workspaces under
+`dist/cmt-workspaces/`; CMT is not vendored into the repository.
 
-## Prepare the Workshop item
+## Prepare one profile
 
-1. Complete an in-game test with More Locations, Global Historical RGOs, Just
-   Goods, and the standalone patch, in that load order. Check direct
-   conflicts, split descendants, and Just Goods' dynamic effects. Do not
-   publish until this release gate passes.
-2. The supplied thumbnail is packaged as `.metadata/thumbnail.png`. It is
-   resized to 512x512 and is under 1 MB. The
-   [EU5 mod structure guide](https://eu5.paradoxwikis.com/Mod_structure)
-   recommends 512x512 pixels and requires the image to be under 1 MB. The
-   source image is retained as a repeatable build input.
-3. Use the proposed Workshop title:
-   **RGO Harmony: Just Goods + More Locations + Global Historical RGOs**.
-   The stable EU5 mod ID is `jg_ml_gh_rgos_compat_standalone`; do not change it
-   after creating the Workshop item.
-4. Prepare a Workshop description that names the three required Workshop
-   items, states the expected order (More Locations → Global Historical RGOs →
-   Just Goods → RGO Harmony), summarizes the patch's RGO decisions, and
-   credits the three mod authors. Explicit author permission has been
-   confirmed; retain its written record for release.
+Run validation, build the chosen profile, then prepare its CMT workspace. The
+preparation command builds and packages the profile again to ensure its files
+are current:
 
-The English description file is
-[`STEAM_PAGE.bbcode`](../integration/workshop/rgo-harmony/STEAM_PAGE.bbcode).
-For PDX Workshop Manager, set the English **Localized Description File** to
-that file's full path. Set **Change Note Directory** to
-`integration/workshop/rgo-harmony/change-notes`; the directory contains
-`0.1.0.bbcode`, matching the standalone mod's current version. For later
-releases, add a `.bbcode` file whose name matches the version in the mod
-metadata.
+```powershell
+npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run workshop:cmt -- prepare --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit
+```
 
-## Upload path
+The CMT project will be under
+`dist/cmt-workspaces/just-goods-more-locations-global-historical-rgos-standalone/project`.
+It contains only the generated mod, CMT's upload tool/dependencies, the
+profile's Workshop description, and change notes for the built version. The
+adapter also includes EU5's `dlc` folder in CMT's release sources. CMT's
+upload defaults are disabled in the generated configuration; preparation
+does not upload or create a Workshop item.
 
-A documented repeatable option is the community
-[PDX Workshop Manager](https://eu5.paradoxwikis.com/PDX_Workshop_Manager).
-It reads EU5 mod metadata and can publish/update a Workshop item. Its
-configuration uses the Steam game App ID (`3450310`) and a mod entry with the
-mod directory; `id: 0` creates a new item, and the resulting numeric Workshop
-ID is used for later updates. The tool's documentation says Steam must be
-running and logged in. Use its current example configuration and GUI/CLI
-instructions rather than copying an old configuration blindly.
+`config/cmt-workshop.json` maps profile IDs to Workshop page directories and
+Workshop item IDs. `0` is CMT's create-new-item value. The publish wrapper
+persists a newly created ID to this config and the local workspace, including
+if CMT reports a later upload failure. Each profile is staged separately, so
+preparing one item cannot select another profile's ID.
+If you intentionally want to create a different item for an already-used
+profile, remove only that profile's generated project directory under
+`dist/cmt-workspaces/` before preparing it again with ID `0`.
 
-For the first upload:
+The `current-intended` Concordia profile is not yet registered for CMT: it
+needs its own reviewed Workshop description and version-matched change notes.
+Add those assets and a profile entry to `config/cmt-workshop.json` before
+preparing it. Do not reuse RGO Harmony's description or Workshop ID.
 
-1. Build and install the profile above, then make sure the finished folder has
-   its thumbnail and correct `.metadata/metadata.json`.
-2. Point the Workshop Manager at the standalone mod directory, not the
-   repository root or the Concordia `current-intended` output. Start with a
-   new item (`id: 0`).
-3. Keep the item private/unlisted during review if the uploader offers that
-   option. Check its title, thumbnail, description, game version, and
-   uploaded files before making it public.
-4. In Steam Workshop item settings, add the three upstream mods as **Required
-   Items** using their Workshop IDs:
-   - Just Goods: `3785316314`
-   - Global Historical RGOs: `3602513956`
-   - More locations Mod: `3809335454`
-5. Record the returned Workshop item ID outside the profile's stable mod ID.
-   For later updates, rebuild the same profile and upload to that existing
-   Workshop item; do not create a new item or change `jg_ml_gh_rgos_compat_standalone`.
+## Upload only after release review
 
-The standalone build metadata currently has no dependency relationships, so
-Required Items and load-order instructions must be set on the Workshop item
-and in its description. Publishing is a separate, manual action; no upload was
-performed as part of this work.
+CMT's upload tool requires Steam to be running and signed in. Review the
+generated files, the Workshop title, thumbnail, description, required items,
+permissions, and release notes before running it. In particular, do not run
+the upload tool with item ID `0` unless you intend to create a new Workshop
+item. CMT does not configure Steam required items or visibility. After a first
+upload, verify both on the Workshop page and keep the item private until the
+release is ready to make public.
+
+The `publish` command rebuilds and stages the selected profile, displays the
+mod name, version, and target Workshop ID, then requires you to type an exact
+confirmation immediately before invoking CMT. It uploads the mod, Workshop
+page, and versioned change notes:
+
+```powershell
+npm run workshop:cmt -- publish --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --python .local\cmt-venv\Scripts\python.exe
+```
+
+The command also persists a newly-created Workshop item ID to
+`config/cmt-workshop.json`, including when CMT reports a later upload failure.
+For updates to that same item, use the same command after updating the versioned file
+[`change-notes/0.1.0.bbcode`](../integration/workshop/rgo-harmony/change-notes/0.1.0.bbcode)
+and the version in the selected profile. The adapter stages the notes as
+CMT's expected version-header format. This wrapper always uploads the mod,
+Workshop page, and current version's change notes together.
+
+Add these upstream items as Steam Workshop **Required Items** on RGO Harmony:
+
+- Just Goods: `3785316314`
+- Global Historical RGOs: `3602513956`
+- More locations Mod: `3809335454`
+
+Keep the load order in the page description: More Locations → Global
+Historical RGOs → Just Goods → RGO Harmony. Required-item relationships are
+not represented by the generated EU5 launcher metadata and must be maintained
+on the Workshop item.
+
+No Steam upload has been performed by the repository's build, install, or CMT
+preparation commands.
