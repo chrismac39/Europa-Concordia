@@ -6,6 +6,7 @@
   "description": "Reproducible integration tooling for Europa Universalis V mods",
   "scripts": {
     "analyze": "tsx scripts/analysis/cli.ts",
+    "rgo:research": "tsx scripts/rgo-research/cli.ts",
     "build": "tsx scripts/build/cli.ts build",
     "diff": "tsx scripts/diff/cli.ts",
     "validate": "tsx scripts/build/cli.ts validate",

@@ -1,0 +1,270 @@
+{
+  "version": 1,
+  "goods": [
+    {
+      "id": "eastern_pear",
+      "aliases": {
+        "en": ["eastern pear", "asian pear", "nashi pear"],
+        "fr": ["poire asiatique"],
+        "es": ["pera asiática"],
+        "de": ["nashi-birne", "asiatische birne"],
+        "ja": ["梨", "なし"],
+        "zh": ["梨", "亚洲梨"],
+        "ko": ["배", "동양배"]
+      }
+    },
+    {
+      "id": "fruit_apple",
+      "aliases": {
+        "en": ["apple", "apples", "apple orchard"],
+        "fr": ["pomme", "pommes", "pommier"],
+        "es": ["manzana", "manzanas", "manzano"],
+        "de": ["apfel", "äpfel", "apfelbaum"],
+        "pl": ["jabłko", "jabłka", "jabłoń"],
+        "ru": ["яблоко", "яблоки", "яблоня"],
+        "ja": ["りんご", "リンゴ", "林檎"],
+        "zh": ["苹果", "蘋果"],
+        "ko": ["사과", "사과나무"],
+        "id": ["apel"]
+      }
+    },
+    {
+      "id": "fruit_banana",
+      "aliases": {
+        "en": ["banana", "bananas", "banana plant"],
+        "fr": ["banane", "bananier"],
+        "es": ["banana", "plátano", "banano"],
+        "de": ["banane", "bananen"],
+        "ja": ["バナナ"],
+        "zh": ["香蕉"],
+        "ko": ["바나나"],
+        "id": ["pisang"]
+      }
+    },
+    {
+      "id": "fruit_cherry",
+      "aliases": {
+        "en": ["cherry", "cherries", "cherry orchard"],
+        "fr": ["cerise", "cerisier"],
+        "es": ["cereza", "cerezo"],
+        "de": ["kirsche", "kirschbaum"],
+        "pl": ["wiśnia", "czereśnia"],
+        "ru": ["вишня", "черешня"],
+        "ja": ["さくらんぼ", "桜桃"],
+        "zh": ["樱桃", "櫻桃"],
+        "ko": ["체리", "버찌"],
+        "id": ["ceri"]
+      }
+    },
+    {
+      "id": "fruit_fig",
+      "aliases": {
+        "en": ["fig", "figs", "fig tree"],
+        "fr": ["figue", "figuier"],
+        "es": ["higo", "higuera"],
+        "de": ["feige", "feigenbaum"],
+        "pl": ["figa", "figowiec"],
+        "ru": ["инжир"],
+        "ja": ["イチジク", "無花果"],
+        "zh": ["无花果", "無花果"],
+        "ko": ["무화과"],
+        "id": ["buah ara"]
+      }
+    },
+    {
+      "id": "fruit_grape",
+      "aliases": {
+        "en": ["grape", "grapes", "grapevine", "vineyard", "viticulture"],
+        "fr": ["raisin", "vigne", "vignoble", "viticulture"],
+        "es": ["uva", "vid", "viñedo", "viticultura"],
+        "de": ["traube", "weintraube", "weinberg", "weinbau"],
+        "pl": ["winogrono", "winorośl", "winnica"],
+        "ru": ["виноград", "виноградник", "виноградарство"],
+        "ja": ["ぶどう", "葡萄", "ブドウ園"],
+        "zh": ["葡萄", "葡萄园", "葡萄園"],
+        "ko": ["포도", "포도밭"],
+        "id": ["anggur", "perkebunan anggur"]
+      }
+    },
+    {
+      "id": "fruit_lemon",
+      "aliases": {
+        "en": ["lemon", "lemons", "lemon tree"],
+        "fr": ["citron", "citronnier"],
+        "es": ["limón", "limonero"],
+        "de": ["zitrone", "zitronenbaum"],
+        "pl": ["cytryna", "cytrynowiec"],
+        "ru": ["лимон", "лимонное дерево"],
+        "ja": ["レモン"],
+        "zh": ["柠檬", "檸檬"],
+        "ko": ["레몬"],
+        "id": ["lemon"]
+      }
+    },
+    {
+      "id": "fruit_mango",
+      "aliases": {
+        "en": ["mango", "mangoes", "mangos"],
+        "fr": ["mangue", "manguier"],
+        "es": ["mango", "mangos"],
+        "de": ["mango", "mangobaum"],
+        "pl": ["mango"],
+        "ru": ["манго"],
+        "ja": ["マンゴー"],
+        "zh": ["芒果"],
+        "ko": ["망고"],
+        "id": ["mangga"]
+      }
+    },
+    {
+      "id": "fruit_peach",
+      "aliases": {
+        "en": ["peach", "peaches", "peach tree"],
+        "fr": ["pêche", "pêcher"],
+        "es": ["melocotón", "durazno", "melocotonero"],
+        "de": ["pfirsich", "pfirsichbaum"],
+        "pl": ["brzoskwinia"],
+        "ru": ["персик"],
+        "ja": ["桃", "もも"],
+        "zh": ["桃"],
+        "ko": ["복숭아"],
+        "id": ["persik"]
+      }
+    },
+    {
+      "id": "fruit_pineapple",
+      "aliases": {
+        "en": ["pineapple", "pineapples"],
+        "fr": ["ananas"],
+        "es": ["piña", "ananás"],
+        "de": ["ananas"],
+        "pl": ["ananas"],
+        "ru": ["ананас"],
+        "ja": ["パイナップル"],
+        "zh": ["菠萝", "鳳梨"],
+        "ko": ["파인애플"],
+        "id": ["nanas"]
+      }
+    },
+    {
+      "id": "fruit_plum",
+      "aliases": {
+        "en": ["plum", "plums", "plum tree"],
+        "fr": ["prune", "prunier"],
+        "es": ["ciruela", "ciruelo"],
+        "de": ["pflaume", "pflaumenbaum"],
+        "pl": ["śliwka", "śliwy"],
+        "ru": ["слива", "сливовое дерево"],
+        "ja": ["すもも", "李"],
+        "zh": ["李子", "梅"],
+        "ko": ["자두"],
+        "id": ["prem"]
+      }
+    },
+    {
+      "id": "fruit_pomegranate",
+      "aliases": {
+        "en": ["pomegranate", "pomegranates"],
+        "fr": ["grenade", "grenadier"],
+        "es": ["granada", "granado"],
+        "de": ["granatapfel", "granatapfelbaum"],
+        "pl": ["granat"],
+        "ru": ["гранат"],
+        "ja": ["ザクロ", "柘榴"],
+        "zh": ["石榴"],
+        "ko": ["석류"],
+        "id": ["delima"]
+      }
+    },
+    {
+      "id": "lychee",
+      "aliases": {
+        "en": ["lychee", "litchi"],
+        "fr": ["litchi"],
+        "es": ["lichi"],
+        "de": ["lychee", "litschi"],
+        "pl": ["liczi"],
+        "ru": ["личи"],
+        "ja": ["ライチ", "茘枝"],
+        "zh": ["荔枝"],
+        "ko": ["리치"],
+        "id": ["leci"]
+      }
+    },
+    {
+      "id": "mandarin",
+      "aliases": {
+        "en": ["mandarin", "mandarin orange", "tangerine"],
+        "fr": ["mandarine"],
+        "es": ["mandarina"],
+        "de": ["mandarine"],
+        "pl": ["mandarynka"],
+        "ru": ["мандарин"],
+        "ja": ["マンダリン", "みかん"],
+        "zh": ["柑橘", "橘子"],
+        "ko": ["귤", "만다린"],
+        "id": ["jeruk mandarin"]
+      }
+    },
+    {
+      "id": "orange",
+      "aliases": {
+        "en": ["orange", "oranges", "orange tree"],
+        "fr": ["orange", "oranger"],
+        "es": ["naranja", "naranjo"],
+        "de": ["orange", "orangenbaum"],
+        "pl": ["pomarańcza", "pomarańcze"],
+        "ru": ["апельсин", "апельсиновое дерево"],
+        "ja": ["オレンジ"],
+        "zh": ["橙子", "橙"],
+        "ko": ["오렌지"],
+        "id": ["jeruk"]
+      }
+    },
+    {
+      "id": "persimmon",
+      "aliases": {
+        "en": ["persimmon", "persimmons"],
+        "fr": ["kaki"],
+        "es": ["caqui"],
+        "de": ["kaki"],
+        "pl": ["kaki"],
+        "ru": ["хурма"],
+        "ja": ["柿", "かき"],
+        "zh": ["柿子"],
+        "ko": ["감"],
+        "id": ["kesemek"]
+      }
+    },
+    {
+      "id": "sweet_potato",
+      "aliases": {
+        "en": ["sweet potato", "sweet potatoes"],
+        "fr": ["patate douce"],
+        "es": ["batata", "boniato", "camote"],
+        "de": ["süßkartoffel"],
+        "pl": ["batat"],
+        "ru": ["батат"],
+        "ja": ["サツマイモ", "さつまいも"],
+        "zh": ["甘薯", "红薯", "地瓜"],
+        "ko": ["고구마"],
+        "id": ["ubi jalar"]
+      }
+    },
+    {
+      "id": "western_pear",
+      "aliases": {
+        "en": ["pear", "pears", "pear tree", "western pear"],
+        "fr": ["poire", "poirier"],
+        "es": ["pera", "peral"],
+        "de": ["birne", "birnbaum"],
+        "pl": ["gruszka", "grusza"],
+        "ru": ["груша", "грушевое дерево"],
+        "ja": ["洋梨", "なし"],
+        "zh": ["西洋梨"],
+        "ko": ["서양배"],
+        "id": ["pir"]
+      }
+    }
+  ]
+}
