@@ -1006,3 +1006,78 @@ test("rejects a target-game-version override that disagrees with the profile", a
     await rm(fixture.root, { recursive: true, force: true });
   }
 });
+
+test("builds a profile under its configured output root", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("mod");
+    await fixture.writePackageFiles("mod", {});
+    await fixture.writeManifest();
+    const buildConfigurationPath = path.join(
+      fixture.root,
+      "config",
+      "build.json",
+    );
+    const buildConfiguration = JSON.parse(
+      await readFile(buildConfigurationPath, "utf8"),
+    ) as Record<string, unknown>;
+    buildConfiguration.profileOutputDirectories = {
+      fixture: "dist/rgo-harmony",
+    };
+    await writeFile(
+      buildConfigurationPath,
+      `${JSON.stringify(buildConfiguration, null, 2)}\n`,
+    );
+
+    const output = await buildProject(fixture.root);
+    assert.equal(
+      output,
+      path.join(fixture.root, "dist", "rgo-harmony", "fixture"),
+    );
+    await assert.rejects(
+      readFile(
+        path.join(
+          fixture.root,
+          "dist",
+          "europa-concordia",
+          "fixture",
+          ".metadata",
+          "metadata.json",
+        ),
+      ),
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("rejects overlapping profile and default output roots", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("mod");
+    await fixture.writePackageFiles("mod", {});
+    await fixture.writeManifest();
+    const buildConfigurationPath = path.join(
+      fixture.root,
+      "config",
+      "build.json",
+    );
+    const buildConfiguration = JSON.parse(
+      await readFile(buildConfigurationPath, "utf8"),
+    ) as Record<string, unknown>;
+    buildConfiguration.profileOutputDirectories = {
+      fixture: "dist/europa-concordia/rgo-harmony",
+    };
+    await writeFile(
+      buildConfigurationPath,
+      `${JSON.stringify(buildConfiguration, null, 2)}\n`,
+    );
+
+    await assert.rejects(
+      validateProject(fixture.root),
+      /outputDirectory and profileOutputDirectories\.fixture must not overlap/,
+    );
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});

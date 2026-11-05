@@ -14,6 +14,8 @@ The standalone profile's Workshop page and versioned change notes are in
 [`integration/workshop/rgo-harmony/`](../integration/workshop/rgo-harmony/).
 Its source image is
 [`thumbnail.png`](../integration/assets/rgo-harmony/thumbnail.png). The
+built game mod is under `dist/rgo-harmony/`, separate from Concordia's
+`dist/europa-concordia/` output. The
 shared map-template payload preserves More Locations data, and the repository
 records the owner's confirmation of author permission for distributing this
 compatibility patch.
@@ -27,7 +29,7 @@ Instead, keep a separate local checkout and Python environment:
 
 ```powershell
 New-Item -ItemType Directory -Force .local | Out-Null
-git clone --branch main --single-branch https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit.git .local\community-mod-toolkit
+git clone --branch toolkit-release --single-branch https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit.git .local\community-mod-toolkit
 python -m venv .local\cmt-venv
 .local\cmt-venv\Scripts\python.exe -m pip install -r .local\community-mod-toolkit\tools\dependencies\requirements.txt
 ```
@@ -53,6 +55,8 @@ The CMT project will be under
 It contains only the generated mod, CMT's upload tool/dependencies, the
 profile's Workshop description, and change notes for the built version. The
 adapter also includes EU5's `dlc` folder in CMT's release sources. CMT's
+Steamworks Python package is copied to the import location expected by its
+uploader. CMT's
 upload defaults are disabled in the generated configuration; preparation
 does not upload or create a Workshop item.
 
@@ -88,6 +92,11 @@ page, and versioned change notes:
 ```powershell
 npm run workshop:cmt -- publish --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --python .local\cmt-venv\Scripts\python.exe
 ```
+
+For a non-interactive terminal, provide the exact confirmation token as
+`--confirm-publish "PUBLISH just-goods-more-locations-global-historical-rgos-standalone UPDATE"`.
+The command checks it against the current profile ID and configured Workshop
+item before starting CMT.
 
 The command also persists a newly-created Workshop item ID to
 `config/cmt-workshop.json`, including when CMT reports a later upload failure.

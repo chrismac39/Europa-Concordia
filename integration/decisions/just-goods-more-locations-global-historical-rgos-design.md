@@ -80,18 +80,18 @@ Do not clone fixed-location Just Goods setters to split descendants.
 
 Suggested matrix fields:
 
-| Field | Purpose |
-|---|---|
-| More Locations location ID | The location whose final RGO behavior is being decided |
-| Vanilla origin | Vanilla location ID, or `new` if it has no direct vanilla counterpart |
-| Split/lineage evidence | How the location relates to its vanilla origin |
-| Vanilla RGO | Baseline assignment |
-| GH RGO assignment | Assignment or modification from GH RGO |
-| Just Goods assignment | Assignment or modification from Just Goods |
-| More Locations assignment | Assignment, including a duplicated vanilla RGO |
-| Intended result | Exact final RGO behavior |
-| Disposition and rationale | Retain, redistribute, replace, suppress, add, or intentionally none; explain why |
-| Evidence | Pinned source paths and relevant location data |
+| Field                      | Purpose                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| More Locations location ID | The location whose final RGO behavior is being decided                           |
+| Vanilla origin             | Vanilla location ID, or `new` if it has no direct vanilla counterpart            |
+| Split/lineage evidence     | How the location relates to its vanilla origin                                   |
+| Vanilla RGO                | Baseline assignment                                                              |
+| GH RGO assignment          | Assignment or modification from GH RGO                                           |
+| Just Goods assignment      | Assignment or modification from Just Goods                                       |
+| More Locations assignment  | Assignment, including a duplicated vanilla RGO                                   |
+| Intended result            | Exact final RGO behavior                                                         |
+| Disposition and rationale  | Retain, redistribute, replace, suppress, add, or intentionally none; explain why |
+| Evidence                   | Pinned source paths and relevant location data                                   |
 
 Use explicit dispositions rather than implicit omissions. Possible outcomes
 include retaining an assignment, distributing an assignment among split
@@ -133,6 +133,7 @@ profiles/
 dist/
   europa-concordia/
     <master-profile-id>/
+  rgo-harmony/
     just-goods-more-locations-global-historical-rgos-standalone/
 ```
 
@@ -167,11 +168,11 @@ standalone compatibility mod. Its
 `patchMod` uses a distinct display name and mod ID so it can be enabled
 independently from the Concordia master patch.
 
-The build already separates artifacts by profile under
-`dist/europa-concordia/<profile-id>/`; use a unique standalone profile ID and
-mod ID rather than changing the shared output root or hand-copying files.
-Building the master profile cannot add its unrelated patches to the
-standalone profile because each profile declares its own patch list.
+The build routes the standalone profile to
+`dist/rgo-harmony/<profile-id>/`, separate from
+`dist/europa-concordia/<master-profile-id>/`. Building the master profile
+cannot add its unrelated patches to the standalone profile because each
+profile declares its own patch list.
 
 This keeps a single repository and a single source of truth while making the
 two launchable mods and their build outputs distinct. Any future publishing or

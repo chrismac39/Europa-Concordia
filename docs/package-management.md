@@ -75,10 +75,11 @@ npm test
 npm run build -- --profile <id>
 ```
 
-Build output is isolated by profile under
-`dist/europa-concordia/<id>/`. The generated load-order guide lists every
-required mod's name, version, Workshop ID or Git revision, and order; it places
-the Concordia patch last. No upstream content is part of the output.
+Build output is isolated by profile. Concordia uses
+`dist/europa-concordia/<id>/`; the standalone RGO Harmony profile uses
+`dist/rgo-harmony/<id>/`. The generated load-order guide lists every required
+mod's name, version, Workshop ID or Git revision, and order; it places the
+compatibility patch last. No upstream content is part of the output.
 
 In the `current-intended` profile, Standard of Living and Just Goods remain
 separate required mods. The existing SOL-JTG compatibility submod is excluded

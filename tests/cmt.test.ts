@@ -30,6 +30,9 @@ test("prepares an isolated CMT project with profile content and release assets",
       recursive: true,
     });
     await mkdir(dependenciesDirectory, { recursive: true });
+    await mkdir(path.join(toolkitDirectory, "tools", "steamworks"), {
+      recursive: true,
+    });
     await writeFile(
       path.join(artifactDirectory, "in_game", "content.txt"),
       "game content",
@@ -49,7 +52,10 @@ test("prepares an isolated CMT project with profile content and release assets",
     );
     await writeFile(
       path.join(toolkitDirectory, "tools", "upload.py"),
-      'SOURCES = [\n    "in_game",\n    "main_menu",\n]\n',
+      [
+        'SOURCES = [\n    "in_game",\n    "main_menu",\n]\n',
+        'clean_name = clean_name.lower().replace(" ", "-")\n',
+      ].join(""),
     );
     await writeFile(
       path.join(toolkitDirectory, "tools", "config.toml"),
@@ -65,6 +71,10 @@ test("prepares an isolated CMT project with profile content and release assets",
     await writeFile(
       path.join(dependenciesDirectory, "requirements.txt"),
       "steamworks",
+    );
+    await writeFile(
+      path.join(toolkitDirectory, "tools", "steamworks", "__init__.py"),
+      "STEAMWORKS = object\n",
     );
 
     const options = {
@@ -86,6 +96,24 @@ test("prepares an isolated CMT project with profile content and release assets",
       "utf8",
     );
     assert.match(uploadScript, /"dlc",\s+"in_game"/);
+    assert.ok(
+      uploadScript.includes(
+        String.raw`clean_name = re.sub(r'[<>:"/\\|?*\x00-\x1f]'`,
+      ),
+    );
+    assert.equal(
+      await readFile(
+        path.join(
+          result.workspaceDirectory,
+          "tools",
+          "dependencies",
+          "steamworks",
+          "__init__.py",
+        ),
+        "utf8",
+      ),
+      "STEAMWORKS = object\n",
+    );
     assert.match(cmtConfig, /workshop_upload_item_id = 0/);
     assert.match(cmtConfig, /upload_mod_by_default = false/);
     assert.match(cmtConfig, /upload_workshop_pages_by_default = false/);

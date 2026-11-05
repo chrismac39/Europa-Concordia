@@ -80,11 +80,18 @@ and SHA-256 digests of its source files. A source change therefore invalidates
 any matching path or semantic approval instead of silently reusing it. The
 analyzer runs on every build.
 
+The build's `profileOutputDirectories` map can route a profile to a separate
+output root while keeping the default Concordia root unchanged. RGO Harmony
+uses `dist/rgo-harmony/`; the `current-intended` Concordia profile continues to
+use `dist/europa-concordia/`.
+
 `npm run build -- --profile <id>` writes:
 
-- `dist/europa-concordia/<id>/` — the profile's compatibility payload and
-  `.metadata/metadata.json`. Complete-file patches may preserve upstream data
-  when required; confirm permission before distributing those outputs;
+- `<profile-output-root>/<id>/` — the profile's compatibility payload and
+  `.metadata/metadata.json`. The default root is
+  `dist/europa-concordia/`; RGO Harmony uses `dist/rgo-harmony/`. Complete-file
+  patches may preserve upstream data when required; confirm permission before
+  distributing those outputs;
 - `dist/load-order/<id>.md` — required mod names, versions, Workshop IDs or Git
   revisions, and order;
 - `dist/build-metadata/<id>.json` — selected input pins and generated patch

@@ -135,9 +135,7 @@ function createLoadOrderGuide(
   const knownRisks = (configuration.profile.knownRisks ?? []).map((risk) => {
     const packageValue = packages.get(risk.packageId);
     if (!packageValue) {
-      throw new Error(
-        `Profile risk references unknown mod ${risk.packageId}`,
-      );
+      throw new Error(`Profile risk references unknown mod ${risk.packageId}`);
     }
     return `- **${packageValue.name}** — ${risk.reason}`;
   });
@@ -207,7 +205,8 @@ export async function buildProject(
 
   const outputBase = path.resolve(
     configuration.rootDirectory,
-    configuration.build.outputDirectory,
+    configuration.build.profileOutputDirectories?.[configuration.profile.id] ??
+      configuration.build.outputDirectory,
   );
   const outputDirectory = path.join(outputBase, configuration.profile.id);
   const outputParent = path.dirname(outputDirectory);
@@ -274,10 +273,7 @@ export async function buildProject(
     );
     if (patchMetadata.thumbnailPath) {
       await copyFile(
-        path.resolve(
-          configuration.rootDirectory,
-          patchMetadata.thumbnailPath,
-        ),
+        path.resolve(configuration.rootDirectory, patchMetadata.thumbnailPath),
         path.join(metadataDirectory, "thumbnail.png"),
       );
     }

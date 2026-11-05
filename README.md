@@ -37,9 +37,10 @@ content-sensitive fingerprints, so an upstream file change invalidates its
 previous approval.
 
 The starter profile is [current-intended](profiles/current-intended.json) for
-EU5 1.4.5. Build output goes to
-`dist/europa-concordia/<profile-id>/`; its generated load-order guide and
-machine-readable build metadata are written beside it under `dist/`.
+EU5 1.4.5. Its build output goes to
+`dist/europa-concordia/<profile-id>/`; the standalone RGO Harmony profile has
+its own output root at `dist/rgo-harmony/<profile-id>/`. Generated load-order
+guides and machine-readable build metadata are written under `dist/`.
 
 The [standalone Just Goods / More Locations / Global Historical RGOs
 profile](profiles/just-goods-more-locations-global-historical-rgos-standalone.json)
