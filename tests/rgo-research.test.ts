@@ -187,6 +187,11 @@ test("Wikidata resolver returns place candidates without selecting one", async (
               label: "Blois",
               description: "person",
             },
+            {
+              id: "Q6",
+              label: "Blois-sur-Seille",
+              description: "commune in Jura, France",
+            },
           ],
         });
       }
@@ -236,6 +241,42 @@ test("Wikidata resolver returns place candidates without selecting one", async (
           claims: {
             P31: [{ mainsnak: { datavalue: { value: { id: "Q5" } } } }],
           },
+        };
+      }
+      if (ids.includes("Q6")) {
+        entities.Q6 = {
+          id: "Q6",
+          labels: { en: { value: "Blois-sur-Seille" } },
+          descriptions: { en: { value: "commune in Jura, Taiwan" } },
+          claims: {
+            P31: [{ mainsnak: { datavalue: { value: { id: "Q484170" } } } }],
+            P131: [{ mainsnak: { datavalue: { value: { id: "Q7" } } } }],
+            P17: [{ mainsnak: { datavalue: { value: { id: "Q8" } } } }],
+          },
+        };
+      }
+      if (ids.includes("Q7")) {
+        entities.Q7 = {
+          id: "Q7",
+          labels: { en: { value: "Jura" } },
+          claims: {
+            P17: [{ mainsnak: { datavalue: { value: { id: "Q8" } } } }],
+          },
+        };
+      }
+      if (ids.includes("Q8")) {
+        entities.Q8 = {
+          id: "Q8",
+          labels: { en: { value: "Taiwan" } },
+          claims: {
+            P37: [{ mainsnak: { datavalue: { value: { id: "Q150" } } } }],
+          },
+        };
+      }
+      if (ids.includes("Q484170")) {
+        entities.Q484170 = {
+          id: "Q484170",
+          labels: { en: { value: "commune" } },
         };
       }
       if (ids.includes("Q515")) {
@@ -316,9 +357,21 @@ test("Wikidata resolver returns place candidates without selecting one", async (
         entities.Q2 = {
           id: "Q2",
           labels: { en: { value: "Loir-et-Cher" } },
+          descriptions: { en: { value: "department in France" } },
           claims: {
+            P31: [{ mainsnak: { datavalue: { value: { id: "Q56061" } } } }],
             P17: [{ mainsnak: { datavalue: { value: { id: "Q142" } } } }],
           },
+          sitelinks: {
+            enwiki: { title: "Loir-et-Cher" },
+            frwiki: { title: "Loir-et-Cher" },
+          },
+        };
+      }
+      if (ids.includes("Q56061")) {
+        entities.Q56061 = {
+          id: "Q56061",
+          labels: { en: { value: "administrative territorial entity" } },
         };
       }
       if (ids.includes("Q150")) {
@@ -339,24 +392,39 @@ test("Wikidata resolver returns place candidates without selecting one", async (
     });
 
     const result = await resolveLocations(
-      [{ id: "blois", englishName: "Blois", context: "Kingdom of France" }],
+      [
+        {
+          id: "blois",
+          englishName: "Blois",
+          context: "Kingdom of France",
+          eu5Province: "Blois",
+        },
+      ],
       client,
       "test",
     );
     const location = result.locations[0];
     assert.equal(location.selectedQid, null);
     assert.equal(location.status, "needs-review");
-    assert.equal(location.candidates[0].qid, "Q1");
-    assert.equal(location.candidates[0].confidence, "high");
+    assert.equal(location.candidates[0].qid, "Q2");
+    assert.equal(location.candidates[0].label, "Loir-et-Cher");
+    assert.equal(location.candidates[0].confidence, "medium");
     assert.equal(location.candidates[0].country, "France");
-    assert.equal(location.candidates[0].administrativeArea, "Loir-et-Cher");
     assert.equal(location.candidates.length, 1);
+    assert.equal(
+      location.candidates.some((candidate) => candidate.qid === "Q1"),
+      false,
+    );
     assert.equal(
       location.candidates.some((candidate) => candidate.qid === "Q3"),
       false,
     );
     assert.equal(
       location.candidates.some((candidate) => candidate.qid === "Q4"),
+      false,
+    );
+    assert.equal(
+      location.candidates.some((candidate) => candidate.qid === "Q6"),
       false,
     );
     assert.deepEqual(

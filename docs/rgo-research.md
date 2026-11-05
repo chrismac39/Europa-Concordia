@@ -12,12 +12,15 @@ change any RGO assignments.
    each location's EU5 province from the installed game's
    `in_game/map_data/definitions.txt`, searches Wikidata by each English
    in-game name, retains entities whose Wikidata type hierarchy identifies
-   them as geographic places or features, and writes:
+   them as administrative units linked to matching geographic places, and writes:
    - `reports/rgo-research/pilot-resolution.json`
    - `reports/rgo-research/pilot-resolution.md`
    - `reports/rgo-research/pilot-resolution.csv`
 2. Review the candidate rows in the CSV, including the EU5 province, modern
-   country/admin area, coordinates, and Wikipedia links. Set `correct` to
+   administrative unit, coordinates, and Wikipedia links. Candidate units may
+   be local LAU-like municipalities/communes or broader NUTS-3-like equivalents.
+   Standalone towns/cities and natural features are not candidates, though a
+   city that is itself an administrative unit can qualify. Set `correct` to
    `TRUE` for one candidate per confirmed location. Leave all rows `FALSE` when
    the match is uncertain. The tool deliberately never auto-selects a
    candidate.
@@ -76,12 +79,14 @@ other than the default file adjacent to the resolution JSON.
 
 - The resolver uses Wikidata search/entity endpoints for candidate names,
   coordinates, administrative links, country languages, and Wikipedia
-  sitelinks. Candidate entities are retained only when their `instance of`
-  (`P31`) type or its `subclass of` (`P279`) ancestry matches a geographic
-  place/feature class, and none of that ancestry matches a person/name class.
-  This excludes people, family names, ships, and other non-geographic
-  namesakes, including name classes that Wikidata also classifies as
-  geographic. Candidate scores are ranking aids only.
+  sitelinks. Search matches are used to find linked administrative units;
+  output candidates are limited to current administrative divisions, not
+  standalone settlements or natural features. Local LAU-like and broader
+  NUTS-3-like units can both appear because national administrative systems
+  differ. The EU5 province
+  boosts candidates whose administrative hierarchy aligns with that context.
+  Candidate scores are ranking aids only; boundaries and levels are not
+  asserted to match historical EU5 borders.
 - The EU5 province is included as contextual information in both reports. It
   comes from the game's province-to-location definitions and is not itself a
   modern-country or administrative-boundary assertion. The default game path

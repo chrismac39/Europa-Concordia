@@ -68,6 +68,20 @@ const nonGeographicClassIds = new Set([
   "Q33274034", // anthroponym from a specific origin
 ]);
 
+const administrativeClassIds = new Set([
+  "Q56061", // administrative territorial entity
+  "Q15284", // municipality
+  "Q484170", // commune
+  "Q28575", // county
+  "Q149621", // district
+  "Q1395692", // province
+  "Q7275", // state
+]);
+
+const nonAdministrativeClassIds = new Set([
+  "Q6256", // country
+]);
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -227,12 +241,15 @@ function makeWikipediaLink(
 }
 
 function candidateScore(
-  inputName: string,
+  input: LocationInput,
   searchResult: SearchResult,
   entity: WikidataEntity | undefined,
   countryKnown: boolean,
+  relatedPlaceNameScore: number,
+  provinceAligned: boolean,
+  countryContextAligned = false,
 ): number {
-  const normalizedInput = normalizeName(inputName);
+  const normalizedInput = normalizeName(input.englishName);
   const normalizedLabel = normalizeName(getLabel(entity) ?? searchResult.label);
   const aliases =
     entity?.aliases?.en?.map((alias) => normalizeName(alias.value)) ?? [];
@@ -241,6 +258,15 @@ function candidateScore(
   let score = exactLabel ? 100 : exactAlias ? 90 : 0;
   if (!exactLabel && !exactAlias && normalizedLabel.includes(normalizedInput)) {
     score = 50;
+  }
+  if (relatedPlaceNameScore > 0) {
+    score += Math.round(relatedPlaceNameScore * 0.35);
+  }
+  if (provinceAligned) {
+    score += 25;
+  }
+  if (countryContextAligned) {
+    score += 20;
   }
   if (countryKnown) {
     score += 15;
@@ -331,7 +357,7 @@ async function fetchTypeAncestors(
   const ancestorsByType = new Map<string, Set<string>>();
   let pending = [...new Set(typeIds)].map((qid) => ({ qid, root: qid }));
 
-  for (let depth = 0; depth < 3 && pending.length > 0; depth += 1) {
+  for (let depth = 0; depth < 2 && pending.length > 0; depth += 1) {
     const entities = await fetchEntities(
       pending.map((entry) => entry.qid),
       client,
@@ -344,7 +370,12 @@ async function fetchTypeAncestors(
       }
       ancestors.add(qid);
       ancestorsByType.set(root, ancestors);
-      if (geographicClassIds.has(qid) || nonGeographicClassIds.has(qid)) {
+      if (
+        geographicClassIds.has(qid) ||
+        nonGeographicClassIds.has(qid) ||
+        administrativeClassIds.has(qid) ||
+        nonAdministrativeClassIds.has(qid)
+      ) {
         continue;
       }
       for (const parentQid of getEntityIds(entities.get(qid), "P279")) {
@@ -357,6 +388,29 @@ async function fetchTypeAncestors(
   }
 
   return ancestorsByType;
+}
+
+async function fetchAdministrativeLineage(
+  roots: WikidataEntity[],
+  client: JsonHttpClient,
+): Promise<Map<string, WikidataEntity>> {
+  const ancestors = new Map<string, WikidataEntity>();
+  const visited = new Set<string>();
+  let pending = roots.flatMap((entity) => getEntityIds(entity, "P131"));
+
+  for (let depth = 0; depth < 2 && pending.length > 0; depth += 1) {
+    const batch = [...new Set(pending)].filter((qid) => !visited.has(qid));
+    batch.forEach((qid) => visited.add(qid));
+    const fetched = await fetchEntities(batch, client);
+    for (const [qid, entity] of fetched) {
+      ancestors.set(qid, entity);
+    }
+    pending = [...fetched.values()].flatMap((entity) =>
+      getEntityIds(entity, "P131"),
+    );
+  }
+
+  return ancestors;
 }
 
 function isGeographicEntity(
@@ -374,6 +428,108 @@ function isGeographicEntity(
   );
 }
 
+function isAdministrativeEntity(
+  entity: WikidataEntity | undefined,
+  ancestorsByType: Map<string, Set<string>>,
+): boolean {
+  const ancestors = new Set(
+    getEntityIds(entity, "P31").flatMap((typeId) => [
+      ...(ancestorsByType.get(typeId) ?? [typeId]),
+    ]),
+  );
+  const description = getDescription(entity) ?? "";
+  const describesObsoleteUnit =
+    /\b(historical|historic|former|abolished|defunct|until\s+\d{4})\b/i.test(
+      description,
+    ) || /\b\d{4}\s*(?:to|[-–])\s*\d{4}\b/i.test(description);
+  return (
+    !describesObsoleteUnit &&
+    ![...ancestors].some((ancestor) =>
+      nonAdministrativeClassIds.has(ancestor),
+    ) &&
+    [...ancestors].some((ancestor) => administrativeClassIds.has(ancestor)) &&
+    ![...ancestors].some((ancestor) => nonGeographicClassIds.has(ancestor))
+  );
+}
+
+function findCountryQid(
+  entity: WikidataEntity | undefined,
+  entities: Map<string, WikidataEntity>,
+): string | undefined {
+  let current = entity;
+  const visited = new Set<string>();
+  for (let depth = 0; current && depth < 4; depth += 1) {
+    const countryQid = getEntityIds(current, "P17")[0];
+    if (countryQid) {
+      return countryQid;
+    }
+    const adminQid = getEntityIds(current, "P131")[0];
+    if (!adminQid || visited.has(adminQid)) {
+      break;
+    }
+    visited.add(adminQid);
+    current = entities.get(adminQid);
+  }
+  return undefined;
+}
+
+function contextMatchesCountry(
+  input: LocationInput,
+  country: string | undefined,
+): boolean {
+  if (!input.context || !country) {
+    return false;
+  }
+  const context = normalizeName(input.context);
+  const normalizedCountry = normalizeName(country);
+  return (
+    context === normalizedCountry ||
+    context.includes(normalizedCountry) ||
+    normalizedCountry.includes(context)
+  );
+}
+
+function provinceMatchesEntity(
+  input: LocationInput,
+  entity: WikidataEntity | undefined,
+  entities: Map<string, WikidataEntity>,
+): boolean {
+  if (!input.eu5Province) {
+    return false;
+  }
+  const province = normalizeName(input.eu5Province);
+  let current = entity;
+  const visited = new Set<string>();
+  for (let depth = 0; current && depth < 4; depth += 1) {
+    const labels = [
+      getLabel(current),
+      ...(current.aliases?.en?.map((alias) => alias.value) ?? []),
+    ].filter((label): label is string => Boolean(label));
+    if (
+      labels.some((label) => {
+        const normalizedLabel = normalizeName(label);
+        const administrativeName =
+          /\b(region|regional unit|county|district|province|department|arrondissement|municipality|commune|prefecture|governorate|oblast|raion|state)\b/.test(
+            normalizedLabel,
+          );
+        return (
+          normalizedLabel === province ||
+          (normalizedLabel.includes(province) && administrativeName)
+        );
+      })
+    ) {
+      return true;
+    }
+    const adminQid = getEntityIds(current, "P131")[0];
+    if (!adminQid || visited.has(adminQid)) {
+      break;
+    }
+    visited.add(adminQid);
+    current = entities.get(adminQid);
+  }
+  return false;
+}
+
 function getSitelink(
   entity: WikidataEntity | undefined,
   site: string,
@@ -387,19 +543,21 @@ function buildCandidate(
   input: LocationInput,
   result: SearchResult,
   entities: Map<string, WikidataEntity>,
+  relatedPlaceNameScore: number,
 ): PlaceCandidate {
   const entity = entities.get(result.id);
   const adminQid = getEntityIds(entity, "P131")[0];
-  const countryQid =
-    getEntityIds(entity, "P17")[0] ??
-    getEntityIds(entities.get(adminQid ?? ""), "P17")[0];
+  const countryQid = findCountryQid(entity, entities);
   const countryEntity = entities.get(countryQid ?? "");
   const adminEntity = entities.get(adminQid ?? "");
   const score = candidateScore(
-    input.englishName,
+    input,
     result,
     entity,
     Boolean(countryQid),
+    relatedPlaceNameScore,
+    provinceMatchesEntity(input, entity, entities),
+    contextMatchesCountry(input, getLabel(countryEntity)),
   );
   const localLanguages = getEntityIds(countryEntity, "P37")
     .map((languageQid) => getLanguageCode(entities.get(languageQid)))
@@ -486,49 +644,219 @@ export async function resolveLocations(
     allResults.map((result) => result.id),
     client,
   );
-  const candidateTypeIds = [...initialEntities.values()].flatMap((entity) =>
-    getEntityIds(entity, "P31"),
+  const initialTypeAncestors = await fetchTypeAncestors(
+    [...initialEntities.values()].flatMap((entity) =>
+      getEntityIds(entity, "P31"),
+    ),
+    client,
   );
-  const typeAncestors = await fetchTypeAncestors(candidateTypeIds, client);
   const geographicResults = new Map<string, SearchResult[]>();
   for (const location of locations) {
     const results = (searchResults.get(location.id) ?? []).filter((result) =>
-      isGeographicEntity(initialEntities.get(result.id), typeAncestors),
+      isGeographicEntity(initialEntities.get(result.id), initialTypeAncestors),
     );
     geographicResults.set(location.id, results);
   }
 
-  const geographicIds = new Set(
+  const administrativeLineage = await fetchAdministrativeLineage(
     [...geographicResults.values()].flatMap((results) =>
-      results.map((result) => result.id),
+      results.flatMap((result) => {
+        const entity = initialEntities.get(result.id);
+        return entity ? [entity] : [];
+      }),
     ),
+    client,
   );
-  const referencedIds = [...geographicIds].flatMap((id) => {
-    const entity = initialEntities.get(id);
-    return [...getEntityIds(entity, "P17"), ...getEntityIds(entity, "P131")];
-  });
+  const placeEntities = new Map([
+    ...initialEntities.entries(),
+    ...administrativeLineage.entries(),
+  ]);
+  const lineageTypeAncestors = await fetchTypeAncestors(
+    [...administrativeLineage.values()].flatMap((entity) =>
+      getEntityIds(entity, "P31"),
+    ),
+    client,
+  );
+  const typeAncestors = new Map([
+    ...initialTypeAncestors.entries(),
+    ...lineageTypeAncestors.entries(),
+  ]);
+
+  const administrativeCandidateResults = new Map<
+    string,
+    Map<
+      string,
+      {
+        result: SearchResult;
+        relatedPlaceNameScore: number;
+        relatedProvinceAligned: boolean;
+      }
+    >
+  >();
+  for (const location of locations) {
+    const candidates = new Map<
+      string,
+      {
+        result: SearchResult;
+        relatedPlaceNameScore: number;
+        relatedProvinceAligned: boolean;
+      }
+    >();
+    const addCandidate = (
+      result: SearchResult,
+      relatedPlaceNameScore: number,
+      relatedProvinceAligned: boolean,
+    ) => {
+      const current = candidates.get(result.id);
+      if (!current) {
+        candidates.set(result.id, {
+          result,
+          relatedPlaceNameScore,
+          relatedProvinceAligned,
+        });
+      } else {
+        candidates.set(result.id, {
+          result,
+          relatedPlaceNameScore: Math.max(
+            relatedPlaceNameScore,
+            current.relatedPlaceNameScore,
+          ),
+          relatedProvinceAligned:
+            relatedProvinceAligned || current.relatedProvinceAligned,
+        });
+      }
+    };
+
+    for (const placeResult of geographicResults.get(location.id) ?? []) {
+      const placeEntity = initialEntities.get(placeResult.id);
+      const placeNameScore = candidateScore(
+        location,
+        placeResult,
+        placeEntity,
+        false,
+        0,
+        false,
+      );
+      if (isAdministrativeEntity(placeEntity, typeAncestors)) {
+        addCandidate(
+          placeResult,
+          0,
+          provinceMatchesEntity(location, placeEntity, placeEntities),
+        );
+      }
+      const placeProvinceAligned = provinceMatchesEntity(
+        location,
+        placeEntity,
+        placeEntities,
+      );
+
+      let pending = getEntityIds(placeEntity, "P131");
+      const visited = new Set<string>();
+      for (let depth = 0; depth < 2 && pending.length > 0; depth += 1) {
+        const next: string[] = [];
+        for (const qid of pending) {
+          if (visited.has(qid)) {
+            continue;
+          }
+          visited.add(qid);
+          const ancestor = placeEntities.get(qid);
+          if (!ancestor) {
+            continue;
+          }
+          const label = getLabel(ancestor);
+          if (
+            isAdministrativeEntity(ancestor, typeAncestors) &&
+            label &&
+            !/^Q\d+$/.test(label)
+          ) {
+            addCandidate(
+              {
+                id: qid,
+                label,
+                description: getDescription(ancestor) ?? "",
+              },
+              placeNameScore,
+              placeProvinceAligned,
+            );
+          }
+          next.push(...getEntityIds(ancestor, "P131"));
+        }
+        pending = next;
+      }
+    }
+    administrativeCandidateResults.set(location.id, candidates);
+  }
+
+  const referencedIds = [...placeEntities.values()].flatMap((entity) => [
+    ...getEntityIds(entity, "P17"),
+    ...getEntityIds(entity, "P131"),
+  ]);
   const referenceEntities = await fetchEntities(referencedIds, client);
   const languageIds = [...referenceEntities.values()].flatMap((entity) =>
     getEntityIds(entity, "P37"),
   );
   const languageEntities = await fetchEntities(languageIds, client);
   const entities = new Map([
-    ...initialEntities.entries(),
+    ...placeEntities.entries(),
     ...referenceEntities.entries(),
     ...languageEntities.entries(),
   ]);
 
   const resolutions: LocationResolution[] = locations.map((location) => {
-    const candidates = (geographicResults.get(location.id) ?? [])
-      .map((result) => buildCandidate(location, result, entities))
+    const candidates = [
+      ...(administrativeCandidateResults.get(location.id)?.values() ?? []),
+    ]
+      .filter(
+        ({ result }) =>
+          getLabel(entities.get(result.id)) ||
+          (result.label.length > 0 && !/^Q\d+$/.test(result.label)),
+      )
+      .map(({ result, relatedPlaceNameScore, relatedProvinceAligned }) => {
+        const candidate = buildCandidate(
+          location,
+          result,
+          entities,
+          relatedPlaceNameScore,
+        );
+        return {
+          candidate,
+          provinceAligned:
+            relatedProvinceAligned ||
+            provinceMatchesEntity(location, entities.get(result.id), entities),
+          countryContextAligned: contextMatchesCountry(
+            location,
+            candidate.country,
+          ),
+        };
+      });
+    const countryAlignedCandidates = candidates.filter(
+      (candidate) => candidate.countryContextAligned,
+    );
+    const candidatesForLocation =
+      countryAlignedCandidates.length > 0
+        ? countryAlignedCandidates
+        : candidates;
+    const provinceAlignedCandidates = candidatesForLocation.filter(
+      (candidate) => candidate.provinceAligned,
+    );
+    const candidatesWithProvincePreference =
+      location.eu5Province && provinceAlignedCandidates.length > 0
+        ? provinceAlignedCandidates
+        : candidatesForLocation;
+    const rankedCandidates = candidatesWithProvincePreference
+      .map(({ candidate }) => candidate)
       .sort((left, right) => right.score - left.score)
       .slice(0, 5);
-    const rankedCandidates = rankCandidateConfidence(location, candidates);
+    const confidenceRankedCandidates = rankCandidateConfidence(
+      location,
+      rankedCandidates,
+    );
     return {
       location,
-      status: rankedCandidates.length > 0 ? "needs-review" : "unresolved",
+      status:
+        confidenceRankedCandidates.length > 0 ? "needs-review" : "unresolved",
       selectedQid: null,
-      candidates: rankedCandidates,
+      candidates: confidenceRankedCandidates,
     };
   });
 
