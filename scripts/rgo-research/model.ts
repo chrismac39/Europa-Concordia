@@ -14,6 +14,17 @@ export interface WikipediaPageLink {
   url: string;
 }
 
+export interface AdministrativeScale {
+  level: string;
+  levelName: string;
+  typicalAreaKm2: number;
+  areaStatistic: "median" | "mean";
+  unitCount: number;
+  sourceDataset: string;
+  sourceVersion: string;
+  sourceUrl: string;
+}
+
 export interface PlaceCandidate {
   qid: string;
   label: string;
@@ -21,9 +32,11 @@ export interface PlaceCandidate {
   score: number;
   confidence: Confidence;
   country?: string;
+  countryIso3?: string;
   countryQid?: string;
   administrativeArea?: string;
   administrativeAreaQid?: string;
+  administrativeScale?: AdministrativeScale;
   coordinates?: {
     latitude: number;
     longitude: number;

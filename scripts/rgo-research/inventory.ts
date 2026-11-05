@@ -174,6 +174,7 @@ function parsePlaceCandidate(
 
   for (const key of [
     "country",
+    "countryIso3",
     "countryQid",
     "administrativeArea",
     "administrativeAreaQid",
@@ -185,6 +186,44 @@ function parsePlaceCandidate(
       }
       parsed[key] = entry;
     }
+  }
+  if (candidate.administrativeScale !== undefined) {
+    const scale = candidate.administrativeScale;
+    if (
+      !scale ||
+      typeof scale !== "object" ||
+      Array.isArray(scale) ||
+      !("level" in scale) ||
+      typeof scale.level !== "string" ||
+      !("levelName" in scale) ||
+      typeof scale.levelName !== "string" ||
+      !("typicalAreaKm2" in scale) ||
+      typeof scale.typicalAreaKm2 !== "number" ||
+      !("areaStatistic" in scale) ||
+      (scale.areaStatistic !== "mean" && scale.areaStatistic !== "median") ||
+      !("unitCount" in scale) ||
+      typeof scale.unitCount !== "number" ||
+      !("sourceDataset" in scale) ||
+      typeof scale.sourceDataset !== "string" ||
+      !("sourceVersion" in scale) ||
+      typeof scale.sourceVersion !== "string" ||
+      !("sourceUrl" in scale) ||
+      typeof scale.sourceUrl !== "string"
+    ) {
+      throw new Error(
+        `Candidate ${candidate.qid} administrativeScale is invalid`,
+      );
+    }
+    parsed.administrativeScale = {
+      level: scale.level,
+      levelName: scale.levelName,
+      typicalAreaKm2: scale.typicalAreaKm2,
+      areaStatistic: scale.areaStatistic,
+      unitCount: scale.unitCount,
+      sourceDataset: scale.sourceDataset,
+      sourceVersion: scale.sourceVersion,
+      sourceUrl: scale.sourceUrl,
+    };
   }
   if (candidate.coordinates !== undefined) {
     if (

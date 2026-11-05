@@ -5,6 +5,8 @@ import type {
   ResolutionFile,
 } from "./model.js";
 import { JsonHttpClient } from "./api.js";
+import type { AdminScaleIndex } from "./admin-scale.js";
+import { getAdminScaleRecord } from "./admin-scale.js";
 
 interface SearchResult {
   id: string;
@@ -93,6 +95,7 @@ function compactEntityResponse(value: unknown): unknown {
 
   const relevantClaims = new Set([
     "P17",
+    "P298",
     "P31",
     "P37",
     "P131",
@@ -204,16 +207,20 @@ function getDescription(
 function getLanguageCode(
   entity: WikidataEntity | undefined,
 ): string | undefined {
-  const getStringClaim = (property: string): string | undefined => {
-    const value = entity?.claims?.[property]?.[0]?.mainsnak?.datavalue?.value;
-    return typeof value === "string" ? value : undefined;
-  };
-  const code = getStringClaim("P424");
+  const code = getStringClaim(entity, "P424");
   if (code) {
     return code;
   }
 
-  return getStringClaim("P218");
+  return getStringClaim(entity, "P218");
+}
+
+function getStringClaim(
+  entity: WikidataEntity | undefined,
+  property: string,
+): string | undefined {
+  const value = entity?.claims?.[property]?.[0]?.mainsnak?.datavalue?.value;
+  return typeof value === "string" ? value : undefined;
 }
 
 function wikipediaLanguageCode(languageCode: string): string {
@@ -331,6 +338,7 @@ async function fetchEntities(
       ids: batch.join("|"),
       props: "labels|descriptions|aliases|claims|sitelinks",
       languages: "en",
+      redirects: "yes",
       format: "json",
     });
     const response: unknown = await client.get(wikidataApiUrl(parameters), {
@@ -544,11 +552,14 @@ function buildCandidate(
   result: SearchResult,
   entities: Map<string, WikidataEntity>,
   relatedPlaceNameScore: number,
+  adminScaleIndex: AdminScaleIndex,
 ): PlaceCandidate {
   const entity = entities.get(result.id);
   const adminQid = getEntityIds(entity, "P131")[0];
   const countryQid = findCountryQid(entity, entities);
   const countryEntity = entities.get(countryQid ?? "");
+  const countryIso3 = getStringClaim(countryEntity, "P298");
+  const adminScale = getAdminScaleRecord(adminScaleIndex, countryIso3);
   const adminEntity = entities.get(adminQid ?? "");
   const score = candidateScore(
     input,
@@ -580,6 +591,21 @@ function buildCandidate(
     confidence: "low",
     ...(countryQid && getLabel(countryEntity)
       ? { country: getLabel(countryEntity), countryQid }
+      : {}),
+    ...(countryIso3 ? { countryIso3 } : {}),
+    ...(adminScale
+      ? {
+          administrativeScale: {
+            level: adminScale.selectedLevel,
+            levelName: adminScale.levelName,
+            typicalAreaKm2: adminScale.typicalAreaKm2,
+            areaStatistic: adminScale.areaStatistic,
+            unitCount: adminScale.unitCount,
+            sourceDataset: adminScale.sourceDataset,
+            sourceVersion: adminScale.sourceVersion,
+            sourceUrl: adminScale.sourceUrl,
+          },
+        }
       : {}),
     ...(adminQid && getLabel(adminEntity)
       ? {
@@ -625,6 +651,7 @@ export async function resolveLocations(
   locations: LocationInput[],
   client: JsonHttpClient,
   inputSource: string,
+  adminScaleIndex: AdminScaleIndex,
 ): Promise<ResolutionFile> {
   const searchResults = new Map<string, SearchResult[]>();
   const allResults: SearchResult[] = [];
@@ -817,6 +844,7 @@ export async function resolveLocations(
           result,
           entities,
           relatedPlaceNameScore,
+          adminScaleIndex,
         );
         return {
           candidate,

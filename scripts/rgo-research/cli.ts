@@ -13,6 +13,7 @@ import { writeResearchReports, writeResolutionReports } from "./report.js";
 import { resolveLocations } from "./wikidata.js";
 import { researchResolvedLocations } from "./wikipedia.js";
 import { addEu5Provinces, readEu5ProvinceMap } from "./provinces.js";
+import { parseAdminScaleIndex } from "./admin-scale.js";
 
 const defaultResolution = "reports/rgo-research/pilot-resolution.json";
 const defaultResearch = "reports/rgo-research/pilot-research.json";
@@ -32,6 +33,7 @@ function usage(): string {
     "Only Wikidata entities classified as geographic locations are included.",
     "EU5 provinces are read from the installed game's map_data/definitions.txt.",
     "Review the resolution CSV and set correct=TRUE for one confirmed candidate per location before research.",
+    "Country subdivision-scale hints come from config/rgo-research-admin-scales.json.",
   ].join("\n");
 }
 
@@ -114,7 +116,20 @@ async function main(): Promise<void> {
     const inputSource = inputPath
       ? path.relative(rootDirectory, path.resolve(rootDirectory, inputPath))
       : defaultInventory;
-    const resolution = await resolveLocations(locations, cache, inputSource);
+    const adminScaleIndex = parseAdminScaleIndex(
+      JSON.parse(
+        await readFile(
+          path.join(rootDirectory, "config", "rgo-research-admin-scales.json"),
+          "utf8",
+        ),
+      ),
+    );
+    const resolution = await resolveLocations(
+      locations,
+      cache,
+      inputSource,
+      adminScaleIndex,
+    );
     await cache.flush();
     const output = await writeResolutionReports(
       rootDirectory,

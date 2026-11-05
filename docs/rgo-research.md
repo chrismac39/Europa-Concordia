@@ -17,13 +17,13 @@ change any RGO assignments.
    - `reports/rgo-research/pilot-resolution.md`
    - `reports/rgo-research/pilot-resolution.csv`
 2. Review the candidate rows in the CSV, including the EU5 province, modern
-   administrative unit, coordinates, and Wikipedia links. Candidate units may
-   be local LAU-like municipalities/communes or broader NUTS-3-like equivalents.
-   Standalone towns/cities and natural features are not candidates, though a
-   city that is itself an administrative unit can qualify. Set `correct` to
-   `TRUE` for one candidate per confirmed location. Leave all rows `FALSE` when
-   the match is uncertain. The tool deliberately never auto-selects a
-   candidate.
+   administrative unit, coordinates, Wikipedia links, and the country's
+   area-based subdivision-scale target. The target is a guide, not a guarantee
+   that a Wikidata candidate is exactly at that boundary tier. Standalone
+   towns/cities and natural features are not candidates, though a city that is
+   itself an administrative unit can qualify. Set `correct` to `TRUE` for one
+   candidate per confirmed location. Leave all rows `FALSE` when the match is
+   uncertain. The tool deliberately never auto-selects a candidate.
 3. Run `npm run rgo:research -- research`. It reads the CSV flags and, for each
    confirmed place, retrieves article pages linked for the country's official
    languages when available. It uses the English Wikipedia page only when no
@@ -92,6 +92,23 @@ other than the default file adjacent to the resolution JSON.
   modern-country or administrative-boundary assertion. The default game path
   is the standard Steam install; set `EU5_GAME_PATH` or pass `--game-path
 "C:\\path\\to\\Europa Universalis V\\game"` for another installation.
+- The country subdivision-scale index is stored in
+  `config/rgo-research-admin-scales.json`. It uses the median land area of
+  2024 LAUs in EU member countries as its reference size. For countries with
+  GISCO LAU/NUTS-3 data, the index chooses whichever available tier has a
+  median area closest to that reference. Elsewhere it chooses the closest
+  geoBoundaries ADM1–ADM5 tier using the API's published mean area as a
+  lightweight proxy for typical size. Closeness is measured by the absolute
+  logarithm of the area ratio so proportional differences are compared
+  consistently. Regenerate it with
+  `npm run rgo:research:index`. GISCO's 2024 LAU and NUTS sources are fixed;
+  geoBoundaries metadata comes from its current `gbOpen` API, so regeneration
+  can update the global entries. Source and license metadata are retained for
+  each entry. The index covers countries for which one of those sources
+  provides usable administrative-area data.
+  Sources: [Eurostat GISCO LAU 2024](https://gisco-services.ec.europa.eu/distribution/v2/lau/lau-2024-files.html),
+  [Eurostat GISCO NUTS 2024](https://gisco-services.ec.europa.eu/distribution/v2/nuts/nuts-2024-files.html),
+  [geoBoundaries API documentation](https://www.geoboundaries.org/api.html).
 - Requests are sequential and rate-limited to at least one second per host.
   Successful JSON responses are cached in ignored
   `.local/rgo-research/api-cache.json`; cached results are reused on later runs.

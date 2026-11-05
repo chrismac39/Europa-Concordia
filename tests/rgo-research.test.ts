@@ -23,7 +23,15 @@ import {
   addEu5Provinces,
   parseEu5ProvinceMap,
 } from "../scripts/rgo-research/provinces.js";
-import { writeResearchReports } from "../scripts/rgo-research/report.js";
+import {
+  writeResearchReports,
+  writeResolutionReports,
+} from "../scripts/rgo-research/report.js";
+import {
+  getAdminScaleRecord,
+  parseAdminScaleIndex,
+} from "../scripts/rgo-research/admin-scale.js";
+import type { AdminScaleIndex } from "../scripts/rgo-research/admin-scale.js";
 
 const rootDirectory = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -134,6 +142,50 @@ test("EU5 province parser maps locations to their game province", () => {
       },
     ],
   );
+});
+
+test("administrative scale index validates records and looks up ISO3 codes", () => {
+  const index = parseAdminScaleIndex({
+    formatVersion: 1,
+    generatedAt: "2026-01-01T00:00:00.000Z",
+    referenceAreaKm2: 100,
+    referenceDescription: "EU LAU median",
+    countries: {
+      FRA: {
+        countryIso3: "FRA",
+        countryName: "France",
+        selectedLevel: "LAU",
+        levelName: "LAU (local administrative unit)",
+        typicalAreaKm2: 200,
+        areaStatistic: "median",
+        unitCount: 34_000,
+        sourceDataset: "Eurostat GISCO LAU 2024",
+        sourceVersion: "2024",
+        sourceUrl: "https://example.test/lau",
+      },
+    },
+  });
+  assert.equal(getAdminScaleRecord(index, "fra")?.selectedLevel, "LAU");
+  assert.equal(getAdminScaleRecord(index, undefined), undefined);
+  assert.throws(
+    () => parseAdminScaleIndex({ ...index, formatVersion: 2 }),
+    /invalid administrative scale index/i,
+  );
+});
+
+test("generated administrative scale index includes global and GISCO entries", async () => {
+  const index = parseAdminScaleIndex(
+    JSON.parse(
+      await readFile(
+        path.join(rootDirectory, "config", "rgo-research-admin-scales.json"),
+        "utf8",
+      ),
+    ),
+  );
+  assert.ok(Object.keys(index.countries).length >= 200);
+  assert.equal(index.countries.FRA?.selectedLevel, "LAU");
+  assert.equal(index.countries.USA?.selectedLevel, "ADM2");
+  assert.equal(index.countries.IRQ?.areaStatistic, "mean");
 });
 
 test("catalog validates configured goods and matches localized crop aliases", async () => {
@@ -349,6 +401,7 @@ test("Wikidata resolver returns place candidates without selecting one", async (
           id: "Q142",
           labels: { en: { value: "France" } },
           claims: {
+            P298: [{ mainsnak: { datavalue: { value: "FRA" } } }],
             P37: [{ mainsnak: { datavalue: { value: { id: "Q150" } } } }],
           },
         };
@@ -391,6 +444,26 @@ test("Wikidata resolver returns place candidates without selecting one", async (
       fetchImplementation,
     });
 
+    const adminScaleIndex: AdminScaleIndex = {
+      formatVersion: 1,
+      generatedAt: "2026-01-01T00:00:00.000Z",
+      referenceAreaKm2: 100,
+      referenceDescription: "EU LAU median",
+      countries: {
+        FRA: {
+          countryIso3: "FRA",
+          countryName: "France",
+          selectedLevel: "LAU",
+          levelName: "LAU (local administrative unit)",
+          typicalAreaKm2: 200,
+          areaStatistic: "median",
+          unitCount: 34_000,
+          sourceDataset: "Eurostat GISCO LAU 2024",
+          sourceVersion: "2024",
+          sourceUrl: "https://example.test/lau",
+        },
+      },
+    };
     const result = await resolveLocations(
       [
         {
@@ -402,6 +475,7 @@ test("Wikidata resolver returns place candidates without selecting one", async (
       ],
       client,
       "test",
+      adminScaleIndex,
     );
     const location = result.locations[0];
     assert.equal(location.selectedQid, null);
@@ -410,6 +484,8 @@ test("Wikidata resolver returns place candidates without selecting one", async (
     assert.equal(location.candidates[0].label, "Loir-et-Cher");
     assert.equal(location.candidates[0].confidence, "medium");
     assert.equal(location.candidates[0].country, "France");
+    assert.equal(location.candidates[0].countryIso3, "FRA");
+    assert.equal(location.candidates[0].administrativeScale?.level, "LAU");
     assert.equal(location.candidates.length, 1);
     assert.equal(
       location.candidates.some((candidate) => candidate.qid === "Q1"),
@@ -460,6 +536,17 @@ test("resolution JSON parser preserves manual place selection", () => {
             score: 125,
             confidence: "high",
             country: "France",
+            countryIso3: "FRA",
+            administrativeScale: {
+              level: "LAU",
+              levelName: "LAU (local administrative unit)",
+              typicalAreaKm2: 11,
+              areaStatistic: "median",
+              unitCount: 34_000,
+              sourceDataset: "Eurostat GISCO LAU 2024",
+              sourceVersion: "2024",
+              sourceUrl: "https://example.test/lau",
+            },
             localWikipedia: [
               {
                 language: "fr",
@@ -472,7 +559,12 @@ test("resolution JSON parser preserves manual place selection", () => {
       },
     ],
   };
-  assert.deepEqual(parseResolutionFile(file), file);
+  const parsed = parseResolutionFile(file);
+  assert.deepEqual(parsed, file);
+  assert.equal(
+    parsed.locations[0].candidates[0].administrativeScale?.level,
+    "LAU",
+  );
   assert.throws(
     () => parseResolutionFile({ ...file, formatVersion: 2 }),
     /invalid format/,
@@ -536,6 +628,63 @@ test("resolution review CSV applies a single correct-candidate flag", () => {
       ),
     /more than one candidate correct/,
   );
+});
+
+test("resolution reports surface the selected country scale target", async () => {
+  const temporaryDirectory = await createTemporaryDirectory();
+  try {
+    const resolution: ResolutionFile = {
+      formatVersion: 1,
+      generatedAt: "2026-01-01T00:00:00.000Z",
+      inputSource: "test",
+      locations: [
+        {
+          location: { id: "blois", englishName: "Blois", context: "France" },
+          status: "needs-review",
+          selectedQid: null,
+          candidates: [
+            {
+              qid: "Q1",
+              label: "Blois",
+              description: "commune in France",
+              score: 100,
+              confidence: "high",
+              country: "France",
+              countryIso3: "FRA",
+              administrativeScale: {
+                level: "LAU",
+                levelName: "LAU (local administrative unit)",
+                typicalAreaKm2: 11,
+                areaStatistic: "median",
+                unitCount: 34_000,
+                sourceDataset: "Eurostat GISCO LAU 2024",
+                sourceVersion: "2024",
+                sourceUrl: "https://example.test/lau",
+              },
+              localWikipedia: [],
+            },
+          ],
+        },
+      ],
+    };
+    const output = await writeResolutionReports(
+      temporaryDirectory,
+      "pilot-resolution.json",
+      resolution,
+    );
+    const reviewRows = parseCsv(await readFile(output.reviewCsvPath, "utf8"));
+    const levelIndex = reviewRows[0].indexOf("selected_admin_level");
+    const areaIndex = reviewRows[0].indexOf("typical_unit_area_km2");
+    assert.equal(reviewRows[1][levelIndex], "LAU");
+    assert.equal(reviewRows[1][areaIndex], "11");
+    assert.equal(reviewRows[1][reviewRows[0].indexOf("correct")], "FALSE");
+    assert.match(
+      await readFile(output.markdownPath, "utf8"),
+      /LAU \(local administrative unit\); 11\.0 km² \(median, Eurostat GISCO LAU 2024\)/,
+    );
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
 });
 
 test("Wikipedia research extracts relevant sections, years, citations, and crop signals", async () => {

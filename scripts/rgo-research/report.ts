@@ -38,7 +38,15 @@ function resolutionReviewCsv(file: ResolutionFile): string {
       "candidate_label",
       "description",
       "country",
+      "country_iso3",
       "administrative_area",
+      "selected_admin_level",
+      "selected_admin_level_name",
+      "typical_unit_area_km2",
+      "area_statistic",
+      "scale_source_dataset",
+      "scale_source_version",
+      "scale_source_url",
       "latitude",
       "longitude",
       "confidence",
@@ -63,7 +71,15 @@ function resolutionReviewCsv(file: ResolutionFile): string {
           candidate?.label ?? "",
           candidate?.description ?? "",
           candidate?.country ?? "",
+          candidate?.countryIso3 ?? "",
           candidate?.administrativeArea ?? "",
+          candidate?.administrativeScale?.level ?? "",
+          candidate?.administrativeScale?.levelName ?? "",
+          candidate?.administrativeScale?.typicalAreaKm2.toString() ?? "",
+          candidate?.administrativeScale?.areaStatistic ?? "",
+          candidate?.administrativeScale?.sourceDataset ?? "",
+          candidate?.administrativeScale?.sourceVersion ?? "",
+          candidate?.administrativeScale?.sourceUrl ?? "",
           candidate?.coordinates?.latitude.toString() ?? "",
           candidate?.coordinates?.longitude.toString() ?? "",
           candidate?.confidence ?? "",
@@ -91,6 +107,7 @@ function resolutionMarkdown(file: ResolutionFile): string {
       "companion CSV. Set `correct` to TRUE for one candidate per confirmed " +
       "location. Leave every candidate FALSE when uncertain. Then run the " +
       "research stage; no RGO assignment is changed by this tool.",
+    "The country-scale target is an area-based guide, not a guarantee that a candidate has the selected boundary tier.",
     "",
   ];
 
@@ -110,8 +127,8 @@ function resolutionMarkdown(file: ResolutionFile): string {
     }
 
     lines.push(
-      "| QID | Candidate | Description | Country | Modern administrative area | Match confidence | Wikipedia |",
-      "| --- | --- | --- | --- | --- | --- | --- |",
+      "| QID | Candidate | Description | Country | Modern administrative area | Country-scale target | Match confidence | Wikipedia |",
+      "| --- | --- | --- | --- | --- | --- | --- | --- |",
     );
     for (const candidate of candidates) {
       const links = [
@@ -121,8 +138,11 @@ function resolutionMarkdown(file: ResolutionFile): string {
       const wikipedia =
         links.map((link) => `[${link.language}](${link.url})`).join(", ") ||
         "None linked";
+      const scale = candidate.administrativeScale
+        ? `${candidate.administrativeScale.levelName}; ${candidate.administrativeScale.typicalAreaKm2.toFixed(1)} km² (${candidate.administrativeScale.areaStatistic}, ${candidate.administrativeScale.sourceDataset})`
+        : "Unavailable";
       lines.push(
-        `| [${candidate.qid}](https://www.wikidata.org/wiki/${candidate.qid}) | ${markdownCell(candidate.label)} | ${markdownCell(candidate.description || "—")} | ${markdownCell(candidate.country ?? "—")} | ${markdownCell(candidate.administrativeArea ?? "—")} | ${candidate.confidence} | ${wikipedia} |`,
+        `| [${candidate.qid}](https://www.wikidata.org/wiki/${candidate.qid}) | ${markdownCell(candidate.label)} | ${markdownCell(candidate.description || "—")} | ${markdownCell(candidate.country ?? "—")} | ${markdownCell(candidate.administrativeArea ?? "—")} | ${markdownCell(scale)} | ${candidate.confidence} | ${wikipedia} |`,
       );
     }
     lines.push("");
