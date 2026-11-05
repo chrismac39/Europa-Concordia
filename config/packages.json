@@ -41,6 +41,44 @@
       }
     },
     {
+      "id": "fruits-expanded",
+      "name": "Fruits Expanded",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3821883489",
+        "snapshotChecksum": "sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0",
+        "path": "sources/steam-workshop/3821883489"
+      },
+      "author": "Unknown (creator not included in local Workshop metadata)",
+      "targetGameVersion": "1.4.5",
+      "version": "0.5.9",
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3821883489 for examination. Its descriptor version is 0.5.9.2 and declares EU5 1.4.* support; the catalog version omits the fourth component to satisfy its three-component version format. No redistribution permission is recorded."
+      }
+    },
+    {
+      "id": "fruits-expanded-just-goods-compatibility",
+      "name": "Fruits Expanded × Just Goods Compatibility Patch",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3828715234",
+        "snapshotChecksum": "sha256:8d1cdf0732cccedf4390b1abbe69ca84eb1fb1da0ac721d13e0f7044d3f44041",
+        "path": "sources/steam-workshop/3828715234"
+      },
+      "author": "Repository owner",
+      "targetGameVersion": "1.4.5",
+      "version": "1.0.0",
+      "dependencies": ["fruits-expanded", "just-goods"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3828715234 for examination. The repository owner identifies themself as the author. Its descriptor declares EU5 1.4.* support."
+      }
+    },
+    {
       "id": "better-road-builder",
       "name": "Better Road Builder",
       "type": "upstream",
