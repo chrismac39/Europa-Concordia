@@ -1,12 +1,14 @@
 export function encodeCsvRow(values: string[]): string {
   return values
     .map((value) => {
-      const safeValue = /^[\t\r\n ]*[=+\-@]/.test(value)
-        ? `'${value}`
-        : value;
+      const safeValue = /^[\t\r\n ]*[=+\-@]/.test(value) ? `'${value}` : value;
       return `"${safeValue.replace(/"/g, '""')}"`;
     })
     .join(",");
+}
+
+export function decodeCsvCell(value: string): string {
+  return /^'[\t\r\n ]*[=+\-@]/.test(value) ? value.slice(1) : value;
 }
 
 export function parseCsv(contents: string): string[][] {

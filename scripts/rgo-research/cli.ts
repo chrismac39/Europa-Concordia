@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { JsonHttpClient } from "./api.js";
 import {
   parseLocationInput,
+  parseResolutionReviewCsv,
   parseResolutionFile,
   readFruitReviewLocations,
 } from "./inventory.js";
@@ -25,12 +26,12 @@ function usage(): string {
   return [
     "Usage:",
     "  npm run rgo:research -- resolve [--input locations.json] [--output report.json] [--game-path GAME_DIR]",
-    "  npm run rgo:research -- research [--resolution report.json] [--output report.json] [--game-path GAME_DIR]",
+    "  npm run rgo:research -- research [--resolution report.json] [--review report.csv] [--output report.json] [--game-path GAME_DIR]",
     "",
     "The default resolve input is the 71 Harmony generic-fruit locations.",
     "Only Wikidata entities classified as geographic locations are included.",
     "EU5 provinces are read from the installed game's map_data/definitions.txt.",
-    "Review the resolution JSON and set selectedQid for each confirmed location before research.",
+    "Review the resolution CSV and set correct=TRUE for one confirmed candidate per location before research.",
   ].join("\n");
 }
 
@@ -51,7 +52,13 @@ function parseOptions(args: string[]): Map<string, string> {
       );
     }
     if (
-      !["--input", "--output", "--resolution", "--game-path"].includes(name)
+      ![
+        "--input",
+        "--output",
+        "--resolution",
+        "--review",
+        "--game-path",
+      ].includes(name)
     ) {
       throw new Error(`Unknown option: ${name}\n${usage()}`);
     }
@@ -90,6 +97,9 @@ async function main(): Promise<void> {
     if (options.has("--resolution")) {
       throw new Error("--resolution is only valid for the research command");
     }
+    if (options.has("--review")) {
+      throw new Error("--review is only valid for the research command");
+    }
     const inputPath = options.get("--input");
     const inputLocations = inputPath
       ? parseLocationInput(
@@ -113,9 +123,8 @@ async function main(): Promise<void> {
     );
     console.log(`Resolution JSON: ${output.jsonPath}`);
     console.log(`Review report: ${output.markdownPath}`);
-    console.log(
-      "Confirm candidate QIDs in the JSON before running the research stage.",
-    );
+    console.log(`Candidate review CSV: ${output.reviewCsvPath}`);
+    console.log("Set correct=TRUE in the CSV for confirmed place candidates.");
     return;
   }
 
@@ -129,16 +138,24 @@ async function main(): Promise<void> {
   const parsedResolution = parseResolutionFile(
     JSON.parse(await readFile(resolutionPath, "utf8")),
   );
+  const reviewPath = path.resolve(
+    rootDirectory,
+    options.get("--review") ?? resolutionPath.replace(/\.json$/i, ".csv"),
+  );
+  const resolution = parseResolutionReviewCsv(
+    await readFile(reviewPath, "utf8"),
+    parsedResolution,
+  );
   const enrichedLocations = addEu5Provinces(
-    parsedResolution.locations.map((location) => location.location),
+    resolution.locations.map((location) => location.location),
     provinceMap,
   );
   const provinceByLocationId = new Map(
     enrichedLocations.map((location) => [location.id, location]),
   );
-  const resolution = {
-    ...parsedResolution,
-    locations: parsedResolution.locations.map((location) => {
+  const enrichedResolution = {
+    ...resolution,
+    locations: resolution.locations.map((location) => {
       const enrichedLocation = provinceByLocationId.get(location.location.id);
       if (!enrichedLocation) {
         throw new Error(
@@ -148,18 +165,21 @@ async function main(): Promise<void> {
       return { ...location, location: enrichedLocation };
     }),
   };
-  const selectedCount = resolution.locations.filter(
+  const selectedCount = enrichedResolution.locations.filter(
     (location) => location.selectedQid !== null,
   ).length;
   if (selectedCount === 0) {
     throw new Error(
-      "No locations have selectedQid values. Review the resolution JSON and confirm at least one place first.",
+      "No locations are marked correct in the resolution CSV. Set correct=TRUE for at least one confirmed candidate first.",
     );
   }
 
-  const catalog = await loadRgoGoodsCatalog(rootDirectory);
+  const catalog = await loadRgoGoodsCatalog(
+    rootDirectory,
+    path.join(gamePath, "in_game", "map_data", "location_templates.txt"),
+  );
   const research = await researchResolvedLocations(
-    resolution,
+    enrichedResolution,
     cache,
     catalog,
     path.relative(rootDirectory, resolutionPath),
@@ -172,6 +192,7 @@ async function main(): Promise<void> {
   );
   console.log(`Research JSON: ${output.jsonPath}`);
   console.log(`Review report: ${output.markdownPath}`);
+  console.log(`RGO suggestion review CSV: ${output.rgoReviewCsvPath}`);
 }
 
 main().catch((error: unknown) => {

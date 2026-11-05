@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { parseCsv } from "./csv.js";
+import { decodeCsvCell, parseCsv } from "./csv.js";
 import type {
   LocationInput,
   LocationResolution,
@@ -295,16 +295,16 @@ export function parseResolutionReviewCsv(
   }
 
   const headers = rows[0].map((header) => header.trim());
-  const headerIndexes = new Map(headers.map((header, index) => [header, index]));
+  const headerIndexes = new Map(
+    headers.map((header, index) => [header, index]),
+  );
   if (headerIndexes.size !== headers.length) {
     throw new Error("Resolution review CSV contains duplicate column names");
   }
   const requiredHeaders = ["location_id", "candidate_qid", "correct"];
   for (const header of requiredHeaders) {
     if (!headerIndexes.has(header)) {
-      throw new Error(
-        `Resolution review CSV is missing the ${header} column`,
-      );
+      throw new Error(`Resolution review CSV is missing the ${header} column`);
     }
   }
 
@@ -334,8 +334,8 @@ export function parseResolutionReviewCsv(
         `Resolution review CSV row ${index + 2} has ${row.length} columns; expected ${headers.length}`,
       );
     }
-    const locationId = row[locationIndex].trim();
-    const candidateQid = row[qidIndex].trim();
+    const locationId = decodeCsvCell(row[locationIndex]).trim();
+    const candidateQid = decodeCsvCell(row[qidIndex]).trim();
     const correctValue = row[correctIndex].trim().toLowerCase();
     const correct = ["true", "yes", "1"].includes(correctValue);
     if (!["", "false", "no", "0", "true", "yes", "1"].includes(correctValue)) {
@@ -371,9 +371,7 @@ export function parseResolutionReviewCsv(
         );
       }
     } else if (
-      !resolution.candidates.some(
-        (candidate) => candidate.qid === candidateQid,
-      )
+      !resolution.candidates.some((candidate) => candidate.qid === candidateQid)
     ) {
       throw new Error(
         `Resolution review CSV candidate ${candidateQid} is not in the candidate list for ${locationId}`,

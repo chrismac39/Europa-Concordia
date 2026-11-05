@@ -1,6 +1,5 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { encodeCsvRow } from "./csv.js";
 import type { CropMatch } from "./model.js";
 
 interface CropAliasEntry {
@@ -36,9 +35,7 @@ function extractRawMaterials(contents: string): string[] {
 
 function extractRawMaterialDefinitions(contents: string): string[] {
   const normalized = contents.replace(/^\uFEFF/, "");
-  const headers = [
-    ...normalized.matchAll(/^([a-z][a-z0-9_]*)\s*=\s*\{/gm),
-  ];
+  const headers = [...normalized.matchAll(/^([a-z][a-z0-9_]*)\s*=\s*\{/gm)];
   return headers.flatMap((header, index) => {
     const start = (header.index ?? 0) + header[0].length;
     const end = headers[index + 1]?.index ?? normalized.length;
@@ -60,18 +57,8 @@ async function readGoodsDefinitions(directory: string): Promise<string[]> {
 
 export async function loadRgoGoodsCatalog(
   rootDirectory: string,
-  vanillaLocationTemplatesPath?: string,
+  vanillaLocationTemplatesPath: string,
 ): Promise<RgoGoodsCatalog> {
-  const vanillaMapPath =
-    vanillaLocationTemplatesPath ??
-    path.join(
-      rootDirectory,
-      "sources",
-      "vanilla",
-      "in_game",
-      "map_data",
-      "location_templates.txt",
-    );
   const harmonyMapPath = path.join(
     rootDirectory,
     "integration",
@@ -110,7 +97,7 @@ export async function loadRgoGoodsCatalog(
     "goods",
   );
   const vanillaGoodsDirectory = path.join(
-    path.dirname(path.dirname(vanillaMapPath)),
+    path.dirname(path.dirname(vanillaLocationTemplatesPath)),
     "common",
     "goods",
   );
@@ -123,7 +110,7 @@ export async function loadRgoGoodsCatalog(
     justGoodsGoods,
     aliasContents,
   ] = await Promise.all([
-    readFile(vanillaMapPath, "utf8"),
+    readFile(vanillaLocationTemplatesPath, "utf8"),
     readFile(harmonyMapPath, "utf8"),
     readFile(fruitsExpandedMapPath, "utf8"),
     readFile(fruitsExpandedGoodsPath, "utf8"),

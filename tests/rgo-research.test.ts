@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -12,8 +12,10 @@ import {
 import {
   parseFruitReviewLocations,
   parseLocationInput,
+  parseResolutionReviewCsv,
   parseResolutionFile,
 } from "../scripts/rgo-research/inventory.js";
+import { encodeCsvRow, parseCsv } from "../scripts/rgo-research/csv.js";
 import type { ResolutionFile } from "../scripts/rgo-research/model.js";
 import { resolveLocations } from "../scripts/rgo-research/wikidata.js";
 import { researchResolvedLocations } from "../scripts/rgo-research/wikipedia.js";
@@ -21,6 +23,7 @@ import {
   addEu5Provinces,
   parseEu5ProvinceMap,
 } from "../scripts/rgo-research/provinces.js";
+import { writeResearchReports } from "../scripts/rgo-research/report.js";
 
 const rootDirectory = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -29,6 +32,36 @@ const rootDirectory = path.resolve(
 
 function createTemporaryDirectory(): Promise<string> {
   return mkdtemp(path.join(os.tmpdir(), "rgo-research-test-"));
+}
+
+async function createVanillaMap(temporaryDirectory: string): Promise<string> {
+  const gamePath = path.join(temporaryDirectory, "game");
+  const mapPath = path.join(
+    gamePath,
+    "in_game",
+    "map_data",
+    "location_templates.txt",
+  );
+  await mkdir(path.join(gamePath, "in_game", "common", "goods"), {
+    recursive: true,
+  });
+  await mkdir(path.dirname(mapPath), { recursive: true });
+  await writeFile(
+    mapPath,
+    "example = { raw_material = vanilla_test_good }\n",
+    "utf8",
+  );
+  await writeFile(
+    path.join(gamePath, "in_game", "common", "goods", "raw_materials.txt"),
+    [
+      "vanilla_defined_good = {",
+      " method = farming",
+      " category = raw_material",
+      "}",
+    ].join("\n"),
+    "utf8",
+  );
+  return mapPath;
 }
 
 test("pilot inventory parser reads 71 unique Harmony fruit locations", async () => {
@@ -104,21 +137,30 @@ test("EU5 province parser maps locations to their game province", () => {
 });
 
 test("catalog validates configured goods and matches localized crop aliases", async () => {
-  const catalog = await loadRgoGoodsCatalog(rootDirectory);
-  assert.ok(catalog.ids.has("fruit_apple"));
-  assert.ok(catalog.ids.has("fruit_grape"));
-  assert.ok(catalog.ids.has("western_pear"));
+  const temporaryDirectory = await createTemporaryDirectory();
+  try {
+    const vanillaMapPath = await createVanillaMap(temporaryDirectory);
+    const catalog = await loadRgoGoodsCatalog(rootDirectory, vanillaMapPath);
+    assert.ok(catalog.ids.has("fruit_apple"));
+    assert.ok(catalog.ids.has("fruit_grape"));
+    assert.ok(catalog.ids.has("western_pear"));
+    assert.ok(catalog.ids.has("cinnamon"));
+    assert.ok(catalog.ids.has("vanilla_test_good"));
+    assert.ok(catalog.ids.has("vanilla_defined_good"));
 
-  const matches = matchRgoGoods(
-    "Les vignobles produisaient du raisin.",
-    "fr",
-    catalog,
-  );
-  assert.ok(
-    matches.some(
-      (match) => match.goodId === "fruit_grape" && match.occurrenceCount >= 1,
-    ),
-  );
+    const matches = matchRgoGoods(
+      "Les vignobles produisaient du raisin.",
+      "fr",
+      catalog,
+    );
+    assert.ok(
+      matches.some(
+        (match) => match.goodId === "fruit_grape" && match.occurrenceCount >= 1,
+      ),
+    );
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
 });
 
 test("Wikidata resolver returns place candidates without selecting one", async () => {
@@ -369,6 +411,65 @@ test("resolution JSON parser preserves manual place selection", () => {
   );
 });
 
+test("resolution review CSV applies a single correct-candidate flag", () => {
+  const file: ResolutionFile = {
+    formatVersion: 1,
+    generatedAt: "2026-01-01T00:00:00.000Z",
+    inputSource: "test",
+    locations: [
+      {
+        location: { id: "blois", englishName: "Blois", context: "France" },
+        status: "needs-review",
+        selectedQid: null,
+        candidates: [
+          {
+            qid: "Q1",
+            label: "Blois",
+            description: "commune in France",
+            score: 125,
+            confidence: "high",
+            localWikipedia: [],
+          },
+          {
+            qid: "Q2",
+            label: "Blois (other)",
+            description: "other place",
+            score: 60,
+            confidence: "low",
+            localWikipedia: [],
+          },
+        ],
+      },
+    ],
+  };
+  const csv = [
+    encodeCsvRow(["location_id", "candidate_qid", "correct", "label"]),
+    encodeCsvRow(["blois", "Q1", "TRUE", "Blois, France"]),
+    encodeCsvRow(["blois", "Q2", "FALSE", 'A "different" place']),
+  ].join("\r\n");
+  assert.deepEqual(parseCsv(csv), [
+    ["location_id", "candidate_qid", "correct", "label"],
+    ["blois", "Q1", "TRUE", "Blois, France"],
+    ["blois", "Q2", "FALSE", 'A "different" place'],
+  ]);
+  assert.equal(
+    parseResolutionReviewCsv(csv, file).locations[0].selectedQid,
+    "Q1",
+  );
+  assert.throws(
+    () =>
+      parseResolutionReviewCsv(
+        [
+          "location_id,candidate_qid,correct",
+          "blois,Q1,TRUE",
+          "blois,Q2,TRUE",
+        ].join("\n"),
+        file,
+      ),
+    /more than one candidate correct/,
+  );
+});
+
 test("Wikipedia research extracts relevant sections, years, citations, and crop signals", async () => {
   const temporaryDirectory = await createTemporaryDirectory();
   try {
@@ -397,7 +498,10 @@ test("Wikipedia research extracts relevant sections, years, citations, and crop 
           },
         }),
     });
-    const catalog = await loadRgoGoodsCatalog(rootDirectory);
+    const catalog = await loadRgoGoodsCatalog(
+      rootDirectory,
+      await createVanillaMap(temporaryDirectory),
+    );
     const resolution: ResolutionFile = {
       formatVersion: 1,
       generatedAt: "2026-01-01T00:00:00.000Z",
@@ -452,6 +556,24 @@ test("Wikipedia research extracts relevant sections, years, citations, and crop 
     assert.deepEqual(article.sections[0].citationUrls, [
       "https://example.org/history",
     ]);
+    const output = await writeResearchReports(
+      temporaryDirectory,
+      "pilot-research.json",
+      research,
+    );
+    const reviewRows = parseCsv(
+      await readFile(output.rgoReviewCsvPath, "utf8"),
+    );
+    const goodIdIndex = reviewRows[0].indexOf("good_id");
+    const validIndex = reviewRows[0].indexOf("valid_rgo");
+    assert.ok(
+      reviewRows
+        .slice(1)
+        .some(
+          (row) =>
+            row[goodIdIndex] === "fruit_grape" && row[validIndex] === "FALSE",
+        ),
+    );
   } finally {
     await rm(temporaryDirectory, { recursive: true, force: true });
   }
@@ -471,7 +593,10 @@ test("English Wikipedia is used as fallback only when no local page is linked", 
           },
         }),
     });
-    const catalog = await loadRgoGoodsCatalog(rootDirectory);
+    const catalog = await loadRgoGoodsCatalog(
+      rootDirectory,
+      await createVanillaMap(temporaryDirectory),
+    );
     const resolution: ResolutionFile = {
       formatVersion: 1,
       generatedAt: "2026-01-01T00:00:00.000Z",

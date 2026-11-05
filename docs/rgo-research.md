@@ -15,19 +15,30 @@ change any RGO assignments.
    them as geographic places or features, and writes:
    - `reports/rgo-research/pilot-resolution.json`
    - `reports/rgo-research/pilot-resolution.md`
-2. Review the ranked candidate places, their modern country/admin area,
-   coordinates, and Wikipedia links. In the JSON file, set `selectedQid` to the
-   candidate that best matches the historical EU5 location. Leave uncertain
-   places as `null`. The tool deliberately never auto-selects a candidate.
-3. Run `npm run rgo:research -- research`. For each confirmed place, the tool
-   retrieves article pages linked for the country's official languages when
-   available. It uses the English Wikipedia page only when no local-language
-   page is linked. It extracts history/economy/agriculture/trade/industry
-   sections, matching year signals from 1300–1899, citation URLs, and matches
-   against configured RGO crop aliases.
+   - `reports/rgo-research/pilot-resolution.csv`
+2. Review the candidate rows in the CSV, including the EU5 province, modern
+   country/admin area, coordinates, and Wikipedia links. Set `correct` to
+   `TRUE` for one candidate per confirmed location. Leave all rows `FALSE` when
+   the match is uncertain. The tool deliberately never auto-selects a
+   candidate.
+3. Run `npm run rgo:research -- research`. It reads the CSV flags and, for each
+   confirmed place, retrieves article pages linked for the country's official
+   languages when available. It uses the English Wikipedia page only when no
+   local-language page is linked. It extracts history/economy/agriculture/
+   trade/industry sections, matching year signals from 1300–1899, citation
+   URLs, and matches against configured RGO crop aliases.
 4. Review:
    - `reports/rgo-research/pilot-research.json`
    - `reports/rgo-research/pilot-research.md`
+   - `reports/rgo-research/pilot-research.rgo-review.csv`
+
+The RGO review CSV contains goods in the vanilla, Just Goods, and Fruits
+Expanded RGO catalogs that matched crop aliases in the retrieved evidence. It
+groups evidence by location and good, includes detected 1300–1899 year signals
+and source URLs, and starts each `valid_rgo` field as `FALSE`. Mark a suggestion
+`TRUE` only after reviewing its location-specific evidence. No RGO assignments
+are changed automatically. A location with no matching RGO suggestions has no
+row in this CSV.
 
 The report's keyword matches are leads for examination, not crop recommendations.
 They do not establish that the crop was grown at the precise EU5 location or in
@@ -57,7 +68,9 @@ historical context that helps a human disambiguate it:
 
 Run `npm run rgo:research -- resolve --input locations.json`. Paths are resolved
 from the repository root. `--output path.json` changes the generated JSON path;
-the companion Markdown report uses the same path with a `.md` extension.
+companion Markdown and CSV review files use `.md` and `.csv` extensions. For the
+research command, `--review path.csv` can select an edited location-review CSV
+other than the default file adjacent to the resolution JSON.
 
 ## APIs, cache, and limitations
 
@@ -81,8 +94,10 @@ the companion Markdown report uses the same path with a `.md` extension.
   through Wikidata sitelinks rather than a full-text web search. It can miss
   relevant local-language sources that are not linked to the selected place.
 - Crop matching uses the aliases in `config/rgo-research-crops.json` and the
-  goods defined or assigned by the base Harmony and Fruits Expanded sources
-  available in this repository. A match is a literal keyword signal, not
+  raw-material goods assigned in the installed vanilla map, Just Goods
+  compatibility map, and Fruits Expanded map, plus raw-material goods defined
+  by the vanilla, Just Goods, and Fruits Expanded sources. A match is a literal
+  keyword signal, not
   semantic classification.
 - Reports are local review artifacts under the ignored `reports/` directory.
   No game-content files or RGO assignments are written.

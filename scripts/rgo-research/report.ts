@@ -77,7 +77,7 @@ function resolutionReviewCsv(file: ResolutionFile): string {
     }
   }
 
-  return `${lines.join("\r\n")}\r\n`;
+  return `\uFEFF${lines.join("\r\n")}\r\n`;
 }
 
 function resolutionMarkdown(file: ResolutionFile): string {
@@ -325,7 +325,7 @@ function rgoReviewCsv(file: ResearchFile): string {
     );
   }
 
-  return `${lines.join("\r\n")}\r\n`;
+  return `\uFEFF${lines.join("\r\n")}\r\n`;
 }
 
 export async function writeResolutionReports(
@@ -356,10 +356,7 @@ export async function writeResearchReports(
   rgoReviewCsvPath: string;
 }> {
   const { jsonPath, markdownPath } = reportPaths(rootDirectory, outputPath);
-  const rgoReviewCsvPath = jsonPath.replace(
-    /\.json$/i,
-    ".rgo-review.csv",
-  );
+  const rgoReviewCsvPath = jsonPath.replace(/\.json$/i, ".rgo-review.csv");
   await mkdir(path.dirname(jsonPath), { recursive: true });
   await Promise.all([
     writeJson(jsonPath, file),
