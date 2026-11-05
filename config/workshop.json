@@ -1,6 +1,16 @@
 {
   "version": 1,
   "steamAppId": 3450310,
+  "metadata": {
+    "name": "Europa Concordia - Playset Compatibility Patch Builder",
+    "id": "europa_concordia",
+    "version": "0.2.0",
+    "supportedGameVersion": "1.4.*",
+    "shortDescription": "A playset-specific EU5 compatibility patch. Required mods stay separate.",
+    "tags": ["Gameplay", "Map"],
+    "relationships": []
+  },
+  "requiredWorkshopItems": [],
   "channels": {
     "stable": {
       "publishedFileId": null,

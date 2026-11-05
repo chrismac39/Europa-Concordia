@@ -1,0 +1,592 @@
+{
+  "version": 1,
+  "id": "current-intended",
+  "name": "Current Intended Playset",
+  "targetGameVersion": "1.4.5",
+  "mods": [
+    {
+      "packageId": "better-road-builder",
+      "name": "Better Road Builder",
+      "version": "1.6.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3605677866",
+        "snapshotChecksum": "sha256:ab6429a6386afb3f7766693fc85d64490c16ec0044517fdfdac176f14e2b3512"
+      }
+    },
+    {
+      "packageId": "community-mod-framework",
+      "name": "Community Mod Framework",
+      "version": "2.5.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+      }
+    },
+    {
+      "packageId": "glorp-ui",
+      "name": "Glorp UI - 1.4.0 Río Salado Open Beta",
+      "version": "04.10.26",
+      "source": {
+        "type": "git",
+        "revision": "7ef53888afca3d6febc4a25d17ee95ecbe9a499d",
+        "publishedWorkshopId": "3812518640"
+      }
+    },
+    {
+      "packageId": "gh-exchequer",
+      "name": "GH: Exchequer",
+      "version": "1.3.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3812701995",
+        "snapshotChecksum": "sha256:74b78a37b8dc42ad6f1a8877a2d8bd9ad053a3363a240dd5b244b4f6eeefc635"
+      }
+    },
+    {
+      "packageId": "dynastic-bloodlines",
+      "name": "Dynastic Bloodlines",
+      "version": "0.9.39",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3790115532",
+        "snapshotChecksum": "sha256:20ef5af4452a48b47919f3643593fd04c8296243054dc692a55391423371e4b0"
+      }
+    },
+    {
+      "packageId": "just-goods",
+      "name": "Just Goods",
+      "version": "1.0.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
+      }
+    },
+    {
+      "packageId": "global-historical-rgos",
+      "name": "Global Historical RGOs",
+      "version": "1.4.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3602513956",
+        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b"
+      }
+    },
+    {
+      "packageId": "standard-of-living",
+      "name": "[v1.4 beta] Standard of Living",
+      "version": "0.0.261024",
+      "source": {
+        "type": "git",
+        "revision": "2c36654528de8cf03ce5a9d9d5a018342d781327",
+        "publishedWorkshopId": "3815438890"
+      }
+    },
+    {
+      "packageId": "eurocentric-institutions",
+      "name": "Eurocentric Institutions",
+      "version": "1.2.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3626542508",
+        "snapshotChecksum": "sha256:283b9d0741149efe939fb39f58e78bb0e938d8cef3ae19d8334df9353d23427b"
+      }
+    },
+    {
+      "packageId": "continental-hegemonies",
+      "name": "Continental Hegemonies",
+      "version": "0.4.1",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3664577264",
+        "snapshotChecksum": "sha256:80e533e03d6ad884b90fd0804b3d2afcc7eba4964d4d098ab34c5845d985471b"
+      }
+    },
+    {
+      "packageId": "gathering-land-rus",
+      "name": "Gathering the Land of the Rus",
+      "version": "1.1.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3652214415",
+        "snapshotChecksum": "sha256:5a9e71ec9a70e55c069a084c479994b4a9884960692da44f371cfcf841d96037"
+      }
+    },
+    {
+      "packageId": "historical-tweaks",
+      "name": "Historical Tweaks",
+      "version": "1.0.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3603092142",
+        "snapshotChecksum": "sha256:5c960d2cf194bb960914e1b3f80cebb8404e80f6bbf87b65519841b6723c755a"
+      }
+    },
+    {
+      "packageId": "more-unique-urban-rights",
+      "name": "More Unique Urban Rights",
+      "version": "1.1.9",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3745922649",
+        "snapshotChecksum": "sha256:b5a3db6230fc2f067c4d76f42d8a759f4c96e94b333d4840464de5cffa803bd3"
+      }
+    },
+    {
+      "packageId": "more-locations",
+      "name": "More locations Mod",
+      "version": "2.10.2026",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3809335454",
+        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd"
+      }
+    },
+    {
+      "packageId": "oikoumene",
+      "name": "Oikoumenē",
+      "version": "0.19.0",
+      "source": {
+        "type": "git",
+        "revision": "c246398bf3e3984f27be2731c86c1bef9a313f05",
+        "publishedWorkshopId": "3721193233"
+      }
+    },
+    {
+      "packageId": "more-restricted-colonization",
+      "name": "More Restricted Colonization",
+      "version": "1.4.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3691186720",
+        "snapshotChecksum": "sha256:c40c15c43213cecd2f9fe58cb426d84ac519111483fcf6c9a0b4c3db935f0557"
+      }
+    },
+    {
+      "packageId": "sulphurs-rivers-expanded",
+      "name": "Sulphur's Rivers Expanded",
+      "version": "1.2.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3617910693",
+        "snapshotChecksum": "sha256:f758eedca808e603fafe7754db1b9e083be6f52a761cccd1fa23a17ed6541fc9"
+      }
+    },
+    {
+      "packageId": "waterways-distance-rework",
+      "name": "Waterways Distance Rework",
+      "version": "1.10.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3608489505",
+        "snapshotChecksum": "sha256:ce35d0f7f235fea897cb13b74b0a3436cab22dc539367383d113f94a08db3154"
+      }
+    }
+  ],
+  "loadOrder": [
+    "better-road-builder",
+    "community-mod-framework",
+    "glorp-ui",
+    "dynastic-bloodlines",
+    "more-locations",
+    "global-historical-rgos",
+    "just-goods",
+    "standard-of-living",
+    "gh-exchequer",
+    "eurocentric-institutions",
+    "continental-hegemonies",
+    "gathering-land-rus",
+    "historical-tweaks",
+    "more-unique-urban-rights",
+    "oikoumene",
+    "more-restricted-colonization",
+    "waterways-distance-rework",
+    "sulphurs-rivers-expanded",
+    "europa_concordia_current_intended"
+  ],
+  "excludedMods": [
+    {
+      "packageId": "autonomous-diplomats",
+      "reason": "The user does not use this mod. Glorp UI's pinned outliner references two of its widgets; a generated Concordia patch removes those references so Autonomous Diplomats can remain disabled. Its auto-cancel and synchronization widgets are intentionally omitted."
+    },
+    {
+      "packageId": "construction-manager",
+      "reason": "The user does not use this mod. It was added as a Glorp UI companion; current-intended removes its direct UI integrations from the pinned Glorp UI and Standard of Living files. Upstream Glorp UI metadata still declares it as a dependency, so the launcher may report that omission."
+    },
+    {
+      "packageId": "diverse-unit-models",
+      "reason": "Not compatible with EU5 1.4.5: its 64x64 iron-metal texture overrides conflict with the 128x128 vanilla texture-array assets and cause a frontend crash. Excluded pending upstream compatibility; Concordia will not patch these textures."
+    },
+    {
+      "packageId": "sol-jtg-compatibility-submod",
+      "reason": "Superseded in this playset by Concordia-authored SoL/Just Goods compatibility files. Keep the pinned source snapshot for behavioral reference and re-analysis only; do not enable this separate compatibility mod."
+    },
+    {
+      "packageId": "gh-exchequer-glorp-ui-patch",
+      "reason": "Superseded by the Concordia-generated Glorp UI left-panel patch. Keep the pinned Workshop snapshot as a behavior reference only; do not enable the separate compatch."
+    }
+  ],
+  "knownRisks": [
+    {
+      "packageId": "glorp-ui",
+      "reason": "Glorp UI metadata declares SmartTaxes, Construction Manager, and Autonomous Diplomats as dependencies. SmartTaxes is intentionally omitted due to performance issues; content-pinned Concordia patches remove the direct Construction Manager and Autonomous Diplomats UI references. The upstream Workshop metadata is unchanged, so verify launcher acceptance and the adjusted UI in-game."
+    },
+    {
+      "packageId": "dynastic-bloodlines",
+      "reason": "Pinned upstream version 0.9.39 declares EU5 1.3.* while this profile targets 1.4.5. Static analyzer and PdxL checks found no blocking errors, but in-game compatibility is unverified. Its header override also removes the Character.ShowsStats guard present in the installed game UI; both UI features remain supplied by the separate upstream mod."
+    },
+    {
+      "packageId": "oikoumene",
+      "reason": "Pinned upstream version 0.19.0 declares EU5 1.* support. Static localization analysis is clean, but dynamic names on EU5 1.4.5, including locations added by More locations, still need in-game verification."
+    },
+    {
+      "packageId": "gathering-land-rus",
+      "reason": "Static analysis found active country-tag overlap with Just Goods (8 tags) and More Unique Urban Rights (5 tags). No direct path or definition conflict was found from these overlaps alone; verify their combined gameplay in a Rus campaign."
+    },
+    {
+      "packageId": "historical-tweaks",
+      "reason": "The pinned Workshop metadata declares EU5 1.3.11 compatibility while current-intended targets 1.4.5. Static compatibility is unverified. Static analysis also found active country-tag overlap with Gathering the Land of the Rus (15 tags), Just Goods (15 tags), and More Unique Urban Rights (8 tags); shared scope alone does not establish a conflict, so audit the combinations in-game."
+    }
+  ],
+  "patches": [
+    {
+      "id": "mrc-historical-defaults-no-cmm",
+      "operation": "replace",
+      "sourcePath": "integration/overrides/more-restricted-colonization/in_game/common/on_action/MRC_cmm_on_actions.txt",
+      "targetPath": "in_game/common/on_action/MRC_cmm_on_actions.txt",
+      "targetPackageId": "more-restricted-colonization",
+      "resolutionType": "merged-patch",
+      "reason": "The EU5 on_action directory does not support database entry injection. This complete, authored replacement preserves MRC's historical-default initialization and removes only its CMF/CMM registration and callback hooks.",
+      "preserves": [
+        "on_game_start",
+        "on_game_load",
+        "MRC_init_safe_defaults",
+        "mrc_historical_bypass",
+        "mrc_tax_threshold"
+      ],
+      "suppresses": [
+        "cmf_on_mod_registration",
+        "cmf_on_callback",
+        "MRC_register_cmf_mod",
+        "MRC_sync_menu_to_globals"
+      ]
+    },
+    {
+      "id": "sol-jtg-demand-goods",
+      "operation": "add",
+      "sourcePath": "integration/patches/sol-jtg-compatibility/in_game/common/goods/zz_CONCORDIA_SOL_JTG_pop_goods.txt",
+      "targetPath": "in_game/common/goods/zz_CONCORDIA_SOL_JTG_pop_goods.txt",
+      "targetPackageId": "just-goods",
+      "resolutionType": "merged-patch",
+      "reason": "Add SoL-style pop-demand scaling for the 26 direct-demand goods while preserving Just Goods good definitions, production, non-pop behavior, and native slave demand.",
+      "preserves": [
+        "INJECT:aromatics",
+        "demand_add",
+        "wealth_impact_threshold"
+      ],
+      "suppresses": []
+    },
+    {
+      "id": "sol-jtg-market-consumption",
+      "operation": "add",
+      "sourcePath": "integration/patches/sol-jtg-compatibility/in_game/common/script_values/zz_CONCORDIA_SOL_market_unit_consumption_values.txt",
+      "targetPath": "in_game/common/script_values/zz_CONCORDIA_SOL_market_unit_consumption_values.txt",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "Define the finalized Just Goods demand quantities required by SoL's market spending and demand-cache calculations.",
+      "preserves": [
+        "sol_unit_consumption_nobles_aromatics",
+        "sol_unit_consumption_burghers_whaleoil"
+      ],
+      "suppresses": ["sol_unit_consumption_nobles_wheat"]
+    },
+    {
+      "id": "sol-jtg-economy-effects",
+      "operation": "add",
+      "sourcePath": "integration/overrides/sol-jtg-compatibility/in_game/common/scripted_effects/zz_A_SOL_economy_effects.txt",
+      "targetPath": "in_game/common/scripted_effects/zz_A_SOL_economy_effects.txt",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "EU5 resolves scripted-effect definitions by database entry, but SoL hardcodes goods enumerations. These complete Concordia-authored replacement definitions preserve SoL's market cache, panel statistics, and substitute-spending flows while adding Just Goods entries.",
+      "preserves": [
+        "REPLACE:sol_refresh_market_pop_demand_maps",
+        "REPLACE:gls_accumulate_panel_stats",
+        "REPLACE:sol_compute_substitute_unit_spending",
+        "sol_market_unit_spending_nobles",
+        "sol_market_substitute_cache",
+        "gls_location_count",
+        "sol_market_good_spending_nobles_amber",
+        "sol_market_good_spending_nobles_aromatics"
+      ],
+      "suppresses": ["TRY_REPLACE:change_gold_effect"]
+    },
+    {
+      "id": "sol-jtg-global-panel",
+      "operation": "replace",
+      "sourcePath": "integration/overrides/sol-jtg-compatibility/in_game/gui/panels/situation/global_living_standard.gui",
+      "targetPath": "in_game/gui/panels/situation/global_living_standard.gui",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "EU5 GUI files at the same path are full-file overrides, not text merges. This complete file retains SoL's existing panel and adds the Just Goods rows.",
+      "preserves": ["situation_panel = {", "SOL_UI_SECTION overall_balance"],
+      "suppresses": ["sol_jtg_compatibility_submod"]
+    },
+    {
+      "id": "sol-jtg-economy-tooltip",
+      "operation": "add",
+      "sourcePath": "integration/overrides/sol-jtg-compatibility/in_game/gui/zz_SOL_economy_local.gui",
+      "targetPath": "in_game/gui/zz_SOL_economy_local.gui",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "Provide the complete SoL economy tooltip template with Just Goods demand entries; the zz_ filename ensures the merged GUI template is loaded after SoL's original template.",
+      "preserves": ["template StandardofLiving_tooltip", "SOL_UI_SECTION"],
+      "suppresses": ["sol_jtg_compatibility_submod"]
+    },
+    {
+      "id": "gh-exchequer-glorp-ui-left-panel",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "gh-exchequer-glorp-ui-left-panel",
+        "sourceFingerprint": "sha256:49879db505ef82c40a5d0b1e120050d102f840f06f5ba1190848d1fdec8296ce"
+      },
+      "targetPath": "in_game/gui/panels/left_panel/glorpUI_left_panel.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Generate a Concordia-owned GH Trade tab and distinct Economy/Trade states from the pinned Glorp UI source. The upstream compatch is reference-only; this anchored transform fails if the input changes and does not include SmartTaxes.",
+      "preserves": [
+        "GHTabTradeTooltip",
+        "concordia_gh_trade_tab_button",
+        "OpenLateralViewWithParams('trade', 'subtab = markets')",
+        "input_action = \"top_left_10\""
+      ],
+      "suppresses": []
+    },
+    {
+      "id": "glorp-ui-without-autonomous-diplomats",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-autonomous-diplomats",
+        "sourceFingerprint": "sha256:d913208df6b66e9cc4f6e5767e452b04d0ea09c37bd935681b20e05f4b55dc18"
+      },
+      "targetPath": "in_game/gui/outliner_entries.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Glorp UI's two direct Autonomous Diplomats widget instances so the user can keep that mod disabled while retaining the rest of the pinned outliner layout.",
+      "preserves": [
+        "blockoverride \"icon_content\"",
+        "using = diplomacy_icon_content"
+      ],
+      "suppresses": [
+        "atd_outliner_auto_cancel_widget = {}",
+        "atd_outliner_sync_widget = {}"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-building-location",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-building-location",
+        "sourceFingerprint": "sha256:78b9c6447c5b08a9c22a7026d1f8873541f556a11b34c9fc02f859b1cc8940f6"
+      },
+      "targetPath": "in_game/gui/glorpUI_build_location_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Construction Manager-only building auto-expand widgets and their active-mod visibility check while preserving Glorp UI's native building controls.",
+      "preserves": [
+        "AutoExpand_Building_Tooltip",
+        "BUILDING_BEST_IN_LOCATION_ACTION_BUTTON"
+      ],
+      "suppresses": [
+        "cm_auto_expand_building_button_bll = {",
+        "cm_mass_auto_expand_button_bll = {",
+        "cm_mass_auto_expand_overlay_no_upgrade = {",
+        "cm_mass_auto_expand_overlay_upgrade = {",
+        "glorpui_is_cm_active"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-food-production",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-food-production",
+        "sourceFingerprint": "sha256:1e835d4f92d41e8b52e37d7fe8c3d189c6a193958570e84a4acbc0371e3d9091"
+      },
+      "targetPath": "in_game/gui/glorpUI_food_production_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Glorp UI's Construction Manager food-RGO widget reference while retaining the vanilla food-production controls.",
+      "preserves": ["FoodLocationItem.HasFoodGoods"],
+      "suppresses": ["cm_auto_food_widget_food_production_lateralview = {}"]
+    },
+    {
+      "id": "glorp-ui-no-cm-raw-goods",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-raw-goods",
+        "sourceFingerprint": "sha256:e40f7c6c1165dbf98f2e37049cf29d191ab93cb2cd83b8913c0a31a0dde0c169"
+      },
+      "targetPath": "in_game/gui/expand_raw_goods_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Construction Manager's RGO automation widgets and show Glorp UI's native auto-expand control without a Construction Manager state check.",
+      "preserves": ["AutoExpand_RGO_Tooltip", "IsAutoExpandRGO(Location.Self)"],
+      "suppresses": [
+        "cm_mass_auto_expand_rgo_button = {}",
+        "cm_auto_expand_rgo_widget_expand_raw_goods_lateralview = {}",
+        "glorpui_is_cm_active"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-pause-menu",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-pause-menu",
+        "sourceFingerprint": "sha256:2d789f924b5cc0d71829d0d29bfe8fd8aa3d582b9796204a65d708abb5f0eeb0"
+      },
+      "targetPath": "in_game/gui/glorpUI_ingame_menu.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove the two CMM pause-menu buttons that call Construction Manager registration GUIs; preserve Glorp UI's normal settings menu.",
+      "preserves": ["SETTINGS_HEADER"],
+      "suppresses": [
+        "CMM_PAUSE_MENU_BUTTON",
+        "CMM_SetHostAndRegisterCoreMod",
+        "CMM_RegisterCoreMod"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-production",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-production",
+        "sourceFingerprint": "sha256:7746bc20e5351dc2e3aa1a25ce35f29cfa405713564558ea79b804ce08346fbf"
+      },
+      "targetPath": "in_game/gui/production_lateralview.gui",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Construction Manager production widgets and keep Glorp UI's native auto-expand checkbox visible without a Construction Manager state check.",
+      "preserves": [
+        "AutoExpand_Building_Tooltip",
+        "And3(BuildingItem.HasBuildings, BuildingItem.GetBuildingType.IsMultipleLevels, Not(BuildingItem.GetBuildingType.OnlyEstatesCanBuild))"
+      ],
+      "suppresses": [
+        "cm_mass_auto_expand_button_pl = {}",
+        "cm_auto_expand_new_building_button_pl = {",
+        "glorpui_is_cm_active"
+      ]
+    },
+    {
+      "id": "glorp-ui-no-cm-warning-suppression",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-warning-suppression",
+        "sourceFingerprint": "sha256:d6ec256f08f5bcc7d28a7ac635870b2ad164afb2e888a8e622421ce1faee3bba"
+      },
+      "targetPath": "in_game/common/scripted_effects/glorpui_cmm_warning_suppression.txt",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Stop Glorp UI's fallback warning-suppression effect from registering Construction Manager as an active CMF mod.",
+      "preserves": ["target = flag:smart_taxes"],
+      "suppresses": ["target = flag:cm"]
+    },
+    {
+      "id": "glorp-ui-no-cm-scripted-gui",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "glorp-ui-without-construction-manager-scripted-gui",
+        "sourceFingerprint": "sha256:61b53af77f3783d3590020a0041a7c6ee1137056a84b15c9bbfe1b4f3e873b00"
+      },
+      "targetPath": "in_game/common/scripted_guis/glorpui_construction_manager_scripted_gui.txt",
+      "targetPackageId": "glorp-ui",
+      "resolutionType": "merged-patch",
+      "reason": "Replace the unused Construction Manager-active scripted GUI with a harmless comment after removing its UI call sites.",
+      "preserves": [
+        "# Concordia: Construction Manager integration is excluded."
+      ],
+      "suppresses": ["glorpui_is_cm_active = {", "target = flag:cm"]
+    },
+    {
+      "id": "sol-no-cm-location-window",
+      "operation": "replace",
+      "generatedFrom": {
+        "strategy": "standard-of-living-without-construction-manager-location-window",
+        "sourceFingerprint": "sha256:cb173a52facca90025a62f894bac41bec661eecab2e44ee17c02524c793c6e60"
+      },
+      "targetPath": "in_game/gui/location_window.gui",
+      "targetPackageId": "standard-of-living",
+      "resolutionType": "merged-patch",
+      "reason": "Remove Construction Manager map-mode, auto-expand status, and upgrade-check hooks from the selected SoL location window while preserving its native actions.",
+      "preserves": [
+        "visible = \"[IsAutoExpand(LocationBuildingItem.GetBuilding.Self)]\"",
+        "GrantLocationTownRights(Location.Self)",
+        "UpgradeBuildingDefault(BuildingType.Self, Location.Self)"
+      ],
+      "suppresses": [
+        "cm_best_town_right",
+        "glorpui_is_cm_active",
+        "cm_is_auto_expand_on_icon",
+        "cm_check_for_auto_expand_when_upgrading_building"
+      ]
+    },
+    {
+      "id": "more-unique-urban-rights-textile-exclusivity",
+      "operation": "add",
+      "sourcePath": "integration/patches/more-unique-urban-rights/in_game/common/town_rights/zz_CONCORDIA_MUR_royal_textile_rights.txt",
+      "targetPath": "in_game/common/town_rights/zz_CONCORDIA_MUR_royal_textile_rights.txt",
+      "targetPackageId": "more-unique-urban-rights",
+      "resolutionType": "merged-patch",
+      "reason": "Inject the complete existing Royal Textile Rights allow block plus exclusions for More Unique Urban Rights' Bengali muslin and Indo-Aryan jamdani rights. EU5 replaces an existing nested block during INJECT, so the vanilla Flemish cloth-industry exclusion is explicitly retained.",
+      "preserves": [
+        "has_town_rights = town_rights_type:flemish_cloth_industries_right"
+      ],
+      "suppresses": [
+        "No vanilla town-right conditions or upstream content are suppressed."
+      ]
+    },
+    {
+      "id": "gathering-historical-tweaks-ranks",
+      "operation": "replace",
+      "sourcePath": "integration/overrides/dynamic-names/current-intended/in_game/common/customizable_localization/country_ranks.txt",
+      "targetPath": "in_game/common/customizable_localization/country_ranks.txt",
+      "targetPackageId": "historical-tweaks",
+      "resolutionType": "merged-patch",
+      "reason": "Use the previously approved dynamic-rank union for the selected Gathering and Historical Tweaks sources only; keep Historical Tweaks' unique rules, add Gathering's khagan and ulus rules, and preserve both Lithuania rank branches.",
+      "preserves": [
+        "rank_kingdom_khagan",
+        "rank_kingdom_ulus",
+        "rank_kingdom_grand_duchy_LIT",
+        "ht_rank_despotate",
+        "ht_rank_dual_monarchy",
+        "ht_rank_tsardom"
+      ],
+      "suppresses": []
+    },
+    {
+      "id": "just-goods-more-locations-global-historical-rgos",
+      "operation": "replace",
+      "sourcePath": "integration/patches/just-goods-more-locations-global-historical-rgos/in_game/map_data/location_templates.txt",
+      "targetPath": "in_game/map_data/location_templates.txt",
+      "targetPackageId": "more-locations",
+      "resolutionType": "merged-patch",
+      "reason": "Preserve More Locations as the complete map-template base, apply Global Historical RGO values to the 1,269 approved direct disagreements and 48 qualifying single-parent descendants, and leave Just Goods' fixed-location effects authoritative.",
+      "preserves": [
+        "russian_wastelands_9",
+        "kolguyev",
+        "borneo_jungle12"
+      ],
+      "suppresses": [
+        "More Locations RGO values at the 1,269 direct Global Historical RGO disagreements without a fixed Just Goods setter",
+        "Duplicated Vanilla RGO values on the 48 approved descendants whose single parent has a changed Global Historical RGO"
+      ]
+    }
+  ],
+  "patchMod": {
+    "name": "Europa Concordia - Current Intended",
+    "id": "europa_concordia_current_intended",
+    "version": "0.5.0",
+    "shortDescription": "Playset-specific EU5 compatibility patch. Requires the listed mods separately.",
+    "tags": ["Gameplay", "Map", "User Interface"]
+  }
+}

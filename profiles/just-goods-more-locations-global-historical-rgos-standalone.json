@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "id": "just-goods-more-locations-global-historical-rgos-standalone",
+  "name": "Just Goods + More Locations + Global Historical RGOs",
+  "targetGameVersion": "1.4.5",
+  "mods": [
+    {
+      "packageId": "more-locations",
+      "name": "More locations Mod",
+      "version": "2.10.2026",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3809335454",
+        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd"
+      }
+    },
+    {
+      "packageId": "global-historical-rgos",
+      "name": "Global Historical RGOs",
+      "version": "1.4.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3602513956",
+        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b"
+      }
+    },
+    {
+      "packageId": "just-goods",
+      "name": "Just Goods",
+      "version": "1.0.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
+      }
+    }
+  ],
+  "loadOrder": [
+    "more-locations",
+    "global-historical-rgos",
+    "just-goods",
+    "jg_ml_gh_rgos_compat_standalone"
+  ],
+  "patches": [
+    {
+      "id": "just-goods-more-locations-global-historical-rgos",
+      "operation": "replace",
+      "sourcePath": "integration/patches/just-goods-more-locations-global-historical-rgos/in_game/map_data/location_templates.txt",
+      "targetPath": "in_game/map_data/location_templates.txt",
+      "targetPackageId": "more-locations",
+      "resolutionType": "merged-patch",
+      "reason": "Preserve More Locations as the complete map-template base, apply Global Historical RGO values to the 1,269 approved direct disagreements and 48 qualifying single-parent descendants, and leave Just Goods' fixed-location effects authoritative.",
+      "preserves": [
+        "russian_wastelands_9",
+        "kolguyev",
+        "borneo_jungle12"
+      ],
+      "suppresses": [
+        "More Locations RGO values at the 1,269 direct Global Historical RGO disagreements without a fixed Just Goods setter",
+        "Duplicated Vanilla RGO values on the 48 approved descendants whose single parent has a changed Global Historical RGO"
+      ]
+    }
+  ],
+  "patchMod": {
+    "name": "RGO Harmony: Just Goods + More Locations + Global Historical RGOs",
+    "id": "jg_ml_gh_rgos_compat_standalone",
+    "version": "0.1.0",
+    "shortDescription": "RGO compatibility for Just Goods, More Locations, and Global Historical RGOs. Requires all three separately.",
+    "tags": ["Gameplay", "Map"],
+    "thumbnailPath": "integration/assets/rgo-harmony/thumbnail.png"
+  }
+}

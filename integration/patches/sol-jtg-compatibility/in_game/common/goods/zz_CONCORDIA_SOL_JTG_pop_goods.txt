@@ -1,0 +1,396 @@
+# Concordia-authored demand integration for Just Goods with Standard of Living.
+# Demand values and targets follow SOL-JTG Workshop snapshot 260822, adapted
+# to Concordia's active SoL 1.4.5 source.
+# Every source threshold and regional demand modifier is fully negated.
+# Native slave demand is unchanged and is never injected here.
+
+# Final SOL-JTG targets for aromatics:
+# nobles=0.05 | clergy=0.009 | burghers=0.04 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:aromatics = {
+	development_threshold = -10
+	demand_add = {
+		clergy = -0.011
+		burghers = 0.02
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+	sub_continent_demand_modifier = {
+		middle_east = -1.25
+	}
+}
+
+# Final SOL-JTG targets for bells:
+# nobles=0.03 | clergy=0.003 | burghers=0.01 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:bells = {
+	development_threshold = -20
+	demand_add = {
+		nobles = 0.005
+		clergy = -0.00325
+		burghers = 0.00375
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for brassware:
+# nobles=0.11 | clergy=0.01 | burghers=0.04 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:brassware = {
+	development_threshold = -20
+	demand_add = {
+		nobles = 0.01
+		clergy = -0.015
+		burghers = 0.015
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for candles:
+# nobles=0.02 | clergy=0.01 | burghers=0.02 | laborers=0.00002 | peasants=0.00006 | soldiers=0 | tribesmen=0
+INJECT:candles = {
+	development_threshold = -10
+	demand_add = {
+		nobles = 0.005
+		clergy = -0.0125
+		burghers = 0.00875
+		laborers = -0.00082
+		peasants = -0.00049
+		soldiers = -0.00013
+	}
+	wealth_impact_threshold = {
+		all = -0.5
+	}
+}
+
+# Final SOL-JTG targets for cardamom:
+# nobles=0.05 | clergy=0.002 | burghers=0.004 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:cardamom = {
+	demand_add = {
+		clergy = -0.003
+		burghers = 0.0015
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for cheese:
+# nobles=0.05 | clergy=0.02 | burghers=0.04 | laborers=0.00003 | peasants=0.0001 | soldiers=0.00005 | tribesmen=0
+INJECT:cheese = {
+	demand_add = {
+		nobles = 0.005
+		clergy = -0.025
+		burghers = 0.015
+		laborers = -0.00147
+		peasants = -0.0009
+		soldiers = -0.00195
+	}
+	wealth_impact_threshold = {
+		all = -0.75
+	}
+}
+
+# Final SOL-JTG targets for cinnamon:
+# nobles=0.05 | clergy=0.002 | burghers=0.004 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:cinnamon = {
+	demand_add = {
+		clergy = -0.003
+		burghers = 0.0015
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for clocks:
+# nobles=0.11 | clergy=0.002 | burghers=0.009 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:clocks = {
+	development_threshold = -30
+	demand_add = {
+		nobles = 0.01
+		clergy = -0.003
+		burghers = 0.004
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for cosmetics:
+# nobles=0.11 | clergy=0 | burghers=0.009 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:cosmetics = {
+	development_threshold = -20
+	demand_add = {
+		nobles = 0.01
+		burghers = 0.004
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for ginger:
+# nobles=0.05 | clergy=0.002 | burghers=0.004 | laborers=0 | peasants=0.00001 | soldiers=0 | tribesmen=0
+INJECT:ginger = {
+	demand_add = {
+		clergy = -0.003
+		burghers = 0.002
+		laborers = -0.0001
+		peasants = -0.00009
+		soldiers = -0.0001
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for meat:
+# nobles=0.05 | clergy=0.02 | burghers=0.04 | laborers=0.00003 | peasants=0.0001 | soldiers=0.00005 | tribesmen=0
+INJECT:meat = {
+	demand_add = {
+		nobles = 0.005
+		clergy = -0.025
+		burghers = 0.015
+		laborers = -0.00147
+		peasants = -0.0009
+		soldiers = -0.00195
+	}
+	wealth_impact_threshold = {
+		all = -0.75
+	}
+}
+
+# Final SOL-JTG targets for mirrors:
+# nobles=0.11 | clergy=0.002 | burghers=0.009 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:mirrors = {
+	development_threshold = -30
+	demand_add = {
+		nobles = 0.01
+		clergy = -0.003
+		burghers = 0.004
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for nutmeg:
+# nobles=0.05 | clergy=0.002 | burghers=0.004 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:nutmeg = {
+	demand_add = {
+		clergy = -0.003
+		burghers = 0.0015
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for optics:
+# nobles=0.11 | clergy=0.002 | burghers=0.009 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:optics = {
+	development_threshold = -30
+	demand_add = {
+		nobles = 0.01
+		clergy = -0.003
+		burghers = 0.004
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for ornaments:
+# nobles=0.05 | clergy=0.006 | burghers=0.02 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:ornaments = {
+	development_threshold = -20
+	demand_add = {
+		clergy = -0.0065
+		burghers = 0.0075
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for palmoil:
+# nobles=0.009 | clergy=0.004 | burghers=0.02 | laborers=0.00001 | peasants=0.00005 | soldiers=0.00002 | tribesmen=0
+INJECT:palmoil = {
+	demand_add = {
+		clergy = -0.005
+		burghers = 0.011
+		laborers = -0.00065
+		peasants = -0.0004
+		soldiers = -0.00088
+	}
+	wealth_impact_threshold = {
+		all = -0.75
+	}
+	continent_demand_modifier = {
+		america = -0.2
+		asia = 0
+		europe = -0.2
+		oceania = -0.2
+	}
+	sub_continent_demand_modifier = {
+		east_africa = -0.1
+		north_africa = -0.1
+		southern_africa = -0.1
+	}
+}
+
+# Final SOL-JTG targets for perfume:
+# nobles=0.11 | clergy=0 | burghers=0.009 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:perfume = {
+	development_threshold = -20
+	demand_add = {
+		nobles = 0.01
+		burghers = 0.004
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for pewterware:
+# nobles=0.03 | clergy=0.01 | burghers=0.03 | laborers=0.00002 | peasants=0.00008 | soldiers=0.00004 | tribesmen=0
+INJECT:pewterware = {
+	development_threshold = -20
+	demand_add = {
+		clergy = -0.02
+		burghers = 0.015
+		laborers = -0.00098
+		peasants = -0.00072
+		soldiers = -0.00146
+	}
+	wealth_impact_threshold = {
+		all = -1
+	}
+}
+
+# Final SOL-JTG targets for precision_instruments:
+# nobles=0.11 | clergy=0 | burghers=0.009 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:precision_instruments = {
+	development_threshold = -30
+	demand_add = {
+		nobles = 0.01
+		burghers = 0.004
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for silverware:
+# nobles=0.11 | clergy=0.002 | burghers=0.009 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:silverware = {
+	development_threshold = -20
+	demand_add = {
+		nobles = 0.01
+		clergy = -0.003
+		burghers = 0.004
+	}
+	wealth_impact_threshold = {
+		all = -1.2
+	}
+}
+
+# Final SOL-JTG targets for soap:
+# nobles=0.05 | clergy=0.02 | burghers=0.04 | laborers=0.00003 | peasants=0.0001 | soldiers=0.00005 | tribesmen=0
+INJECT:soap = {
+	development_threshold = -10
+	demand_add = {
+		nobles = 0.005
+		clergy = -0.025
+		burghers = 0.015
+		laborers = -0.00147
+		peasants = -0.0009
+		soldiers = -0.00195
+	}
+	wealth_impact_threshold = {
+		all = -0.75
+	}
+	sub_continent_demand_modifier = {
+		east_asia = -0.5
+		south_asia = -0.5
+		south_east_asia = -0.5
+	}
+}
+
+# Final SOL-JTG targets for star_anise:
+# nobles=0.05 | clergy=0.002 | burghers=0.004 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:star_anise = {
+	demand_add = {
+		clergy = -0.003
+		burghers = 0.0015
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for tallow:
+# nobles=0.009 | clergy=0.004 | burghers=0.02 | laborers=0.00001 | peasants=0.00005 | soldiers=0.00002 | tribesmen=0
+INJECT:tallow = {
+	demand_add = {
+		clergy = -0.005
+		burghers = 0.011
+		laborers = -0.00065
+		peasants = -0.0004
+		soldiers = -0.00088
+	}
+	wealth_impact_threshold = {
+		all = -0.5
+	}
+}
+
+# Final SOL-JTG targets for turmeric:
+# nobles=0.05 | clergy=0.002 | burghers=0.004 | laborers=0 | peasants=0.00001 | soldiers=0 | tribesmen=0
+INJECT:turmeric = {
+	demand_add = {
+		clergy = -0.003
+		burghers = 0.002
+		laborers = -0.0001
+		peasants = -0.00009
+		soldiers = -0.0001
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for vanilla:
+# nobles=0.05 | clergy=0.002 | burghers=0.004 | laborers=0 | peasants=0 | soldiers=0 | tribesmen=0
+INJECT:vanilla = {
+	demand_add = {
+		clergy = -0.003
+		burghers = 0.0015
+	}
+	wealth_impact_threshold = {
+		all = -1.1
+	}
+}
+
+# Final SOL-JTG targets for whaleoil:
+# nobles=0.009 | clergy=0.004 | burghers=0.02 | laborers=0.00001 | peasants=0.00005 | soldiers=0.00002 | tribesmen=0
+INJECT:whaleoil = {
+	development_threshold = -20
+	demand_add = {
+		clergy = -0.005
+		burghers = 0.011
+		laborers = -0.00065
+		peasants = -0.0004
+		soldiers = -0.00088
+	}
+	wealth_impact_threshold = {
+		all = -0.75
+	}
+	continent_demand_modifier = {
+		africa = -0.1
+		asia = -0.25
+		oceania = -0.5
+	}
+}

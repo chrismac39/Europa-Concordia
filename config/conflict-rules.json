@@ -1,5 +1,1195 @@
 {
   "version": 1,
   "filePathCollisions": "error",
+  "filePathResolutions": [
+    {
+      "path": "in_game/gui/economy_lateralview.gui",
+      "packages": ["gh-exchequer", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "gh-exchequer": "4e66abbb389bd5b3df228622ee30b0601e247df48b2151570f1a9bcf652e5887",
+        "glorp-ui": "aae6b3cd67bc4b727d87a02bc6c79d38a8529b6c739dd7147cb1258cb450faa5"
+      },
+      "winner": "gh-exchequer",
+      "reason": "GH Exchequer documents that it replaces UI mods' economy panel when loaded later; Concordia generates the separate Glorp left-panel Trade tab patch."
+    },
+    {
+      "path": "in_game/gui/vanilla/cmfg_economy_lateralview_vanilla_types.gui",
+      "packages": ["gh-exchequer", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "gh-exchequer": "82a3e68d5b2fdd8da3456b61a69f524951d6aeecd2b58f79ae15fce99e4fe9ba",
+        "glorp-ui": "d84d8d1fee4b08deb896d8e142b827de8e2e5bf46010fbbb7645b31c92e327db"
+      },
+      "winner": "gh-exchequer",
+      "reason": "GH Exchequer documents that its extracted vanilla economy templates replace the UI-mod copy when GH loads later."
+    },
+    {
+      "path": "in_game/gui/location_window.gui",
+      "packages": ["glorp-ui", "standard-of-living"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "glorp-ui": "9e1e3e534aa6a5bc939527e3e8b9fd3dbb91365bc4d38e459f2483f92350a0f8",
+        "standard-of-living": "cb173a52facca90025a62f894bac41bec661eecab2e44ee17c02524c793c6e60"
+      },
+      "winner": "standard-of-living",
+      "reason": "With Construction Manager excluded, retain the later pinned Standard of Living location window; a Concordia patch removes the leftover Construction Manager hooks."
+    },
+    {
+      "path": "in_game/gui/vanilla/cmfg_location_window_vanilla_types.gui",
+      "packages": ["glorp-ui", "standard-of-living"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "glorp-ui": "a47c8617917a7aeb1d2730b23bcf5878652f8b8f44f4adfc6619ec08f3f50149",
+        "standard-of-living": "46a632288d94fb8072db5e34bcd5062dfa86241a87bbf45532556649f6c1b359"
+      },
+      "winner": "standard-of-living",
+      "reason": "Standard of Living's generated vanilla location types are synchronized to the pinned Glorp UI 04.10.26 source and include SoL's tooltip addition."
+    },
+    {
+      "path": "in_game/common/on_action/historical_tweaks_on_actions.txt",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "f67288b074de9d523d1800738af424949446ac4e38755115fa5a2e19a363f13c",
+        "historical-tweaks": "d2e5493fa96bbb43d5d8589138b90bb5f6978c4c542d918aa1a0b3f72f16474a"
+      },
+      "winner": "historical-tweaks",
+      "reason": "The standalone Historical Tweaks file is the newer superset and includes explicit Gathering of the Rus compatibility logic.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/events/historical_tweaks_events.txt",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "1102db6efcc424da453bdec41af8060dd5e3bd84d408c5149278590a54c4f277",
+        "historical-tweaks": "5e86e7c5bb1ba10ad955156bf1919c1804894a5bc0d72f587e486612d2820d09"
+      },
+      "winner": "historical-tweaks",
+      "reason": "The standalone Historical Tweaks event file includes the Rus-bundled events plus newer events and explicit Gathering of the Rus compatibility behavior.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/events/historical_tweaks_union_events.txt",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "acfaa3e2f3f74238ba42cfe48e5671ca92475e5e66343eb483cb6d5e8fb1c1ea",
+        "historical-tweaks": "0e39e15ebd95a219092949d571cbc91423c03db21e9e7a7e2fd34044ad184869"
+      },
+      "winner": "historical-tweaks",
+      "reason": "The standalone Historical Tweaks union events contain later trigger, AI-selection, and player-option fixes than the copy bundled with Gathering of the Rus.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/common/customizable_localization/countries.txt",
+      "packages": ["gathering-land-rus", "imperial-ambitions"],
+      "override": "integration/overrides/collision-2/in_game/common/customizable_localization/countries.txt",
+      "reason": "The Concordia merge keeps both packages' unique country definitions and combines Gathering the Rus conditional Golden Horde vassal names with Imperial Ambitions' fallback names for KZN and UZB.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "path": "in_game/common/customizable_localization/country_ranks.txt",
+      "packages": ["gathering-land-rus", "historical-tweaks"],
+      "sourceFingerprints": {
+        "gathering-land-rus": "dce3e5f77488985377e87497e15eb2ed08c75dc3f2d96c51194cbe505a758e55",
+        "historical-tweaks": "b6421b68bc0548a042d85643bcd800be309dbfac78b3ff8707f411a04ea809d5"
+      },
+      "override": "integration/overrides/dynamic-names/current-intended/in_game/common/customizable_localization/country_ranks.txt",
+      "reason": "The current-intended merge starts from Historical Tweaks, preserves its unique rank rules, adds Gathering's khagan and ulus rules, and unions Gathering's kingdom-rank Lithuania branch with Historical Tweaks' duchy-rank branch without importing inactive Imperial Ambitions or Prussian Destiny rules.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "path": "in_game/common/customizable_localization/country_name_construction.txt",
+      "packages": [
+        "historical-tweaks",
+        "imperial-ambitions",
+        "prussian-destiny"
+      ],
+      "override": "integration/overrides/dynamic-names/in_game/common/customizable_localization/country_name_construction.txt",
+      "reason": "The Concordia merge keeps common construction rules once, preserves package-specific name rules, and unions the four differing shared-rule trigger variants.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "path": "in_game/common/languages/00_anatolia.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Anatolian language definitions at this colliding path.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/common/languages/00_caucasus.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Caucasian language definitions at this colliding path.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/common/languages/00_polish.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Polish language definitions at this colliding path.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/common/languages/00_russian.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Russian language definitions at this colliding path.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/common/languages/00_steppes.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete steppe language definitions at this colliding path.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/common/languages/00_tartar.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Tartar language definitions at this colliding path.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/common/languages/00_xinjiang.txt",
+      "packages": ["oikoumene", "ruthenia-steppe-fix"],
+      "winner": "oikoumene",
+      "reason": "Decision 3 selects Oikoumenē as the base; use its complete Xinjiang language definitions at this colliding path.",
+      "resolutionType": "load-order"
+    },
+    {
+      "path": "in_game/map_data/rivers.png",
+      "packages": ["more-locations", "sulphurs-rivers-expanded"],
+      "winner": "sulphurs-rivers-expanded",
+      "reason": "Decision 36 selects Sulphur's Rivers Expanded as the river-layer base; its raster matches the selected More locations map canvas dimensions.",
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "more-locations": "c37a62f4e4e2d81eb1d48b734e310f7e1cceadf35e63ba8954f8ef2a7a66e18e",
+        "sulphurs-rivers-expanded": "9319b3e1145d68fb05b7ed6c0594210bd7011990e8f373b4171460ee17018bbf"
+      }
+    },
+    {
+      "path": "in_game/common/on_action/mrc_cmm_on_actions.txt",
+      "packages": ["more-restricted-colonization"],
+      "override": "integration/overrides/more-restricted-colonization/in_game/common/on_action/MRC_cmm_on_actions.txt",
+      "reason": "Keep More Restricted Colonization's safe historical defaults while disabling its CMF setting registration and callback hooks.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "path": "in_game/common/scripted_effects/mrc_cmm_effects.txt",
+      "packages": ["more-restricted-colonization"],
+      "override": "integration/overrides/more-restricted-colonization/in_game/common/scripted_effects/MRC_cmm_effects.txt",
+      "reason": "Disable More Restricted Colonization's unused CMF/CMM setting registration and synchronization effects.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "path": "in_game/common/script_values/glorpui_rgo_script_values.txt",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "0f772e7825e81e91c7cc77eb19c1c6262127c16409d9df9ff904ca2abe233c42",
+        "glorp-ui": "0f772e7825e81e91c7cc77eb19c1c6262127c16409d9df9ff904ca2abe233c42"
+      },
+      "winner": "glorp-ui",
+      "reason": "These Construction Manager and Glorp UI source files are byte-identical; retain Glorp UI as the later, content-pinned copy."
+    },
+    {
+      "path": "in_game/common/scripted_guis/glorpui_build_location_scripted_gui.txt",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "52472772da2836012606d9d85ba70913aa7f19e7fd5f10594b631e153fc777d8",
+        "glorp-ui": "52472772da2836012606d9d85ba70913aa7f19e7fd5f10594b631e153fc777d8"
+      },
+      "winner": "glorp-ui",
+      "reason": "These Construction Manager and Glorp UI source files are byte-identical; retain Glorp UI as the later, content-pinned copy."
+    },
+    {
+      "path": "in_game/common/scripted_guis/glorpui_construction_manager_scripted_gui.txt",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "61b53af77f3783d3590020a0041a7c6ee1137056a84b15c9bbfe1b4f3e873b00",
+        "glorp-ui": "61b53af77f3783d3590020a0041a7c6ee1137056a84b15c9bbfe1b4f3e873b00"
+      },
+      "winner": "glorp-ui",
+      "reason": "These Construction Manager and Glorp UI source files are byte-identical; retain Glorp UI as the later, content-pinned copy."
+    },
+    {
+      "path": "in_game/gui/expand_raw_goods_lateralview.gui",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "e2aa3b756b80e9e49b0172ec09690c9147b80d93f95d4f39d4b6e4c238fd570d",
+        "glorp-ui": "e40f7c6c1165dbf98f2e37049cf29d191ab93cb2cd83b8913c0a31a0dde0c169"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Glorp UI file retains Construction Manager's RGO auto-expand control and differs from its copy only in formatting; use the later Glorp UI copy."
+    },
+    {
+      "path": "in_game/gui/outliner_entries.gui",
+      "packages": ["autonomous-diplomats", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "autonomous-diplomats": "5fe3553d89334bd40760e2e939cacc16b52e6e63ee731c647adce50610cb6f5c",
+        "glorp-ui": "d913208df6b66e9cc4f6e5767e452b04d0ea09c37bd935681b20e05f4b55dc18"
+      },
+      "winner": "glorp-ui",
+      "reason": "For profiles selecting both mods, Glorp UI's later outliner layout instantiates both Autonomous Diplomats widgets. The current-intended profile excludes Autonomous Diplomats and removes those instances with a generated patch."
+    },
+    {
+      "path": "main_menu/gui/cmf_dependency_check.gui",
+      "packages": ["autonomous-diplomats", "construction-manager"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "autonomous-diplomats": "d594b500b48db8c0b7aeecc03fe2fc2ebb97dd7761d25d7b4655be3e5fcf99ff",
+        "construction-manager": "f3e67cb1b6bf28bdf051517b536511a7585aa4aa52d8a07d44b5edf17b1c5ed0"
+      },
+      "winner": "construction-manager",
+      "reason": "For profiles selecting both mods, the Construction Manager version retains the shared CMF dependency and auto-enable flow while adding its create-playset UI; load Autonomous Diplomats first and pin both file contents."
+    },
+    {
+      "path": "main_menu/localization/braz_por/glorpui_shared_l_braz_por.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "9fdb239e4a6bed01b15628927d8c4b22f3958ea0dd7e4e5bde361b53753ec74d",
+        "glorp-ui": "71a60bd8d23a0b85097e366e4d73e282ddf8f98570332f6cd247eb6c5f563617"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/english/glorpui_shared_l_english.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "2e5d7799ef7f3cfef37a843cc8b3c67a871af193f1de40b4ef57c9e3282e7d61",
+        "glorp-ui": "2e5d7799ef7f3cfef37a843cc8b3c67a871af193f1de40b4ef57c9e3282e7d61"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/french/glorpui_shared_l_french.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "d1a9f39bdd996801609366d9c7cb26162098cbc42f89e91cf25a6e18781eba01",
+        "glorp-ui": "eed9c1d903891cfce32b7f8bbe84f0cf070315ba8c38421256ec5d4c4a5ad221"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/german/glorpui_shared_l_german.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "c320588534bb2e3371b5a07fe27ff0cae3821cf02c6beac2d29d4ce0782a4366",
+        "glorp-ui": "2e374b654d3c00c8ef650b0eda3a9d72fd16271e8e59907f722b2e2a16c07398"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/japanese/glorpui_shared_l_japanese.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "5552d1b531a007ea2cec5e09e8d2c26cb5ca87ef62ed3aa139d4fe680cf38bcc",
+        "glorp-ui": "eff5ed35be19a6540452a5942f5ecadd8a26f38441615094163dbb5579011f8c"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/korean/glorpui_shared_l_korean.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "2853731a47e08d8b87628a3e823ca5b41d786a4978d0afdad8bf18f0c7922c01",
+        "glorp-ui": "6d379753c2762b815989dd79c62884a12c2f041a6f257f4c2ae7f9fa073edfcc"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/polish/glorpui_shared_l_polish.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "2516eb3efaa1b53a295f040c285dc104edecc36c89765789c5a615117040142b",
+        "glorp-ui": "7e7115fd3b2cc585db458e00440ecd18f6d443d8cedb26abb53a1e508b156d34"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/russian/glorpui_shared_l_russian.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "8d641d8e9733e59d8063ef62be6a1ea58efb80ef15cb21103e265005dd767c94",
+        "glorp-ui": "e4eee4b4d56f8c3df563770ac9be4d824d3adbeb7e23e49e0deb581ef7c0dc64"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/simp_chinese/glorpui_shared_l_simp_chinese.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "1cfdc90a004618275faf74fd6c86cbcd56ea694fdab9c9b836c3721f384325e2",
+        "glorp-ui": "6ed4d45ec6515254636af2caa27ef49da48f63274e1501f82c201102f40fa292"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/spanish/glorpui_shared_l_spanish.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "8181a1eaace5a52febadfe8e6c9ea71ee3358c36c6402b4fa36be0bee39ff348",
+        "glorp-ui": "ee3b1c3634a8fc0b8f34cacdc9fa89333b6886bbddf97e5d73d70ccb631161c0"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "main_menu/localization/turkish/glorpui_shared_l_turkish.yml",
+      "packages": ["construction-manager", "glorp-ui"],
+      "resolutionType": "load-order",
+      "sourceFingerprints": {
+        "construction-manager": "d4996a52655d44150b11a16b87323093ab6b0a4309fb240d0c0ef8bed576921b",
+        "glorp-ui": "8a2cde6bc90b49df5ed227142813e43a7be8a251f78f4d4dfcb4be7e3fdace62"
+      },
+      "winner": "glorp-ui",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "path": "in_game/map_data/location_templates.txt",
+      "packages": ["global-historical-rgos", "more-locations"],
+      "resolutionType": "merged-patch",
+      "sourceFingerprints": {
+        "global-historical-rgos": "01d18e2e207c1e168e4ab1984b7b917361680636918d95957665c91b4690deca",
+        "more-locations": "7062be86b7c7b76fb74da9f641f8fa74fd6d84ab2a4149b81d05bb93724281f7"
+      },
+      "patchId": "just-goods-more-locations-global-historical-rgos",
+      "reason": "Use the shared, content-pinned merged template patch: Global Historical RGOs wins the 1,269 approved direct disagreements and 48 qualifying descendants, while Just Goods' fixed-location effects remain authoritative."
+    }
+  ],
+  "semanticResolutions": [
+    {
+      "fingerprint": "00d0ab0dfee1e92f",
+      "decision": "Merge Just Goods and SoL's disjoint cloves injections.",
+      "reason": "Just Goods injects only the cloves default_market_price while SoL injects demand_add and wealth_impact_threshold. These database-entry injections affect distinct fields, so both active mods' behavior is retained without a Concordia replacement.",
+      "resolutionType": "native-merge"
+    },
+    {
+      "fingerprint": "287c328f8e967ce7",
+      "decision": "Keep CMF and SoL callback registrations while excluding MRC's CMM callback.",
+      "reason": "EU5 merges same-named on-action definitions from different files. The content-checked MRC replacement suppresses only MRC's CMM callback; CMF's core handler and SoL's independent handler remain active.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "fingerprint": "8799017da9674b34",
+      "decision": "Keep the CMF, Just Goods, and SoL registration callbacks; exclude MRC's CMM registration.",
+      "reason": "EU5 merges same-named on-action definitions from different files. Just Goods and SoL register distinct settings through CMF; the content-checked MRC replacement disables MRC's CMM registration.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "fingerprint": "7291d3730396ab54",
+      "decision": "Retain every independent monthly pulse registration.",
+      "reason": "EU5 natively merges same-named on-action definitions from separate files. CMF, GH Trade Desk, HSO Finances, Glorp UI, Just Goods, and SoL register distinct callbacks; preserve all six definitions without replacing the shared pulse.",
+      "resolutionType": "native-merge"
+    },
+    {
+      "fingerprint": "2b65f6b23ed15ae2",
+      "resolutionType": "native-merge",
+      "decision": "Retain Dynastic Bloodlines' game-start initialization callback.",
+      "reason": "EU5 natively merges same-named on-action definitions from different files. Dynastic Bloodlines adds its independent one-time initialization and country synchronization callback; no Concordia replacement is needed."
+    },
+    {
+      "fingerprint": "455da159c2d2af93",
+      "decision": "Retain all independent game-start callbacks and MRC historical defaults.",
+      "reason": "EU5 natively merges same-named on-action definitions from different files. The MRC replacement retains safe-default initialization while removing only its CMM hooks; CMF, Just Goods, and SoL callbacks remain separate.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "fingerprint": "e7fd4381905822be",
+      "decision": "Retain the independent yearly pulse registrations.",
+      "reason": "EU5 natively merges same-named on-action definitions from different files. CMF, Just Goods, and SoL yearly callbacks and event pools are distinct contributions.",
+      "resolutionType": "native-merge"
+    },
+    {
+      "fingerprint": "47ce920f8634de57",
+      "decision": "Keep CMF as the shared log-state owner and retain SoL as a producer.",
+      "reason": "SoL uses CMF's log key allocator and maps, applies the same 200-entry cap, and increments cmf_log_count once per entry. Both writers implement the same CMF log contract rather than competing state.",
+      "resolutionType": "shared-state"
+    },
+    {
+      "fingerprint": "832729945153948e",
+      "decision": "Merge on_game_load callbacks additively: retain CMF callbacks and MRC safe-default initialization.",
+      "reason": "The built mod retains each package's on_actions registration in separate files; MRC's initialization restores its default values without exposing CMM controls.",
+      "resolutionType": "merged-patch"
+    },
+    {
+      "fingerprint": "9d26f08affb71ccf",
+      "resolutionType": "native-merge",
+      "decision": "Keep the CMF and Construction Manager monthly human-country callbacks.",
+      "reason": "CMF provides an empty extension point and Construction Manager contributes its unified auto-expand and list-visibility updates; EU5 natively merges the distinct callback contributions."
+    },
+    {
+      "fingerprint": "18ce1f4b943da852",
+      "resolutionType": "native-merge",
+      "decision": "Keep Glorp UI's lobby-banner registration.",
+      "reason": "CMF provides the registration hook and Glorp UI contributes its independent lobby banner callback."
+    },
+    {
+      "fingerprint": "6ace8e5e7f38ce23",
+      "resolutionType": "merged-patch",
+      "decision": "Keep the independent CMF, Construction Manager, Glorp UI, and SoL callbacks; suppress MRC's CMM callback.",
+      "reason": "EU5 merges these same-named on-actions across files. The profile's content-checked MRC replacement removes only MRC's CMM hook; all remaining callbacks are distinct package handlers."
+    },
+    {
+      "fingerprint": "c9546b12d571396e",
+      "resolutionType": "native-merge",
+      "decision": "Keep Construction Manager's country-transfer handler.",
+      "reason": "CMF's same-named extension point and Construction Manager's transfer callback are natively merged; the CM callback performs its own state transfer."
+    },
+    {
+      "fingerprint": "b11531186a6f225d",
+      "resolutionType": "merged-patch",
+      "decision": "Keep CMF, Construction Manager, Glorp UI, Just Goods, and SoL registration callbacks; suppress MRC registration.",
+      "reason": "EU5 merges registration callbacks across files. The profile's content-checked MRC replacement removes only MRC's CMM registration; each retained package registers its own distinct CMF settings."
+    },
+    {
+      "fingerprint": "cf8952ff3ef76f2c",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent monthly-pulse registrations.",
+      "reason": "CMF, Glorp UI, GH Exchequer's trade and finance systems, Just Goods, and SoL register distinct monthly callbacks; no same-system duplicate was identified."
+    },
+    {
+      "fingerprint": "d673b1dda5a4951c",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent human-country load callbacks.",
+      "reason": "CMF registration, Construction Manager initialization, and Glorp UI value synchronization are separate contributions to the merged on-action."
+    },
+    {
+      "fingerprint": "9d60230b5535b511",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF and Construction Manager game-load callbacks.",
+      "reason": "CMF's load handling and Construction Manager's lobby-global initialization are separate callbacks and are natively merged."
+    },
+    {
+      "fingerprint": "bff4c09d8e38d6ab",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent human-country game-start callbacks.",
+      "reason": "CMF registration, Construction Manager initialization, and Glorp UI value synchronization are distinct callbacks on the natively merged on-action."
+    },
+    {
+      "fingerprint": "b737f1129b0a73df",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF and Construction Manager game-start callbacks.",
+      "reason": "CMF's game-start handling and Construction Manager's lobby-global initialization are separate callbacks and are natively merged."
+    },
+    {
+      "fingerprint": "49123aa0063b0745",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "f4ae781223ae312d",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "7a2bfb1b1c31c31c",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "40dcc516d795b8fd",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "39991546fbedb846",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "898699790181e98a",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "1bd9d69acb45a24d",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "b7b9daa0d8fb41e5",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "4989633fb2aa5703",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "10ecba49f5b46723",
+      "resolutionType": "load-order",
+      "winner": "glorp-ui",
+      "decision": "Use Glorp UI's shared localization values.",
+      "reason": "The pinned Construction Manager and Glorp UI language files have matching key sets; Glorp UI is later in the profile, so its values win without losing unique keys."
+    },
+    {
+      "fingerprint": "0086dc6ac1fd1470",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "02afce684057fa7e",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "20c48dc33349b27f",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "2bf67cf6b993f9ce",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "5259f0080e382b2d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "bbc5c6cccb0ee9bc",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "c9366094cbca5a29",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "cd3ae19a24508567",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "fb9b9b91e127192d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "161fe0bcb75c7392",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "18e2f55e9e441b4e",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "65e57c72ff6b317e",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "70241994d9573a93",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "721c9ba3f85f7fc9",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "7e980b5e386d84e6",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b518a2ff408a06c3",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "db7e1d1da75e985b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "e04c2373b60520a9",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "3ed148d943333ce5",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "758c34dae103a45f",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "818bb674c358d7ad",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "8a66e03e6147dffe",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "ae2d49b457e813d2",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b95448072125bcc0",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "d3aac13a288ba886",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "d3b2c1a57568c560",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "fb675ada3571d2ac",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "016e3b5c993074db",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "48133ae1197734c1",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "48f60414212a33ad",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6188786dfe9841b5",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6d892a4fecc02d6b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "80a8d4200a090e09",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "a720bc65c01382ce",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "bea997f3e1f3a92d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "bfc4999ac9c1c3a7",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "0fab8926c57b09ed",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "382221ca2ca1d030",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "3de24d2e5adaa1b8",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "448cad9690964964",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "552264bb50893fa2",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "5d211b90de3aba47",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "7267312ed986df69",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "746659b50626594f",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "80be2a92a89ace49",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "2753487a27a65471",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "30740f0b12cf56a4",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "3f72d36ee5ca1d72",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "58624dafdbdb4a08",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "9dd3a8da4a3196cc",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b9778ee5e7622e67",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "e345b5ff4f347965",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f1f18c3d9556b135",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f455f9b205bdce62",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6563372228092869",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "6e0d72ad552b3e21",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "7728512a6b668301",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "91e4808937a5666b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "cd6e4e863db518c3",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "ceef8f3c0ae0f855",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "d5295eb860dc4df6",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f6c1c1d3712a732a",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f7ceb09c73cc8613",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "079707e39292ce4b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "1d80562b8580828d",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "50bfc115529a70b0",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "79952beebe2f3332",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "960df67afeb718fb",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "b794a101c8d4c440",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "e008ebb89d86f9bf",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "ecd069ee99cd8550",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "f550943d2754441b",
+      "resolutionType": "load-order",
+      "winner": "oikoumene",
+      "decision": "Use Oikoumene's shared location-name values.",
+      "reason": "Oikoumene loads after More locations Mod in current-intended. Its pinned values win shared localization keys; non-overlapping keys from both mods remain."
+    },
+    {
+      "fingerprint": "69c76fc1f04910cf",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct game-start callbacks.",
+      "reason": "CMF, Dynastic Bloodlines, Gathering the Land of the Rus, Just Goods, MRC's safe-default initialization, and SoL contribute distinct callbacks. The profile's MRC replacement still removes only its CMM registration hooks."
+    },
+    {
+      "fingerprint": "0c26ba94849268ab",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct monthly-pulse callbacks.",
+      "reason": "Gathering's Rus international-organization bootstrap is separate from the existing monthly registrations, so all callbacks remain active."
+    },
+    {
+      "fingerprint": "ec8e73a96366bb0c",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct yearly-pulse callbacks.",
+      "reason": "Gathering's anti-Tatar/unifier, leash, and ulus-repair callbacks are distinct from the existing CMF, Just Goods, and SoL callbacks and event pools."
+    },
+    {
+      "fingerprint": "c82d3eba395cab23",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct biyearly-pulse callbacks.",
+      "reason": "Dynastic Bloodlines' dynasty flavor callback and Gathering's down-with-yoke and Rus-area-preference callbacks are independent registrations."
+    },
+    {
+      "fingerprint": "92af6e23afea34ec",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct new-ruler callbacks.",
+      "reason": "Dynastic Bloodlines and Gathering register separate new-ruler behavior; neither callback replaces the other."
+    },
+    {
+      "fingerprint": "5477ed5abddf265b",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct four-yearly-pulse callbacks.",
+      "reason": "Gathering's Tatar-border cleanup and AI-Russia correction are separate from Just Goods' bison-depletion event pool."
+    },
+    {
+      "fingerprint": "25ee09d87bea7f03",
+      "resolutionType": "native-merge",
+      "decision": "Merge all unique named-color keys.",
+      "reason": "Gathering's borderland and Chernorus colors and Just Goods' goods colors use disjoint top-level keys; the analyzer approves this only while every named-color key is unique."
+    },
+    {
+      "fingerprint": "51c65b0d60920f9d",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct game-start callbacks.",
+      "reason": "The earlier callback decision applies: existing package registrations and Historical Tweaks' game-start callbacks have distinct registration names."
+    },
+    {
+      "fingerprint": "c06a59f5212df438",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct monthly-pulse callbacks.",
+      "reason": "The earlier callback decision applies: Historical Tweaks adds distinct monthly callbacks alongside Gathering's Rus bootstrap and the existing mod registrations."
+    },
+    {
+      "fingerprint": "67fa285f719e7c9a",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct yearly-pulse callbacks.",
+      "reason": "The earlier callback decision applies: Historical Tweaks' yearly, Iberian, and nation-spawning callbacks remain alongside the existing callbacks."
+    },
+    {
+      "fingerprint": "5b3233da78253f13",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct biyearly-pulse callbacks.",
+      "reason": "The earlier callback decision applies: Historical Tweaks' force-war callbacks are distinct from Gathering's Rus-area preferences and Dynastic Bloodlines' dynasty flavor callback."
+    },
+    {
+      "fingerprint": "b2441e4cae3ab611",
+      "resolutionType": "native-merge",
+      "decision": "Merge all unique named-color keys.",
+      "reason": "Historical Tweaks adds map_ht_dual_monarchy and map_lupijaki; both are unique across the selected Gathering and Just Goods color definitions. The analyzer verifies key uniqueness before applying this resolution."
+    },
+    {
+      "fingerprint": "779b39991ade4e18",
+      "resolutionType": "shared-state",
+      "decision": "Retain Gathering's rus_gathering_intact compatibility flag.",
+      "reason": "Gathering sets the flag at game start, and Historical Tweaks tests for its absence to gate duplicate Rus-related behavior. This producer-consumer contract is intentional."
+    },
+    {
+      "fingerprint": "f31519e33c7371b6",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct ending-war callbacks.",
+      "reason": "Gathering's borderland, Chernorus, and Orthodox-call cleanup callbacks are distinct from Historical Tweaks' situation-gated Holy League callback."
+    },
+    {
+      "fingerprint": "e7a5a659f76e4f46",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct location-occupied callbacks.",
+      "reason": "Gathering's Rus location behavior and Historical Tweaks' Timurid and Iberian callbacks are separate registrations with distinct scopes."
+    },
+    {
+      "fingerprint": "cdf641b1c1cebadc",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct siege-won callbacks.",
+      "reason": "Gathering's Rus siege behavior and Historical Tweaks' situation-momentum and Iberian callbacks are separate registrations with distinct scopes."
+    },
+    {
+      "fingerprint": "8b13d59d668649b9",
+      "resolutionType": "merged-patch",
+      "decision": "Keep CMF, Glorp UI, and SoL callbacks; suppress MRC's CMM callback.",
+      "reason": "Construction Manager is excluded. The profile's content-checked MRC replacement removes only its CMM callback; CMF, Glorp UI, and SoL retain their distinct handlers."
+    },
+    {
+      "fingerprint": "6daa232dead684f0",
+      "resolutionType": "merged-patch",
+      "decision": "Keep CMF, Glorp UI, Just Goods, and SoL registration callbacks; suppress MRC registration.",
+      "reason": "Construction Manager is excluded. EU5 merges the remaining independent settings registrations, while the profile's content-checked MRC replacement removes only MRC's CMM registration."
+    },
+    {
+      "fingerprint": "b53ce8ac5a22d9ab",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent CMF and Glorp UI game-load callbacks.",
+      "reason": "Construction Manager is excluded. CMF's load handling and Glorp UI's value synchronization remain distinct callbacks on the natively merged on-action."
+    },
+    {
+      "fingerprint": "285f3cc6a7fd3fd8",
+      "resolutionType": "native-merge",
+      "decision": "Keep independent CMF and Glorp UI game-start callbacks.",
+      "reason": "Construction Manager is excluded. CMF's game-start handling and Glorp UI's value synchronization remain distinct callbacks on the natively merged on-action."
+    }
+  ],
   "definitionConflicts": "deferred"
 }

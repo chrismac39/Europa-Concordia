@@ -1,13 +1,11 @@
 # Europa Concordia
 
-Europa Concordia is a curated, maintained, all-in-one Europa Universalis V mod
-project. It combines separately sourced mods and original content into one
-traceable release while keeping imported source content distinct from local
-compatibility work.
-
-This repository currently provides the scaffolding and a minimal local build
-pipeline. It does not yet acquire upstream sources, apply integration changes,
-parse EU5 definitions, or verify the final directory against EU5's mod format.
+Europa Concordia is a playset compatibility patch builder for Europa
+Universalis V. Upstream mods stay separate in the player's playset; Concordia
+analyzes their pinned source snapshots and generates profile-specific
+compatibility files, launcher metadata, and a load-order guide. A complete-file
+patch may preserve selected upstream data when the game requires a full-file
+override, so check the package permission records before distributing builds.
 
 ## Requirements
 
@@ -18,44 +16,96 @@ parse EU5 definitions, or verify the final directory against EU5's mod format.
 
 ```sh
 npm install
-npm run validate
+npm run analyze -- --profile current-intended
+npm run validate -- --profile current-intended
 npm test
-npm run build
+npm run build -- --profile current-intended
 ```
 
-The initial package manifest is empty, so validation and build operate on zero
-packages until a package is added. Builds write to the ignored
-`dist/europa-concordia/` directory.
+Analysis reports are generated under `reports/<profile-id>/`. Review numbered
+evidence from the profile's deep frontier in VS Code's side-by-side diff editor:
+
+```sh
+npm run diff -- --profile current-intended 1
+```
+
+`npm run analyze` checks exact paths, cross-file EU5 definitions,
+`REPLACE:`/`INJECT:` targets, event and on-action IDs, localization values,
+global variables, and shared country-system footprints. Each profile pins
+selected mod versions and source identifiers. Findings include profile- and
+content-sensitive fingerprints, so an upstream file change invalidates its
+previous approval.
+
+The starter profile is [current-intended](profiles/current-intended.json) for
+EU5 1.4.5. Build output goes to
+`dist/europa-concordia/<profile-id>/`; its generated load-order guide and
+machine-readable build metadata are written beside it under `dist/`.
+
+The [standalone Just Goods / More Locations / Global Historical RGOs
+profile](profiles/just-goods-more-locations-global-historical-rgos-standalone.json)
+builds the same shared RGO patch source without Concordia's unrelated patches:
+
+```sh
+npm run analyze -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
+```
+
+Install the generated patch locally for the EU5 launcher with:
+
+```sh
+npm run workshop:install -- --profile current-intended
+```
+
+This only builds and copies the selected profile to the local EU5 mod
+directory. It does not upload or publish anything to Steam.
+
+To prepare a profile for the Community Mod Toolkit (CMT), see
+[Workshop publishing](docs/workshop-publishing.md). Each profile gets an
+isolated CMT project; CMT setup and uploads never run against the Concordia
+repository root.
 
 ## Adding a package
 
-1. Read [package management](docs/package-management.md) and add a manifest
-   entry to `config/packages.json`.
+1. Read [package management](docs/package-management.md) and add an analysis
+   input to `config/packages.json`.
 2. Keep the selected source snapshot immutable in its declared `source.path`.
    Do not add a third-party source until its redistribution terms have been
    checked.
-3. Record local compatibility work under `integration/patches/` or
-   `integration/overrides/`, with a decision in `integration/decisions/`.
-4. Run `npm run validate`, `npm test`, and `npm run build`.
+3. Add a profile under `profiles/` that pins the mod version, external
+   identifier, target EU5 version, and load order.
+4. Put compatibility payloads in `integration/patches/` or
+   `integration/overrides/`, and document the reasoning and any required
+   upstream-content permissions in `integration/decisions/`.
+5. Run `npm run analyze -- --profile <id>`, `npm test`, and
+   `npm run build -- --profile <id>`.
 
-The current build only copies enabled package files, in package-ID order, and
-fails on case-insensitive path collisions. Integration patches and overrides
-are recorded for future build support but are not yet applied.
+The build does not bundle upstream mods wholesale. It stops on unresolved or
+incompatible conflicts and verifies that a load-order decision matches the
+profile's order and source-file fingerprints.
 
 ## Project layout
 
-- `packages/upstream/`, `packages/maintained/`, `packages/original/`: package
-  working areas
+- `sources/`: immutable analysis snapshots for candidate mods
+- `profiles/`: playset selections, version pins, and load orders
 - `integration/`: separately maintained patches, overrides, and decisions
 - `config/`: package, build, and conflict-policy manifests
 - `scripts/`: TypeScript build and validation tooling
 - `tests/`: synthetic tests; no real mod content is required
-- `reports/`: reserved for generated reports
+- `reports/`: profile-specific analysis reports
 - `dist/`: generated build output
 
 See [architecture](docs/architecture.md), [conflict resolution](docs/conflict-resolution.md),
 and [legacy migration](docs/legacy-migration.md) for the initial design.
 For EU5-aware editor setup and vanilla-file safety rules, see
 [development setup](docs/development-setup.md).
-The planned, confirmation-gated Workshop release flow is described in
-[Workshop publishing](docs/workshop-publishing.md).
+The local install and no-upload boundary is described in
+[local patch packaging](docs/workshop-publishing.md).
+The current local download comparison is tracked in
+[Workshop inventory](docs/workshop-inventory.md).
+Deferred follow-up work is recorded in
+[future improvements](docs/future-improvements.md).
+Review the generated [high-level decision frontier](reports/current-intended/decision-frontier.md).
+Exhaustive source evidence is in the profile's `deep-frontier.md`.
+The planned [Just Goods / More Locations / Global Historical RGOs compatibility design](integration/decisions/just-goods-more-locations-global-historical-rgos-design.md)
+documents its location audit and the shared-source, two-profile release design.

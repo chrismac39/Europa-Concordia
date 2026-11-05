@@ -1,140 +1,112 @@
-# Steam Workshop publishing
+# Steam Workshop publishing with Community Mod Toolkit
 
-## Status and target
+## Project boundary
 
-Europa Concordia targets one public **stable** Workshop item for Europa
-Universalis V (Steam App ID `3450310`). The current repository has no
-publishing command, no installable EU5 package layout verification, no
-Workshop item, and no SteamCMD installation. `config/workshop.json` is only a
-version-controlled target configuration; its `publishedFileId` is `null`
-until a stable item is explicitly created. Do not invent or substitute an ID.
+Europa Concordia builds independent EU5 mods from profiles. For example, the
+standalone RGO compatibility profile is
+[just-goods-more-locations-global-historical-rgos-standalone](../profiles/just-goods-more-locations-global-historical-rgos-standalone.json);
+the larger Concordia playset patch is
+[current-intended](../profiles/current-intended.json). Each profile must have
+its own Workshop item ID, description, release notes, and CMT workspace.
+Upstream Workshop mods remain separate.
 
-Local playtesting happens before publishing by installing and testing the
-packaged mod with the game. It does not require a separate Workshop test item
-or dev channel.
+The standalone profile's Workshop page and versioned change notes are in
+[`integration/workshop/rgo-harmony/`](../integration/workshop/rgo-harmony/).
+Its source image is
+[`thumbnail.png`](../integration/assets/rgo-harmony/thumbnail.png). The
+shared map-template payload preserves More Locations data, and the repository
+records the owner's confirmation of author permission for distributing this
+compatibility patch.
 
-## Separate pipeline stages
+## Install CMT outside the repository
 
-The eventual workflow must have distinct operations:
+CMT's [setup script](https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit)
+is designed to merge toolkit history and files into a single-mod Git
+repository. Do **not** run it at the root of this multi-profile repository.
+Instead, keep a separate local checkout and Python environment:
 
-1. **Build** — assemble enabled package sources and approved integration
-   changes.
-2. **Validate** — check package dependencies, final assembled content,
-   unresolved path/definition conflicts, metadata, source pins, attribution,
-   and redistribution permissions. Validation must run against the assembled
-   all-in-one result, not only individual package inputs.
-3. **Package** — create a clean release directory at the configured
-   `dist/workshop/stable` path. Include only the verified EU5 mod metadata and
-   content, plus any explicitly required preview/release files. Exclude source
-   repositories, package snapshots, integration working files, tooling,
-   tests, local settings, reports, and unrelated development material.
-4. **Publish** — a separate, explicitly invoked local SteamCMD operation.
-   Publishing is not part of build, validation, packaging, Git hooks, pushes,
-   version bumps, or CI.
+```powershell
+New-Item -ItemType Directory -Force .local | Out-Null
+git clone --branch main --single-branch https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit.git .local\community-mod-toolkit
+python -m venv .local\cmt-venv
+.local\cmt-venv\Scripts\python.exe -m pip install -r .local\community-mod-toolkit\tools\dependencies\requirements.txt
+```
 
-The release packager must not assume metadata filenames or content roots from
-another mod template. Confirm EU5's actual metadata and Workshop folder
-requirements against the installed game before implementing the package
-allowlist or calling an artifact installable.
+`.local/` is ignored by Git. The CMT upload script and its dependencies are
+copied from that checkout into generated, profile-specific workspaces under
+`dist/cmt-workspaces/`; CMT is not vendored into the repository.
 
-## Stable configuration
+## Prepare one profile
 
-`config/workshop.json` records:
+Run validation, build the chosen profile, then prepare its CMT workspace. The
+preparation command builds and packages the profile again to ensure its files
+are current:
 
-- Steam App ID `3450310`;
-- exactly one configured channel, `stable`;
-- `publishedFileId: null` until the user creates the item;
-- intended public visibility; and
-- the future packaged artifact directory.
+```powershell
+npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run workshop:cmt -- prepare --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit
+```
 
-After creation, record the returned `PublishedFileId` in this version-controlled
-file. Do not store account credentials, SteamCMD state, tokens, or session
-files in this configuration. No Workshop ID has been created as part of this
-setup.
+The CMT project will be under
+`dist/cmt-workspaces/just-goods-more-locations-global-historical-rgos-standalone/project`.
+It contains only the generated mod, CMT's upload tool/dependencies, the
+profile's Workshop description, and change notes for the built version. The
+adapter also includes EU5's `dlc` folder in CMT's release sources. CMT's
+upload defaults are disabled in the generated configuration; preparation
+does not upload or create a Workshop item.
 
-## Release inputs and preflight
+`config/cmt-workshop.json` maps profile IDs to Workshop page directories and
+Workshop item IDs. `0` is CMT's create-new-item value. The publish wrapper
+persists a newly created ID to this config and the local workspace, including
+if CMT reports a later upload failure. Each profile is staged separately, so
+preparing one item cannot select another profile's ID.
+If you intentionally want to create a different item for an already-used
+profile, remove only that profile's generated project directory under
+`dist/cmt-workspaces/` before preparing it again with ID `0`.
 
-Before a future publish command can proceed, it must generate and show a
-release summary containing the mod version, supported EU5 version, selected
-channel and App ID, existing item ID or proposed item creation, included
-packages and pinned source versions, changelog, Workshop description,
-attribution, and credits. Missing release information or undocumented
-redistribution permission is a validation failure, not a warning.
+The `current-intended` Concordia profile is not yet registered for CMT: it
+needs its own reviewed Workshop description and version-matched change notes.
+Add those assets and a profile entry to `config/cmt-workshop.json` before
+preparing it. Do not reuse RGO Harmony's description or Workshop ID.
 
-The preflight must verify all of the following:
+## Upload only after release review
 
-1. Build completed successfully.
-2. Validation passed against the final assembled package.
-3. No unresolved integration conflicts remain.
-4. The destination is the configured stable item and visibility is explicit.
-5. Required third-party attribution and redistribution permissions are
-   documented.
-6. A release summary, mod version, description, credits, attribution, and
-   changelog have been generated and reviewed.
-7. The packaged content has been installed and tested locally before a public
-   release.
+CMT's upload tool requires Steam to be running and signed in. Review the
+generated files, the Workshop title, thumbnail, description, required items,
+permissions, and release notes before running it. In particular, do not run
+the upload tool with item ID `0` unless you intend to create a new Workshop
+item. CMT does not configure Steam required items or visibility. After a first
+upload, verify both on the Workshop page and keep the item private until the
+release is ready to make public.
 
-If `publishedFileId` is `null`, present the action as **create a new public
-stable Workshop item**. Require an additional explicit confirmation before
-creation, then record the ID returned by Steam. For updates, display the
-resolved existing ID and require confirmation immediately before upload.
-Never offer an unattended `--yes` or CI publishing path. Steamworks documents
-that a submitted item update cannot be canceled, so the final confirmation
-must happen after the human has reviewed the exact target and release summary.
+The `publish` command rebuilds and stages the selected profile, displays the
+mod name, version, and target Workshop ID, then requires you to type an exact
+confirmation immediately before invoking CMT. It uploads the mod, Workshop
+page, and versioned change notes:
 
-## Local SteamCMD authentication
+```powershell
+npm run workshop:cmt -- publish --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --python .local\cmt-venv\Scripts\python.exe
+```
 
-Once local publishing is implemented and SteamCMD is separately authorized
-and installed, the publisher will invoke SteamCMD locally with a generated
-Workshop item VDF descriptor pointing only at the clean stable artifact and
-configured App ID/PublishedFileId, using SteamCMD's
-`workshop_build_item <item.vdf>` operation. This is separate from the
-Node.js build and packaging stages.
+The command also persists a newly-created Workshop item ID to
+`config/cmt-workshop.json`, including when CMT reports a later upload failure.
+For updates to that same item, use the same command after updating the versioned file
+[`change-notes/0.1.0.bbcode`](../integration/workshop/rgo-harmony/change-notes/0.1.0.bbcode)
+and the version in the selected profile. The adapter stages the notes as
+CMT's expected version-header format. This wrapper always uploads the mod,
+Workshop page, and current version's change notes together.
 
-Authentication remains wholly within SteamCMD's supported interactive login
-flow. The intended local sequence is:
+Add these upstream items as Steam Workshop **Required Items** on RGO Harmony:
 
-1. Start SteamCMD interactively and enter `login <account-name>`. Enter the
-   password and any Steam Guard challenge only when SteamCMD prompts for them;
-   never pass them as command arguments.
-2. Run the separate Europa Concordia publish command. It rebuilds or verifies
-   the release artifact, prints the target item and complete release summary,
-   then requires the explicit human confirmation described above.
-3. Only after confirmation does the publisher invoke SteamCMD's
-   `workshop_build_item <item.vdf>` against the clean stable artifact.
-4. Verify SteamCMD's completion result and the resulting Workshop item. If
-   this was first-time item creation, record the returned PublishedFileId in
-   `config/workshop.json` after reviewing the created item.
+- Just Goods: `3785316314`
+- Global Historical RGOs: `3602513956`
+- More locations Mod: `3809335454`
 
-Steam Guard must remain enabled. Europa Concordia must never accept credentials
-as CLI arguments or environment variables, prompt for them in its own UI, read
-or emit SteamCMD session/config files, log auth output, or place auth data in
-the repository or release artifact. Do not export or copy SteamCMD's cached
-credentials. The project will not manage Steam's local authentication state.
+Keep the load order in the page description: More Locations → Global
+Historical RGOs → Just Goods → RGO Harmony. Required-item relationships are
+not represented by the generated EU5 launcher metadata and must be maintained
+on the Workshop item.
 
-No SteamCMD authentication or upload was performed for this setup, and
-SteamCMD was not installed.
-
-## Toolkit workflow review
-
-The EU5 Community Mod Toolkit documents a local Python/SteamworksPy upload
-tool and a GitHub Actions release workflow using SteamCMD. Useful ideas are
-clean release staging, a dry-run summary, explicitly configured Workshop
-item IDs, and separating content from Workshop page metadata.
-
-Europa Concordia does not adopt the toolkit's GPL-licensed implementation,
-Python dependency, or automatic workflow. The documented Actions workflow can
-use a cached `STEAM_CONFIG_VDF` repository secret and configurable push,
-pull-request, or nightly publishing triggers. Those credential and automation
-choices conflict with Europa Concordia's authentication and explicit-human-
-confirmation requirements. Its documented Steam Guard-off alternative is
-also expressly rejected. No GitHub Actions workflow or secrets are configured.
-
-## References
-
-- [Valve SteamCMD documentation](https://developer.valvesoftware.com/wiki/SteamCMD)
-- [Steamworks Workshop implementation](https://partner.steamgames.com/doc/features/workshop/implementation)
-- [Steamworks ISteamUGC API](https://partner.steamgames.com/doc/api/ISteamUGC)
-- [EU5 Community Mod Toolkit](https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit)
-- [Toolkit Upload Tool](https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit/wiki/Upload-Tool)
-- [Toolkit Release Workflow](https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit/wiki/Release-Workflow)
+No Steam upload has been performed by the repository's build, install, or CMT
+preparation commands.

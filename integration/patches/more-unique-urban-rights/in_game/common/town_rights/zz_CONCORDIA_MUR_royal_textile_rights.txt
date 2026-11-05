@@ -1,0 +1,15 @@
+INJECT:royal_textile_rights = {
+	allow = {
+		scope:target = {
+			NOT = {
+				has_town_rights = town_rights_type:flemish_cloth_industries_right
+			}
+			NOT = {
+				has_town_rights = town_rights_type:aga_tr_bengal_muslin
+			}
+			NOT = {
+				has_town_rights = town_rights_type:aga_tr_indoaryan_jamdani
+			}
+		}
+	}
+}
