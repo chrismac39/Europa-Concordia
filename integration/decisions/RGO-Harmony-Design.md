@@ -129,12 +129,12 @@ integration/
       <shared compatibility payload, grouped by EU5 game path>
 profiles/
   current-intended.json
-  just-goods-more-locations-global-historical-rgos-standalone.json
+  rgo-harmony.json
 dist/
   europa-concordia/
     <master-profile-id>/
   rgo-harmony/
-    just-goods-more-locations-global-historical-rgos-standalone/
+    rgo-harmony/
 ```
 
 The exact profile IDs and output files should follow the existing profile
@@ -160,7 +160,7 @@ three-mod ordering.
 ### Standalone output
 
 The dedicated
-[standalone profile](../../profiles/just-goods-more-locations-global-historical-rgos-standalone.json)
+[RGO Harmony profile](../../profiles/rgo-harmony.json)
 selects only the three required upstream mods, their pinned source revisions,
 in More Locations → Global Historical RGOs → Just Goods order, followed by the
 standalone compatibility mod. Its

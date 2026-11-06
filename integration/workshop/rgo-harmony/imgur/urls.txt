@@ -1,0 +1,13 @@
+# Add one direct Imgur image URL per line.
+# Use each URL in STEAM_PAGE.bbcode as [img]URL[/img].
+# Example: https://i.imgur.com/IMAGE_ID.png
+#scen1
+https://i.imgur.com/DoD4s6G.png
+#scen2
+https://i.imgur.com/3LEbpUZ.png
+#scen3a
+https://i.imgur.com/7hkNqcB.png
+#scen3b
+https://i.imgur.com/q9O3neG.png
+#scen4
+https://i.imgur.com/9bDsKzP.png

@@ -42,14 +42,13 @@ EU5 1.4.5. Its build output goes to
 its own output root at `dist/rgo-harmony/<profile-id>/`. Generated load-order
 guides and machine-readable build metadata are written under `dist/`.
 
-The [standalone Just Goods / More Locations / Global Historical RGOs
-profile](profiles/just-goods-more-locations-global-historical-rgos-standalone.json)
+The [RGO Harmony profile](profiles/rgo-harmony.json)
 builds the same shared RGO patch source without Concordia's unrelated patches:
 
 ```sh
-npm run analyze -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run analyze -- --profile rgo-harmony
+npm run validate -- --profile rgo-harmony
+npm run build -- --profile rgo-harmony
 ```
 
 Install the generated patch locally for the EU5 launcher with:

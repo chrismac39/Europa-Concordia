@@ -1,7 +1,7 @@
 {
   "version": 1,
   "profiles": {
-    "just-goods-more-locations-global-historical-rgos-standalone": {
+    "rgo-harmony": {
       "workshopDirectory": "integration/workshop/rgo-harmony",
       "workshopItemId": 3833870015
     }

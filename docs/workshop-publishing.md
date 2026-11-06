@@ -4,7 +4,7 @@
 
 Europa Concordia builds independent EU5 mods from profiles. For example, the
 standalone RGO compatibility profile is
-[just-goods-more-locations-global-historical-rgos-standalone](../profiles/just-goods-more-locations-global-historical-rgos-standalone.json);
+[RGO Harmony](../profiles/rgo-harmony.json);
 the larger Concordia playset patch is
 [current-intended](../profiles/current-intended.json). Each profile must have
 its own Workshop item ID, description, release notes, and CMT workspace.
@@ -13,7 +13,8 @@ Upstream Workshop mods remain separate.
 The standalone profile's Workshop page and versioned change notes are in
 [`integration/workshop/rgo-harmony/`](../integration/workshop/rgo-harmony/).
 Its source image is
-[`thumbnail.png`](../integration/assets/rgo-harmony/thumbnail.png). The
+[`thumbnail.png`](../integration/workshop/rgo-harmony/thumbnail.png), alongside
+the gallery images. The
 built game mod is under `dist/rgo-harmony/`, separate from Concordia's
 `dist/europa-concordia/` output. The
 shared map-template payload preserves More Locations data, and the repository
@@ -45,13 +46,13 @@ preparation command builds and packages the profile again to ensure its files
 are current:
 
 ```powershell
-npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run workshop:cmt -- prepare --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit
+npm run validate -- --profile rgo-harmony
+npm run build -- --profile rgo-harmony
+npm run workshop:cmt -- prepare --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit
 ```
 
 The CMT project will be under
-`dist/cmt-workspaces/just-goods-more-locations-global-historical-rgos-standalone/project`.
+`dist/cmt-workspaces/rgo-harmony/project`.
 It contains only the generated mod, CMT's upload tool/dependencies, the
 profile's Workshop description, and change notes for the built version. The
 adapter also includes EU5's `dlc` folder in CMT's release sources. CMT's
@@ -82,7 +83,7 @@ Gallery images are not synchronized during ordinary publishing. To stage the
 images for review, prepare with `--sync-gallery`:
 
 ```powershell
-npm run workshop:cmt -- prepare --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --sync-gallery
+npm run workshop:cmt -- prepare --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit --sync-gallery
 ```
 
 Only an explicit `--sync-gallery` publish changes the Workshop gallery. CMT
@@ -114,11 +115,11 @@ confirmation immediately before invoking CMT. It uploads the mod, Workshop
 page, and versioned change notes:
 
 ```powershell
-npm run workshop:cmt -- publish --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --python .local\cmt-venv\Scripts\python.exe
+npm run workshop:cmt -- publish --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit --python .local\cmt-venv\Scripts\python.exe
 ```
 
 For a non-interactive terminal, provide the exact confirmation token as
-`--confirm-publish "PUBLISH just-goods-more-locations-global-historical-rgos-standalone UPDATE"`.
+`--confirm-publish "PUBLISH rgo-harmony UPDATE"`.
 The command checks it against the current profile ID and configured Workshop
 item before starting CMT.
 
@@ -126,7 +127,7 @@ For an explicit gallery synchronization, add `--sync-gallery` to the publish
 command as well. For example:
 
 ```powershell
-npm run workshop:cmt -- publish --profile just-goods-more-locations-global-historical-rgos-standalone --toolkit-dir .local\community-mod-toolkit --sync-gallery --confirm-publish "PUBLISH just-goods-more-locations-global-historical-rgos-standalone UPDATE"
+npm run workshop:cmt -- publish --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit --sync-gallery --confirm-publish "PUBLISH rgo-harmony UPDATE"
 ```
 
 The command also persists a newly-created Workshop item ID to

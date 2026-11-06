@@ -6,6 +6,6 @@
   "conflictRulesFile": "config/conflict-rules.json",
   "outputDirectory": "dist/europa-concordia",
   "profileOutputDirectories": {
-    "just-goods-more-locations-global-historical-rgos-standalone": "dist/rgo-harmony"
+    "rgo-harmony": "dist/rgo-harmony"
   }
 }
