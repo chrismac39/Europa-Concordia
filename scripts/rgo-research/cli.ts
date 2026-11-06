@@ -31,7 +31,7 @@ function usage(): string {
     "",
     "The default resolve input is the 71 Harmony generic-fruit locations.",
     "Only Wikidata entities classified as geographic locations are included.",
-    "EU5 provinces are read from the installed game's map_data/definitions.txt.",
+    "EU5 region, area, and province context are read from map_data/definitions.txt.",
     "Review the resolution CSV and set correct=TRUE for one confirmed candidate per location before research.",
     "Country subdivision-scale hints come from config/rgo-research-admin-scales.json.",
   ].join("\n");

@@ -112,20 +112,39 @@ test("EU5 province parser maps locations to their game province", () => {
           basra abadan abdas
         }
         baghdad_province = { baghdad baqubah }
-        limousin_province = {
-          limousin_province = { limoges }
-          la_marche_province = { gueret }
-        }
+      }
+      limousin_province = {
+        limousin_province = { limoges }
+        la_marche_province = { gueret }
+      }
+    }
+    iberia_region = {
+      toledo_area = {
+        west_mancha_province = { ciudad_real calatrava }
       }
     }
   `);
   assert.deepEqual(provinces.get("abdas"), {
     id: "basra_province",
     name: "Basra",
+    areaId: "iraq_arabi_area",
+    areaName: "Iraq Arabi",
+    regionId: "crescent_region",
+    regionName: "Crescent",
   });
   assert.deepEqual(provinces.get("gueret"), {
     id: "la_marche_province",
     name: "La Marche",
+    regionId: "crescent_region",
+    regionName: "Crescent",
+  });
+  assert.deepEqual(provinces.get("calatrava"), {
+    id: "west_mancha_province",
+    name: "West Mancha",
+    areaId: "toledo_area",
+    areaName: "Toledo",
+    regionId: "iberia_region",
+    regionName: "Iberia",
   });
   assert.deepEqual(
     addEu5Provinces(
@@ -139,6 +158,10 @@ test("EU5 province parser maps locations to their game province", () => {
         context: "Hüleguids",
         eu5Province: "Basra",
         eu5ProvinceId: "basra_province",
+        eu5Area: "Iraq Arabi",
+        eu5AreaId: "iraq_arabi_area",
+        eu5Region: "Crescent",
+        eu5RegionId: "crescent_region",
       },
     ],
   );
@@ -218,10 +241,12 @@ test("catalog validates configured goods and matches localized crop aliases", as
 test("Wikidata resolver returns place candidates without selecting one", async () => {
   const temporaryDirectory = await createTemporaryDirectory();
   try {
+    const searchQueries: string[] = [];
     const fetchImplementation: typeof fetch = async (input) => {
       const url = new URL(String(input));
       const params = url.searchParams;
       if (params.get("action") === "wbsearchentities") {
+        searchQueries.push(params.get("search") ?? "");
         return Response.json({
           search: [
             {
@@ -471,6 +496,8 @@ test("Wikidata resolver returns place candidates without selecting one", async (
           englishName: "Blois",
           context: "Kingdom of France",
           eu5Province: "Blois",
+          eu5Area: "Orleanais",
+          eu5Region: "Western Europe",
         },
       ],
       client,
@@ -484,6 +511,9 @@ test("Wikidata resolver returns place candidates without selecting one", async (
     assert.equal(location.candidates[0].label, "Loir-et-Cher");
     assert.equal(location.candidates[0].confidence, "medium");
     assert.equal(location.candidates[0].country, "France");
+    assert.ok(searchQueries.includes("Blois"));
+    assert.ok(searchQueries.includes("Orleanais"));
+    assert.ok(searchQueries.includes("Western Europe"));
     assert.equal(location.candidates[0].countryIso3, "FRA");
     assert.equal(location.candidates[0].administrativeScale?.level, "LAU");
     assert.equal(location.candidates.length, 1);
@@ -512,6 +542,146 @@ test("Wikidata resolver returns place candidates without selecting one", async (
   }
 });
 
+test("EU5 area and region searches prefer a matching country", async () => {
+  const temporaryDirectory = await createTemporaryDirectory();
+  try {
+    const fetchImplementation: typeof fetch = async (input) => {
+      const params = new URL(String(input)).searchParams;
+      if (params.get("action") === "wbsearchentities") {
+        const search = params.get("search");
+        const results =
+          search === "Calatrava"
+            ? [
+                {
+                  id: "QPH",
+                  label: "Calatrava",
+                  description: "municipality in the Philippines",
+                },
+                {
+                  id: "QES",
+                  label: "Calatrava",
+                  description: "municipality in Spain",
+                },
+              ]
+            : search === "Toledo"
+              ? [
+                  {
+                    id: "QTOLEDO",
+                    label: "Toledo",
+                    description: "province in Spain",
+                  },
+                ]
+              : [
+                  {
+                    id: "QIBERIA",
+                    label: "Iberia",
+                    description: "geographic region in Spain",
+                  },
+                ];
+        return Response.json({ search: results });
+      }
+
+      const ids = (params.get("ids") ?? "").split("|");
+      const entityData: Record<
+        string,
+        { label: string; type?: string; country?: string }
+      > = {
+        QPH: { label: "Calatrava", type: "Q56061", country: "Q928" },
+        QES: { label: "Calatrava", type: "Q56061", country: "Q29" },
+        QTOLEDO: { label: "Toledo", type: "Q56061", country: "Q29" },
+        QIBERIA: { label: "Iberia", type: "Q82794", country: "Q29" },
+        Q928: { label: "Philippines" },
+        Q29: { label: "Spain" },
+        Q56061: { label: "administrative territorial entity" },
+        Q82794: { label: "geographic region" },
+      };
+      const entities = Object.fromEntries(
+        ids.flatMap((id) => {
+          const data = entityData[id];
+          return data
+            ? [
+                [
+                  id,
+                  {
+                    id,
+                    labels: { en: { value: data.label } },
+                    descriptions: {
+                      en: {
+                        value:
+                          data.label === "Calatrava"
+                            ? id === "QPH"
+                              ? "municipality in the Philippines"
+                              : "municipality in Spain"
+                            : "",
+                      },
+                    },
+                    claims: {
+                      ...(data.type
+                        ? {
+                            P31: [
+                              {
+                                mainsnak: {
+                                  datavalue: { value: { id: data.type } },
+                                },
+                              },
+                            ],
+                          }
+                        : {}),
+                      ...(data.country
+                        ? {
+                            P17: [
+                              {
+                                mainsnak: {
+                                  datavalue: { value: { id: data.country } },
+                                },
+                              },
+                            ],
+                          }
+                        : {}),
+                    },
+                  },
+                ],
+              ]
+            : [];
+        }),
+      );
+      return Response.json({ entities });
+    };
+    const client = new JsonHttpClient({
+      cachePath: path.join(temporaryDirectory, "cache.json"),
+      minIntervalMs: 0,
+      fetchImplementation,
+    });
+    const result = await resolveLocations(
+      [
+        {
+          id: "calatrava",
+          englishName: "Calatrava",
+          context: "Castile",
+          eu5Province: "West Mancha",
+          eu5Area: "Toledo",
+          eu5Region: "Iberia",
+        },
+      ],
+      client,
+      "test",
+      {
+        formatVersion: 1,
+        generatedAt: "2026-01-01T00:00:00.000Z",
+        referenceAreaKm2: 100,
+        referenceDescription: "EU LAU median",
+        countries: {},
+      },
+    );
+    assert.deepEqual(
+      result.locations[0].candidates.map((candidate) => candidate.country),
+      ["Spain"],
+    );
+  } finally {
+    await rm(temporaryDirectory, { recursive: true, force: true });
+  }
+});
+
 test("resolution JSON parser preserves manual place selection", () => {
   const file: ResolutionFile = {
     formatVersion: 1,
@@ -523,6 +693,10 @@ test("resolution JSON parser preserves manual place selection", () => {
           id: "blois",
           englishName: "Blois",
           context: "France",
+          eu5Region: "Western Europe",
+          eu5RegionId: "western_europe_region",
+          eu5Area: "Orleanais",
+          eu5AreaId: "orleanais_area",
           eu5Province: "Basra",
           eu5ProvinceId: "basra_province",
         },

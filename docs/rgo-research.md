@@ -9,16 +9,18 @@ change any RGO assignments.
 
 1. Run `npm run rgo:research -- resolve`. This reads the 71-location pilot
    table in `integration/decisions/RGO-Harmony-Expanded-Inventory.md`, reads
-   each location's EU5 province from the installed game's
-   `in_game/map_data/definitions.txt`, searches Wikidata by each English
-   in-game name, retains entities whose Wikidata type hierarchy identifies
-   them as administrative units linked to matching geographic places, and writes:
+   each location's EU5 region, area, and province from the installed game's
+   `in_game/map_data/definitions.txt`, searches Wikidata by the English name
+   and again with the game geography and historical context appended, retains
+   entities whose Wikidata type hierarchy identifies them as administrative
+   units linked to matching geographic places, and writes:
    - `reports/rgo-research/pilot-resolution.json`
    - `reports/rgo-research/pilot-resolution.md`
    - `reports/rgo-research/pilot-resolution.csv`
 2. Review the candidate rows in the CSV, including the EU5 province, modern
-   administrative unit, coordinates, Wikipedia links, and the country's
-   area-based subdivision-scale target. The target is a guide, not a guarantee
+   administrative unit, coordinates, Wikipedia links, EU5 region/area/province
+   context, and the country's area-based subdivision-scale target. The target
+   is a guide, not a guarantee
    that a Wikidata candidate is exactly at that boundary tier. Standalone
    towns/cities and natural features are not candidates, though a city that is
    itself an administrative unit can qualify. Set `correct` to `TRUE` for one
@@ -83,13 +85,17 @@ other than the default file adjacent to the resolution JSON.
   output candidates are limited to current administrative divisions, not
   standalone settlements or natural features. Local LAU-like and broader
   NUTS-3-like units can both appear because national administrative systems
-  differ. The EU5 province
-  boosts candidates whose administrative hierarchy aligns with that context.
+  differ. EU5 area and region names are searched independently as geographic
+  context; when those results identify a clear country, candidates in other
+  countries are deprioritized if a candidate in the contextual country exists.
+  EU5 province, area, and region names can also boost candidates whose
+  administrative ancestry aligns with that context. These are historical
+  game-map hints, not modern-country or administrative-boundary assertions.
   Candidate scores are ranking aids only; boundaries and levels are not
   asserted to match historical EU5 borders.
-- The EU5 province is included as contextual information in both reports. It
-  comes from the game's province-to-location definitions and is not itself a
-  modern-country or administrative-boundary assertion. The default game path
+- The EU5 region, area, and province are included as contextual information in
+  both reports. They come from the game's nested map definitions and are not
+  themselves modern-country or administrative-boundary assertions. The default game path
   is the standard Steam install; set `EU5_GAME_PATH` or pass `--game-path
 "C:\\path\\to\\Europa Universalis V\\game"` for another installation.
 - The country subdivision-scale index is stored in

@@ -14,6 +14,13 @@ interface SearchResult {
   description: string;
 }
 
+interface ContextSearchHit {
+  term: string;
+  weight: number;
+  rank: number;
+  result: SearchResult;
+}
+
 interface WikidataEntity {
   id: string;
   labels?: Record<string, { value: string }>;
@@ -37,6 +44,7 @@ const geographicClassIds = new Set([
   "Q15284", // municipality
   "Q484170", // commune
   "Q23442", // island
+  "Q23413", // castle
   "Q4022", // river
   "Q23397", // lake
   "Q8502", // mountain
@@ -253,7 +261,7 @@ function candidateScore(
   entity: WikidataEntity | undefined,
   countryKnown: boolean,
   relatedPlaceNameScore: number,
-  provinceAligned: boolean,
+  geographyAligned: boolean,
   countryContextAligned = false,
 ): number {
   const normalizedInput = normalizeName(input.englishName);
@@ -269,7 +277,7 @@ function candidateScore(
   if (relatedPlaceNameScore > 0) {
     score += Math.round(relatedPlaceNameScore * 0.35);
   }
-  if (provinceAligned) {
+  if (geographyAligned) {
     score += 25;
   }
   if (countryContextAligned) {
@@ -286,12 +294,13 @@ function candidateScore(
 }
 
 async function searchEntities(
-  input: LocationInput,
+  query: string,
+  locationId: string,
   client: JsonHttpClient,
 ): Promise<SearchResult[]> {
   const parameters = new URLSearchParams({
     action: "wbsearchentities",
-    search: input.englishName,
+    search: query,
     language: "en",
     uselang: "en",
     type: "item",
@@ -300,7 +309,7 @@ async function searchEntities(
   });
   const response: unknown = await client.get(wikidataApiUrl(parameters));
   if (!isRecord(response) || !Array.isArray(response.search)) {
-    throw new Error(`Unexpected Wikidata search response for ${input.id}`);
+    throw new Error(`Unexpected Wikidata search response for ${locationId}`);
   }
   return response.search.flatMap((value): SearchResult[] => {
     if (
@@ -319,6 +328,42 @@ async function searchEntities(
       },
     ];
   });
+}
+
+async function searchContextEntities(
+  location: LocationInput,
+  client: JsonHttpClient,
+): Promise<ContextSearchHit[]> {
+  const terms = [
+    { term: location.eu5Area, weight: 3 },
+    { term: location.eu5Region, weight: 2 },
+  ].filter(
+    (entry, index, entries): entry is { term: string; weight: number } => {
+      const term = entry.term;
+      if (
+        typeof term !== "string" ||
+        term.trim().length === 0 ||
+        normalizeName(term) === normalizeName(location.englishName)
+      ) {
+        return false;
+      }
+      return (
+        entries.findIndex(
+          (candidate) =>
+            typeof candidate.term === "string" &&
+            normalizeName(candidate.term) === normalizeName(term),
+        ) === index
+      );
+    },
+  );
+  const hits: ContextSearchHit[] = [];
+  for (const { term, weight } of terms) {
+    const results = await searchEntities(term, location.id, client);
+    results.forEach((result, rank) =>
+      hits.push({ term, weight, rank, result }),
+    );
+  }
+  return hits;
 }
 
 async function fetchEntities(
@@ -497,15 +542,90 @@ function contextMatchesCountry(
   );
 }
 
-function provinceMatchesEntity(
+function scoreContextCountries(
+  hits: ContextSearchHit[],
+  entities: Map<string, WikidataEntity>,
+  typeAncestors: Map<string, Set<string>>,
+): Map<string, number> {
+  const scoreByTerm = new Map<string, Map<string, number>>();
+  for (const hit of hits) {
+    const entity = entities.get(hit.result.id);
+    if (!isGeographicEntity(entity, typeAncestors)) {
+      continue;
+    }
+    const normalizedTerm = normalizeName(hit.term);
+    const searchableNames = [
+      getLabel(entity),
+      ...(entity?.aliases?.en?.map((alias) => alias.value) ?? []),
+    ]
+      .filter((name): name is string => Boolean(name))
+      .map(normalizeName);
+    if (
+      !searchableNames.some(
+        (name) =>
+          name === normalizedTerm ||
+          name.includes(normalizedTerm) ||
+          normalizedTerm.includes(name),
+      )
+    ) {
+      continue;
+    }
+
+    const directCountryQids = getEntityIds(entity, "P17");
+    const countryQids =
+      directCountryQids.length > 0
+        ? directCountryQids
+        : [findCountryQid(entity, entities)].filter((qid): qid is string =>
+            Boolean(qid),
+          );
+    const termScores = scoreByTerm.get(normalizedTerm) ?? new Map();
+    const contribution =
+      hit.weight / (hit.rank + 1) / Math.max(countryQids.length, 1);
+    for (const countryQid of countryQids) {
+      termScores.set(
+        countryQid,
+        Math.max(termScores.get(countryQid) ?? 0, contribution),
+      );
+    }
+    scoreByTerm.set(normalizedTerm, termScores);
+  }
+
+  const scores = new Map<string, number>();
+  for (const termScores of scoreByTerm.values()) {
+    for (const [countryQid, score] of termScores) {
+      scores.set(countryQid, (scores.get(countryQid) ?? 0) + score);
+    }
+  }
+  return scores;
+}
+
+function getPreferredContextCountry(
+  scores: Map<string, number>,
+): string | undefined {
+  const ranked = [...scores.entries()].sort(
+    ([, left], [, right]) => right - left,
+  );
+  const [bestCountry, bestScore] = ranked[0] ?? [];
+  const secondScore = ranked[1]?.[1] ?? 0;
+  return bestCountry && bestScore >= 1.5 && bestScore - secondScore >= 0.75
+    ? bestCountry
+    : undefined;
+}
+
+function eu5GeographyMatchesEntity(
   input: LocationInput,
   entity: WikidataEntity | undefined,
   entities: Map<string, WikidataEntity>,
 ): boolean {
-  if (!input.eu5Province) {
+  const geographyNames = [
+    input.eu5Province,
+    input.eu5Area,
+    input.eu5Region,
+  ].filter((name): name is string => Boolean(name));
+  if (geographyNames.length === 0) {
     return false;
   }
-  const province = normalizeName(input.eu5Province);
+  const normalizedGeographyNames = geographyNames.map(normalizeName);
   let current = entity;
   const visited = new Set<string>();
   for (let depth = 0; current && depth < 4; depth += 1) {
@@ -520,9 +640,10 @@ function provinceMatchesEntity(
           /\b(region|regional unit|county|district|province|department|arrondissement|municipality|commune|prefecture|governorate|oblast|raion|state)\b/.test(
             normalizedLabel,
           );
-        return (
-          normalizedLabel === province ||
-          (normalizedLabel.includes(province) && administrativeName)
+        return normalizedGeographyNames.some(
+          (geographyName) =>
+            normalizedLabel === geographyName ||
+            (normalizedLabel.includes(geographyName) && administrativeName),
         );
       })
     ) {
@@ -567,7 +688,7 @@ function buildCandidate(
     entity,
     Boolean(countryQid),
     relatedPlaceNameScore,
-    provinceMatchesEntity(input, entity, entities),
+    eu5GeographyMatchesEntity(input, entity, entities),
     contextMatchesCountry(input, getLabel(countryEntity)),
   );
   const localLanguages = getEntityIds(countryEntity, "P37")
@@ -655,11 +776,20 @@ export async function resolveLocations(
 ): Promise<ResolutionFile> {
   const searchResults = new Map<string, SearchResult[]>();
   const allResults: SearchResult[] = [];
+  const contextSearchResults = new Map<string, ContextSearchHit[]>();
+  const allContextResults: SearchResult[] = [];
 
   for (const [index, location] of locations.entries()) {
-    const results = await searchEntities(location, client);
+    const results = await searchEntities(
+      location.englishName,
+      location.id,
+      client,
+    );
+    const contextResults = await searchContextEntities(location, client);
     searchResults.set(location.id, results);
+    contextSearchResults.set(location.id, contextResults);
     allResults.push(...results);
+    allContextResults.push(...contextResults.map((hit) => hit.result));
     if ((index + 1) % 10 === 0 || index + 1 === locations.length) {
       console.log(
         `Searched Wikidata for ${index + 1}/${locations.length} locations`,
@@ -668,7 +798,7 @@ export async function resolveLocations(
   }
 
   const initialEntities = await fetchEntities(
-    allResults.map((result) => result.id),
+    [...allResults, ...allContextResults].map((result) => result.id),
     client,
   );
   const initialTypeAncestors = await fetchTypeAncestors(
@@ -678,15 +808,30 @@ export async function resolveLocations(
     client,
   );
   const geographicResults = new Map<string, SearchResult[]>();
+  const geographicContextResults = new Map<string, SearchResult[]>();
   for (const location of locations) {
     const results = (searchResults.get(location.id) ?? []).filter((result) =>
       isGeographicEntity(initialEntities.get(result.id), initialTypeAncestors),
     );
     geographicResults.set(location.id, results);
+    geographicContextResults.set(
+      location.id,
+      (contextSearchResults.get(location.id) ?? [])
+        .map((hit) => hit.result)
+        .filter((result) =>
+          isGeographicEntity(
+            initialEntities.get(result.id),
+            initialTypeAncestors,
+          ),
+        ),
+    );
   }
 
   const administrativeLineage = await fetchAdministrativeLineage(
-    [...geographicResults.values()].flatMap((results) =>
+    [
+      ...geographicResults.values(),
+      ...geographicContextResults.values(),
+    ].flatMap((results) =>
       results.flatMap((result) => {
         const entity = initialEntities.get(result.id);
         return entity ? [entity] : [];
@@ -716,7 +861,7 @@ export async function resolveLocations(
       {
         result: SearchResult;
         relatedPlaceNameScore: number;
-        relatedProvinceAligned: boolean;
+        relatedGeographyAligned: boolean;
       }
     >
   >();
@@ -726,30 +871,31 @@ export async function resolveLocations(
       {
         result: SearchResult;
         relatedPlaceNameScore: number;
-        relatedProvinceAligned: boolean;
+        relatedGeographyAligned: boolean;
       }
     >();
     const addCandidate = (
       result: SearchResult,
       relatedPlaceNameScore: number,
-      relatedProvinceAligned: boolean,
+      relatedGeographyAligned: boolean,
     ) => {
       const current = candidates.get(result.id);
       if (!current) {
         candidates.set(result.id, {
           result,
           relatedPlaceNameScore,
-          relatedProvinceAligned,
+          relatedGeographyAligned,
         });
       } else {
         candidates.set(result.id, {
+          ...current,
           result,
           relatedPlaceNameScore: Math.max(
             relatedPlaceNameScore,
             current.relatedPlaceNameScore,
           ),
-          relatedProvinceAligned:
-            relatedProvinceAligned || current.relatedProvinceAligned,
+          relatedGeographyAligned:
+            relatedGeographyAligned || current.relatedGeographyAligned,
         });
       }
     };
@@ -768,10 +914,10 @@ export async function resolveLocations(
         addCandidate(
           placeResult,
           0,
-          provinceMatchesEntity(location, placeEntity, placeEntities),
+          eu5GeographyMatchesEntity(location, placeEntity, placeEntities),
         );
       }
-      const placeProvinceAligned = provinceMatchesEntity(
+      const placeGeographyAligned = eu5GeographyMatchesEntity(
         location,
         placeEntity,
         placeEntities,
@@ -803,7 +949,7 @@ export async function resolveLocations(
                 description: getDescription(ancestor) ?? "",
               },
               placeNameScore,
-              placeProvinceAligned,
+              placeGeographyAligned,
             );
           }
           next.push(...getEntityIds(ancestor, "P131"));
@@ -828,6 +974,18 @@ export async function resolveLocations(
     ...referenceEntities.entries(),
     ...languageEntities.entries(),
   ]);
+  const preferredContextCountries = new Map<string, string>();
+  for (const location of locations) {
+    const scores = scoreContextCountries(
+      contextSearchResults.get(location.id) ?? [],
+      entities,
+      typeAncestors,
+    );
+    const preferredCountry = getPreferredContextCountry(scores);
+    if (preferredCountry) {
+      preferredContextCountries.set(location.id, preferredCountry);
+    }
+  }
 
   const resolutions: LocationResolution[] = locations.map((location) => {
     const candidates = [
@@ -838,7 +996,7 @@ export async function resolveLocations(
           getLabel(entities.get(result.id)) ||
           (result.label.length > 0 && !/^Q\d+$/.test(result.label)),
       )
-      .map(({ result, relatedPlaceNameScore, relatedProvinceAligned }) => {
+      .map(({ result, relatedPlaceNameScore, relatedGeographyAligned }) => {
         const candidate = buildCandidate(
           location,
           result,
@@ -848,30 +1006,45 @@ export async function resolveLocations(
         );
         return {
           candidate,
-          provinceAligned:
-            relatedProvinceAligned ||
-            provinceMatchesEntity(location, entities.get(result.id), entities),
+          geographyAligned:
+            relatedGeographyAligned ||
+            eu5GeographyMatchesEntity(
+              location,
+              entities.get(result.id),
+              entities,
+            ),
           countryContextAligned: contextMatchesCountry(
             location,
             candidate.country,
           ),
         };
       });
-    const countryAlignedCandidates = candidates.filter(
+    const preferredContextCountry = preferredContextCountries.get(location.id);
+    const contextCountryCandidates = preferredContextCountry
+      ? candidates.filter(
+          ({ candidate }) => candidate.countryQid === preferredContextCountry,
+        )
+      : [];
+    const candidatesForContextCountry =
+      contextCountryCandidates.length > 0
+        ? contextCountryCandidates
+        : candidates;
+    const countryAlignedCandidates = candidatesForContextCountry.filter(
       (candidate) => candidate.countryContextAligned,
     );
-    const candidatesForLocation =
+    const candidatesAlignedWithContext =
       countryAlignedCandidates.length > 0
         ? countryAlignedCandidates
-        : candidates;
-    const provinceAlignedCandidates = candidatesForLocation.filter(
-      (candidate) => candidate.provinceAligned,
+        : candidatesForContextCountry;
+    const geographyAlignedCandidates = candidatesAlignedWithContext.filter(
+      (candidate) => candidate.geographyAligned,
     );
-    const candidatesWithProvincePreference =
-      location.eu5Province && provinceAlignedCandidates.length > 0
-        ? provinceAlignedCandidates
-        : candidatesForLocation;
-    const rankedCandidates = candidatesWithProvincePreference
+    const candidatesWithGeographyPreference =
+      (location.eu5Province || location.eu5Area || location.eu5Region) &&
+      geographyAlignedCandidates.length > 0
+        ? geographyAlignedCandidates
+        : candidatesAlignedWithContext;
+    const rankedCandidates = candidatesWithGeographyPreference
       .map(({ candidate }) => candidate)
       .sort((left, right) => right.score - left.score)
       .slice(0, 5);

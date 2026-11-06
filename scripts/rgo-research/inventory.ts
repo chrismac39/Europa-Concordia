@@ -81,6 +81,10 @@ export function parseLocationInput(value: unknown): LocationInput[] {
     const context = record.context.trim();
     const eu5Province = record.eu5Province;
     const eu5ProvinceId = record.eu5ProvinceId;
+    const eu5Area = record.eu5Area;
+    const eu5AreaId = record.eu5AreaId;
+    const eu5Region = record.eu5Region;
+    const eu5RegionId = record.eu5RegionId;
     if (!id || !englishName) {
       throw new Error(
         `Location input row ${index + 1} must have non-empty id and englishName fields`,
@@ -88,10 +92,14 @@ export function parseLocationInput(value: unknown): LocationInput[] {
     }
     if (
       (eu5Province !== undefined && typeof eu5Province !== "string") ||
-      (eu5ProvinceId !== undefined && typeof eu5ProvinceId !== "string")
+      (eu5ProvinceId !== undefined && typeof eu5ProvinceId !== "string") ||
+      (eu5Area !== undefined && typeof eu5Area !== "string") ||
+      (eu5AreaId !== undefined && typeof eu5AreaId !== "string") ||
+      (eu5Region !== undefined && typeof eu5Region !== "string") ||
+      (eu5RegionId !== undefined && typeof eu5RegionId !== "string")
     ) {
       throw new Error(
-        `Location input row ${index + 1} eu5Province and eu5ProvinceId fields must be strings when provided`,
+        `Location input row ${index + 1} EU5 geographic context fields must be strings when provided`,
       );
     }
 
@@ -101,6 +109,10 @@ export function parseLocationInput(value: unknown): LocationInput[] {
       context,
       ...(typeof eu5Province === "string" ? { eu5Province } : {}),
       ...(typeof eu5ProvinceId === "string" ? { eu5ProvinceId } : {}),
+      ...(typeof eu5Area === "string" ? { eu5Area } : {}),
+      ...(typeof eu5AreaId === "string" ? { eu5AreaId } : {}),
+      ...(typeof eu5Region === "string" ? { eu5Region } : {}),
+      ...(typeof eu5RegionId === "string" ? { eu5RegionId } : {}),
     };
   });
 
@@ -285,6 +297,14 @@ export function parseResolutionFile(value: unknown): ResolutionFile {
           typeof locationRecord.eu5Province !== "string") ||
         (locationRecord.eu5ProvinceId !== undefined &&
           typeof locationRecord.eu5ProvinceId !== "string") ||
+        (locationRecord.eu5Area !== undefined &&
+          typeof locationRecord.eu5Area !== "string") ||
+        (locationRecord.eu5AreaId !== undefined &&
+          typeof locationRecord.eu5AreaId !== "string") ||
+        (locationRecord.eu5Region !== undefined &&
+          typeof locationRecord.eu5Region !== "string") ||
+        (locationRecord.eu5RegionId !== undefined &&
+          typeof locationRecord.eu5RegionId !== "string") ||
         !["needs-review", "unresolved"].includes(String(record.status)) ||
         (record.selectedQid !== null &&
           typeof record.selectedQid !== "string") ||
@@ -303,6 +323,18 @@ export function parseResolutionFile(value: unknown): ResolutionFile {
           : {}),
         ...(typeof locationRecord.eu5ProvinceId === "string"
           ? { eu5ProvinceId: locationRecord.eu5ProvinceId }
+          : {}),
+        ...(typeof locationRecord.eu5Area === "string"
+          ? { eu5Area: locationRecord.eu5Area }
+          : {}),
+        ...(typeof locationRecord.eu5AreaId === "string"
+          ? { eu5AreaId: locationRecord.eu5AreaId }
+          : {}),
+        ...(typeof locationRecord.eu5Region === "string"
+          ? { eu5Region: locationRecord.eu5Region }
+          : {}),
+        ...(typeof locationRecord.eu5RegionId === "string"
+          ? { eu5RegionId: locationRecord.eu5RegionId }
           : {}),
       };
       return {

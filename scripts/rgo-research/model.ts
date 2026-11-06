@@ -6,6 +6,10 @@ export interface LocationInput {
   context: string;
   eu5Province?: string;
   eu5ProvinceId?: string;
+  eu5Area?: string;
+  eu5AreaId?: string;
+  eu5Region?: string;
+  eu5RegionId?: string;
 }
 
 export interface WikipediaPageLink {
