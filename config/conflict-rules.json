@@ -1189,6 +1189,37 @@
       "resolutionType": "native-merge",
       "decision": "Keep independent CMF and Glorp UI game-start callbacks.",
       "reason": "Construction Manager is excluded. CMF's game-start handling and Glorp UI's value synchronization remain distinct callbacks on the natively merged on-action."
+    },
+    {
+      "fingerprint": "0f5180d47ef36f6e",
+      "resolutionType": "native-merge",
+      "decision": "Keep the separate CMF, Just Brass, and Just Clocks registration callbacks.",
+      "reason": "CMF provides the registration extension point; Just Goods registers its Brass and Clocks settings in separate files. EU5 natively merges these distinct callbacks, so retain each without a Concordia replacement."
+    },
+    {
+      "fingerprint": "d4fcde94d97ef66f",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF's and Just Goods Academies' monthly callbacks.",
+      "reason": "CMF's monthly handler and the Academies tradition and influence pulses are distinct callbacks in separate files. Preserve both on the natively merged pulse."
+    },
+    {
+      "fingerprint": "e2b99eb7e01671ef",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
+      "reason": "CMF initialization and the separate Just Goods subsystem initializers, including the 1.4 Gunpowder and Stone RGO setters, are independent registrations. Retain each once through EU5's native merge; do not combine or replace the upstream files."
+    },
+    {
+      "fingerprint": "58c17dec6c926199",
+      "resolutionType": "native-merge",
+      "decision": "Keep the independent CMF and Just Goods yearly-pulse callbacks.",
+      "reason": "CMF yearly handling and Just Goods' separate event pools and subsystem callbacks are independent contributions to the natively merged pulse; preserve each without a whole-file replacement."
+    },
+    {
+      "fingerprint": "648ee8a68121430d",
+      "resolutionType": "load-order",
+      "winner": "just-goods-1-1",
+      "decision": "Use Just Goods 1.1's English `hammam` localization.",
+      "reason": "The user selected Just Goods' `Hammam` text over More Locations' `Hammām`. The RGO Harmony load order places Just Goods after More Locations, so its value is the effective winner."
     }
   ],
   "definitionConflicts": "deferred"

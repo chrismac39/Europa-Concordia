@@ -558,6 +558,25 @@
       }
     },
     {
+      "id": "just-goods-1-1",
+      "name": "Just Goods",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a",
+        "path": "sources/steam-workshop/3785316314-1.1"
+      },
+      "author": "moveably",
+      "targetGameVersion": "1.4.5",
+      "version": "1.1.0",
+      "dependencies": ["community-mod-framework"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "Local snapshot of Steam Workshop item 3785316314, upstream version 1.1, updated 2026-11-08. It declares EU5 1.4 support and a Community Mod Framework 2.* dependency. The repository owner confirms explicit author permission for distributing the compatibility patch; retain the written permission with release records."
+      }
+    },
+    {
       "id": "descriptions-for-every-tile",
       "name": "Descriptions for Every Tile",
       "type": "upstream",

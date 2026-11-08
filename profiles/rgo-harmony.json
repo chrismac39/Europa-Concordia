@@ -5,6 +5,16 @@
   "targetGameVersion": "1.4.5",
   "mods": [
     {
+      "packageId": "community-mod-framework",
+      "name": "Community Mod Framework",
+      "version": "2.5.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+      }
+    },
+    {
       "packageId": "more-locations",
       "name": "More locations Mod",
       "version": "2.10.2026",
@@ -25,20 +35,21 @@
       }
     },
     {
-      "packageId": "just-goods",
+      "packageId": "just-goods-1-1",
       "name": "Just Goods",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
+        "snapshotChecksum": "sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a"
       }
     }
   ],
   "loadOrder": [
     "more-locations",
     "global-historical-rgos",
-    "just-goods",
+    "community-mod-framework",
+    "just-goods-1-1",
     "jg_ml_gh_rgos_compat_standalone"
   ],
   "patches": [
@@ -60,8 +71,8 @@
   "patchMod": {
     "name": "RGO Harmony: Just Goods + More Locations + Global Historical RGOs",
     "id": "jg_ml_gh_rgos_compat_standalone",
-    "version": "0.1.6",
-    "shortDescription": "RGO compatibility for Just Goods, More Locations, and Global Historical RGOs. Requires all three separately.",
+    "version": "0.1.7",
+    "shortDescription": "RGO compatibility for Just Goods, More Locations, and Global Historical RGOs. Requires all three and Community Mod Framework separately.",
     "tags": ["Gameplay", "Map"],
     "thumbnailPath": "integration/workshop/rgo-harmony/thumbnail.png"
   }

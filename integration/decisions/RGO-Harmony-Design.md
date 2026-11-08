@@ -2,9 +2,15 @@
 
 ## Status
 
-Implementation generated for both profiles; runtime behavior has not yet been
-verified in game. The shared map-template source and corrected split-location
-audit are linked below.
+The map-template implementation is generated for both profiles; runtime
+behavior has not yet been verified in game. The standalone RGO Harmony profile
+now uses a separate Just Goods 1.1 snapshot and includes its required
+Community Mod Framework dependency. The existing location-template merge is
+unchanged because Just Goods 1.1 does not provide that file. Its expanded
+startup RGO assignments and the newly surfaced profile findings are resolved
+as recorded in the [Just Goods 1.4 refresh](RGO-Harmony-1.4-Refresh.md). The Concordia
+`current-intended` profile remains pinned to Just Goods 1.0 for its later,
+separate review.
 
 The filtered source-disagreement candidate set is recorded in the
 [RGO source inventory](just-goods-more-locations-global-historical-rgos-inventory.md).
