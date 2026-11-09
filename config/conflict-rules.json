@@ -1238,6 +1238,37 @@
       "reason": "The user selected Just Goods' `Hammam` text over More Locations' `Hammām`. The RGO Harmony load order places Just Goods after More Locations, so its value is the effective winner."
     },
     {
+      "fingerprint": "0ed70578c8c12dec",
+      "resolutionType": "native-merge",
+      "decision": "Keep the separate CMF, Just Brass, and Just Clocks registration callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. CMF provides the registration extension point; Just Goods registers its Brass and Clocks settings in separate files. EU5 natively merges these distinct callbacks."
+    },
+    {
+      "fingerprint": "93d4c64aab8b6f9c",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF's and Just Goods Academies' monthly callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. Their monthly handlers are distinct callbacks in separate files and are preserved on the natively merged pulse."
+    },
+    {
+      "fingerprint": "2b855afec6ac054a",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. CMF initialization and the separate Just Goods subsystem initializers are independent registrations; retain each through EU5's native merge."
+    },
+    {
+      "fingerprint": "b112044d227fae63",
+      "resolutionType": "native-merge",
+      "decision": "Keep the independent CMF and Just Goods yearly-pulse callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. Their yearly handlers are independent callbacks and remain on the natively merged pulse."
+    },
+    {
+      "fingerprint": "a742a0cac6259862",
+      "resolutionType": "load-order",
+      "winner": "just-goods-1-1",
+      "decision": "Use Just Goods 1.1's English `hammam` localization.",
+      "reason": "The RGO Synthesis profile preserves RGO Harmony's load order and selected localization: Just Goods' `Hammam` text takes precedence over More Locations' `Hammām`."
+    },
+    {
       "fingerprint": "1808de6c6c579e2c",
       "resolutionType": "native-merge",
       "decision": "Keep the Fruits Expanded specialist brewery and beer-workshop production methods with Just Goods' building modifiers.",

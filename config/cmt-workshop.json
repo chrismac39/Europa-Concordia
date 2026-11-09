@@ -8,6 +8,10 @@
     "rgo-harmony-expanded": {
       "workshopDirectory": "integration/workshop/rgo-harmony-expanded",
       "workshopItemId": 0
+    },
+    "rgo-synthesis": {
+      "workshopDirectory": "integration/workshop/rgo-synthesis",
+      "workshopItemId": 0
     }
   }
 }
