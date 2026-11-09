@@ -1,20 +1,20 @@
 [b]RGO Harmony: Just Goods + More Locations + Historical RGOs - Global[/b]
 
-A compatibility patch for these three mods:
+A compatibility patch for these four mods:
 [list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3692202776]Community Mod Framework[/url]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3809335454]More locations Mod[/url]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3602513956]Historical RGOs - Global[/url]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3785316314]Just Goods[/url]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3692202776]Community Mod Framework[/url]
 [/list]
 
 Development note: We are beginning the scaffolding to include the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3821883489]Fruits Expanded[/url] mod in a future update. This release does not add Fruits Expanded compatibility changes.
 
-All four mods are required. Load them in this order, with RGO Harmony last:
+All four upstream mods are required. Load them in this order, with RGO Harmony last:
 [list=1]
+[*]Community Mod Framework
 [*]More locations Mod
 [*]Historical RGOs - Global
-[*]Community Mod Framework
 [*]Just Goods
 [*]RGO Harmony
 [/list]
@@ -40,4 +40,4 @@ At Padova, Just Goods' game-start effects script changes the map-template RGO fr
 
 Mechanically, RGO Harmony replaces one `location_templates.txt` file with the compatibility-adjusted values. Just Goods' game-start replacement scripts remain intact and still replace RGO values at their selected locations.
 
-Compatibility: Not tested with any other mods and I cannot guarantee correct behavior if additional mods are enabled. However, it should work correctly as long as the three required mods are loaded in the specified order and no other mods modify the same `location_templates.txt` file or the same RGO assignments.
+Compatibility: Not tested with any other mods and I cannot guarantee correct behavior if additional mods are enabled. However, it should work correctly as long as the four required upstream mods are loaded in the specified order and no other mods modify the same `location_templates.txt` file or the same RGO assignments.
