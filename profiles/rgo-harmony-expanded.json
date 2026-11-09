@@ -71,10 +71,10 @@
       "targetPath": "in_game/map_data/location_templates.txt",
       "targetPackageId": "more-locations",
       "resolutionType": "merged-patch",
-      "reason": "Keep the complete RGO Harmony map and its More Locations base, apply Fruits Expanded values at 949 approved shared locations where Harmony equals Vanilla and at all 67 approved three-way differences, preserve the approved Global Historical RGO values and Just Goods fixed-location effects, and leave the 71 fruit-replacement review cases at their Harmony values.",
+      "reason": "Keep the complete RGO Harmony map and its More Locations base, apply Fruits Expanded values at 949 approved shared locations where Harmony equals Vanilla and at all 67 approved three-way differences, apply all 71 user-approved per-location values where Harmony uses generic fruit, preserve the approved Global Historical RGO values and Just Goods fixed-location effects, and retain fruit at the three locations where Just Goods assigns sulfur at startup.",
       "preserves": ["russian_wastelands_9", "kolguyev", "borneo_jungle12"],
       "suppresses": [
-        "Harmony map values at the 1,016 approved locations where the Expanded decision selects Fruits Expanded"
+        "Harmony map values changed by the 1,016 approved Fruits Expanded decisions and 64 user-selected RGO decisions at Harmony-fruit locations"
       ]
     }
   ],

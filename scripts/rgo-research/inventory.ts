@@ -9,13 +9,13 @@ import type {
 } from "./model.js";
 
 const fruitReviewHeading =
-  "### Separate review: Harmony generic fruit; assess FE fruit replacers";
+  "### User-approved decisions: Harmony generic fruit locations (71 locations)";
 
 export function parseFruitReviewLocations(markdown: string): LocationInput[] {
   const headingIndex = markdown.indexOf(fruitReviewHeading);
   if (headingIndex < 0) {
     throw new Error(
-      `Could not find the 71-location fruit review section: ${fruitReviewHeading}`,
+      `Could not find the 71-location Harmony-fruit decision section: ${fruitReviewHeading}`,
     );
   }
 

@@ -72,7 +72,7 @@ async function createVanillaMap(temporaryDirectory: string): Promise<string> {
   return mapPath;
 }
 
-test("pilot inventory parser reads 71 unique Harmony fruit locations", async () => {
+test("Expanded inventory parser reads 71 unique Harmony-fruit decisions", async () => {
   const markdown = await readFile(
     path.join(
       rootDirectory,

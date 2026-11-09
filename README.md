@@ -54,7 +54,7 @@ npm run build -- --profile rgo-harmony
 [RGO Harmony Expanded](profiles/rgo-harmony-expanded.json) is a separate
 profile that adds Fruits Expanded's approved RGO assignments while preserving
 the base Harmony map, selecting Fruits Expanded values for the 67 three-way
-conflicts, and leaving only the 71 fruit-replacement cases unresolved:
+conflicts and the user-approved RGO values for all 71 Harmony-`fruit` cases:
 
 ```sh
 npm run analyze -- --profile rgo-harmony-expanded

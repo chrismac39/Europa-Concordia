@@ -24,13 +24,13 @@ Just Goods 1.1 has 1,197 unique fixed-location startup RGO IDs (1,198 setter occ
 
 ## Current intersections with the map-decision groups
 
-The map rules classify 1,088 locations for Harmony, 949 Harmony-equals-Vanilla updates, 67 approved Fruits Expanded three-way updates, and 71 Harmony-`fruit` locations for review. The stored 71- and 67-location tables were checked against the current V/H/FE source maps and their location-ID sets match exactly. Just Goods startup setters intersect these groups as follows:
+The map rules classify 1,088 locations for Harmony, 949 Harmony-equals-Vanilla updates, 67 approved Fruits Expanded three-way updates, and 71 user-decided Harmony-`fruit` locations. The stored 71- and 67-location tables were checked against the current V/H/FE source maps and their location-ID sets match exactly. Just Goods startup setters intersect these groups as follows:
 
-| Map decision group              | Current Just Goods 1.1 setters | Treatment in Expanded                                                                           |
-| ------------------------------- | -----------------------------: | ----------------------------------------------------------------------------------------------- |
-| Harmony retained (1,088)        |                             43 | Keep the approved Harmony map value and the current Just Goods effect.                          |
-| Fruits Expanded applied (1,016) |                             74 | Apply the approved FE map value; leave all Just Goods 1.1 effects intact and authoritative.     |
-| Harmony `fruit` review (71)     |                              3 | Leave the map value as `fruit`; do not select a fruit replacement. Preserve Just Goods effects. |
+| Map decision group              | Current Just Goods 1.1 setters | Treatment in Expanded                                                                                          |
+| ------------------------------- | -----------------------------: | -------------------------------------------------------------------------------------------------------------- |
+| Harmony retained (1,088)        |                             43 | Keep the approved Harmony map value and the current Just Goods effect.                                         |
+| Fruits Expanded applied (1,016) |                             74 | Apply the approved FE map value; leave all Just Goods 1.1 effects intact and authoritative.                    |
+| Harmony `fruit` decisions (71)  |                              3 | Keep `fruit` at Cazorla, Pukamuru, and Samara; Just Goods assigns `sulfur` at startup. Preserve those effects. |
 
 The 74-setter overlap table records the 15 assignments also present in the stale FE/JG patch source; that patch is not loaded, so none of its effect replacements or removed setters enter this profile. The other 59 affected locations have no setter in that compatibility source and likewise retain the current Just Goods effect.
 
@@ -117,13 +117,13 @@ The 74-setter overlap table records the 15 assignments also present in the stale
 </details>
 
 <details>
-<summary>Pending fruit-replacement overlaps with Just Goods 1.1 (3 locations)</summary>
+<summary>User-decided fruit-map overlaps with Just Goods 1.1 (3 locations)</summary>
 
-| Location ID | V                    | H                 | FE                    | Just Goods 1.1 | Source                                                                                             | Status                                        |
-| ----------- | -------------------- | ----------------- | --------------------- | -------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `cazorla`   | `wild_game` (V:2873) | `fruit` (H:2861)  | `wild_game` (FE:2873) | `sulfur`       | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_gunpowder_on_actions.txt:177` | Fruit replacement review; no FE good selected |
-| `pukamuru`  | `stone` (V:24632)    | `fruit` (H:24608) | `stone` (FE:24639)    | `sulfur`       | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_gunpowder_on_actions.txt:946` | Fruit replacement review; no FE good selected |
-| `samara`    | `livestock` (V:5012) | `fruit` (H:5013)  | `livestock` (FE:5012) | `sulfur`       | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_gunpowder_on_actions.txt:281` | Fruit replacement review; no FE good selected |
+| Location ID | V                    | H                 | FE                    | Just Goods 1.1 | Source                                                                                             | Status                                                   |
+| ----------- | -------------------- | ----------------- | --------------------- | -------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `cazorla`   | `wild_game` (V:2873) | `fruit` (H:2861)  | `wild_game` (FE:2873) | `sulfur`       | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_gunpowder_on_actions.txt:177` | Keep map `fruit`; Just Goods assigns `sulfur` at startup |
+| `pukamuru`  | `stone` (V:24632)    | `fruit` (H:24608) | `stone` (FE:24639)    | `sulfur`       | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_gunpowder_on_actions.txt:946` | Keep map `fruit`; Just Goods assigns `sulfur` at startup |
+| `samara`    | `livestock` (V:5012) | `fruit` (H:5013)  | `livestock` (FE:5012) | `sulfur`       | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_gunpowder_on_actions.txt:281` | Keep map `fruit`; Just Goods assigns `sulfur` at startup |
 
 </details>
 
@@ -180,6 +180,6 @@ The 74-setter overlap table records the 15 assignments also present in the stale
 
 ## Expanded map payload decisions
 
-The Expanded map payload starts from the complete existing Harmony map and changes only the 1,016 approved shared `raw_material` values in the FE group: 949 where Harmony equals Vanilla and 67 where all three values differ. It leaves all 1,088 approved Harmony results unchanged, retains the six Harmony values omitted by FE, preserves all More Locations-only definitions and entries, and does not import the 42 FE-only definitions (none has `raw_material`). The 71 Harmony-`fruit` locations remain explicit review items in the [location inventory](./RGO-Harmony-Expanded-Inventory.md), with their current Harmony values retained. No research suggestion is treated as an assignment.
+The Expanded map payload starts from the complete existing Harmony map and applies 1,016 approved Fruits Expanded values: 949 where Harmony equals Vanilla and 67 where all three values differ. It also applies the 71 per-location decisions in the [location inventory](./RGO-Harmony-Expanded-Inventory.md), changing 64 map values and retaining `fruit` at the four user-selected base-fruit locations and the three Just Goods sulfur-setter locations. It leaves all 1,088 approved Harmony results unchanged, retains the six Harmony values omitted by FE, preserves all More Locations-only definitions and entries, and does not import the 42 FE-only definitions (none has `raw_material`). The prior research suggestions are not treated as assignments.
 
 The 74 fixed Just Goods intersections do not alter map precedence. Just Goods 1.1 startup setters remain as authored; the profile does not copy or replace Just Goods effect blocks. Source inspection does not establish runtime ordering, so in-game validation remains outstanding.
