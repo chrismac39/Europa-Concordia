@@ -1,7 +1,8 @@
 # RGO Harmony Expanded location and conflict inventory
 
-Inventory date: 2026-11-09. This is a source-level comparison for review, not
-an approved compatibility policy or a claim about EU5 runtime ordering. The
+Inventory date: 2026-11-09. This source-level comparison records the approved
+per-location map decisions as well as their evidence; it does not claim
+anything about EU5 runtime ordering. The
 corresponding design and review questions are in
 [RGO-Harmony-Expanded-Design.md](./RGO-Harmony-Expanded-Design.md). Current
 Just Goods 1.1 intersections and the stale FE/JG patch comparison are in the
@@ -62,7 +63,7 @@ The 2,175 differing shared RGO values break down as:
 
 </details>
 
-The last group is the clearest full-file regression risk: the FE file carries the Vanilla value instead of the existing Harmony value. The separate six-row omission group would also lose an explicit Harmony RGO. The table below lists all 2,181 shared RGO differences and omissions.
+The last group is the clearest full-file regression risk: the FE file carries the Vanilla value instead of the existing Harmony value. A wholesale FE replacement would also lose six explicit Harmony RGOs; the approved Expanded decision is to retain those base values. The table below lists all 2,181 shared RGO differences and omissions.
 
 ## Shared location RGO differences
 
@@ -77,11 +78,11 @@ For each shared location with different explicit values, apply the rule recorded
 | Fruits Expanded equals Vanilla; Harmony is `fruit`           |        71 | Use the user-approved per-location value |
 | Harmony equals Vanilla; Fruits Expanded differs              |       949 | Use Fruits Expanded (approved)           |
 | Fruits Expanded, Harmony, and Vanilla are pairwise different |        67 | Use Fruits Expanded (approved)           |
-| Harmony has an RGO; Fruits Expanded omits it                 |         6 | Separate table; pending review           |
+| Harmony has an RGO; Fruits Expanded omits it                 |         6 | Retain Harmony base value (approved)     |
 
 </details>
 
-The first four tables partition the 2,175 shared locations with differing explicit RGO values. The fifth table lists six shared Harmony assignments that the Fruits Expanded file omits.
+The first four tables partition the 2,175 shared locations with differing explicit RGO values. The fifth table lists six shared Harmony assignments omitted by Fruits Expanded; Expanded retains each Harmony base value.
 
 ### Use Harmony: FE equals Vanilla; Harmony is not generic fruit (1,088 locations)
 
@@ -2306,10 +2307,10 @@ Each Vanilla, Harmony, and Fruits Expanded value differs from the other two. The
 
 </details>
 
-### Separate review: Harmony RGO omitted by Fruits Expanded (6 locations)
+### Approved: retain Harmony RGO omitted by Fruits Expanded (6 locations)
 
 <details>
-<summary>Separate review: Harmony RGO omitted by Fruits Expanded (6 locations) ? Location ID</summary>
+<summary>Approved: retain Harmony RGO omitted by Fruits Expanded (6 locations) ? Location ID</summary>
 
 | Location ID            | Vanilla baseline | Base RGO Harmony      | Fruits Expanded                 | FE-JG compat effect |
 | ---------------------- | ---------------- | --------------------- | ------------------------------- | ------------------- |

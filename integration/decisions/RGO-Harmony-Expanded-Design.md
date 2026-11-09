@@ -10,9 +10,9 @@ all 71 Harmony-`fruit` locations: 68 selected RGO values and three retained
 `fruit` map values where Just Goods assigns sulfur at startup. The base RGO
 Harmony profile and patch remain unchanged.
 
-The six RGO values omitted by Fruits Expanded and all More Locations-only data
-remain as in base Harmony. The 42 Fruits Expanded-only definitions are not
-imported.
+The six RGO values omitted by Fruits Expanded are explicitly approved to
+retain their base Harmony values. All More Locations-only data also remains
+as in base Harmony. The 42 Fruits Expanded-only definitions are not imported.
 
 The location-by-location evidence is in the
 [RGO Harmony Expanded inventory](./RGO-Harmony-Expanded-Inventory.md). The
@@ -104,6 +104,8 @@ For a shared location with different explicit RGO values:
    Fruits Expanded definition.
 3. If all three values differ, use the Fruits Expanded value. This is an
    approved decision for all 67 locations in the separate comparison table.
+4. If Fruits Expanded omits a Harmony RGO, retain the Harmony base value. This
+   is approved for all six locations in the omission table.
 
 The inventory applies these rules to 1,088 Harmony rows, 949
 Fruits Expanded rows where Harmony equals Vanilla, and 67 approved
@@ -112,9 +114,10 @@ Fruits Expanded values for three-way differences. The Expanded payload applies
 decisions; 64 of those choices change the generic Harmony `fruit` value,
 four select `fruit`, and three retain `fruit` alongside Just Goods' sulfur
 startup assignment. It retains Harmony values at the six locations where
-Fruits Expanded omits an RGO. The 42 FE-only location definitions have no
-explicit RGO and are not imported. This decision covers static map-template
-values only; Just Goods startup effects remain intact.
+Fruits Expanded omits an RGO, as explicitly approved in the inventory. The 42
+FE-only location definitions have no explicit RGO and are not imported. This
+decision covers static map-template values only; Just Goods startup effects
+remain intact.
 
 Prior location-focused web-research suggestions remain in the 71-row
 inventory table as context. They are not the source of the selected values;
