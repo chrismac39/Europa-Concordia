@@ -594,7 +594,7 @@ function validateConflictRules(value: unknown): ConflictRules {
   }
 
   const errors: string[] = [];
-  const paths = new Set<string>();
+  const pathResolutionKeys = new Set<string>();
   value.filePathResolutions.forEach((resolution, index) => {
     const label = `filePathResolutions[${index}]`;
     if (!isRecord(resolution)) {
@@ -684,10 +684,21 @@ function validateConflictRules(value: unknown): ConflictRules {
     }
     if (pathIsValid) {
       const collisionKey = resolutionPath.toLocaleLowerCase("en-US");
-      if (paths.has(collisionKey)) {
-        errors.push(`${label}.path duplicates another resolution`);
+      const packageKey = Array.isArray(resolutionPackages)
+        ? resolutionPackages
+            .filter(
+              (packageId): packageId is string => typeof packageId === "string",
+            )
+            .sort()
+            .join("\0")
+        : "";
+      const resolutionKey = `${collisionKey}\0${packageKey}`;
+      if (pathResolutionKeys.has(resolutionKey)) {
+        errors.push(
+          `${label} duplicates another resolution for the same path and package set`,
+        );
       }
-      paths.add(collisionKey);
+      pathResolutionKeys.add(resolutionKey);
     }
   });
   const semanticFingerprints = new Set<string>();

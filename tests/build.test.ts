@@ -925,6 +925,73 @@ test("blocks combinations explicitly classified as incompatible", async () => {
   }
 });
 
+test("allows content-pinned path decisions for distinct package sets", async () => {
+  const fixture = await createFixture();
+  try {
+    fixture.addPackage("first");
+    fixture.addPackage("second");
+    fixture.addPackage("third");
+    await fixture.writePackageFiles("first", {
+      "in_game/common/shared.txt": "first source",
+    });
+    await fixture.writePackageFiles("second", {
+      "in_game/common/shared.txt": "second source",
+    });
+    await fixture.writePackageFiles("third", {
+      "in_game/common/shared.txt": "third source",
+    });
+    await fixture.writeRules({
+      filePathResolutions: [
+        {
+          path: "in_game/common/shared.txt",
+          packages: ["first", "second"],
+          resolutionType: "load-order",
+          sourceFingerprints: {
+            first: hash("first source"),
+            second: hash("second source"),
+          },
+          winner: "second",
+          reason: "Use the second package for this two-package profile.",
+        },
+        {
+          path: "in_game/common/shared.txt",
+          packages: ["first", "second", "third"],
+          resolutionType: "load-order",
+          sourceFingerprints: {
+            first: hash("first source"),
+            second: hash("second source"),
+            third: hash("third source"),
+          },
+          winner: "third",
+          reason: "Use the third package for this three-package profile.",
+        },
+      ],
+    });
+    await fixture.writeManifest();
+
+    const threePackageConfiguration = await validateProject(fixture.root);
+    const threePackageFinding = (
+      await analyzeProject(threePackageConfiguration)
+    ).findings.find((finding) => finding.type === "path");
+    assert.ok(threePackageFinding);
+    assert.equal(threePackageFinding.resolved, true);
+    assert.equal(threePackageFinding.resolution, "third");
+    await buildProject(fixture.root);
+
+    await fixture.writeProfile(["first", "second"], ["first", "second"]);
+    const twoPackageConfiguration = await validateProject(fixture.root);
+    const twoPackageFinding = (
+      await analyzeProject(twoPackageConfiguration)
+    ).findings.find((finding) => finding.type === "path");
+    assert.ok(twoPackageFinding);
+    assert.equal(twoPackageFinding.resolved, true);
+    assert.equal(twoPackageFinding.resolution, "second");
+    await buildProject(fixture.root);
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("requires profile pins to match the package manifest", async () => {
   const fixture = await createFixture();
   try {

@@ -1,9 +1,14 @@
 # RGO Harmony Expanded location and conflict inventory
 
-Inventory date: 2026-11-05. This is a source-level comparison for review, not
+Inventory date: 2026-11-09. This is a source-level comparison for review, not
 an approved compatibility policy or a claim about EU5 runtime ordering. The
 corresponding design and review questions are in
-[RGO-Harmony-Expanded-Design.md](./RGO-Harmony-Expanded-Design.md).
+[RGO-Harmony-Expanded-Design.md](./RGO-Harmony-Expanded-Design.md). Current
+Just Goods 1.1 intersections and the stale FE/JG patch comparison are in the
+[Just Goods overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md). The
+`FE-JG compat effect` cells and historical effect tables document the old
+patch comparison against Just Goods 1.0; they are not the current Expanded
+profile behavior.
 
 ## Scope and comparison method
 
@@ -14,13 +19,14 @@ The existing standalone profile is the base RGO Harmony playset: More Locations,
 <details>
 <summary>Source files and pins ? Source</summary>
 
-| Source                                           | Pin                                                                                                                                     | Compared file                                                                                                     | Compared-file SHA-256                                              |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Vanilla EU5 1.4.5                                | Local installed game                                                                                                                    | `C:\Program Files (x86)\Steam\steamapps\common\Europa Universalis V\game\in_game\map_data\location_templates.txt` | `f2f3d80a2bb65b41b578a51cb06cc47a0f8d83b682eec8c2cce69f1add9cd59c` |
-| Base RGO Harmony                                 | Profile `rgo-harmony`; ML 3809335454, GH RGO 3602513956, Just Goods 3785316314                                                        | `integration/patches/just-goods-more-locations-global-historical-rgos/in_game/map_data/location_templates.txt`    | `fd899c4f82afbc4b9c6f00628319c7bb5f2062378f037cc41a4af81f8722928f` |
-| Fruits Expanded                                  | Workshop 3821883489; source descriptor 0.5.9.2; tree checksum `sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0` | `sources/steam-workshop/3821883489/in_game/map_data/location_templates.txt`                                       | `607cf7263126fed9d727ab558811efbc4706f2c178ed1f6c3d09cb383a474a2f` |
-| Fruits Expanded - Just Goods Compatibility Patch | Workshop 3828715234; source descriptor 1.0.0; tree checksum `sha256:8d1cdf0732cccedf4390b1abbe69ca84eb1fb1da0ac721d13e0f7044d3f44041`   | Seven `in_game/common/on_action/zz_fe_jg_compat_*.txt` effect replacements                                        | Workshop tree checksum above                                       |
-| Just Goods                                       | Workshop 3785316314; version 1.0.0; tree checksum `sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada`             | `sources/steam-workshop/3785316314/in_game/common/on_action/spices_on_actions.txt`                                | Pinned tree checksum above                                         |
+| Source                                           | Pin                                                                                                                                                       | Compared file                                                                                                     | Compared-file SHA-256                                              |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Vanilla EU5 1.4.5                                | Local installed game                                                                                                                                      | `C:\Program Files (x86)\Steam\steamapps\common\Europa Universalis V\game\in_game\map_data\location_templates.txt` | `f2f3d80a2bb65b41b578a51cb06cc47a0f8d83b682eec8c2cce69f1add9cd59c` |
+| Base RGO Harmony                                 | Profile `rgo-harmony`; ML 3809335454, GH RGO 3602513956, Just Goods 3785316314                                                                            | `integration/patches/just-goods-more-locations-global-historical-rgos/in_game/map_data/location_templates.txt`    | `fd899c4f82afbc4b9c6f00628319c7bb5f2062378f037cc41a4af81f8722928f` |
+| Fruits Expanded                                  | Workshop 3821883489; source descriptor 0.5.9.2; tree checksum `sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0`                   | `sources/steam-workshop/3821883489/in_game/map_data/location_templates.txt`                                       | `607cf7263126fed9d727ab558811efbc4706f2c178ed1f6c3d09cb383a474a2f` |
+| Fruits Expanded - Just Goods Compatibility Patch | Workshop 3828715234; source descriptor 1.0.0; tree checksum `sha256:8d1cdf0732cccedf4390b1abbe69ca84eb1fb1da0ac721d13e0f7044d3f44041`                     | Seven `in_game/common/on_action/zz_fe_jg_compat_*.txt` effect replacements                                        | Workshop tree checksum above                                       |
+| Just Goods (historical effect comparison)        | Workshop 3785316314; version 1.0.0; tree checksum `sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada`                               | `sources/steam-workshop/3785316314/in_game/common/on_action/spices_on_actions.txt`                                | Pinned tree checksum above                                         |
+| Just Goods (current RGO Harmony pin)             | Workshop 3785316314; package version 1.1.0; metadata version 1.1; tree checksum `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_spices_on_actions.txt`                       | Current profile source checksum                                    |
 
 </details>
 
@@ -60,7 +66,7 @@ The last group is the clearest full-file regression risk: the FE file carries th
 
 ## Shared location RGO differences
 
-For each shared location with different explicit values, apply the rule recorded in the design. If Fruits Expanded equals Vanilla and Harmony differs, use Harmony, except when Harmony's current value is generic `fruit`: those locations are separated for FE-specific replacement review. If Harmony equals Vanilla and Fruits Expanded differs, use Fruits Expanded. All-three-different rows remain undecided. `V`, `H`, and `FE` identify values and source lines. These map-value decisions do not determine the separate Just Goods startup effects.
+For each shared location with different explicit values, apply the rule recorded in the design. If Fruits Expanded equals Vanilla and Harmony differs, use Harmony, except when Harmony's current value is generic `fruit`: those locations are separated for FE-specific replacement review. If Harmony equals Vanilla and Fruits Expanded differs, use Fruits Expanded. For all-three-different rows, use Fruits Expanded. `V`, `H`, and `FE` identify values and source lines. These map-value decisions do not determine the separate Just Goods startup effects.
 
 <details>
 <summary>Shared location RGO differences ? RGO case</summary>
@@ -70,7 +76,7 @@ For each shared location with different explicit values, apply the rule recorded
 | Fruits Expanded equals Vanilla; Harmony is not `fruit`       |     1,088 | Use Harmony (approved)                      |
 | Fruits Expanded equals Vanilla; Harmony is `fruit`           |        71 | Review for an FE-specific fruit replacement |
 | Harmony equals Vanilla; Fruits Expanded differs              |       949 | Use Fruits Expanded (approved)              |
-| Fruits Expanded, Harmony, and Vanilla are pairwise different |        67 | Separate table; pending review              |
+| Fruits Expanded, Harmony, and Vanilla are pairwise different |        67 | Use Fruits Expanded (approved)              |
 | Harmony has an RGO; Fruits Expanded omits it                 |         6 | Separate table; pending review              |
 
 </details>
@@ -1175,90 +1181,90 @@ The first four tables partition the 2,175 shared locations with differing explic
 
 </details>
 
-### Separate review: Harmony generic fruit; assess FE fruit replacers (71 locations)
+### User-approved decisions: Harmony generic fruit locations (71 locations)
 
-At these locations, the Harmony value is generic `fruit`, while the Fruits Expanded map still matches Vanilla. Choose an FE-specific fruit good where appropriate. Fruits Expanded defines `eastern_pear`, `fruit_apple`, `fruit_banana`, `fruit_cherry`, `fruit_fig`, `fruit_grape`, `fruit_lemon`, `fruit_mango`, `fruit_peach`, `fruit_pineapple`, `fruit_plum`, `fruit_pomegranate`, `lychee`, `mandarin`, `orange`, `persimmon`, `sweet_potato`, and `western_pear`.
+At all 71 locations, Harmony's map value is generic `fruit`, while the Fruits Expanded map matches Vanilla. The `Expanded selected RGO` column records the user-approved decision. Cazorla, Pukamuru, and Samara retain map value `fruit` because Just Goods 1.1 assigns `sulfur` at startup. Fruits Expanded defines `eastern_pear`, `fruit_apple`, `fruit_banana`, `fruit_cherry`, `fruit_fig`, `fruit_grape`, `fruit_lemon`, `fruit_mango`, `fruit_peach`, `fruit_pineapple`, `fruit_plum`, `fruit_pomegranate`, `lychee`, `mandarin`, `orange`, `persimmon`, `sweet_potato`, and `western_pear`.
 
 The table adds each location's English in-game display name and its 1337 starting polity as search clues. Names come from the installed game's `main_menu/localization/english/location_names/location_names_l_english.yml`; polity labels come from `main_menu/setup/1337/10_countries.txt` and the English country-name localization. The polity is historical game-start context, not a modern country assignment or precise present-day location. `Not listed` means no country ownership entry was found for that location in the setup file.
 
-Web-research proposals below focus on each named settlement or map location, not its surrounding province. The historical target is around 1337 where the sources allow it. Site-specific evidence is preferred; regional or later evidence is labeled and treated as lower confidence. A no-match means no defensible location-specific FE fruit was found, not proof that the fruit was never grown there. Wine trade, climate, and modern crop branding alone are not treated as proof of local cultivation.
+The prior web-research suggestions in the last column focus on each named settlement or map location, not its surrounding province. They remain contextual evidence only; the user-approved value in `Expanded selected RGO` is authoritative. The historical target was around 1337 where sources allowed it. Site-specific evidence is preferred; regional or later evidence is labeled and treated as lower confidence. A no-match means no defensible location-specific FE fruit was found, not proof that the fruit was never grown there. Wine trade, climate, and modern crop branding alone are not treated as proof of local cultivation.
 
 <details>
-<summary>Separate review: Harmony generic fruit; assess FE fruit replacers (71 locations) ? Location ID</summary>
+<summary>User-approved decisions: Harmony generic fruit locations (71 locations) ? Location ID</summary>
 
-| Location ID | English in-game name | 1337 start polity | Vanilla baseline | Base RGO Harmony | Fruits Expanded | FE-JG compat effect | Web-research proposal (c. 1337) |
-| ---------------------- | -------------------- | ----------------- | --------------------- | ----------------- | ---------------------- | ------------------- | -------------------------------- |
-| `abdas` | Abdas | Hüleguids | `clay` (V:6989) | `fruit` (H:6994) | `clay` (FE:6989) | - | No FE proposal ? exact modern site unresolved; no reliable site-specific crop record surfaced (low). |
-| `amorgos` | Amorgós | Venice | `silk` (V:6021) | `fruit` (H:6026) | `silk` (FE:6021) | - | No FE proposal ? local agro-pastoral history exists, but grape evidence is ancient or Cyclades-wide, not c. 1337 (low). |
-| `anping` | Ānpíng | China | `wheat` (V:10213) | `fruit` (H:10217) | `wheat` (FE:10213) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `ardagh` | Ardagh | Annaly | `horses` (V:1863) | `fruit` (H:1851) | `horses` (FE:1863) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `baise` | Bǎisè | Lai'an | `lumber` (V:10880) | `fruit` (H:10884) | `lumber` (FE:10880) | - | No FE proposal ? later grain records for Lai?an do not establish a fruit at this sub-location (low). |
-| `bang_keng` | Bang Keng | Champa | `lumber` (V:14704) | `fruit` (H:14708) | `lumber` (FE:14704) | - | No FE proposal ? Champa-wide sources emphasize rice, forestry, and trade; none documents fruit at this location (low). |
-| `blois` | Blois | Blois | `iron` (V:2332) | `fruit` (H:2320) | `iron` (FE:2332) | - | `fruit_grape`? ? medieval wine trade is documented; local production references point to the wider Blais area and a 1511 fountain, not site-specific medieval vineyards ([Blois town history](https://www.bloischambord.com/en/tours-and-activities/our-heritage/visit-blois/); low-medium). |
-| `buckeburg` | Bückeburg | Schauenburg | `wool` (V:1029) | `fruit` (H:1017) | `wool` (FE:1029) | - | No FE proposal ? medieval Schaumburg sources describe colonist farming and grain, not a local fruit specialization (low-medium). |
-| `calatrava` | Calatrava | Castile | `wheat` (V:2841) | `fruit` (H:2829) | `wheat` (FE:2841) | - | No FE proposal ? transhumant livestock/pasture was the documented primary specialization, not FE fruit (high). |
-| `camerino` | Camerino | Camerino | `wool` (V:3150) | `fruit` (H:3138) | `wool` (FE:3150) | - | No FE proposal ? local history identifies wool production and trade as the town?s economic base; no fruit specialization surfaced (medium). |
-| `cazorla` | Cazorla | Castile | `wild_game` (V:2873) | `fruit` (H:2861) | `wild_game` (FE:2873) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `chateau_thierry` | Château-Thierry | France | `dyes` (V:2089) | `fruit` (H:2077) | `dyes` (FE:2089) | - | `fruit_grape`? ? the municipal site places vineyards immediately west of town and notes 12th-century cellars, but does not establish c. 1337 cultivation within this location ([Ch?teau-Thierry municipality](https://www.chateau-thierry.fr/article/le-champagne); low-medium). |
-| `chinon` | Chinon | France | `silk` (V:2354) | `fruit` (H:2342) | `silk` (FE:2354) | - | `fruit_grape` ? local vineyard history is dated to antiquity; an official tourism source connects vine cultivation with the town?s 13th-century prosperity ([Touraine vineyards](https://www.tourainevaldeloire.com/en/discover/beautiful-vineyards-beautiful-dishes/welcome-to-the-touraine-vineyards/loire-wines/chinon-wine/); medium-high). |
-| `chodziez` | Chodzież | Poland | `iron` (V:3728) | `fruit` (H:3716) | `iron` (FE:3728) | - | No FE proposal ? sources describe a fishing/farming settlement but identify no particular fruit crop (low). |
-| `corbie` | Corbie | France | `wool` (V:2358) | `fruit` (H:2346) | `wool` (FE:2358) | - | `fruit_grape` ? vines appear in Corbie Abbey?s 662 foundation charter, with wine routed through Corbie in the mid-14th century ([Picardy viticulture study](https://www.jstor.org/stable/27572105); high). |
-| `dangtu` | Dāngtú | China | `wheat` (V:8626) | `fruit` (H:8630) | `wheat` (FE:8626) | - | No FE proposal ? peach associations are poetic/modern, while the pomegranate reference is regional and later than 1337 (low). |
-| `dongxiang` | Dōngxiāng | China | `livestock` (V:8514) | `fruit` (H:8518) | `livestock` (FE:8514) | - | `fruit_plum`? ? a local Song-era plum-viewing garden is documented, but this does not prove edible plum production or a major crop ([Dongxiang government site](https://www.jxfzdx.gov.cn/art/2026/4/17/art_9240_3257680.html); low). |
-| `ebstorf` | Ebstorf | Lüneburg | `wool` (V:1050) | `fruit` (H:1038) | `wool` (FE:1050) | - | No FE proposal ? the located garden evidence concerns modern produce; no medieval fruit orchard record surfaced (low). |
-| `el_golea` | El Golèa | Not listed | `wheat` (V:18224) | `fruit` (H:18225) | `wheat` (FE:18224) | - | No FE proposal ? date palms are the documented oasis staple, but dates are not an FE good; no specific listed fruit is supported (medium). |
-| `epe` | Epe | Ijebu | `saffron` (V:19010) | `fruit` (H:19010) | `saffron` (FE:19010) | - | No FE proposal ? the settlement appears to post-date 1337; no period-relevant fruit crop evidence surfaced (low-medium). |
-| `fugou` | Fúgōu | China | `livestock` (V:10399) | `fruit` (H:10403) | `livestock` (FE:10399) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `gex` | Gex | Savoy | `fur` (V:2287) | `fruit` (H:2275) | `fur` (FE:2287) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `gongju` | Gongju | Goryeo | `pepper` (V:9570) | `fruit` (H:9574) | `pepper` (FE:9570) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `gora` | Góra | Ścinawa | `wool` (V:3911) | `fruit` (H:3899) | `wool` (FE:3911) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `grindsted` | Grindsted | Denmark | `sand` (V:105) | `fruit` (H:106) | `sand` (FE:105) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `hayrabolu` | Hayrabolu | Byzantium | `fur` (V:5879) | `fruit` (H:5884) | `fur` (FE:5879) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `ikryanoye` | Ikryanoye | Jochi | `fish` (V:4735) | `fruit` (H:4736) | `fish` (FE:4735) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `kaunas` | Kaunas | Lithuania | `wool` (V:3778) | `fruit` (H:3766) | `wool` (FE:3778) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `kawachi` | Kawachi | Japan | `pepper` (V:9280) | `fruit` (H:9284) | `pepper` (FE:9280) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `khvorostyanka` | Khvorostyanka | Jochi | `livestock` (V:5015) | `fruit` (H:5016) | `livestock` (FE:5015) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `kowal` | Kowal | Poland | `wool` (V:3678) | `fruit` (H:3666) | `wool` (FE:3678) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `kracheh` | Krâchéh | Khmer | `rice` (V:14972) | `fruit` (H:14976) | `rice` (FE:14972) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `kuga` | Kuga | Japan | `fish` (V:9118) | `fruit` (H:9122) | `fish` (FE:9118) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `kuripan` | Kuripan | Kuripan | `lumber` (V:15303) | `fruit` (H:15307) | `lumber` (FE:15303) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `lehui` | Lèhuì | China | `rice` (V:10756) | `fruit` (H:10760) | `rice` (FE:10756) | - | No FE proposal ? areca/betel palm is the best-documented regional crop, but it is not an FE good (medium). |
-| `liuyang` | Liúyáng | China | `rice` (V:8375) | `fruit` (H:8379) | `rice` (FE:8375) | - | No FE proposal ? kumquat is documented, but it is not an FE good; mapping it to mandarin/orange would overstate the evidence (low). |
-| `longford` | Longford | Annaly | `horses` (V:1862) | `fruit` (H:1850) | `horses` (FE:1862) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `los_yebenes` | Los Yébenes | Castile | `fur` (V:2833) | `fruit` (H:2821) | `fur` (FE:2833) | - | No FE proposal ? local accounts emphasize pastoralism, charcoal, beekeeping, and hunting, not orchard crops (medium). |
-| `luxian` | Lùxiàn | China | `wheat` (V:10309) | `fruit` (H:10313) | `wheat` (FE:10309) | - | No FE proposal ? longan is not an FE good; the lychee reference is broad Shu-region literature, not evidence for this site (low). |
-| `manzushir` | Manzushir | China | `wild_game` (V:10126) | `fruit` (H:10130) | `wild_game` (FE:10126) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `najran` | Najrān | Yām | `silk` (V:7520) | `fruit` (H:7524) | `silk` (FE:7520) | - | `fruit_grape`? ? a local Najrani grape variety is described as cultivated for centuries, but the source does not date it to 1337; dates are the better-attested staple and are absent from FE ([Slow Food Foundation](https://www.fondazioneslowfood.com/en/ark-of-taste-slow-food/najrani-grapes/); medium-low). |
-| `oropesa` | Oropesa | Castile | `stone` (V:2539) | `fruit` (H:2527) | `stone` (FE:2539) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `orte` | Orte | Rome | `marble` (V:3085) | `fruit` (H:3073) | `marble` (FE:3085) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `orthez` | Orthez | Béarn | `wool` (V:2134) | `fruit` (H:2122) | `wool` (FE:2134) | - | `fruit_grape` ? an academic history identifies vineyards on the hills around Orthez after it became B?arn?s capital; regional and period evidence is medieval, though not parcel-specific ([Presses universitaires du Midi](https://books.openedition.org/pumi/22942); medium). |
-| `osuna` | Osuna | Castile | `olives` (V:2884) | `fruit` (H:2872) | `olives` (FE:2884) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `passau` | Passau | Passau | `fur` (V:1474) | `fruit` (H:1462) | `fur` (FE:1474) | - | No FE proposal ? wine trade is documented, but trade/transshipment is not proof of local grape cultivation (low). |
-| `phanom_rung` | Phanom Rung | Khmer | `wool` (V:14921) | `fruit` (H:14925) | `wool` (FE:14921) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `pukamuru` | Pukamuru | Not listed | `stone` (V:24632) | `fruit` (H:24608) | `stone` (FE:24639) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `riberac` | Ribérac | Périgord | `saffron` (V:2171) | `fruit` (H:2159) | `saffron` (FE:2171) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `royston` | Royston | England | `wheat` (V:1678) | `fruit` (H:1666) | `wheat` (FE:1678) | - | No FE proposal ? local museum history describes sheep pasture, barley, dairy, and grain trade, not fruit production ([Royston Museum](https://www.roystonmuseum.org.uk/post/fields-of-gold); high). |
-| `samara` | Samara | Jochi | `livestock` (V:5012) | `fruit` (H:5013) | `livestock` (FE:5012) | - | No FE proposal ? the settlement was established in 1586 on previously unsettled steppe; no 1337 location agriculture is applicable (high). |
-| `santubong` | Santubong | Santubong | `mercury` (V:15411) | `fruit` (H:15415) | `mercury` (FE:15411) | - | No FE proposal ? archaeology emphasizes ironworking and maritime trade; no agricultural fruit evidence surfaced (low). |
-| `sevede` | Sevede | Sweden | `lumber` (V:59) | `fruit` (H:59) | `lumber` (FE:59) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `shilovo` | Shilovo | Ryazan | `livestock` (V:4947) | `fruit` (H:4948) | `livestock` (FE:4947) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `shizong` | Shīzōng | Shīzōng | `legumes` (V:11105) | `fruit` (H:11109) | `legumes` (FE:11105) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `sindangkasih` | Sindangkasih | Sunda | `lumber` (V:15539) | `fruit` (H:15545) | `lumber` (FE:15539) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `skopin` | Skopin | Pronsk | `livestock` (V:4954) | `fruit` (H:4955) | `livestock` (FE:4954) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `suisin` | Suisin | Not listed | `clay` (V:23272) | `fruit` (H:23279) | `clay` (FE:23279) | - | No FE proposal ? Patwin subsistence is documented as gathering, fishing, and acorns rather than cultivated FE fruit (high). |
-| `sukkur` | Sukkur | Samma | `cotton` (V:14165) | `fruit` (H:14169) | `cotton` (FE:14165) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `suxi` | Sūxī | China | `livestock` (V:8324) | `fruit` (H:8328) | `livestock` (FE:8324) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `takaichi` | Katsuragi | Japan | `rice` (V:8966) | `fruit` (H:8970) | `rice` (FE:8966) | - | `persimmon`? ? MAFF identifies Gose?s Gosho persimmon as the progenitor of sweet persimmons; exact origin date and match to this map location remain uncertain ([Japan MAFF](https://www.maff.go.jp/e/policies/market/k_ryouri/areastory/1440/index.html); low-medium). |
-| `talavera_de_la_reina` | Talavera de la Reina | Castile | `livestock` (V:2837) | `fruit` (H:2825) | `livestock` (FE:2837) | - | No FE proposal ? a medieval local agriculture study exists, but accessible evidence did not verify vine cultivation at this site by 1337 (low). |
-| `tama` | Tama | Japan | `rice` (V:9218) | `fruit` (H:9222) | `rice` (FE:9218) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `tukums` | Tukums | Livonia | `fur` (V:3661) | `fruit` (H:3649) | `fur` (FE:3661) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `uniejow` | Uniejów | Sieradz | `wool` (V:3691) | `fruit` (H:3679) | `wool` (FE:3691) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `vitoria` | Vitoria | Castile | `wheat` (V:2618) | `fruit` (H:2606) | `wheat` (FE:2618) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `wehlau` | Wehlau | Teutons | `fur` (V:3871) | `fruit` (H:3859) | `fur` (FE:3871) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
-| `yexian` | Yèxiàn | China | `livestock` (V:10452) | `fruit` (H:10456) | `livestock` (FE:10452) | - | No FE proposal ? no fruit evidence for Henan Yexian; do not conflate it with Laizhou pears in Shandong (low). |
-| `zhaoxin` | Zhāoxìn | China | `wheat` (V:8688) | `fruit` (H:8692) | `wheat` (FE:8688) | - | Unresearched ? follow-up needed before proposing an FE value. |
-| `zhengcheng` | Zēngchéng | China | `rice` (V:10813) | `fruit` (H:10817) | `rice` (FE:10813) | - | `lychee` ? a Zengcheng heritage-system study reports roughly 2,000 years of local cultivation, supported by Song-era records/inscriptions ([Chinese Journal of Eco-Agriculture](https://ecoagri.ac.cn/en/article/Y2020/I9/1435); high). |
-| `zlotoryja` | Złotoryja | Legnica | `goods_gold` (V:3919) | `fruit` (H:3907) | `goods_gold` (FE:3919) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| Location ID | English in-game name | 1337 start polity | Vanilla baseline | Base RGO Harmony | Fruits Expanded map value | Expanded selected RGO | FE-JG compat effect | Prior web-research suggestion (not selected) |
+| ---------------------- | -------------------- | ----------------- | --------------------- | ----------------- | ---------------------- | -------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `abdas` | Abdas | Hüleguids | `clay` (V:6989) | `fruit` (H:6994) | `clay` (FE:6989) | `fruit` | - | No FE proposal ? exact modern site unresolved; no reliable site-specific crop record surfaced (low). |
+| `amorgos` | Amorgós | Venice | `silk` (V:6021) | `fruit` (H:6026) | `silk` (FE:6021) | `olives` | - | No FE proposal ? local agro-pastoral history exists, but grape evidence is ancient or Cyclades-wide, not c. 1337 (low). |
+| `anping` | Ānpíng | China | `wheat` (V:10213) | `fruit` (H:10217) | `wheat` (FE:10213) | `eastern_pear` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `ardagh` | Ardagh | Annaly | `horses` (V:1863) | `fruit` (H:1851) | `horses` (FE:1863) | `fruit_apple` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `baise` | Bǎisè | Lai'an | `lumber` (V:10880) | `fruit` (H:10884) | `lumber` (FE:10880) | `fruit_mango` | - | No FE proposal ? later grain records for Lai?an do not establish a fruit at this sub-location (low). |
+| `bang_keng` | Bang Keng | Champa | `lumber` (V:14704) | `fruit` (H:14708) | `lumber` (FE:14704) | `sugar` | - | No FE proposal ? Champa-wide sources emphasize rice, forestry, and trade; none documents fruit at this location (low). |
+| `blois` | Blois | Blois | `iron` (V:2332) | `fruit` (H:2320) | `iron` (FE:2332) | `fruit_grape` | - | `fruit_grape`? ? medieval wine trade is documented; local production references point to the wider Blais area and a 1511 fountain, not site-specific medieval vineyards ([Blois town history](https://www.bloischambord.com/en/tours-and-activities/our-heritage/visit-blois/); low-medium). |
+| `buckeburg` | Bückeburg | Schauenburg | `wool` (V:1029) | `fruit` (H:1017) | `wool` (FE:1029) | `millet` | - | No FE proposal ? medieval Schaumburg sources describe colonist farming and grain, not a local fruit specialization (low-medium). |
+| `calatrava` | Calatrava | Castile | `wheat` (V:2841) | `fruit` (H:2829) | `wheat` (FE:2841) | `wool` | - | No FE proposal ? transhumant livestock/pasture was the documented primary specialization, not FE fruit (high). |
+| `camerino` | Camerino | Camerino | `wool` (V:3150) | `fruit` (H:3138) | `wool` (FE:3150) | `wheat` | - | No FE proposal ? local history identifies wool production and trade as the town?s economic base; no fruit specialization surfaced (medium). |
+| `cazorla` | Cazorla | Castile | `wild_game` (V:2873) | `fruit` (H:2861) | `wild_game` (FE:2873) | `fruit` (retain; Just Goods assigns `sulfur`) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `chateau_thierry` | Château-Thierry | France | `dyes` (V:2089) | `fruit` (H:2077) | `dyes` (FE:2089) | `fruit_grape` | - | `fruit_grape`? ? the municipal site places vineyards immediately west of town and notes 12th-century cellars, but does not establish c. 1337 cultivation within this location ([Ch?teau-Thierry municipality](https://www.chateau-thierry.fr/article/le-champagne); low-medium). |
+| `chinon` | Chinon | France | `silk` (V:2354) | `fruit` (H:2342) | `silk` (FE:2354) | `fruit_grape` | - | `fruit_grape` ? local vineyard history is dated to antiquity; an official tourism source connects vine cultivation with the town?s 13th-century prosperity ([Touraine vineyards](https://www.tourainevaldeloire.com/en/discover/beautiful-vineyards-beautiful-dishes/welcome-to-the-touraine-vineyards/loire-wines/chinon-wine/); medium-high). |
+| `chodziez` | Chodzież | Poland | `iron` (V:3728) | `fruit` (H:3716) | `iron` (FE:3728) | `millet` | - | No FE proposal ? sources describe a fishing/farming settlement but identify no particular fruit crop (low). |
+| `corbie` | Corbie | France | `wool` (V:2358) | `fruit` (H:2346) | `wool` (FE:2358) | `wheat` | - | `fruit_grape` ? vines appear in Corbie Abbey?s 662 foundation charter, with wine routed through Corbie in the mid-14th century ([Picardy viticulture study](https://www.jstor.org/stable/27572105); high). |
+| `dangtu` | Dāngtú | China | `wheat` (V:8626) | `fruit` (H:8630) | `wheat` (FE:8626) | `rice` | - | No FE proposal ? peach associations are poetic/modern, while the pomegranate reference is regional and later than 1337 (low). |
+| `dongxiang` | Dōngxiāng | China | `livestock` (V:8514) | `fruit` (H:8518) | `livestock` (FE:8514) | `cotton` | - | `fruit_plum`? ? a local Song-era plum-viewing garden is documented, but this does not prove edible plum production or a major crop ([Dongxiang government site](https://www.jxfzdx.gov.cn/art/2026/4/17/art_9240_3257680.html); low). |
+| `ebstorf` | Ebstorf | Lüneburg | `wool` (V:1050) | `fruit` (H:1038) | `wool` (FE:1050) | `wool` | - | No FE proposal ? the located garden evidence concerns modern produce; no medieval fruit orchard record surfaced (low). |
+| `el_golea` | El Golèa | Not listed | `wheat` (V:18224) | `fruit` (H:18225) | `wheat` (FE:18224) | `fruit` | - | No FE proposal ? date palms are the documented oasis staple, but dates are not an FE good; no specific listed fruit is supported (medium). |
+| `epe` | Epe | Ijebu | `saffron` (V:19010) | `fruit` (H:19010) | `saffron` (FE:19010) | `fruit_mango` | - | No FE proposal ? the settlement appears to post-date 1337; no period-relevant fruit crop evidence surfaced (low-medium). |
+| `fugou` | Fúgōu | China | `livestock` (V:10399) | `fruit` (H:10403) | `livestock` (FE:10399) | `wheat` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `gex` | Gex | Savoy | `fur` (V:2287) | `fruit` (H:2275) | `fur` (FE:2287) | `fruit_grape` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `gongju` | Gongju | Goryeo | `pepper` (V:9570) | `fruit` (H:9574) | `pepper` (FE:9570) | `rice` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `gora` | Góra | Ścinawa | `wool` (V:3911) | `fruit` (H:3899) | `wool` (FE:3911) | `millet` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `grindsted` | Grindsted | Denmark | `sand` (V:105) | `fruit` (H:106) | `sand` (FE:105) | `livestock` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `hayrabolu` | Hayrabolu | Byzantium | `fur` (V:5879) | `fruit` (H:5884) | `fur` (FE:5879) | `wheat` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `ikryanoye` | Ikryanoye | Jochi | `fish` (V:4735) | `fruit` (H:4736) | `fish` (FE:4735) | `fiber_crops` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `kaunas` | Kaunas | Lithuania | `wool` (V:3778) | `fruit` (H:3766) | `wool` (FE:3778) | `beeswax` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `kawachi` | Kawachi | Japan | `pepper` (V:9280) | `fruit` (H:9284) | `pepper` (FE:9280) | `fruit_plum` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `khvorostyanka` | Khvorostyanka | Jochi | `livestock` (V:5015) | `fruit` (H:5016) | `livestock` (FE:5015) | `wool` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `kowal` | Kowal | Poland | `wool` (V:3678) | `fruit` (H:3666) | `wool` (FE:3678) | `livestock` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `kracheh` | Krâchéh | Khmer | `rice` (V:14972) | `fruit` (H:14976) | `rice` (FE:14972) | `lychee` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `kuga` | Kuga | Japan | `fish` (V:9118) | `fruit` (H:9122) | `fish` (FE:9118) | `persimmon` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `kuripan` | Kuripan | Kuripan | `lumber` (V:15303) | `fruit` (H:15307) | `lumber` (FE:15303) | `fruit_banana` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `lehui` | Lèhuì | China | `rice` (V:10756) | `fruit` (H:10760) | `rice` (FE:10756) | `fruit_mango` | - | No FE proposal ? areca/betel palm is the best-documented regional crop, but it is not an FE good (medium). |
+| `liuyang` | Liúyáng | China | `rice` (V:8375) | `fruit` (H:8379) | `rice` (FE:8375) | `mandarin` | - | No FE proposal ? kumquat is documented, but it is not an FE good; mapping it to mandarin/orange would overstate the evidence (low). |
+| `longford` | Longford | Annaly | `horses` (V:1862) | `fruit` (H:1850) | `horses` (FE:1862) | `fruit_plum` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `los_yebenes` | Los Yébenes | Castile | `fur` (V:2833) | `fruit` (H:2821) | `fur` (FE:2833) | `fruit_fig` | - | No FE proposal ? local accounts emphasize pastoralism, charcoal, beekeeping, and hunting, not orchard crops (medium). |
+| `luxian` | Lùxiàn | China | `wheat` (V:10309) | `fruit` (H:10313) | `wheat` (FE:10309) | `eastern_pear` | - | No FE proposal ? longan is not an FE good; the lychee reference is broad Shu-region literature, not evidence for this site (low). |
+| `manzushir` | Manzushir | China | `wild_game` (V:10126) | `fruit` (H:10130) | `wild_game` (FE:10126) | `wool` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `najran` | Najrān | Yām | `silk` (V:7520) | `fruit` (H:7524) | `silk` (FE:7520) | `fruit` | - | `fruit_grape`? ? a local Najrani grape variety is described as cultivated for centuries, but the source does not date it to 1337; dates are the better-attested staple and are absent from FE ([Slow Food Foundation](https://www.fondazioneslowfood.com/en/ark-of-taste-slow-food/najrani-grapes/); medium-low). |
+| `oropesa` | Oropesa | Castile | `stone` (V:2539) | `fruit` (H:2527) | `stone` (FE:2539) | `silk` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `orte` | Orte | Rome | `marble` (V:3085) | `fruit` (H:3073) | `marble` (FE:3085) | `olives` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `orthez` | Orthez | Béarn | `wool` (V:2134) | `fruit` (H:2122) | `wool` (FE:2134) | `fiber_crops` | - | `fruit_grape` ? an academic history identifies vineyards on the hills around Orthez after it became B?arn?s capital; regional and period evidence is medieval, though not parcel-specific ([Presses universitaires du Midi](https://books.openedition.org/pumi/22942); medium). |
+| `osuna` | Osuna | Castile | `olives` (V:2884) | `fruit` (H:2872) | `olives` (FE:2884) | `olives` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `passau` | Passau | Passau | `fur` (V:1474) | `fruit` (H:1462) | `fur` (FE:1474) | `millet` | - | No FE proposal ? wine trade is documented, but trade/transshipment is not proof of local grape cultivation (low). |
+| `phanom_rung` | Phanom Rung | Khmer | `wool` (V:14921) | `fruit` (H:14925) | `wool` (FE:14921) | `fruit_mango` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `pukamuru` | Pukamuru | Not listed | `stone` (V:24632) | `fruit` (H:24608) | `stone` (FE:24639) | `fruit` (retain; Just Goods assigns `sulfur`) | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `riberac` | Ribérac | Périgord | `saffron` (V:2171) | `fruit` (H:2159) | `saffron` (FE:2171) | `fruit_grape` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `royston` | Royston | England | `wheat` (V:1678) | `fruit` (H:1666) | `wheat` (FE:1678) | `fruit_apple` | - | No FE proposal ? local museum history describes sheep pasture, barley, dairy, and grain trade, not fruit production ([Royston Museum](https://www.roystonmuseum.org.uk/post/fields-of-gold); high). |
+| `samara` | Samara | Jochi | `livestock` (V:5012) | `fruit` (H:5013) | `livestock` (FE:5012) | `fruit` (retain; Just Goods assigns `sulfur`) | - | No FE proposal ? the settlement was established in 1586 on previously unsettled steppe; no 1337 location agriculture is applicable (high). |
+| `santubong` | Santubong | Santubong | `mercury` (V:15411) | `fruit` (H:15415) | `mercury` (FE:15411) | `iron` | - | No FE proposal ? archaeology emphasizes ironworking and maritime trade; no agricultural fruit evidence surfaced (low). |
+| `sevede` | Sevede | Sweden | `lumber` (V:59) | `fruit` (H:59) | `lumber` (FE:59) | `millet` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `shilovo` | Shilovo | Ryazan | `livestock` (V:4947) | `fruit` (H:4948) | `livestock` (FE:4947) | `millet` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `shizong` | Shīzōng | Shīzōng | `legumes` (V:11105) | `fruit` (H:11109) | `legumes` (FE:11105) | `rice` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `sindangkasih` | Sindangkasih | Sunda | `lumber` (V:15539) | `fruit` (H:15545) | `lumber` (FE:15539) | `fruit_lemon` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `skopin` | Skopin | Pronsk | `livestock` (V:4954) | `fruit` (H:4955) | `livestock` (FE:4954) | `millet` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `suisin` | Suisin | Not listed | `clay` (V:23272) | `fruit` (H:23279) | `clay` (FE:23279) | `fruit_banana` | - | No FE proposal ? Patwin subsistence is documented as gathering, fishing, and acorns rather than cultivated FE fruit (high). |
+| `sukkur` | Sukkur | Samma | `cotton` (V:14165) | `fruit` (H:14169) | `cotton` (FE:14165) | `fruit` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `suxi` | Sūxī | China | `livestock` (V:8324) | `fruit` (H:8328) | `livestock` (FE:8324) | `persimmon` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `takaichi` | Katsuragi | Japan | `rice` (V:8966) | `fruit` (H:8970) | `rice` (FE:8966) | `fruit_peach` | - | `persimmon`? ? MAFF identifies Gose?s Gosho persimmon as the progenitor of sweet persimmons; exact origin date and match to this map location remain uncertain ([Japan MAFF](https://www.maff.go.jp/e/policies/market/k_ryouri/areastory/1440/index.html); low-medium). |
+| `talavera_de_la_reina` | Talavera de la Reina | Castile | `livestock` (V:2837) | `fruit` (H:2825) | `livestock` (FE:2837) | `clay` | - | No FE proposal ? a medieval local agriculture study exists, but accessible evidence did not verify vine cultivation at this site by 1337 (low). |
+| `tama` | Tama | Japan | `rice` (V:9218) | `fruit` (H:9222) | `rice` (FE:9218) | `persimmon` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `tukums` | Tukums | Livonia | `fur` (V:3661) | `fruit` (H:3649) | `fur` (FE:3661) | `lumber` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `uniejow` | Uniejów | Sieradz | `wool` (V:3691) | `fruit` (H:3679) | `wool` (FE:3691) | `millet` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `vitoria` | Vitoria | Castile | `wheat` (V:2618) | `fruit` (H:2606) | `wheat` (FE:2618) | `millet` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `wehlau` | Wehlau | Teutons | `fur` (V:3871) | `fruit` (H:3859) | `fur` (FE:3871) | `western_pear` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
+| `yexian` | Yèxiàn | China | `livestock` (V:10452) | `fruit` (H:10456) | `livestock` (FE:10452) | `fruit_peach` | - | No FE proposal ? no fruit evidence for Henan Yexian; do not conflate it with Laizhou pears in Shandong (low). |
+| `zhaoxin` | Zhāoxìn | China | `wheat` (V:8688) | `fruit` (H:8692) | `wheat` (FE:8688) | `eastern_pear` | - | Unresearched ? follow-up needed before proposing an FE value. |
+| `zhengcheng` | Zēngchéng | China | `rice` (V:10813) | `fruit` (H:10817) | `rice` (FE:10813) | `lychee` | - | `lychee` ? a Zengcheng heritage-system study reports roughly 2,000 years of local cultivation, supported by Song-era records/inscriptions ([Chinese Journal of Eco-Agriculture](https://ecoagri.ac.cn/en/article/Y2020/I9/1435); high). |
+| `zlotoryja` | Złotoryja | Legnica | `goods_gold` (V:3919) | `fruit` (H:3907) | `goods_gold` (FE:3919) | `fruit_apple` | - | No FE proposal ? no defensible location-specific c. 1337 fruit-crop evidence surfaced (low; not proof of absence). |
 
 </details>
 
@@ -2221,14 +2227,14 @@ Web-research proposals below focus on each named settlement or map location, not
 
 </details>
 
-### Separate review: all three RGO values differ (67 locations)
+### Approved: use Fruits Expanded when all three RGO values differ (67 locations)
 
-No result is approved for these locations. Each Vanilla, Harmony, and Fruits Expanded value differs from the other two.
+Each Vanilla, Harmony, and Fruits Expanded value differs from the other two. The approved Expanded decision is to use the Fruits Expanded value for every location in this table.
 
 <details>
-<summary>Separate review: all three RGO values differ (67 locations) ? Location ID</summary>
+<summary>Approved: use Fruits Expanded when all three RGO values differ (67 locations) ? Location ID</summary>
 
-| Location ID         | Vanilla baseline    | Base RGO Harmony       | Fruits Expanded                | FE-JG compat effect |
+| Location ID         | Vanilla baseline    | Base RGO Harmony       | Fruits Expanded (selected)     | FE-JG compat effect |
 | ------------------- | ------------------- | ---------------------- | ------------------------------ | ------------------- |
 | `al_qunfudhah`      | `fruit` (V:7489)    | `fish` (H:7493)        | `fruit_lemon` (FE:7489)        | -                   |
 | `bajestan`          | `fruit` (V:8169)    | `sand` (H:8173)        | `fruit_pomegranate` (FE:8169)  | -                   |
@@ -2370,9 +2376,14 @@ These IDs are defined by the Fruits Expanded map file but absent from the base H
 
 </details>
 
-## Just Goods effect changes made by the compatibility patch
+## Historical Just Goods 1.0 effect changes made by the FE/JG patch
 
-The compatibility patch uses `TRY_REPLACE` on the seven Just Goods `add_*_rgos` scripted effects. It retains 227 unique location IDs (229 location setter occurrences) from 242 original Just Goods locations and removes 15. The retained effect bodies and non-location function logic match their Just Goods definitions; the patch only omits those 15 location blocks. Every retained location keeps the same Just Goods good as its original effect. The 15 removed locations are listed here.
+This section records the older compatibility patch comparison against Just
+Goods 1.0, not the current Expanded loadout. The downloaded FE/JG patch is
+excluded from Expanded because its `TRY_REPLACE` bodies omit current Just
+Goods 1.1 setters and restore the obsolete `chan_bo` turmeric assignment.
+See the [current Just Goods 1.1 overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md)
+before using any of the historical setter tables below.
 
 <details>
 <summary>Just Goods effect changes made by the compatibility patch ? Location ID</summary>

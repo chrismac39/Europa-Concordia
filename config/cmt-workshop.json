@@ -4,6 +4,10 @@
     "rgo-harmony": {
       "workshopDirectory": "integration/workshop/rgo-harmony",
       "workshopItemId": 3833870015
+    },
+    "rgo-harmony-expanded": {
+      "workshopDirectory": "integration/workshop/rgo-harmony-expanded",
+      "workshopItemId": 0
     }
   }
 }

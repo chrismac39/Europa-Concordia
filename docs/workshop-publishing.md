@@ -21,6 +21,30 @@ shared map-template payload preserves More Locations data, and the repository
 records the owner's confirmation of author permission for distributing this
 compatibility patch.
 
+The Fruits Expanded variant is a separate
+[RGO Harmony Expanded profile](../profiles/rgo-harmony-expanded.json), with its
+own Workshop page, thumbnail, change notes, CMT project, and output under
+`dist/rgo-harmony-expanded/`. Its CMT entry uses Workshop item ID `0` until a
+new item is created. The existing Fruits Expanded / Just Goods script patch
+is intentionally not in its playset: its pinned effect replacements omit
+Just Goods 1.1 assignments and restore the removed `chan_bo` turmeric setter.
+See the [Expanded source and conflict audit](../integration/decisions/RGO-Harmony-Expanded-Design.md).
+
+Prepare Expanded independently:
+
+```powershell
+npm run validate -- --profile rgo-harmony-expanded
+npm run build -- --profile rgo-harmony-expanded
+npm run workshop:cmt -- prepare --profile rgo-harmony-expanded --toolkit-dir .local\community-mod-toolkit
+```
+
+The Expanded Workshop assets are in
+[`integration/workshop/rgo-harmony-expanded/`](../integration/workshop/rgo-harmony-expanded/).
+Required Items should be Community Mod Framework, More Locations, Global
+Historical RGOs, Just Goods, and Fruits Expanded. Do not add the stale
+Fruits Expanded / Just Goods compatibility patch until it is updated for the
+selected Just Goods 1.1 source.
+
 ## Install CMT outside the repository
 
 CMT's [setup script](https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit)

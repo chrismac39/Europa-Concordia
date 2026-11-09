@@ -2,14 +2,21 @@
 
 ## Status
 
-Source examination is complete. The general map-value precedence rule is
-approved, with Harmony's generic `fruit` results separated for FE-specific
-replacement review. The all-three-different rows and other listed issues
-remain pending review. No Expanded profile, compatibility payload, or build
-output has been created.
+The separate RGO Harmony Expanded profile and map payload are implemented.
+They change the 949 approved shared RGO values where Harmony matches Vanilla
+and Fruits Expanded differs, plus all 67 approved three-way differences by
+using Fruits Expanded's value. The base RGO Harmony profile and patch remain
+unchanged.
+
+The 71 Harmony-`fruit` locations remain explicit review items; no
+Fruits Expanded replacement was guessed for them. The six RGO values omitted
+by Fruits Expanded and all More Locations-only data remain as in base Harmony.
+The 42 Fruits Expanded-only definitions are not imported.
 
 The location-by-location evidence is in the
 [RGO Harmony Expanded inventory](./RGO-Harmony-Expanded-Inventory.md). The
+current Just Goods 1.1 comparison is in the
+[Just Goods overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md). The
 baseline is the existing
 [RGO Harmony design](./RGO-Harmony-Design.md) and its
 [source inventory](./RGO-Harmony-Inventory.md).
@@ -21,8 +28,8 @@ and Global Historical RGOs with Fruits Expanded and its
 Fruits Expanded–Just Goods compatibility patch. Identify source-file
 collisions, location-level RGO differences, and scripted Just Goods setters
 that can supersede map-template values. Use the existing Harmony map as the
-baseline; do not make a new profile or compatibility patch until the
-location decisions are reviewed.
+baseline. Implement the approved map decisions in a distinct profile, and
+leave the 71 fruit-replacement review cases at their Harmony values.
 
 ## Pinned examination inputs
 
@@ -34,7 +41,7 @@ uses the local pinned snapshots in `config/packages.json`:
 | ------------------------------------------------ | ------------: | --------------------------------------------- | ------------------------------------------------------------------------- |
 | More Locations                                   |    3809335454 | 2.10.2026                                     | `sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd` |
 | Global Historical RGOs                           |    3602513956 | 1.4.0                                         | `sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b` |
-| Just Goods                                       |    3785316314 | 1.0.0                                         | `sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada` |
+| Just Goods                                       |    3785316314 | 1.1.0; source metadata 1.1                    | `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` |
 | Fruits Expanded                                  |    3821883489 | descriptor 0.5.9.2; Workshop title says 1.4.1 | `sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0` |
 | Fruits Expanded × Just Goods Compatibility Patch |    3828715234 | descriptor 1.0.0                              | `sha256:8d1cdf0732cccedf4390b1abbe69ca84eb1fb1da0ac721d13e0f7044d3f44041` |
 
@@ -59,25 +66,25 @@ Workshop source snapshots are examination inputs, not distributable payloads.
    generic `fruit` value and are separated for FE-specific replacement
    review. The rule assigns 949 locations to Fruits Expanded where Harmony
    equals Vanilla. The remaining 67 locations have three pairwise different
-   RGO values and are also separated for review. Six more shared locations
+   RGO values; the approved Expanded decision uses the Fruits Expanded value
+   for all 67. Six more shared locations
    have a Harmony RGO that Fruits Expanded omits. In addition, the Fruits
    Expanded file has 42 definitions not in the Harmony map; none has an
    explicit `raw_material`.
-3. **The compatibility patch replaces seven Just Goods spice scripted
-   effects.** Relative to Just Goods, it removes 15 fixed-location setters
-   and keeps the remaining setters. Fourteen removed setters yield locations
-   assigned a Fruits Expanded good; the fifteenth yields a location assigned
-   generic `fruit`. The inventory lists every removal.
-4. **Fifteen retained Just Goods setters target locations whose
-   Fruits Expanded map value differs from the Harmony map.** Thirteen target
-   a Fruits Expanded good; two target generic-fruit locations (`burica` and
-   `xicotepec`). These effects use a Just Goods good, so the intended
-   runtime result needs an explicit decision rather than assuming the map
-   value wins.
-5. **The compatibility patch has two duplicate-location cases.** It assigns
-   `nutmeg` to `banda_island` twice, and assigns both `cinnamon` and
-   `turmeric` to `chan_bo` in separate effects. Runtime resolution for the
-   latter is not established by this static examination.
+3. **Current Just Goods 1.1 has 1,197 unique fixed-location startup RGO
+   assignments.** The current setter intersections are 43 Harmony-retained,
+   74 approved Fruits Expanded map updates, and three fruit-review rows. The
+   [Just Goods overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md)
+   records each intersection and its source line.
+4. **The downloaded Fruits Expanded / Just Goods compatibility patch is
+   stale for Just Goods 1.1.** Its seven `TRY_REPLACE` effects omit 15 current
+   Just Goods setters and restore the old `chan_bo` turmeric setter, which
+   Just Goods 1.1 removed. The Expanded profile therefore does not load it;
+   Just Goods 1.1 effects remain authoritative. No effect blocks are copied
+   or modified.
+5. **Just Goods 1.1 still has a duplicate `banda_island` setter**, twice
+   assigning `nutmeg`. Its `chan_bo` startup effect now assigns only
+   `cinnamon`. This source finding does not prove runtime ordering.
 
 See the inventory for the exact location IDs, source line numbers, values,
 and effect-file references. The source analysis does not prove EU5 runtime
@@ -92,36 +99,30 @@ For a shared location with different explicit RGO values:
    for an FE-specific replacement.
 2. If Harmony equals Vanilla and Fruits Expanded differs, use the
    Fruits Expanded definition.
-3. If all three values differ, keep the location in the separate review
-   table; no winner is approved yet.
+3. If all three values differ, use the Fruits Expanded value. This is an
+   approved decision for all 67 locations in the separate comparison table.
 
-The inventory applies these rules to 1,088 Harmony rows and 949
-Fruits Expanded rows. It separates 71 Harmony-`fruit` rows for FE-specific
-replacement review, 67 all-three-different rows, and the six locations where
-Fruits Expanded omits a Harmony RGO. This decision covers static
-map-template values only; it does not resolve Just Goods startup effects.
+The inventory applies these rules to 1,088 Harmony rows, 949
+Fruits Expanded rows where Harmony equals Vanilla, and 67 approved
+Fruits Expanded values for three-way differences. The Expanded payload applies
+1,016 approved Fruits Expanded values and retains the complete Harmony map
+otherwise. It keeps 71 Harmony-`fruit` rows for FE-specific replacement
+review and retains Harmony values at the six locations where Fruits Expanded
+omits an RGO. The 42 FE-only location definitions have no explicit RGO and
+are not imported. This decision covers static map-template values only;
+Just Goods startup effects remain intact.
 
 A location-focused web-research pass is recorded in the 71-row inventory
 table. It prioritizes evidence for the named location around 1337, labels
 regional or later evidence as tentative, and does not approve any proposed FE
 value automatically.
 
-## Remaining review before implementation
+## Remaining review
 
-- Review and decide the 67 locations where the Fruits Expanded, Harmony, and
-  Vanilla RGOs are all different.
 - Review the web-research proposals for the 71 Harmony `fruit` locations and
   choose appropriate Fruits Expanded fruit goods where warranted.
-- Decide how to handle the six shared Harmony RGO assignments omitted by
-  Fruits Expanded and whether to preserve all 3,591 Harmony-only More
-  Locations entries.
-- Confirm whether the 15 Just Goods setters removed by the existing
-  compatibility patch should remain removed, and resolve the 15 retained
-  Just-Goods-versus-Fruits-Expanded overlaps.
-- Decide how to handle the two duplicate setter cases, especially the
-  competing `chan_bo` assignments.
-- Decide whether the 42 Fruits Expanded-only, no-RGO definitions belong in
-  the Expanded map output.
-
-No RGO values have been changed in a compatibility payload; implementation
-remains pending these reviews.
+- Validate the current Just Goods startup behavior and map-result ordering in
+  EU5 1.4.5 in game. Static source analysis cannot establish runtime ordering.
+- Re-run the source audit if any pinned Workshop source changes. The current
+  Fruits Expanded / Just Goods patch must first be reconciled with Just Goods
+  1.1 before it is added to the Expanded playset.
