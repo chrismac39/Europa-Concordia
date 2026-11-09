@@ -1,5 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -30,6 +37,9 @@ test("prepares an isolated CMT project with profile content and release assets",
       recursive: true,
     });
     await mkdir(dependenciesDirectory, { recursive: true });
+    await mkdir(path.join(toolkitDirectory, "tools", "steamworks"), {
+      recursive: true,
+    });
     await writeFile(
       path.join(artifactDirectory, "in_game", "content.txt"),
       "game content",
@@ -49,7 +59,10 @@ test("prepares an isolated CMT project with profile content and release assets",
     );
     await writeFile(
       path.join(toolkitDirectory, "tools", "upload.py"),
-      'SOURCES = [\n    "in_game",\n    "main_menu",\n]\n',
+      [
+        'SOURCES = [\n    "in_game",\n    "main_menu",\n]\n',
+        'clean_name = clean_name.lower().replace(" ", "-")\n',
+      ].join(""),
     );
     await writeFile(
       path.join(toolkitDirectory, "tools", "config.toml"),
@@ -65,6 +78,10 @@ test("prepares an isolated CMT project with profile content and release assets",
     await writeFile(
       path.join(dependenciesDirectory, "requirements.txt"),
       "steamworks",
+    );
+    await writeFile(
+      path.join(toolkitDirectory, "tools", "steamworks", "__init__.py"),
+      "STEAMWORKS = object\n",
     );
 
     const options = {
@@ -86,6 +103,24 @@ test("prepares an isolated CMT project with profile content and release assets",
       "utf8",
     );
     assert.match(uploadScript, /"dlc",\s+"in_game"/);
+    assert.ok(
+      uploadScript.includes(
+        String.raw`clean_name = re.sub(r'[<>:"/\\|?*\x00-\x1f]'`,
+      ),
+    );
+    assert.equal(
+      await readFile(
+        path.join(
+          result.workspaceDirectory,
+          "tools",
+          "dependencies",
+          "steamworks",
+          "__init__.py",
+        ),
+        "utf8",
+      ),
+      "STEAMWORKS = object\n",
+    );
     assert.match(cmtConfig, /workshop_upload_item_id = 0/);
     assert.match(cmtConfig, /upload_mod_by_default = false/);
     assert.match(cmtConfig, /upload_workshop_pages_by_default = false/);
@@ -117,6 +152,18 @@ test("prepares an isolated CMT project with profile content and release assets",
       /^\[b\]v1\.2\.3:\[\/b\]\n\nFirst release\.\n$/,
     );
 
+    await assert.rejects(
+      prepareCmtWorkspace({ ...options, syncGallery: true }),
+      /Gallery synchronization requested, but the directory does not exist/,
+    );
+    const sourceGalleryDirectory = path.join(workshopDirectory, "gallery");
+    await mkdir(sourceGalleryDirectory);
+    await writeFile(path.join(sourceGalleryDirectory, "02-economy.jpg"), "two");
+    await writeFile(
+      path.join(sourceGalleryDirectory, "01-overview.PNG"),
+      "one",
+    );
+
     await writeFile(
       path.join(result.workspaceDirectory, "tools", "config.toml"),
       cmtConfig.replace(
@@ -133,9 +180,29 @@ test("prepares an isolated CMT project with profile content and release assets",
       ),
       '{"versions":{}}',
     );
-    const refreshed = await prepareCmtWorkspace(options);
+    const refreshed = await prepareCmtWorkspace({
+      ...options,
+      syncGallery: true,
+    });
     assert.equal(refreshed.workshopItemId, 123456);
     assert.equal(refreshed.reusedWorkshopItemId, true);
+    const stagedGalleryDirectory = path.join(
+      refreshed.workspaceDirectory,
+      "assets",
+      "workshop",
+      "gallery",
+    );
+    assert.deepEqual(await readdir(stagedGalleryDirectory), [
+      "01-overview.PNG",
+      "02-economy.jpg",
+    ]);
+    assert.equal(
+      await readFile(
+        path.join(stagedGalleryDirectory, "01-overview.PNG"),
+        "utf8",
+      ),
+      "one",
+    );
     assert.match(
       await readFile(
         path.join(refreshed.workspaceDirectory, "tools", "config.toml"),

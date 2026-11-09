@@ -136,6 +136,7 @@ export interface BuildConfiguration {
   packagesFile: string;
   conflictRulesFile: string;
   outputDirectory: string;
+  profileOutputDirectories?: Record<string, string>;
 }
 
 export interface FilePathResolution {

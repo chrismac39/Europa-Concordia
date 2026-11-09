@@ -379,6 +379,22 @@
       },
       "patchId": "just-goods-more-locations-global-historical-rgos",
       "reason": "Use the shared, content-pinned merged template patch: Global Historical RGOs wins the 1,269 approved direct disagreements and 48 qualifying descendants, while Just Goods' fixed-location effects remain authoritative."
+    },
+    {
+      "path": "in_game/map_data/location_templates.txt",
+      "packages": [
+        "fruits-expanded",
+        "global-historical-rgos",
+        "more-locations"
+      ],
+      "resolutionType": "merged-patch",
+      "sourceFingerprints": {
+        "fruits-expanded": "607cf7263126fed9d727ab558811efbc4706f2c178ed1f6c3d09cb383a474a2f",
+        "global-historical-rgos": "01d18e2e207c1e168e4ab1984b7b917361680636918d95957665c91b4690deca",
+        "more-locations": "7062be86b7c7b76fb74da9f641f8fa74fd6d84ab2a4149b81d05bb93724281f7"
+      },
+      "patchId": "rgo-harmony-expanded",
+      "reason": "Use the RGO Harmony Expanded complete-map merge: keep More Locations as the base, preserve the approved Global Historical RGO values and base Harmony data, and apply Fruits Expanded only at the 949 approved shared locations."
     }
   ],
   "semanticResolutions": [
@@ -1189,6 +1205,117 @@
       "resolutionType": "native-merge",
       "decision": "Keep independent CMF and Glorp UI game-start callbacks.",
       "reason": "Construction Manager is excluded. CMF's game-start handling and Glorp UI's value synchronization remain distinct callbacks on the natively merged on-action."
+    },
+    {
+      "fingerprint": "0f5180d47ef36f6e",
+      "resolutionType": "native-merge",
+      "decision": "Keep the separate CMF, Just Brass, and Just Clocks registration callbacks.",
+      "reason": "CMF provides the registration extension point; Just Goods registers its Brass and Clocks settings in separate files. EU5 natively merges these distinct callbacks, so retain each without a Concordia replacement."
+    },
+    {
+      "fingerprint": "d4fcde94d97ef66f",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF's and Just Goods Academies' monthly callbacks.",
+      "reason": "CMF's monthly handler and the Academies tradition and influence pulses are distinct callbacks in separate files. Preserve both on the natively merged pulse."
+    },
+    {
+      "fingerprint": "e2b99eb7e01671ef",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
+      "reason": "CMF initialization and the separate Just Goods subsystem initializers, including the 1.4 Gunpowder and Stone RGO setters, are independent registrations. Retain each once through EU5's native merge; do not combine or replace the upstream files."
+    },
+    {
+      "fingerprint": "58c17dec6c926199",
+      "resolutionType": "native-merge",
+      "decision": "Keep the independent CMF and Just Goods yearly-pulse callbacks.",
+      "reason": "CMF yearly handling and Just Goods' separate event pools and subsystem callbacks are independent contributions to the natively merged pulse; preserve each without a whole-file replacement."
+    },
+    {
+      "fingerprint": "648ee8a68121430d",
+      "resolutionType": "load-order",
+      "winner": "just-goods-1-1",
+      "decision": "Use Just Goods 1.1's English `hammam` localization.",
+      "reason": "The user selected Just Goods' `Hammam` text over More Locations' `Hammām`. The RGO Harmony load order places Just Goods after More Locations, so its value is the effective winner."
+    },
+    {
+      "fingerprint": "0ed70578c8c12dec",
+      "resolutionType": "native-merge",
+      "decision": "Keep the separate CMF, Just Brass, and Just Clocks registration callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. CMF provides the registration extension point; Just Goods registers its Brass and Clocks settings in separate files. EU5 natively merges these distinct callbacks."
+    },
+    {
+      "fingerprint": "93d4c64aab8b6f9c",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF's and Just Goods Academies' monthly callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. Their monthly handlers are distinct callbacks in separate files and are preserved on the natively merged pulse."
+    },
+    {
+      "fingerprint": "2b855afec6ac054a",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. CMF initialization and the separate Just Goods subsystem initializers are independent registrations; retain each through EU5's native merge."
+    },
+    {
+      "fingerprint": "b112044d227fae63",
+      "resolutionType": "native-merge",
+      "decision": "Keep the independent CMF and Just Goods yearly-pulse callbacks.",
+      "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. Their yearly handlers are independent callbacks and remain on the natively merged pulse."
+    },
+    {
+      "fingerprint": "a742a0cac6259862",
+      "resolutionType": "load-order",
+      "winner": "just-goods-1-1",
+      "decision": "Use Just Goods 1.1's English `hammam` localization.",
+      "reason": "The RGO Synthesis profile preserves RGO Harmony's load order and selected localization: Just Goods' `Hammam` text takes precedence over More Locations' `Hammām`."
+    },
+    {
+      "fingerprint": "1808de6c6c579e2c",
+      "resolutionType": "native-merge",
+      "decision": "Keep the Fruits Expanded specialist brewery and beer-workshop production methods with Just Goods' building modifiers.",
+      "reason": "The Fruits Expanded injections add possible production methods; Just Goods injects only local fire risk modifiers. These fields are independent, so retain both contributions."
+    },
+    {
+      "fingerprint": "b84193bdca394210",
+      "resolutionType": "native-merge",
+      "decision": "Keep the Fruits Expanded specialist brewery and beer-workshop production methods with Just Goods' building modifiers.",
+      "reason": "The Fruits Expanded injections add possible production methods; Just Goods injects only local fire risk modifiers. These fields are independent, so retain both contributions."
+    },
+    {
+      "fingerprint": "5ab67514ece032b9",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF and both Just Goods registration callbacks.",
+      "reason": "CMF provides the registration extension point, while Just Goods registers separate Brass and Clocks settings callbacks. Keep the distinct registrations."
+    },
+    {
+      "fingerprint": "87c226d2e7750d6e",
+      "resolutionType": "native-merge",
+      "decision": "Keep the distinct CMF, Fruits Expanded, and Just Goods monthly callbacks.",
+      "reason": "CMF's monthly handler, Fruits Expanded's horticultural report callbacks, and Just Goods Academies' callbacks are distinct; retain each on the natively merged pulse."
+    },
+    {
+      "fingerprint": "0d734fca9c55cbd0",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
+      "reason": "CMF initialization and the separate Just Goods subsystem initializers are distinct registrations. Retain each once through EU5's native merge, including all current Just Goods 1.1 RGO setters."
+    },
+    {
+      "fingerprint": "e92d51e271f216b1",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct CMF and Just Goods yearly-pulse callbacks.",
+      "reason": "The CMF yearly handler and the independent Just Goods subsystem callbacks and event pools are separate contributions; preserve each without replacing upstream files."
+    },
+    {
+      "fingerprint": "e66fc10f144ea9bd",
+      "resolutionType": "native-merge",
+      "decision": "Merge all unique Fruits Expanded and Just Goods named-color keys.",
+      "reason": "The pinned sources contain 62 direct named-color keys with no duplicates, so every Fruits Expanded fruit color and Just Goods goods color can remain."
+    },
+    {
+      "fingerprint": "caad3063b65d133d",
+      "resolutionType": "load-order",
+      "winner": "just-goods-1-1",
+      "decision": "Use Just Goods 1.1's English `hammam` localization.",
+      "reason": "The existing RGO Harmony decision selected Just Goods' `Hammam` value over More Locations' `Hammām`; Expanded keeps Just Goods after More Locations in load order."
     }
   ],
   "definitionConflicts": "deferred"

@@ -19,6 +19,7 @@ export interface CmtWorkspaceOptions {
   toolkitDirectory: string;
   workshopItemId: number;
   version: string;
+  syncGallery?: boolean;
 }
 
 export interface CmtWorkspaceResult {
@@ -102,6 +103,26 @@ function addDlcSource(uploadScript: string): string {
   );
 }
 
+function sanitizeCmtReleaseFolderName(uploadScript: string): string {
+  const safeNameMarker = String.raw`clean_name = re.sub(r'[<>:"/\\|?*\x00-\x1f]'`;
+  if (uploadScript.includes(safeNameMarker)) {
+    return uploadScript;
+  }
+  const expression =
+    /^([ \t]*)clean_name = clean_name\.lower\(\)\.replace\(" ", "-"\)$/gm;
+  const matches = [...uploadScript.matchAll(expression)];
+  if (matches.length !== 1) {
+    throw new Error(
+      "CMT tools/upload.py has no unique release-folder name normalization to make Windows-safe",
+    );
+  }
+  const safeNameLine = String.raw`clean_name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "-", clean_name.lower().replace(" ", "-")).strip(" .")`;
+  return uploadScript.replace(
+    expression,
+    (_line, indentation: string) => `${indentation}${safeNameLine}`,
+  );
+}
+
 async function optionalFileContents(filePath: string): Promise<string | null> {
   try {
     return await readFile(filePath, "utf8");
@@ -176,12 +197,50 @@ export async function prepareCmtWorkspace(
     toolkitToolsDirectory,
     "dependencies",
   );
+  const toolkitSteamworksPath = path.join(toolkitToolsDirectory, "steamworks");
   const descriptionPath = path.join(workshopDirectory, "STEAM_PAGE.bbcode");
+  const galleryDirectory = path.join(workshopDirectory, "gallery");
   const changeNotesPath = path.join(
     workshopDirectory,
     "change-notes",
     `${options.version}.bbcode`,
   );
+
+  let galleryImages: string[] = [];
+  if (options.syncGallery) {
+    let galleryEntries;
+    try {
+      galleryEntries = await readdir(galleryDirectory, {
+        withFileTypes: true,
+      });
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        "code" in error &&
+        error.code === "ENOENT"
+      ) {
+        throw new Error(
+          `Gallery synchronization requested, but the directory does not exist: ${galleryDirectory}`,
+        );
+      }
+      throw error;
+    }
+    if (galleryEntries.length === 0) {
+      throw new Error(
+        `Gallery synchronization requested, but no images were found in ${galleryDirectory}`,
+      );
+    }
+    for (const entry of galleryEntries) {
+      if (!entry.isFile() || !/\.(?:jpe?g|png)$/i.test(entry.name)) {
+        throw new Error(
+          `Unsupported gallery entry: ${path.join(galleryDirectory, entry.name)} (expected JPG, JPEG, or PNG files)`,
+        );
+      }
+    }
+    galleryImages = galleryEntries
+      .map((entry) => entry.name)
+      .sort((left, right) => (left < right ? -1 : left > right ? 1 : 0));
+  }
 
   const [
     uploadScript,
@@ -189,12 +248,14 @@ export async function prepareCmtWorkspace(
     description,
     changeNotes,
     toolkitDependenciesStat,
+    toolkitSteamworksStat,
   ] = await Promise.all([
     readFile(uploadScriptPath, "utf8"),
     readFile(toolkitConfigPath, "utf8"),
     readFile(descriptionPath, "utf8"),
     readFile(changeNotesPath, "utf8"),
     access(toolkitDependenciesPath).then(() => true),
+    access(toolkitSteamworksPath).then(() => true),
   ]);
   if (!description.trim()) {
     throw new Error(`Workshop description is empty: ${descriptionPath}`);
@@ -202,6 +263,11 @@ export async function prepareCmtWorkspace(
   if (!toolkitDependenciesStat) {
     throw new Error(
       `CMT dependencies directory not found: ${toolkitDependenciesPath}`,
+    );
+  }
+  if (!toolkitSteamworksStat) {
+    throw new Error(
+      `CMT Steamworks package not found: ${toolkitSteamworksPath}`,
     );
   }
 
@@ -232,7 +298,9 @@ export async function prepareCmtWorkspace(
     generatedConfig = replaceTomlValue(generatedConfig, key, value);
   }
 
-  const uploadScriptWithDlc = addDlcSource(uploadScript);
+  const compatibleUploadScript = sanitizeCmtReleaseFolderName(
+    addDlcSource(uploadScript),
+  );
   await mkdir(workspaceParent, { recursive: true });
   const stagingDirectory = await mkdtemp(
     path.join(workspaceParent, ".cmt-staging-"),
@@ -259,10 +327,15 @@ export async function prepareCmtWorkspace(
     await cp(toolkitDependenciesPath, dependenciesDirectory, {
       recursive: true,
     });
+    await cp(
+      toolkitSteamworksPath,
+      path.join(dependenciesDirectory, "steamworks"),
+      { recursive: true },
+    );
     await mkdir(workshopAssetsDirectory, { recursive: true });
     await writeFile(
       path.join(toolsDirectory, "upload.py"),
-      uploadScriptWithDlc,
+      compatibleUploadScript,
       "utf8",
     );
     await writeFile(
@@ -279,6 +352,19 @@ export async function prepareCmtWorkspace(
       formatChangeNotes(options.version, changeNotes),
       "utf8",
     );
+    if (galleryImages.length > 0) {
+      const stagedGalleryDirectory = path.join(
+        workshopAssetsDirectory,
+        "gallery",
+      );
+      await mkdir(stagedGalleryDirectory, { recursive: true });
+      for (const imageName of galleryImages) {
+        await cp(
+          path.join(galleryDirectory, imageName),
+          path.join(stagedGalleryDirectory, imageName),
+        );
+      }
+    }
 
     const existingUploadVersionPath = path.join(
       workspaceDirectory,

@@ -2,8 +2,9 @@
 
 This is the single record of user-approved directions for the integration.
 Votes authorize future implementation work; they do not themselves merge files
-or resolve the underlying findings. All votes below were recorded on
-2026-10-29. Implementation remains pending unless a section says otherwise.
+or resolve the underlying findings. Decisions 1-41 were recorded on
+2026-10-29; Decisions 42-44 were recorded on 2026-11-08. Implementation
+remains pending unless a section says otherwise.
 
 ## Vote register
 
@@ -50,6 +51,20 @@ or resolve the underlying findings. All votes below were recorded on
 |       39 |  C   | Synthesize a Concordia merge                  |
 |       40 |  C   | Synthesize a Concordia merge                  |
 |       41 |  A   | Use SOL-JTG Compatibility Submod as the base  |
+|       42 |  A   | Preserve all 484 new Just Goods 1.1 startup RGO assignments |
+|       43 |  A   | Keep Reunion's sulfur startup and vanilla event option     |
+|       44 |  A   | Prefer Just Goods 1.1's `Hammam` localization              |
+
+### Decisions 42-44 — Just Goods 1.4 / RGO Harmony
+
+The user approved preserving all 484 new Just Goods 1.1 startup RGO
+assignments. The existing map patch remains unchanged, and the 484 setters
+remain in Just Goods' own startup callbacks. At Reunion, keep both behaviors:
+Just Goods starts the location with sulfur, and its later event option may
+change it to vanilla. For `english:hammam`, use Just Goods 1.1's `Hammam` text;
+the RGO Harmony profile loads Just Goods after More Locations. These approvals
+apply to the standalone RGO Harmony profile only; the `current-intended`
+Concordia profile remains pinned to Just Goods 1.0 pending its separate review.
 
 ### Clarification to Decisions 38 and 41 — SoL / Just Goods
 

@@ -1,18 +1,43 @@
-[b]RGO Harmony: Just Goods + More Locations + Global Historical RGOs[/b]
+[b]RGO Harmony: Just Goods + More Locations + Historical RGOs - Global[/b]
 
-A compatibility patch for these three mods:
+A compatibility patch for these four mods:
 [list]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3692202776]Community Mod Framework[/url]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3809335454]More locations Mod[/url]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3602513956]Global Historical RGOs[/url]
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3602513956]Historical RGOs - Global[/url]
 [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3785316314]Just Goods[/url]
 [/list]
 
-All three mods are required. Load them in this order, with RGO Harmony last:
+Development note: We are beginning the scaffolding to include the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3821883489]Fruits Expanded[/url] mod in a future update. This release does not add Fruits Expanded compatibility changes.
+
+All four upstream mods are required. Load them in this order, with RGO Harmony last:
 [list=1]
+[*]Community Mod Framework
 [*]More locations Mod
-[*]Global Historical RGOs
+[*]Historical RGOs - Global
 [*]Just Goods
 [*]RGO Harmony
 [/list]
 
-Precedence follows the chosen conflict rules: Just Goods' explicit RGO changes win at its fixed locations; Global Historical RGOs wins over More Locations for the 1,269 agreed conflicts and 48 qualifying single-parent split locations. More Locations remains the map and RGO base everywhere else.
+RGO Harmony keeps More Locations as the base map and default RGO assignments. At the 1,269 locations where More Locations and Historical RGOs - Global directly assign different RGO values, it uses Historical RGOs - Global's value. It also carries Historical RGOs - Global's RGO values forward to 48 additional child locations created by More Locations' splits: each child has a single original parent, and RGO Harmony gives the child the Historical RGOs - Global value assigned to that parent. Just Goods' game-start replacement scripts still run and apply Just Goods' values at its selected locations; all other conflict free locations retain More Locations' RGO values.
+
+[b]Examples of the compatibility rules in-game:[/b]
+
+Abony is a More Locations-added location in Hungary that more locations split off from Szolnok. No RGO conflicts arise here so its wheat assignment from parent of Szolnok is retained by RGO Harmony.
+[img]https://i.imgur.com/DoD4s6G.png[/img]
+
+At Agra in northern India, More Locations assigns silk while Historical RGOs - Global assigns rice and Just Goods has no affect. Hence, RGO Harmony uses rice for Agra.
+[img]https://i.imgur.com/3LEbpUZ.png[/img]
+
+At Corbie in northern France, Historical RGOs - Global's fruit replaces More Locations' wool so RGO Harmony uses fruit for Corbie.
+[img]https://i.imgur.com/7hkNqcB.png[/img]
+
+Aubigny is a More Locations-added child split off of Corbie. Since it inherited Corbie's Vanilla wool from its parent while Historical RGOs - Global already changed Corbie to fruit, RGO Harmony gives Aubigny fruit as well.
+[img]https://i.imgur.com/q9O3neG.png[/img]
+
+At Padova, Just Goods' game-start effects script changes the map-template RGO from medicaments to aromatics, and RGO Harmony leaves that Just Goods effect intact.
+[img]https://i.imgur.com/9bDsKzP.png[/img]
+
+Mechanically, RGO Harmony replaces one `location_templates.txt` file with the compatibility-adjusted values. Just Goods' game-start replacement scripts remain intact and still replace RGO values at their selected locations.
+
+Compatibility: Not tested with any other mods and I cannot guarantee correct behavior if additional mods are enabled. However, it should work correctly as long as the four required upstream mods are loaded in the specified order and no other mods modify the same `location_templates.txt` file or the same RGO assignments.

@@ -37,19 +37,32 @@ content-sensitive fingerprints, so an upstream file change invalidates its
 previous approval.
 
 The starter profile is [current-intended](profiles/current-intended.json) for
-EU5 1.4.5. Build output goes to
-`dist/europa-concordia/<profile-id>/`; its generated load-order guide and
-machine-readable build metadata are written beside it under `dist/`.
+EU5 1.4.5. Its build output goes to
+`dist/europa-concordia/<profile-id>/`; the standalone RGO Harmony profile has
+its own output root at `dist/rgo-harmony/<profile-id>/`. Generated load-order
+guides and machine-readable build metadata are written under `dist/`.
 
-The [standalone Just Goods / More Locations / Global Historical RGOs
-profile](profiles/just-goods-more-locations-global-historical-rgos-standalone.json)
+The [RGO Harmony profile](profiles/rgo-harmony.json)
 builds the same shared RGO patch source without Concordia's unrelated patches:
 
 ```sh
-npm run analyze -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run validate -- --profile just-goods-more-locations-global-historical-rgos-standalone
-npm run build -- --profile just-goods-more-locations-global-historical-rgos-standalone
+npm run analyze -- --profile rgo-harmony
+npm run validate -- --profile rgo-harmony
+npm run build -- --profile rgo-harmony
 ```
+
+[RGO Harmony Expanded](profiles/rgo-harmony-expanded.json) is a separate
+profile that adds Fruits Expanded's approved RGO assignments while preserving
+the base Harmony map, selecting Fruits Expanded values for the 67 three-way
+conflicts and the user-approved RGO values for all 71 Harmony-`fruit` cases:
+
+```sh
+npm run analyze -- --profile rgo-harmony-expanded
+npm run validate -- --profile rgo-harmony-expanded
+npm run build -- --profile rgo-harmony-expanded
+```
+
+Its output and Workshop setup are isolated from the base RGO Harmony variant.
 
 Install the generated patch locally for the EU5 launcher with:
 

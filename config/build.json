@@ -4,5 +4,10 @@
   "defaultProfile": "current-intended",
   "packagesFile": "config/packages.json",
   "conflictRulesFile": "config/conflict-rules.json",
-  "outputDirectory": "dist/europa-concordia"
+  "outputDirectory": "dist/europa-concordia",
+  "profileOutputDirectories": {
+    "rgo-harmony": "dist/rgo-harmony",
+    "rgo-harmony-expanded": "dist/rgo-harmony-expanded",
+    "rgo-synthesis": "dist/rgo-synthesis"
+  }
 }

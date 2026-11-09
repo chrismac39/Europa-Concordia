@@ -2,6 +2,8 @@
 
 Inventory date: 2026-11-04. This records source-value disagreements and the approved handling of fixed-location Just Goods setters; it is not a claim about EU5 runtime file resolution. The approved merged map patch is generated; split-location findings are in the [split audit CSV](just-goods-more-locations-global-historical-rgos-split-audit.csv) and [readable summary](just-goods-more-locations-global-historical-rgos-split-audit.md).
 
+**Historical input notice:** this inventory uses Just Goods 1.0.0. The standalone RGO Harmony profile now pins Just Goods 1.1.0; its 1.4 startup-setter delta and approved handling are recorded in the [Just Goods 1.4 refresh](RGO-Harmony-1.4-Refresh.md). Do not use the 723-setter count below as the current 1.1 total.
+
 ## Working precedence and filter
 
 For both standalone and Concordia outputs, use **Global Historical RGOs > More Locations > Vanilla** for the 1,269 rows where Global Historical RGOs and More Locations disagree and no fixed-location Just Goods setter conflicts. The Just Goods groups are explicit exceptions: preserve Just Goods on all 723 setter locations, and let it take precedence over both map values in the 50 three-way disagreements.

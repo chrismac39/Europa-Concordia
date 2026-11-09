@@ -1,9 +1,19 @@
 {
   "version": 1,
-  "id": "just-goods-more-locations-global-historical-rgos-standalone",
-  "name": "Just Goods + More Locations + Global Historical RGOs",
+  "id": "rgo-synthesis",
+  "name": "RGO - Synthesis",
   "targetGameVersion": "1.4.5",
   "mods": [
+    {
+      "packageId": "community-mod-framework",
+      "name": "Community Mod Framework",
+      "version": "2.5.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+      }
+    },
     {
       "packageId": "more-locations",
       "name": "More locations Mod",
@@ -25,21 +35,22 @@
       }
     },
     {
-      "packageId": "just-goods",
+      "packageId": "just-goods-1-1",
       "name": "Just Goods",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
+        "snapshotChecksum": "sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a"
       }
     }
   ],
   "loadOrder": [
     "more-locations",
     "global-historical-rgos",
-    "just-goods",
-    "jg_ml_gh_rgos_compat_standalone"
+    "community-mod-framework",
+    "just-goods-1-1",
+    "rgo_synthesis_standalone"
   ],
   "patches": [
     {
@@ -49,12 +60,8 @@
       "targetPath": "in_game/map_data/location_templates.txt",
       "targetPackageId": "more-locations",
       "resolutionType": "merged-patch",
-      "reason": "Preserve More Locations as the complete map-template base, apply Global Historical RGO values to the 1,269 approved direct disagreements and 48 qualifying single-parent descendants, and leave Just Goods' fixed-location effects authoritative.",
-      "preserves": [
-        "russian_wastelands_9",
-        "kolguyev",
-        "borneo_jungle12"
-      ],
+      "reason": "Initial scaffold reuses RGO Harmony's current compatibility payload unchanged; no Synthesis agricultural changes are implemented yet.",
+      "preserves": ["russian_wastelands_9", "kolguyev", "borneo_jungle12"],
       "suppresses": [
         "More Locations RGO values at the 1,269 direct Global Historical RGO disagreements without a fixed Just Goods setter",
         "Duplicated Vanilla RGO values on the 48 approved descendants whose single parent has a changed Global Historical RGO"
@@ -62,11 +69,11 @@
     }
   ],
   "patchMod": {
-    "name": "RGO Harmony: Just Goods + More Locations + Global Historical RGOs",
-    "id": "jg_ml_gh_rgos_compat_standalone",
+    "name": "RGO - Synthesis",
+    "id": "rgo_synthesis_standalone",
     "version": "0.1.0",
-    "shortDescription": "RGO compatibility for Just Goods, More Locations, and Global Historical RGOs. Requires all three separately.",
+    "shortDescription": "Agricultural RGO overhaul scaffold using RGO Harmony's current compatibility foundation. Requires Community Mod Framework, More Locations, Global Historical RGOs, and Just Goods.",
     "tags": ["Gameplay", "Map"],
-    "thumbnailPath": "integration/assets/rgo-harmony/thumbnail.png"
+    "thumbnailPath": "integration/workshop/rgo-synthesis/thumbnail.png"
   }
 }

@@ -55,22 +55,27 @@ function parseArguments(argumentsValue: string[]): {
   profileId: string;
   toolkitDirectory: string;
   pythonCommand: string;
+  syncGallery: boolean;
+  confirmation?: string;
 } {
   const [command, ...options] = argumentsValue;
   if (command !== "prepare" && command !== "publish") {
     throw new Error(
-      "Usage: npm run workshop:cmt -- <prepare|publish> --profile PROFILE_ID --toolkit-dir PATH [--python PATH]",
+      "Usage: npm run workshop:cmt -- <prepare|publish> --profile PROFILE_ID --toolkit-dir PATH [--python PATH] [--sync-gallery] [--confirm-publish PHRASE]",
     );
   }
   let profileId: string | undefined;
   let toolkitDirectory: string | undefined;
   let pythonCommand: string | undefined;
+  let syncGallery = false;
+  let confirmation: string | undefined;
   for (let index = 0; index < options.length; index += 1) {
     const option = options[index];
     if (
       option === "--profile" ||
       option === "--toolkit-dir" ||
-      option === "--python"
+      option === "--python" ||
+      option === "--confirm-publish"
     ) {
       const value = options[index + 1];
       if (!value) {
@@ -86,11 +91,16 @@ function parseArguments(argumentsValue: string[]): {
           throw new Error("--toolkit-dir may only be specified once");
         }
         toolkitDirectory = value;
-      } else {
+      } else if (option === "--python") {
         if (pythonCommand !== undefined) {
           throw new Error("--python may only be specified once");
         }
         pythonCommand = value;
+      } else {
+        if (confirmation !== undefined) {
+          throw new Error("--confirm-publish may only be specified once");
+        }
+        confirmation = value;
       }
       index += 1;
     } else if (option.startsWith("--profile=")) {
@@ -111,20 +121,38 @@ function parseArguments(argumentsValue: string[]): {
       if (!pythonCommand) {
         throw new Error("--python requires a value");
       }
+    } else if (option.startsWith("--confirm-publish=")) {
+      if (confirmation !== undefined) {
+        throw new Error("--confirm-publish may only be specified once");
+      }
+      confirmation = option.slice("--confirm-publish=".length);
+      if (!confirmation) {
+        throw new Error("--confirm-publish requires a value");
+      }
+    } else if (option === "--sync-gallery") {
+      if (syncGallery) {
+        throw new Error("--sync-gallery may only be specified once");
+      }
+      syncGallery = true;
     } else {
       throw new Error(`Unknown option: ${option}`);
     }
   }
   if (!profileId || !toolkitDirectory) {
     throw new Error(
-      "Usage: npm run workshop:cmt -- <prepare|publish> --profile PROFILE_ID --toolkit-dir PATH [--python PATH]",
+      "Usage: npm run workshop:cmt -- <prepare|publish> --profile PROFILE_ID --toolkit-dir PATH [--python PATH] [--confirm-publish PHRASE]",
     );
+  }
+  if (command === "prepare" && confirmation !== undefined) {
+    throw new Error("--confirm-publish may only be used with publish");
   }
   return {
     command,
     profileId,
     toolkitDirectory,
     pythonCommand: pythonCommand ?? "python",
+    syncGallery,
+    confirmation,
   };
 }
 
@@ -133,11 +161,11 @@ async function confirmPublication(
   modName: string,
   version: string,
   workshopItemId: number,
+  syncGallery: boolean,
+  confirmation?: string,
 ): Promise<boolean> {
-  if (!process.stdin.isTTY || !process.stdout.isTTY) {
-    throw new Error("CMT publishing requires an interactive terminal");
-  }
   const action = workshopItemId === 0 ? "CREATE" : "UPDATE";
+  const expectedConfirmation = `PUBLISH ${profileId} ${action}`;
   console.log(
     `About to ${action.toLowerCase()} a Workshop item for ${modName} ${version}.`,
   );
@@ -145,17 +173,31 @@ async function confirmPublication(
     `Target Workshop item ID: ${workshopItemId === 0 ? "0 (creates a new item)" : workshopItemId}.`,
   );
   console.log(
-    "Confirm build and conflict checks passed, permissions and attribution are documented, and the thumbnail, page, release notes, and required-item plan are reviewed.",
+    `Confirm build and conflict checks passed, permissions and attribution are documented, and the thumbnail, ${syncGallery ? "gallery, " : ""}page, release notes, and required-item plan are reviewed.`,
   );
+  if (confirmation !== undefined) {
+    if (confirmation !== expectedConfirmation) {
+      throw new Error(
+        `To confirm this upload, use --confirm-publish "${expectedConfirmation}"`,
+      );
+    }
+    console.log("Explicit CMT publish confirmation accepted.");
+    return true;
+  }
+  if (!process.stdin.isTTY || !process.stdout.isTTY) {
+    throw new Error(
+      `CMT publishing requires an interactive terminal or --confirm-publish "${expectedConfirmation}"`,
+    );
+  }
   const prompt = createInterface({
     input: process.stdin,
     output: process.stdout,
   });
   try {
     const answer = await prompt.question(
-      `Type PUBLISH ${profileId} ${action} to continue: `,
+      `Type ${expectedConfirmation} to continue: `,
     );
-    return answer === `PUBLISH ${profileId} ${action}`;
+    return answer === expectedConfirmation;
   } finally {
     prompt.close();
   }
@@ -164,13 +206,19 @@ async function confirmPublication(
 async function runCmtUpload(
   pythonCommand: string,
   scriptPath: string,
+  syncGallery: boolean,
 ): Promise<number> {
   return new Promise((resolve, reject) => {
-    const child = spawn(
-      pythonCommand,
-      [scriptPath, "--mod", "--workshop-pages", "--change-notes"],
-      { stdio: "inherit" },
-    );
+    const argumentsValue = [
+      scriptPath,
+      "--mod",
+      "--workshop-pages",
+      "--change-notes",
+    ];
+    if (syncGallery) {
+      argumentsValue.push("--sync-gallery");
+    }
+    const child = spawn(pythonCommand, argumentsValue, { stdio: "inherit" });
     child.once("error", reject);
     child.once("close", (code, signal) => {
       if (signal) {
@@ -232,8 +280,14 @@ async function persistCreatedWorkshopItemId(
 }
 
 async function main(): Promise<void> {
-  const { command, profileId, toolkitDirectory, pythonCommand } =
-    parseArguments(process.argv.slice(2));
+  const {
+    command,
+    profileId,
+    toolkitDirectory,
+    pythonCommand,
+    syncGallery,
+    confirmation,
+  } = parseArguments(process.argv.slice(2));
   const rootDirectory = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../..",
@@ -257,6 +311,7 @@ async function main(): Promise<void> {
     toolkitDirectory: path.resolve(toolkitDirectory),
     workshopItemId: cmtProfile.workshopItemId,
     version: metadata.version,
+    syncGallery,
   });
   console.log(
     `Prepared CMT workspace for ${metadata.name} at ${path.relative(rootDirectory, result.workspaceDirectory)}.`,
@@ -282,6 +337,8 @@ async function main(): Promise<void> {
         metadata.name,
         metadata.version,
         result.workshopItemId,
+        syncGallery,
+        confirmation,
       ))
     ) {
       console.log("Cancelled; no Workshop upload was started.");
@@ -293,6 +350,7 @@ async function main(): Promise<void> {
       uploadExitCode = await runCmtUpload(
         pythonCommand,
         path.join(result.workspaceDirectory, "tools", "upload.py"),
+        syncGallery,
       );
     } finally {
       await persistCreatedWorkshopItemId(

@@ -212,6 +212,20 @@ function validateBuildConfiguration(value: unknown): BuildConfiguration {
       "Build configuration must have version 1, targetGameVersion, defaultProfile, packagesFile, conflictRulesFile, and outputDirectory",
     );
   }
+  if (
+    value.profileOutputDirectories !== undefined &&
+    (!isRecord(value.profileOutputDirectories) ||
+      !Object.entries(value.profileOutputDirectories).every(
+        ([profileId, outputDirectory]) =>
+          profilePatchIdPattern.test(profileId) &&
+          typeof outputDirectory === "string" &&
+          outputDirectory.trim() !== "",
+      ))
+  ) {
+    throw new Error(
+      "Build configuration profileOutputDirectories must map profile IDs to non-empty relative paths",
+    );
+  }
 
   return value as unknown as BuildConfiguration;
 }
@@ -580,7 +594,7 @@ function validateConflictRules(value: unknown): ConflictRules {
   }
 
   const errors: string[] = [];
-  const paths = new Set<string>();
+  const pathResolutionKeys = new Set<string>();
   value.filePathResolutions.forEach((resolution, index) => {
     const label = `filePathResolutions[${index}]`;
     if (!isRecord(resolution)) {
@@ -670,10 +684,21 @@ function validateConflictRules(value: unknown): ConflictRules {
     }
     if (pathIsValid) {
       const collisionKey = resolutionPath.toLocaleLowerCase("en-US");
-      if (paths.has(collisionKey)) {
-        errors.push(`${label}.path duplicates another resolution`);
+      const packageKey = Array.isArray(resolutionPackages)
+        ? resolutionPackages
+            .filter(
+              (packageId): packageId is string => typeof packageId === "string",
+            )
+            .sort()
+            .join("\0")
+        : "";
+      const resolutionKey = `${collisionKey}\0${packageKey}`;
+      if (pathResolutionKeys.has(resolutionKey)) {
+        errors.push(
+          `${label} duplicates another resolution for the same path and package set`,
+        );
       }
-      paths.add(collisionKey);
+      pathResolutionKeys.add(resolutionKey);
     }
   });
   const semanticFingerprints = new Set<string>();
@@ -866,15 +891,52 @@ export async function validateProject(
   const conflictRules = validateConflictRules(
     JSON.parse(await readFile(conflictRulesFile, "utf8")) as unknown,
   );
-  const outputDirectory = resolveProjectPath(
-    rootDirectory,
-    effectiveBuildConfiguration.outputDirectory,
-    "outputDirectory",
-  );
-  const outputRelative = path.relative(rootDirectory, outputDirectory);
-  const outputSegments = outputRelative.split(path.sep);
-  if (outputSegments[0] !== "dist" || outputSegments.length < 2) {
-    throw new Error("outputDirectory must be a child directory inside dist/");
+  const outputRoots = [
+    {
+      label: "outputDirectory",
+      directory: effectiveBuildConfiguration.outputDirectory,
+    },
+    ...Object.entries(
+      effectiveBuildConfiguration.profileOutputDirectories ?? {},
+    ).map(([profileId, directory]) => ({
+      label: `profileOutputDirectories.${profileId}`,
+      directory,
+    })),
+  ].map(({ label, directory }) => {
+    const absoluteDirectory = resolveProjectPath(
+      rootDirectory,
+      directory,
+      label,
+    );
+    const relativeDirectory = path.relative(rootDirectory, absoluteDirectory);
+    const segments = relativeDirectory.split(path.sep);
+    if (segments[0] !== "dist" || segments.length < 2) {
+      throw new Error(`${label} must be a child directory inside dist/`);
+    }
+    return { label, absoluteDirectory };
+  });
+  for (let first = 0; first < outputRoots.length; first += 1) {
+    for (let second = first + 1; second < outputRoots.length; second += 1) {
+      const firstPath = outputRoots[first].absoluteDirectory;
+      const secondPath = outputRoots[second].absoluteDirectory;
+      const firstToSecond = path.relative(firstPath, secondPath);
+      const secondToFirst = path.relative(secondPath, firstPath);
+      const firstContainsSecond =
+        firstToSecond === "" ||
+        (firstToSecond !== ".." &&
+          !firstToSecond.startsWith(`..${path.sep}`) &&
+          !path.isAbsolute(firstToSecond));
+      const secondContainsFirst =
+        secondToFirst === "" ||
+        (secondToFirst !== ".." &&
+          !secondToFirst.startsWith(`..${path.sep}`) &&
+          !path.isAbsolute(secondToFirst));
+      if (firstContainsSecond || secondContainsFirst) {
+        throw new Error(
+          `${outputRoots[first].label} and ${outputRoots[second].label} must not overlap`,
+        );
+      }
+    }
   }
 
   const packagesById = new Map(

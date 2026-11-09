@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "id": "rgo-harmony-expanded",
+  "name": "RGO Harmony Expanded",
+  "targetGameVersion": "1.4.5",
+  "mods": [
+    {
+      "packageId": "community-mod-framework",
+      "name": "Community Mod Framework",
+      "version": "2.5.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+      }
+    },
+    {
+      "packageId": "more-locations",
+      "name": "More locations Mod",
+      "version": "2.10.2026",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3809335454",
+        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd"
+      }
+    },
+    {
+      "packageId": "global-historical-rgos",
+      "name": "Global Historical RGOs",
+      "version": "1.4.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3602513956",
+        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b"
+      }
+    },
+    {
+      "packageId": "just-goods-1-1",
+      "name": "Just Goods",
+      "version": "1.1.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a"
+      }
+    },
+    {
+      "packageId": "fruits-expanded",
+      "name": "Fruits Expanded",
+      "version": "0.5.9",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3821883489",
+        "snapshotChecksum": "sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0"
+      }
+    }
+  ],
+  "loadOrder": [
+    "more-locations",
+    "global-historical-rgos",
+    "community-mod-framework",
+    "just-goods-1-1",
+    "fruits-expanded",
+    "rgo_harmony_expanded_standalone"
+  ],
+  "patches": [
+    {
+      "id": "rgo-harmony-expanded",
+      "operation": "replace",
+      "sourcePath": "integration/patches/rgo-harmony-expanded/in_game/map_data/location_templates.txt",
+      "targetPath": "in_game/map_data/location_templates.txt",
+      "targetPackageId": "more-locations",
+      "resolutionType": "merged-patch",
+      "reason": "Keep the complete RGO Harmony map and its More Locations base, apply Fruits Expanded values at 949 approved shared locations where Harmony equals Vanilla and at all 67 approved three-way differences, apply all 71 user-approved per-location values where Harmony uses generic fruit, retain Harmony base values at all six locations where Fruits Expanded omits an RGO, preserve the approved Global Historical RGO values and Just Goods fixed-location effects, and retain fruit at the three locations where Just Goods assigns sulfur at startup.",
+      "preserves": ["russian_wastelands_9", "kolguyev", "borneo_jungle12"],
+      "suppresses": [
+        "Harmony map values changed by the 1,016 approved Fruits Expanded decisions and 64 user-selected RGO decisions at Harmony-fruit locations"
+      ]
+    }
+  ],
+  "patchMod": {
+    "name": "RGO Harmony Expanded",
+    "id": "rgo_harmony_expanded_standalone",
+    "version": "0.1.0",
+    "shortDescription": "Reviewed Fruits Expanded RGO choices for RGO Harmony. Requires Community Mod Framework, More Locations, Global Historical RGOs, Just Goods, and Fruits Expanded.",
+    "tags": ["Gameplay", "Map"],
+    "thumbnailPath": "integration/workshop/rgo-harmony-expanded/thumbnail.png"
+  }
+}
