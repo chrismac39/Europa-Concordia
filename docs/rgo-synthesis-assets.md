@@ -29,7 +29,9 @@ PNG files directly inside `interface/icons/trade_goods/` are resized to
 `interface/icons/trade_goods/illustrations/` are resized to 1080 × 440 by
 default. Both sizes can be changed with command-line options. Other images,
 including `interface/illustrations/bg/` backgrounds, keep their source
-dimensions. Every image is encoded as BC3/DXT5 DDS with alpha support.
+dimensions. Resizing uses alpha-aware Lanczos filtering. Every image is
+encoded as BC3/DXT5 DDS with alpha support and a complete mip chain, matching
+the vanilla wheat icon's texture setup.
 
 The resized PNG previews are written under
 `.local/rgo-synthesis-image-previews/`, preserving the source tree structure.
