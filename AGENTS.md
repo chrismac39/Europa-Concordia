@@ -29,3 +29,50 @@
   Steam Guard recovery codes, or SteamCMD session files. Keep authentication
   outside the repository and all generated artifacts. Never disable Steam
   Guard.
+
+## EU5 and Concordia workflow
+
+These are original, repository-specific guidelines informed by the
+[Flavorium Universalis Claude developer guide](https://github.com/wtmenten/flavorium-universalis/blob/master/CLAUDE.md).
+Its mod-specific commands, examples, and version-dependent findings are not
+assumed to apply here.
+
+- Read [development setup](docs/development-setup.md),
+  [architecture](docs/architecture.md), and the relevant package or conflict
+  documentation before changing the corresponding workflow.
+- For EU5 scripting, GUI, localization, and metadata, verify syntax and
+  behavior against the installed vanilla files for the profile's target game
+  version. Inspect definitions and working usage examples; do not infer valid
+  names or scopes from intuition, EU4, or another mod. Look under the actual
+  `game/in_game/` and `game/main_menu/` trees, not an assumed `game/common/`
+  path.
+- EU5 files are not interchangeable merge units. A same-path file can replace
+  an entire earlier file, while database-entry directives such as `REPLACE:`
+  and `INJECT:` have distinct, context-dependent behavior. Check which
+  mechanism is supported before choosing an integration; when a complete-file
+  patch is necessary, account for all upstream behavior it retains or
+  suppresses and record the decision.
+- Keep upstream source snapshots as analysis inputs. Put compatibility logic
+  in maintained integration patches or overrides, and record the rationale,
+  source pins, and any redistribution permissions required for the output.
+- Follow `.editorconfig` for the specific path being edited. EU5 game-content
+  files have path-scoped encoding and indentation rules; do not apply those
+  rules to TypeScript, documentation, or unrelated `.txt` and `.yml` files.
+- Treat reports and build output as generated evidence, not source to hand-edit.
+  For compatibility changes, analyze the selected profile, inspect numbered
+  findings with `npm run diff -- --profile <id> <finding-number>`, record or
+  refresh decisions, then validate, test, and build:
+
+  ```sh
+  npm run analyze -- --profile <id>
+  npm run validate -- --profile <id>
+  npm test
+  npm run build -- --profile <id>
+  ```
+
+- Do not treat successful static analysis as proof of in-game behavior.
+  Identify runtime-sensitive changes that still need EU5 testing, and do not
+  suppress unresolved conflicts to make a build pass.
+- Local installation is not publishing. Never upload, create, or update a
+  Workshop item as a side effect of analysis, validation, building, or
+  installation.
