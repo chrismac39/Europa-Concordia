@@ -8,8 +8,10 @@ original Just Goods 1.0 snapshot remains unchanged and is still selected by
 `current-intended`. More Locations, Global Historical RGOs, the merged map
 payload, and the previous map precedence decisions are unchanged.
 
-The source comparison and review are complete. No Just Goods effects have
-been copied into the map patch; its startup callbacks remain upstream.
+The November 8 source comparison is retained below as historical evidence.
+The November 14 update is now the selected Just Goods 1.1 source in RGO
+Harmony, RGO Harmony Expanded, and RGO Synthesis. No Just Goods effects have
+been copied into any map patch; its startup callbacks remain upstream.
 
 ## Examination inputs
 
@@ -18,16 +20,44 @@ been copied into the map patch; its startup callbacks remain upstream.
 | More Locations                        |                    2.10.2026 | Workshop 3809335454; `sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd`                     |
 | Global Historical RGOs                |                        1.4.0 | Workshop 3602513956; `sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b`                     |
 | Just Goods, historical profile pin    | 1.0.0; metadata supports 1.3 | Workshop 3785316314; `sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada`                     |
-| Just Goods, refreshed RGO Harmony pin |   1.1; metadata supports 1.4 | Workshop 3785316314, updated 2026-11-08; `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` |
+| Just Goods, previous RGO Harmony pin  |   1.1; metadata supports 1.4 | Workshop 3785316314, updated 2026-11-08; `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` |
 | Community Mod Framework               |                        2.5.0 | Workshop 3692202776; `sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110`                     |
 | Vanilla EU5                           |          1.4.5 local install | `location_templates.txt` SHA-256 `f2f3d80a2bb65b41b578a51cb06cc47a0f8d83b682eec8c2cce69f1add9cd59c`                |
 
-The refreshed Workshop snapshot contains 1,028 files. Its metadata requires
+The November 8 Workshop snapshot contains 1,028 files. Its metadata requires
 Community Mod Framework version `2.*`; the standalone profile therefore
 selects the pinned 2.5.0 package before Just Goods. Just Goods 1.1 contains no
 `location_templates.txt`, so the map-template collision and the existing
 More Locations / Global Historical RGOs merge are not changed by this source
 update.
+
+## November 14, 2026 source refresh
+
+Steam reports the Just Goods item updated on November 14, 2026. The refreshed
+local snapshot is preserved at
+`sources/steam-workshop/3785316314-1.1-2026-11-14` with 1,029 files and tree
+checksum `sha256:598ba086caeda8d29eeb0273aff194191fcbb9285a5a32c742cdcd282d41ff1a`.
+Its metadata remains upstream version 1.1, supports EU5 1.4, and retains the
+Community Mod Framework 2.* dependency.
+
+Compared with the November 8 snapshot, Just Goods changes its Flint good
+identifier to `gunflint` in the same 109 fixed startup locations. The location
+set is unchanged, and the good is still localized as “Flint.” Other changes
+include building, production, expedition, law, town-right, and localization
+content. Just Goods still adds no `location_templates.txt`.
+
+The existing approval to preserve Just Goods startup RGO effects therefore
+continues to cover these assignments. Static analysis found no new RGO
+location decision or localization collision in RGO Harmony. The changed
+content fingerprints for the already-approved native on-action merges were
+reviewed and re-pinned; the RGO Harmony analysis again reports zero unresolved
+decisions. The expanded profile also retains the previously approved native
+named-color merge; all selected Fruits Expanded and Just Goods color keys
+remain distinct.
+
+The package catalog and the three RGO profiles that select Just Goods 1.1 now
+pin this snapshot. The original November 8 snapshot and the Just Goods 1.0
+source remain unchanged; `current-intended` remains pinned to Just Goods 1.0.
 
 ## Fixed startup RGO delta
 

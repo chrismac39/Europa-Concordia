@@ -14,9 +14,10 @@ by `current-intended`; EU5 1.4.5 compatibility for that source is unverified.
 The repository owner has confirmed permission to distribute the compatibility
 patch; retain the written permission with release records.
 
-The standalone RGO Harmony profile now uses a separately pinned 1.1 snapshot
-at `sources/steam-workshop/3785316314-1.1`, which declares EU5 1.4 support and
-a Community Mod Framework 2.* dependency. The original 1.0 pin remains in
+The RGO profiles use the separately pinned Just Goods 1.1 snapshot at
+`sources/steam-workshop/3785316314-1.1-2026-11-14`, which declares EU5 1.4
+support and a Community Mod Framework 2.* dependency. The November 8 snapshot
+is preserved as historical evidence. The original 1.0 pin remains in
 `current-intended` pending the separate Concordia review.
 
 ## Maintenance approach

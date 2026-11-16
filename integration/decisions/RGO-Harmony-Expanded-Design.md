@@ -14,9 +14,14 @@ The six RGO values omitted by Fruits Expanded are explicitly approved to
 retain their base Harmony values. All More Locations-only data also remains
 as in base Harmony. The 42 Fruits Expanded-only definitions are not imported.
 
+This design's Just Goods evidence was recorded against the November 8, 2026
+snapshot. The November 14 source refresh preserved the startup RGO target set
+but renamed Flint to `gunflint`; see the
+[RGO Harmony refresh record](./RGO-Harmony-1.4-Refresh.md).
+
 The location-by-location evidence is in the
 [RGO Harmony Expanded inventory](./RGO-Harmony-Expanded-Inventory.md). The
-current Just Goods 1.1 comparison is in the
+November 8 Just Goods 1.1 comparison is in the
 [Just Goods overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md). The
 baseline is the existing
 [RGO Harmony design](./RGO-Harmony-Design.md) and its
@@ -33,7 +38,7 @@ baseline. Implement the approved map decisions in a distinct profile. Use the
 per-location choices for the 71 Harmony-`fruit` locations and preserve the
 three Just Goods sulfur startup setters.
 
-## Pinned examination inputs
+## Pinned examination inputs (2026-11-09 baseline)
 
 The base Harmony profile targets EU5 1.4.5 and orders More Locations, Global
 Historical RGOs, and Just Goods before its Harmony patch. The examination
@@ -43,7 +48,7 @@ uses the local pinned snapshots in `config/packages.json`:
 | ------------------------------------------------ | ------------: | --------------------------------------------- | ------------------------------------------------------------------------- |
 | More Locations                                   |    3809335454 | 2.10.2026                                     | `sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd` |
 | Global Historical RGOs                           |    3602513956 | 1.4.0                                         | `sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b` |
-| Just Goods                                       |    3785316314 | 1.1.0; source metadata 1.1                    | `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` |
+| Just Goods (November 8 baseline)                |    3785316314 | 1.1.0; source metadata 1.1                    | `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` |
 | Fruits Expanded                                  |    3821883489 | descriptor 0.5.9.2; Workshop title says 1.4.1 | `sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0` |
 | Fruits Expanded × Just Goods Compatibility Patch |    3828715234 | descriptor 1.0.0                              | `sha256:8d1cdf0732cccedf4390b1abbe69ca84eb1fb1da0ac721d13e0f7044d3f44041` |
 
@@ -73,7 +78,7 @@ Workshop source snapshots are examination inputs, not distributable payloads.
    have a Harmony RGO that Fruits Expanded omits. In addition, the Fruits
    Expanded file has 42 definitions not in the Harmony map; none has an
    explicit `raw_material`.
-3. **Current Just Goods 1.1 has 1,197 unique fixed-location startup RGO
+3. **The November 8 Just Goods 1.1 baseline has 1,197 unique fixed-location startup RGO
    assignments.** The current setter intersections are 43 Harmony-retained,
    74 approved Fruits Expanded map updates, and three user-decided fruit rows
    that retain the generic map value because Just Goods assigns sulfur. The

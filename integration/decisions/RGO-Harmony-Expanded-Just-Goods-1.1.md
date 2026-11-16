@@ -1,8 +1,8 @@
 # RGO Harmony Expanded: Just Goods 1.1 overlap audit
 
-Updated: 2026-11-09. This audit uses the current pinned Just Goods 1.1, Fruits Expanded, and Fruits Expanded / Just Goods compatibility sources. It records source assignments; it does not claim runtime ordering.
+Updated: 2026-11-09. This audit uses the November 8 Just Goods 1.1 snapshot, Fruits Expanded, and Fruits Expanded / Just Goods compatibility sources. It records source assignments; it does not claim runtime ordering. The November 14 source retains the same startup RGO target set but renames Flint to `gunflint`; see the [RGO Harmony refresh record](./RGO-Harmony-1.4-Refresh.md) for the current pin and review.
 
-## Current source state
+## November 8 baseline source state
 
 | Input                                            | Local source                            | Pin / file SHA-256                                                                                                                     |
 | ------------------------------------------------ | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |

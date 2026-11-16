@@ -5,7 +5,10 @@ per-location map decisions as well as their evidence; it does not claim
 anything about EU5 runtime ordering. The
 corresponding design and review questions are in
 [RGO-Harmony-Expanded-Design.md](./RGO-Harmony-Expanded-Design.md). Current
-Just Goods 1.1 intersections and the stale FE/JG patch comparison are in the
+profile source was refreshed on November 14; this inventory's Just Goods 1.1
+intersection counts use the November 8 snapshot. The RGO target set is
+unchanged, with Flint renamed to `gunflint`. Intersections and the stale FE/JG
+patch comparison are in the
 [Just Goods overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md). The
 `FE-JG compat effect` cells and historical effect tables document the old
 patch comparison against Just Goods 1.0; they are not the current Expanded
@@ -27,7 +30,7 @@ The existing standalone profile is the base RGO Harmony playset: More Locations,
 | Fruits Expanded                                  | Workshop 3821883489; source descriptor 0.5.9.2; tree checksum `sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0`                   | `sources/steam-workshop/3821883489/in_game/map_data/location_templates.txt`                                       | `607cf7263126fed9d727ab558811efbc4706f2c178ed1f6c3d09cb383a474a2f` |
 | Fruits Expanded - Just Goods Compatibility Patch | Workshop 3828715234; source descriptor 1.0.0; tree checksum `sha256:8d1cdf0732cccedf4390b1abbe69ca84eb1fb1da0ac721d13e0f7044d3f44041`                     | Seven `in_game/common/on_action/zz_fe_jg_compat_*.txt` effect replacements                                        | Workshop tree checksum above                                       |
 | Just Goods (historical effect comparison)        | Workshop 3785316314; version 1.0.0; tree checksum `sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada`                               | `sources/steam-workshop/3785316314/in_game/common/on_action/spices_on_actions.txt`                                | Pinned tree checksum above                                         |
-| Just Goods (current RGO Harmony pin)             | Workshop 3785316314; package version 1.1.0; metadata version 1.1; tree checksum `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_spices_on_actions.txt`                       | Current profile source checksum                                    |
+| Just Goods (November 8 baseline pin)             | Workshop 3785316314; package version 1.1.0; metadata version 1.1; tree checksum `sha256:a22e541cb5c38820c4750e49274b81b3f7a867461a35980570e36f7edec34c1a` | `sources/steam-workshop/3785316314-1.1/in_game/common/on_action/just_spices_on_actions.txt`                       | Historical profile source checksum                                 |
 
 </details>
 
@@ -2383,7 +2386,7 @@ This section records the older compatibility patch comparison against Just
 Goods 1.0, not the current Expanded loadout. The downloaded FE/JG patch is
 excluded from Expanded because its `TRY_REPLACE` bodies omit current Just
 Goods 1.1 setters and restore the obsolete `chan_bo` turmeric assignment.
-See the [current Just Goods 1.1 overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md)
+See the [November 8 Just Goods 1.1 baseline overlap audit](./RGO-Harmony-Expanded-Just-Goods-1.1.md)
 before using any of the historical setter tables below.
 
 <details>

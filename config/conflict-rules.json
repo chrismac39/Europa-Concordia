@@ -1219,13 +1219,13 @@
       "reason": "CMF's monthly handler and the Academies tradition and influence pulses are distinct callbacks in separate files. Preserve both on the natively merged pulse."
     },
     {
-      "fingerprint": "e2b99eb7e01671ef",
+      "fingerprint": "084afb4b07332e8e",
       "resolutionType": "native-merge",
       "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
-      "reason": "CMF initialization and the separate Just Goods subsystem initializers, including the 1.4 Gunpowder and Stone RGO setters, are independent registrations. Retain each once through EU5's native merge; do not combine or replace the upstream files."
+      "reason": "CMF initialization and the separate Just Goods subsystem initializers, including the 1.4 Gunpowder and Stone RGO setters, are independent registrations. Retain each once through EU5's native merge; do not combine or replace the upstream files. The Stone callback now assigns the same 109 Flint locations through the renamed gunflint good ID."
     },
     {
-      "fingerprint": "58c17dec6c926199",
+      "fingerprint": "c2e51d16644e0ae1",
       "resolutionType": "native-merge",
       "decision": "Keep the independent CMF and Just Goods yearly-pulse callbacks.",
       "reason": "CMF yearly handling and Just Goods' separate event pools and subsystem callbacks are independent contributions to the natively merged pulse; preserve each without a whole-file replacement."
@@ -1250,13 +1250,13 @@
       "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. Their monthly handlers are distinct callbacks in separate files and are preserved on the natively merged pulse."
     },
     {
-      "fingerprint": "2b855afec6ac054a",
+      "fingerprint": "3cce7e24ceac220e",
       "resolutionType": "native-merge",
       "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
       "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. CMF initialization and the separate Just Goods subsystem initializers are independent registrations; retain each through EU5's native merge."
     },
     {
-      "fingerprint": "b112044d227fae63",
+      "fingerprint": "b57d5da56b9798fa",
       "resolutionType": "native-merge",
       "decision": "Keep the independent CMF and Just Goods yearly-pulse callbacks.",
       "reason": "The RGO Synthesis profile uses the same pinned Community Mod Framework and Just Goods 1.1 sources as RGO Harmony. Their yearly handlers are independent callbacks and remain on the natively merged pulse."
@@ -1293,22 +1293,22 @@
       "reason": "CMF's monthly handler, Fruits Expanded's horticultural report callbacks, and Just Goods Academies' callbacks are distinct; retain each on the natively merged pulse."
     },
     {
-      "fingerprint": "0d734fca9c55cbd0",
+      "fingerprint": "3bd94ec6f7beee96",
       "resolutionType": "native-merge",
       "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
       "reason": "CMF initialization and the separate Just Goods subsystem initializers are distinct registrations. Retain each once through EU5's native merge, including all current Just Goods 1.1 RGO setters."
     },
     {
-      "fingerprint": "e92d51e271f216b1",
+      "fingerprint": "e5545add817dadd9",
       "resolutionType": "native-merge",
       "decision": "Keep all distinct CMF and Just Goods yearly-pulse callbacks.",
       "reason": "The CMF yearly handler and the independent Just Goods subsystem callbacks and event pools are separate contributions; preserve each without replacing upstream files."
     },
     {
-      "fingerprint": "e66fc10f144ea9bd",
+      "fingerprint": "c80a6a90e14ced3b",
       "resolutionType": "native-merge",
       "decision": "Merge all unique Fruits Expanded and Just Goods named-color keys.",
-      "reason": "The pinned sources contain 62 direct named-color keys with no duplicates, so every Fruits Expanded fruit color and Just Goods goods color can remain."
+      "reason": "The pinned sources contain disjoint named-color keys, including Just Goods' renamed `goods_gunflint` key, so every Fruits Expanded fruit color and Just Goods goods color can remain."
     },
     {
       "fingerprint": "caad3063b65d133d",
