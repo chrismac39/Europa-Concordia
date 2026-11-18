@@ -2,10 +2,10 @@
   "version": 1,
   "id": "rgo-harmony",
   "name": "Just Goods + More Locations + Global Historical RGOs",
-  "targetGameVersion": "1.4.5",
+  "targetGameVersion": "1.4.9",
   "mods": [
     {
-      "packageId": "community-mod-framework",
+      "packageId": "community-mod-framework-eu5-1-4-9-review",
       "name": "Community Mod Framework",
       "version": "2.5.0",
       "source": {
@@ -15,7 +15,7 @@
       }
     },
     {
-      "packageId": "more-locations",
+      "packageId": "more-locations-eu5-1-4-9-review",
       "name": "More locations Mod",
       "version": "2.10.2026",
       "source": {
@@ -25,7 +25,7 @@
       }
     },
     {
-      "packageId": "global-historical-rgos",
+      "packageId": "global-historical-rgos-eu5-1-4-9-review",
       "name": "Global Historical RGOs",
       "version": "1.4.0",
       "source": {
@@ -35,7 +35,7 @@
       }
     },
     {
-      "packageId": "just-goods-1-1",
+      "packageId": "just-goods-1-1-eu5-1-4-9-review",
       "name": "Just Goods",
       "version": "1.1.0",
       "source": {
@@ -46,10 +46,10 @@
     }
   ],
   "loadOrder": [
-    "more-locations",
-    "global-historical-rgos",
-    "community-mod-framework",
-    "just-goods-1-1",
+    "community-mod-framework-eu5-1-4-9-review",
+    "more-locations-eu5-1-4-9-review",
+    "global-historical-rgos-eu5-1-4-9-review",
+    "just-goods-1-1-eu5-1-4-9-review",
     "jg_ml_gh_rgos_compat_standalone"
   ],
   "patches": [
@@ -58,7 +58,7 @@
       "operation": "replace",
       "sourcePath": "integration/patches/just-goods-more-locations-global-historical-rgos/in_game/map_data/location_templates.txt",
       "targetPath": "in_game/map_data/location_templates.txt",
-      "targetPackageId": "more-locations",
+      "targetPackageId": "more-locations-eu5-1-4-9-review",
       "resolutionType": "merged-patch",
       "reason": "Preserve More Locations as the complete map-template base, apply Global Historical RGO values to the 1,269 approved direct disagreements and 48 qualifying single-parent descendants, and leave Just Goods' fixed-location effects authoritative.",
       "preserves": ["russian_wastelands_9", "kolguyev", "borneo_jungle12"],
@@ -71,7 +71,7 @@
   "patchMod": {
     "name": "RGO Harmony: Just Goods + More Locations + Historical RGOs - Global",
     "id": "jg_ml_gh_rgos_compat_standalone",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "shortDescription": "RGO compatibility for Just Goods, More Locations, and Historical RGOs - Global. Requires all three and Community Mod Framework separately.",
     "tags": ["Gameplay", "Map"],
     "thumbnailPath": "integration/workshop/rgo-harmony/thumbnail.png"

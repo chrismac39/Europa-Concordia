@@ -132,3 +132,43 @@ records zero unresolved findings.
 
 No Concordia `current-intended` pins, patches, or output have been changed in
 this first pass.
+
+## EU5 1.4.9 compatibility review — 2026-11-18
+
+The installed EU5 build is 1.4.9 (Steam build ID `26655995`). The current
+vanilla `location_templates.txt` SHA-256 is
+`2c1ec72fe9c7878d296d155a624b2f593f8df48b1da28a1f271219bad899d623`; the
+previous 1.4.5 review recorded
+`f2f3d80a2bb65b41b578a51cb06cc47a0f8d83b682eec8c2cce69f1add9cd59c`. The
+historical 1.4.5 vanilla file is not retained, so this is not a line-by-line
+diff of the game update.
+
+The RGO Harmony map payload remains SHA-256
+`fd899c4f82afbc4b9c6f00628319c7bb5f2062378f037cc41a4af81f8722928f`. It
+contains 32,111 location-template entries. The current vanilla and Global
+Historical RGOs files each contain 28,562 template IDs. Forty-two vanilla
+template IDs are absent from the pinned More Locations template and its map
+definitions; they are outside the selected More Locations map data and were
+not added to the Harmony map patch. Every raw-material good referenced by the
+Harmony map is defined in either the selected vanilla sources or pinned Just
+Goods source.
+
+The selected upstream snapshots declare EU5 support as follows: Community Mod
+Framework and More Locations list `1.4.*`, Just Goods lists `1.4`, and Global
+Historical RGOs lists `1.4.0`. Version-specific 1.4.9 catalog aliases record
+the static review for this profile while preserving the original package pins
+for other profiles. The Global Historical RGOs upstream declaration is not
+changed; runtime verification remains pending.
+
+The official 1.4.9 notes identify a gameplay fix: completing the “Settle the
+Frontier” cabinet action now upgrades the settled locations' RGOs. RGO Harmony
+only replaces `location_templates.txt`; it does not replace that cabinet
+action, so the vanilla fix remains active. No map-payload change was indicated
+by this review.
+
+The Just Goods Workshop item was updated again on November 16, but its local
+content tree is byte-for-byte identical to the already pinned November 14
+snapshot; no source-pin change was needed. The standalone profile now targets
+1.4.9, increments to 0.1.10, and orders Community Mod Framework first. This is
+a static compatibility review only; runtime verification in EU5 1.4.9 remains
+outstanding.

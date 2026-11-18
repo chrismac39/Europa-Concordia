@@ -613,6 +613,82 @@
         "license": "No license provided",
         "notice": "Local snapshot of Steam Workshop item 3602513956. Upstream declares EU5 1.4.0 compatibility. The repository owner confirms explicit author permission for distributing the compatibility patch; retain the written permission with release records."
       }
+    },
+    {
+      "id": "community-mod-framework-eu5-1-4-9-review",
+      "name": "Community Mod Framework",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110",
+        "path": "sources/steam-workshop/3692202776"
+      },
+      "author": "Community Mod Framework",
+      "targetGameVersion": "1.4.9",
+      "version": "2.5.0",
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "EU5 1.4.9 static review alias for the pinned Community Mod Framework 2.5.0 source. Upstream declares EU5 1.4.* support. Redistribution permission was confirmed by the repository owner on 2026-10-29. Runtime verification remains pending."
+      }
+    },
+    {
+      "id": "more-locations-eu5-1-4-9-review",
+      "name": "More locations Mod",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3809335454",
+        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd",
+        "path": "sources/steam-workshop/3809335454"
+      },
+      "author": "Naaku",
+      "targetGameVersion": "1.4.9",
+      "version": "2.10.2026",
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "EU5 1.4.9 static review alias for the pinned More Locations source. Upstream declares EU5 1.4.* support. Explicit author permission for distributing the compatibility patch, including merged location-template data, is recorded. Runtime verification remains pending."
+      }
+    },
+    {
+      "id": "global-historical-rgos-eu5-1-4-9-review",
+      "name": "Global Historical RGOs",
+      "type": "upstream",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3602513956",
+        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b",
+        "path": "sources/steam-workshop/3602513956"
+      },
+      "author": "Enrar",
+      "targetGameVersion": "1.4.9",
+      "version": "1.4.0",
+      "dependencies": [],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "EU5 1.4.9 static review alias for the pinned Global Historical RGOs source. Its upstream metadata declares EU5 1.4.0, not 1.4.9. The selected Harmony payload was reviewed against the installed 1.4.9 vanilla files; runtime verification remains pending. Explicit author permission for distributing the compatibility patch is recorded."
+      }
+    },
+    {
+      "id": "just-goods-1-1-eu5-1-4-9-review",
+      "name": "Just Goods",
+      "type": "maintained",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:598ba086caeda8d29eeb0273aff194191fcbb9285a5a32c742cdcd282d41ff1a",
+        "path": "sources/steam-workshop/3785316314-1.1-2026-11-14"
+      },
+      "author": "moveably",
+      "targetGameVersion": "1.4.9",
+      "version": "1.1.0",
+      "dependencies": ["community-mod-framework-eu5-1-4-9-review"],
+      "attribution": {
+        "license": "No license provided",
+        "notice": "EU5 1.4.9 static review alias for Just Goods 1.1.0. Upstream metadata declares EU5 1.4 support and a Community Mod Framework 2.* dependency. The repository owner confirms explicit author permission for distributing the compatibility patch; retain the written permission with release records. Runtime verification remains pending."
+      }
     }
   ]
 }
