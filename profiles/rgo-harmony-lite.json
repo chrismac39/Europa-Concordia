@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "id": "rgo-harmony-lite",
+  "name": "RGO Harmony Lite",
+  "targetGameVersion": "1.4.9",
+  "mods": [
+    {
+      "packageId": "community-mod-framework-eu5-1-4-9-review",
+      "name": "Community Mod Framework",
+      "version": "2.5.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3692202776",
+        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+      }
+    },
+    {
+      "packageId": "global-historical-rgos-eu5-1-4-9-review",
+      "name": "Global Historical RGOs",
+      "version": "1.4.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3602513956",
+        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b"
+      }
+    },
+    {
+      "packageId": "just-goods-1-1-eu5-1-4-9-review",
+      "name": "Just Goods",
+      "version": "1.1.0",
+      "source": {
+        "type": "steam-workshop",
+        "workshopId": "3785316314",
+        "snapshotChecksum": "sha256:598ba086caeda8d29eeb0273aff194191fcbb9285a5a32c742cdcd282d41ff1a"
+      }
+    }
+  ],
+  "loadOrder": [
+    "community-mod-framework-eu5-1-4-9-review",
+    "global-historical-rgos-eu5-1-4-9-review",
+    "just-goods-1-1-eu5-1-4-9-review",
+    "rgo_harmony_lite_standalone"
+  ],
+  "patches": [],
+  "patchMod": {
+    "name": "RGO Harmony Lite: Global Historical RGOs + Just Goods",
+    "id": "rgo_harmony_lite_standalone",
+    "version": "0.1.0",
+    "shortDescription": "Lightweight compatibility for Global Historical RGOs and Just Goods. Requires both mods and Community Mod Framework separately.",
+    "tags": ["Gameplay", "Map"]
+  }
+}

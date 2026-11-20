@@ -1356,6 +1356,30 @@
       "reason": "CMF yearly handling and Just Goods' separate event pools and subsystem callbacks are independent contributions to the natively merged pulse; preserve each without a whole-file replacement."
     },
     {
+      "fingerprint": "5f0afa6e74ed4e88",
+      "resolutionType": "native-merge",
+      "decision": "Keep the separate CMF, Just Brass, and Just Clocks registration callbacks.",
+      "reason": "CMF provides the registration extension point; Just Goods registers its Brass and Clocks settings in separate files. EU5 natively merges these distinct callbacks."
+    },
+    {
+      "fingerprint": "b24578038aa9f69f",
+      "resolutionType": "native-merge",
+      "decision": "Keep CMF's and Just Goods Academies' monthly callbacks.",
+      "reason": "CMF's monthly handler and the Academies tradition and influence pulses are distinct callbacks in separate files. Preserve both on the natively merged pulse."
+    },
+    {
+      "fingerprint": "8478d59bac4eb7b2",
+      "resolutionType": "native-merge",
+      "decision": "Keep all distinct CMF and Just Goods game-start callbacks.",
+      "reason": "CMF initialization and the separate Just Goods subsystem initializers, including the 1.4 Gunpowder and Stone RGO setters, are independent registrations. Retain each once through EU5's native merge; the Stone callback assigns the same 109 Flint locations through the renamed gunflint good ID."
+    },
+    {
+      "fingerprint": "927b2eaeae50c686",
+      "resolutionType": "native-merge",
+      "decision": "Keep the independent CMF and Just Goods yearly-pulse callbacks.",
+      "reason": "CMF yearly handling and Just Goods' separate event pools and subsystem callbacks are independent contributions to the natively merged pulse; preserve each without a whole-file replacement."
+    },
+    {
       "fingerprint": "6c07e8f60bf27845",
       "resolutionType": "load-order",
       "winner": "just-goods-1-1-eu5-1-4-9-review",

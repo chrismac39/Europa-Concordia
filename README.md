@@ -64,6 +64,14 @@ npm run build -- --profile rgo-harmony-expanded
 
 Its output and Workshop setup are isolated from the base RGO Harmony variant.
 
+[RGO Harmony Lite](profiles/rgo-harmony-lite.json) is a separate profile for
+Global Historical RGOs + Just Goods that excludes More Locations. It retains
+Just Goods' required Community Mod Framework dependency, preserves Just Goods'
+fixed startup RGO setters, and does not include the base profile's More
+Locations map merge. The current Lite build emits package metadata only; see
+the [Lite design decision](integration/decisions/RGO-Harmony-Lite-Design.md)
+for the conflict rationale.
+
 Install the generated patch locally for the EU5 launcher with:
 
 ```sh
