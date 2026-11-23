@@ -74,6 +74,63 @@ icon variants: positive, negative, global population demand, and inflation
 impact. Just Clocks also has a guild-building-level icon for its specific
 mechanics; the converter processes any PNG placed under `modifier_types/`.
 
+## Build RGO modifier variants
+
+`scripts/assets/build_modifier_icons.py` composes each original transparent
+trade-good PNG with the supplied positive, negative, inflation, and population
+demand modifier overlays. The script trims transparent padding for layout
+calculations, resizes with premultiplied-alpha Lanczos filtering, and writes
+1254 × 1254 RGBA masters. It never modifies the source images and does not
+replace the DDS converter.
+
+The default configuration reads the existing overlays from
+`.local/rgo-synthesis-modifier-overlays/`: `Green Plus.png`, `Red Minus.png`,
+`Impact Inflation.png`, and `global pop demand.png`. Each overlay is trimmed
+using its alpha bounds. The supplied files have isolated alpha values around
+the canvas border, so the config ignores alpha values at or below 16 when
+finding the crop bounds while preserving all pixels inside those bounds.
+Update the modifier directory, filenames, and sizing/placement settings in
+`scripts/assets/modifier_icon_config.json` if these assets move. The default
+master output directory is
+`integration/patches/rgo-synthesis/main_menu/gfx/interface/icons/modifier_types`;
+previews and contact sheets remain under ignored `.local/` paths.
+The config's `resampling` can be `lanczos`, `bicubic`, `bilinear`, or
+`nearest`; all methods resize premultiplied-alpha pixels before converting
+back to RGBA.
+
+Build all four variants for one good or every directly-contained
+`icon_goods_*.png` base icon:
+
+```powershell
+.local\rgo-synthesis-image-venv\Scripts\python.exe scripts\assets\build_modifier_icons.py `
+  --good cassava --all-modifiers
+
+.local\rgo-synthesis-image-venv\Scripts\python.exe scripts\assets\build_modifier_icons.py `
+  --all-goods --all-modifiers
+```
+
+Select one modifier with `--modifier positive` (also `negative`, `inflation`,
+or `pop_demand`). Variants are named like
+`cassava_positive.png`, `cassava_negative.png`,
+`cassava_impacts_inflation.png`, and `global_cassava_pop_demand.png`.
+Trade-good IDs are copied intact from `icon_goods_<trade_good>.png`, including
+any underscores. A 128 × 128 alpha-preserving preview is written for each
+variant; add `--no-previews` to omit them. Add
+`--contact-sheet` to write a neutral-background comparison sheet (base plus
+the selected variants). A separate sheet is written for each good, including
+when batching. Existing master outputs are skipped by default;
+`--overwrite` explicitly replaces them and refreshes previews/contact sheets.
+Use `--config` to select another JSON configuration. The existing converter treats images in `modifier_types/` as 64 × 64 DDS
+icons. After reviewing the masters, run the DDS converter and register the DDS
+source/target paths in the RGO Synthesis profile before building; the profile
+includes explicitly declared files, not the whole asset directory.
+
+Test the compositor and converter together with:
+
+```powershell
+.local\rgo-synthesis-image-venv\Scripts\python.exe -m unittest discover -s scripts\assets -p "test_*.py"
+```
+
 Change image sizes and paths with `--icon-size`, `--modifier-icon-size`,
 `--illustration-width`, `--illustration-height`, `--source`, `--dds-output`,
 and `--preview-output`. Run the script with `--help` for all options.
