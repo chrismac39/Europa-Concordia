@@ -192,6 +192,10 @@ export async function prepareCmtWorkspace(
 
   const toolkitToolsDirectory = path.join(toolkitDirectory, "tools");
   const uploadScriptPath = path.join(toolkitToolsDirectory, "upload.py");
+  const galleryScriptPath = path.join(
+    toolkitToolsDirectory,
+    "workshop_gallery.py",
+  );
   const toolkitConfigPath = path.join(toolkitToolsDirectory, "config.toml");
   const toolkitDependenciesPath = path.join(
     toolkitToolsDirectory,
@@ -244,6 +248,7 @@ export async function prepareCmtWorkspace(
 
   const [
     uploadScript,
+    galleryScript,
     toolkitConfig,
     description,
     changeNotes,
@@ -251,6 +256,7 @@ export async function prepareCmtWorkspace(
     toolkitSteamworksStat,
   ] = await Promise.all([
     readFile(uploadScriptPath, "utf8"),
+    readFile(galleryScriptPath, "utf8"),
     readFile(toolkitConfigPath, "utf8"),
     readFile(descriptionPath, "utf8"),
     readFile(changeNotesPath, "utf8"),
@@ -336,6 +342,11 @@ export async function prepareCmtWorkspace(
     await writeFile(
       path.join(toolsDirectory, "upload.py"),
       compatibleUploadScript,
+      "utf8",
+    );
+    await writeFile(
+      path.join(toolsDirectory, "workshop_gallery.py"),
+      galleryScript,
       "utf8",
     );
     await writeFile(

@@ -65,6 +65,10 @@ test("prepares an isolated CMT project with profile content and release assets",
       ].join(""),
     );
     await writeFile(
+      path.join(toolkitDirectory, "tools", "workshop_gallery.py"),
+      "GALLERY_HELPER = True\n",
+    );
+    await writeFile(
       path.join(toolkitDirectory, "tools", "config.toml"),
       [
         "workshop_upload_item_id = 0",
@@ -107,6 +111,17 @@ test("prepares an isolated CMT project with profile content and release assets",
       uploadScript.includes(
         String.raw`clean_name = re.sub(r'[<>:"/\\|?*\x00-\x1f]'`,
       ),
+    );
+    assert.equal(
+      await readFile(
+        path.join(
+          result.workspaceDirectory,
+          "tools",
+          "workshop_gallery.py",
+        ),
+        "utf8",
+      ),
+      "GALLERY_HELPER = True\n",
     );
     assert.equal(
       await readFile(

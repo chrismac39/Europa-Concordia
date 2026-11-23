@@ -44,14 +44,17 @@ Instead, keep a separate local checkout and Python environment:
 
 ```powershell
 New-Item -ItemType Directory -Force .local | Out-Null
-git clone --branch toolkit-release --single-branch https://github.com/Europa-Universalis-5-Modding-Co-op/community-mod-toolkit.git .local\community-mod-toolkit
+git clone --branch image_handling_improvements --single-branch https://github.com/chrismac39/community-mod-toolkit.git .local\community-mod-toolkit
 python -m venv .local\cmt-venv
 .local\cmt-venv\Scripts\python.exe -m pip install -r .local\community-mod-toolkit\tools\dependencies\requirements.txt
 ```
 
-`.local/` is ignored by Git. The CMT upload script and its dependencies are
-copied from that checkout into generated, profile-specific workspaces under
-`dist/cmt-workspaces/`; CMT is not vendored into the repository.
+The fork branch adds the gallery synchronization support required by this
+workflow; the upstream `toolkit-release` branch does not yet include it.
+`.local/` is ignored by Git. CMT's upload script, gallery adapter, and
+dependencies are copied from that checkout into generated, profile-specific
+workspaces under `dist/cmt-workspaces/`; CMT is not vendored into the
+repository.
 
 ## Prepare one profile
 
@@ -68,12 +71,12 @@ npm run workshop:cmt -- prepare --profile rgo-harmony-expanded --toolkit-dir .lo
 The CMT project will be under
 `dist/cmt-workspaces/rgo-harmony-expanded/project`.
 It contains only the generated mod, CMT's upload tool/dependencies, the
-profile's Workshop description, and change notes for the built version. The
-adapter also includes EU5's `dlc` folder in CMT's release sources. CMT's
-Steamworks Python package is copied to the import location expected by its
-uploader. CMT's
-upload defaults are disabled in the generated configuration; preparation
-does not upload or create a Workshop item.
+profile's Workshop description, and change notes for the built version. CMT
+includes EU5's `dlc` folder in release sources and sanitizes release folder
+names for Windows. The Steamworks Python package is copied to the import
+location expected by its uploader. CMT's upload defaults are disabled in the
+generated configuration; preparation does not upload or create a Workshop
+item.
 
 `config/cmt-workshop.json` maps profile IDs to Workshop page directories and
 Workshop item IDs. `0` is CMT's create-new-item value. The publish wrapper
