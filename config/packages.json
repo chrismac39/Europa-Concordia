@@ -6,11 +6,10 @@
       "name": "[v1.4 beta] Standard of Living",
       "type": "upstream",
       "source": {
-        "type": "git",
-        "url": "https://github.com/HLJSXK/eu5-modding-project.git",
-        "revision": "2c36654528de8cf03ce5a9d9d5a018342d781327",
-        "path": "sources/git/standard-of-living",
-        "publishedWorkshopId": "3815438890"
+        "type": "steam-workshop",
+        "workshopId": "3815438890",
+        "snapshotChecksum": "sha256:84b12559c934d3eef735d0f3c582bf32caabf4ececfb8867a67a214eff889bb7",
+        "path": "sources/steam-workshop/3815438890-2026-11-23"
       },
       "author": "猪",
       "targetGameVersion": "1.4.5",
@@ -18,7 +17,7 @@
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
-        "notice": "Clean export of src/stable from the pinned v1.4.4 Git revision. Published as Steam Workshop item 3815438890. Obtain redistribution permission before enabling it for a distributed build."
+        "notice": "Local analysis snapshot refreshed from Steam Workshop item 3815438890 on 2026-11-23. No redistribution rights are implied; obtain permission before enabling source files for a distributed build."
       }
     },
     {
@@ -28,13 +27,16 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3769566303",
-        "snapshotChecksum": "sha256:31d63273bf52737b83fb971ec0f94d2f511aa2d89445eae19dabd366693184ab",
-        "path": "sources/steam-workshop/3769566303"
+        "snapshotChecksum": "sha256:e34eaa83c10ed3be6ef42adf24ad3e3e64d2798b27ee3bd8fa854842f9e78748",
+        "path": "sources/steam-workshop/3769566303-2026-11-23"
       },
       "author": "猪",
       "targetGameVersion": "1.4.5",
-      "version": "0.0.260822",
-      "dependencies": ["just-goods", "standard-of-living"],
+      "version": "0.0.261112",
+      "dependencies": [
+        "just-goods",
+        "standard-of-living"
+      ],
       "attribution": {
         "license": "No license provided",
         "notice": "Local snapshot of Steam Workshop item 3769566303, version 260822. The downloaded Workshop copy is authoritative; it differs from the earlier Git export. Upstream declares EU5 1.3.11 compatibility. Obtain redistribution permission before enabling it for a distributed build."
@@ -47,12 +49,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3821883489",
-        "snapshotChecksum": "sha256:38b16175a6abdfe28ec319cd0845af532c5011026b8f7a48018683f5ff96a7c0",
+        "snapshotChecksum": "sha256:9523dbaba628a3a74b4bfa1519dee8a4694f54e15371881564c7874cf8ff7787",
         "path": "sources/steam-workshop/3821883489"
       },
       "author": "Unknown (creator not included in local Workshop metadata)",
       "targetGameVersion": "1.4.5",
-      "version": "0.5.9",
+      "version": "1.4.0",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -66,13 +68,16 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3828715234",
-        "snapshotChecksum": "sha256:8d1cdf0732cccedf4390b1abbe69ca84eb1fb1da0ac721d13e0f7044d3f44041",
+        "snapshotChecksum": "sha256:83a91d8bfd8fabe54383c9788f4e55be332e97811456824fbd5a2dc61edc04b7",
         "path": "sources/steam-workshop/3828715234"
       },
       "author": "Repository owner",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "dependencies": ["fruits-expanded", "just-goods"],
+      "dependencies": [
+        "fruits-expanded",
+        "just-goods"
+      ],
       "attribution": {
         "license": "No license provided",
         "notice": "Local snapshot of Steam Workshop item 3828715234 for examination. The repository owner identifies themself as the author. Its descriptor declares EU5 1.4.* support."
@@ -85,7 +90,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3605677866",
-        "snapshotChecksum": "sha256:ab6429a6386afb3f7766693fc85d64490c16ec0044517fdfdac176f14e2b3512",
+        "snapshotChecksum": "sha256:d7a404eb31f2476f450a3404f2a7143fb95b360b526515da3d547e7c5bac5477",
         "path": "sources/steam-workshop/3605677866"
       },
       "author": "GDI_JeffL",
@@ -104,7 +109,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3692202776",
-        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110",
+        "snapshotChecksum": "sha256:40ae855de27078a09ce30031c8fc8798060cb260e06e50a671b8a85a26973d5a",
         "path": "sources/steam-workshop/3692202776"
       },
       "author": "Community Mod Framework",
@@ -123,7 +128,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3714859568",
-        "snapshotChecksum": "sha256:b32c4455f8e0d38bcb1ff7f5bd77c3c78ea4e0400f3ab71a41415140d26bb041",
+        "snapshotChecksum": "sha256:1f3ef19c5f8fe4fac8eb4561d71a47c4f4d8ca84812d9b51e6424f3a5ae094c6",
         "path": "sources/steam-workshop/3714859568"
       },
       "author": "Stefan",
@@ -142,12 +147,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3626542508",
-        "snapshotChecksum": "sha256:283b9d0741149efe939fb39f58e78bb0e938d8cef3ae19d8334df9353d23427b",
-        "path": "sources/steam-workshop/3626542508"
+        "snapshotChecksum": "sha256:385582b37cd44127ff736d05242617c9e181a5192c422618a0197ec03151dbbe",
+        "path": "sources/steam-workshop/3626542508-2026-11-23"
       },
       "author": "Exend",
       "targetGameVersion": "1.4.5",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -161,7 +166,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3664577264",
-        "snapshotChecksum": "sha256:80e533e03d6ad884b90fd0804b3d2afcc7eba4964d4d098ab34c5845d985471b",
+        "snapshotChecksum": "sha256:dc32444d96cc5455d53444dab8fb70c5ed44a688b175a54e80f2a0426dc51565",
         "path": "sources/steam-workshop/3664577264"
       },
       "author": "Trinedy",
@@ -180,7 +185,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3603092142",
-        "snapshotChecksum": "sha256:5c960d2cf194bb960914e1b3f80cebb8404e80f6bbf87b65519841b6723c755a",
+        "snapshotChecksum": "sha256:66b9c99fe194edc7a13d4ec69454a252720e1c44f607d2c4341dfad55d60ee06",
         "path": "sources/steam-workshop/3603092142"
       },
       "author": "Happyperson3796",
@@ -194,17 +199,17 @@
     },
     {
       "id": "imperial-ambitions",
-      "name": "Imperial Ambitions",
+      "name": "Tide of History (Imperial Ambitions)",
       "type": "upstream",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3813524452",
-        "snapshotChecksum": "sha256:92f2cae312fa94eba47d4073f4b3de3f41e9c77b351d776ebec87520b5480102",
-        "path": "sources/steam-workshop/3813524452"
+        "snapshotChecksum": "sha256:f8b037a41ed26ccc723863ff478b06e3301ca61b026fdce272b646ae4ae35086",
+        "path": "sources/steam-workshop/3813524452-2026-11-23"
       },
       "author": "Airdæ",
       "targetGameVersion": "1.4.5",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -218,7 +223,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3809335454",
-        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd",
+        "snapshotChecksum": "sha256:3070e5026d223a21c5cfe41c79db46947893396e5d65a436e98144b87f472d4e",
         "path": "sources/steam-workshop/3809335454"
       },
       "author": "Naaku",
@@ -237,8 +242,8 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3691186720",
-        "snapshotChecksum": "sha256:c40c15c43213cecd2f9fe58cb426d84ac519111483fcf6c9a0b4c3db935f0557",
-        "path": "sources/steam-workshop/3691186720"
+        "snapshotChecksum": "sha256:d68c78f84af8ac6e96f9bfcb9e52151a1abeb321e1efbecd7734279ee3df03d2",
+        "path": "sources/steam-workshop/3691186720-2026-11-23"
       },
       "author": "Aayom",
       "targetGameVersion": "1.4.5",
@@ -256,12 +261,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3745922649",
-        "snapshotChecksum": "sha256:b5a3db6230fc2f067c4d76f42d8a759f4c96e94b333d4840464de5cffa803bd3",
-        "path": "sources/steam-workshop/3745922649"
+        "snapshotChecksum": "sha256:355882388185ea2b8dc4ad866a23ae93bb4d7e8a11bd2191a31d3473d4d43bfe",
+        "path": "sources/steam-workshop/3745922649-2026-11-23"
       },
       "author": "Agamenton",
       "targetGameVersion": "1.4.5",
-      "version": "1.1.9",
+      "version": "1.2.0",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -275,12 +280,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3617910693",
-        "snapshotChecksum": "sha256:f758eedca808e603fafe7754db1b9e083be6f52a761cccd1fa23a17ed6541fc9",
-        "path": "sources/steam-workshop/3617910693"
+        "snapshotChecksum": "sha256:4e675ea6069d55aff8c659a2d2c0699ae297dff8a72565ccbbcfdb7af99f310b",
+        "path": "sources/steam-workshop/3617910693-2026-11-23"
       },
       "author": "Sulphur",
       "targetGameVersion": "1.4.5",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -294,12 +299,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3608489505",
-        "snapshotChecksum": "sha256:ce35d0f7f235fea897cb13b74b0a3436cab22dc539367383d113f94a08db3154",
-        "path": "sources/steam-workshop/3608489505"
+        "snapshotChecksum": "sha256:52e002b4c40bf877b3284e0d05221a1107000042bf97a9cf600cb37581480a53",
+        "path": "sources/steam-workshop/3608489505-2026-11-23"
       },
       "author": "Relandelon",
       "targetGameVersion": "1.4.5",
-      "version": "1.10.0",
+      "version": "2.4.2",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -311,18 +316,18 @@
       "name": "Ruthenia and Steppe Fix",
       "type": "upstream",
       "source": {
-        "type": "git",
-        "url": "https://github.com/KitKotyk/Rutenia-and-Steppe-Fix.git",
-        "revision": "34e802343e7d452ce264be1c9d2e0c22caa8475d",
-        "path": "sources/git/ruthenia-steppe-fix"
+        "type": "steam-workshop",
+        "workshopId": "3608237308",
+        "snapshotChecksum": "sha256:73834d8cf3b8cca80647b83cf6a4021913a14f50f1584a717bcd4a954721e3c4",
+        "path": "sources/steam-workshop/3608237308-2026-11-23"
       },
       "author": "Dima_UA",
       "targetGameVersion": "1.4.5",
-      "version": "11.3.1",
+      "version": "11.3.5",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
-        "notice": "Clean export from the pinned Git revision. Published as Steam Workshop item 3608237308. Obtain redistribution permission before enabling it for a distributed build."
+        "notice": "Local analysis snapshot refreshed from Steam Workshop item 3608237308 on 2026-11-23. No redistribution rights are implied; obtain permission before enabling source files for a distributed build."
       }
     },
     {
@@ -332,12 +337,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3668193813",
-        "snapshotChecksum": "sha256:66ec97f094653af12c00a60c2ec8cc82a2546bcd9d790a128af7b6cb596f67e7",
-        "path": "sources/steam-workshop/3668193813"
+        "snapshotChecksum": "sha256:4af71cf2c4a86b46cde8d6d75ee91a1e2548e51864eede4cbca227418e82c1e6",
+        "path": "sources/steam-workshop/3668193813-2026-11-23"
       },
       "author": "Trinedy",
       "targetGameVersion": "1.4.5",
-      "version": "1.4.1",
+      "version": "1.4.4",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -351,7 +356,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3685755118",
-        "snapshotChecksum": "sha256:87d261d2de9d3592d3333c2fa10ac9551d9056b983ad181f3e8350d67a19d049",
+        "snapshotChecksum": "sha256:b5a816194874e22f607596bc82b1f8bcc2666a4bdb85bff8daf0acc64e6e22de",
         "path": "sources/steam-workshop/3685755118"
       },
       "author": "Emirke",
@@ -370,7 +375,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3688963094",
-        "snapshotChecksum": "sha256:12a18e6ac5388ec9815f232e14f3f4a8718bf95a146365e19ae2d5fbb12dec74",
+        "snapshotChecksum": "sha256:3471dfb5dd7c02f5dd426e9de81e44d6a6e45e69e489a8da64e176dd18e4e7f4",
         "path": "sources/steam-workshop/3688963094"
       },
       "author": "Emperor VI",
@@ -387,11 +392,10 @@
       "name": "Oikoumenē",
       "type": "upstream",
       "source": {
-        "type": "git",
-        "url": "https://github.com/Zatzarinny/Oikoumene-EU5.git",
-        "revision": "c246398bf3e3984f27be2731c86c1bef9a313f05",
-        "publishedWorkshopId": "3721193233",
-        "path": "sources/git/oikoumene"
+        "type": "steam-workshop",
+        "workshopId": "3721193233",
+        "snapshotChecksum": "sha256:9c21466b6ebf06e05023e76e77593bcbe5e1c4ed1c84014459193f596b33de36",
+        "path": "sources/steam-workshop/3721193233-2026-11-23"
       },
       "author": "Pontifex",
       "targetGameVersion": "1.4.5",
@@ -399,7 +403,7 @@
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
-        "notice": "Clean export from the pinned Git revision. Published as Steam Workshop item 3721193233. Obtain redistribution permission before enabling it for a distributed build."
+        "notice": "Local analysis snapshot refreshed from Steam Workshop item 3721193233 on 2026-11-23. No redistribution rights are implied; obtain permission before enabling source files for a distributed build."
       }
     },
     {
@@ -409,7 +413,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3790115532",
-        "snapshotChecksum": "sha256:20ef5af4452a48b47919f3643593fd04c8296243054dc692a55391423371e4b0",
+        "snapshotChecksum": "sha256:79de708a2b246e597996a80b6ba3de28269dc9c5eb301bc4679f9b4ebb1192fd",
         "path": "sources/steam-workshop/3790115532"
       },
       "author": "bagetbaget",
@@ -423,13 +427,13 @@
     },
     {
       "id": "gathering-land-rus",
-      "name": "Gathering the Land of the Rus",
+      "name": "Gathering of the Rus",
       "type": "upstream",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3652214415",
-        "snapshotChecksum": "sha256:5a9e71ec9a70e55c069a084c479994b4a9884960692da44f371cfcf841d96037",
-        "path": "sources/steam-workshop/3652214415"
+        "snapshotChecksum": "sha256:77dcd05c46b28ba85df001a33c8e323f37552678aa529ee2ee0afd0efe1f3448",
+        "path": "sources/steam-workshop/3652214415-2026-11-23"
       },
       "author": "Atanos",
       "targetGameVersion": "1.4.5",
@@ -447,7 +451,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3812701995",
-        "snapshotChecksum": "sha256:74b78a37b8dc42ad6f1a8877a2d8bd9ad053a3363a240dd5b244b4f6eeefc635",
+        "snapshotChecksum": "sha256:cb3e132c9fa03941ceacb6b4d1f5a0098556dfcfb981b609a07df418ecc877bd",
         "path": "sources/steam-workshop/3812701995"
       },
       "author": "IronPrats",
@@ -461,18 +465,21 @@
     },
     {
       "id": "gh-exchequer-glorp-ui-patch",
-      "name": "GH: Exchequer - Glorp UI compatch",
+      "name": "GH: Exchequer - Glorp UI patch",
       "type": "upstream",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3827095294",
-        "snapshotChecksum": "sha256:2d8f971797ebfa8a130302183366561cc81bd8a98c38c0960778ba7c673d480b",
+        "snapshotChecksum": "sha256:9fcfe83b7817ae0d298e92dd655aaaf8d5894333f14d662096a84489965d41e6",
         "path": "sources/steam-workshop/3827095294"
       },
       "author": "IronPrats",
       "targetGameVersion": "1.4.5",
       "version": "1.0.0",
-      "dependencies": ["gh-exchequer", "glorp-ui"],
+      "dependencies": [
+        "gh-exchequer",
+        "glorp-ui"
+      ],
       "attribution": {
         "license": "No license provided",
         "notice": "Local snapshot of Steam Workshop item 3827095294. Obtain redistribution permission before enabling it for a distributed build."
@@ -492,7 +499,9 @@
       "author": "romaimperator",
       "targetGameVersion": "1.4.5",
       "version": "2.2.13",
-      "dependencies": ["community-mod-framework"],
+      "dependencies": [
+        "community-mod-framework"
+      ],
       "attribution": {
         "license": "No license provided",
         "notice": "Analysis snapshot at the pinned Git revision; published as Steam Workshop item 3736668860. Keep the Workshop mod separate from Concordia."
@@ -512,7 +521,9 @@
       "author": "Conner Olsen",
       "targetGameVersion": "1.4.5",
       "version": "1.5.0",
-      "dependencies": ["community-mod-framework"],
+      "dependencies": [
+        "community-mod-framework"
+      ],
       "attribution": {
         "license": "GPL-3.0",
         "notice": "Pinned upstream source declares EU5 1.3.* support and was last updated for 1.3.10. Concordia targets 1.4.5 by explicit user choice; runtime compatibility remains unverified. Keep the Workshop mod separate."
@@ -523,19 +534,20 @@
       "name": "Glorp UI - 1.4.0 Río Salado Open Beta",
       "type": "upstream",
       "source": {
-        "type": "git",
-        "url": "https://github.com/clickypoo/EU5.Glorp.UI.git",
-        "revision": "7ef53888afca3d6febc4a25d17ee95ecbe9a499d",
-        "path": "sources/git/glorp-ui",
-        "publishedWorkshopId": "3812518640"
+        "type": "steam-workshop",
+        "workshopId": "3812518640",
+        "snapshotChecksum": "sha256:5409f2acd3bce44886301adee91806b74e987bfb90485e43a52d2e0f289cc974",
+        "path": "sources/steam-workshop/3812518640-2026-11-23"
       },
       "author": "glorp",
       "targetGameVersion": "1.4.5",
       "version": "04.10.26",
-      "dependencies": ["community-mod-framework"],
+      "dependencies": [
+        "community-mod-framework"
+      ],
       "attribution": {
         "license": "No license provided",
-        "notice": "Clean analysis export from the pinned open-beta Git revision; published as Steam Workshop item 3812518640. Glorp UI declares SmartTaxes, Construction Manager, and Autonomous Diplomats as dependencies. Concordia's current-intended patches remove the direct Construction Manager and Autonomous Diplomats UI references. SmartTaxes is intentionally excluded due to performance issues."
+        "notice": "Local analysis snapshot refreshed from Steam Workshop item 3812518640 on 2026-11-23. Glorp UI declares SmartTaxes, Construction Manager, and Autonomous Diplomats as dependencies. Concordia's current-intended patches remove the direct Construction Manager and Autonomous Diplomats UI references. SmartTaxes is intentionally excluded due to performance issues."
       }
     },
     {
@@ -545,12 +557,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada",
-        "path": "sources/steam-workshop/3785316314"
+        "snapshotChecksum": "sha256:617a20cd613ec44d94ee25e8be85d2b96b1ad5686461ffcafd535f9b0ded7726",
+        "path": "sources/steam-workshop/3785316314-1.1-2026-11-23"
       },
       "author": "moveably",
       "targetGameVersion": "1.4.5",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "dependencies": [],
       "attribution": {
         "license": "No license provided",
@@ -564,13 +576,15 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:598ba086caeda8d29eeb0273aff194191fcbb9285a5a32c742cdcd282d41ff1a",
-        "path": "sources/steam-workshop/3785316314-1.1-2026-11-14"
+        "snapshotChecksum": "sha256:617a20cd613ec44d94ee25e8be85d2b96b1ad5686461ffcafd535f9b0ded7726",
+        "path": "sources/steam-workshop/3785316314-1.1-2026-11-23"
       },
       "author": "moveably",
       "targetGameVersion": "1.4.5",
       "version": "1.1.0",
-      "dependencies": ["community-mod-framework"],
+      "dependencies": [
+        "community-mod-framework"
+      ],
       "attribution": {
         "license": "No license provided",
         "notice": "Local snapshot of Steam Workshop item 3785316314, upstream version 1.1, updated 2026-11-14. It declares EU5 1.4 support and a Community Mod Framework 2.* dependency. The repository owner confirms explicit author permission for distributing the compatibility patch; retain the written permission with release records."
@@ -583,12 +597,12 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3830305546",
-        "snapshotChecksum": "sha256:f0f9b1c5a3d34f70f3d5784365784a477ea323879dd4765b146f0f2110361253",
-        "path": "sources/steam-workshop/3830305546"
+        "snapshotChecksum": "sha256:f0efb4c9130c693f74144604047b4f96cc4b1a923c0ca9513f306183cdc7c690",
+        "path": "sources/steam-workshop/3830305546-2026-11-23"
       },
       "author": "h2o",
       "targetGameVersion": "1.4.5",
-      "version": "1.0.8",
+      "version": "1.2.5",
       "dependencies": [],
       "attribution": {
         "license": "CC BY-SA 4.0 (descriptions and translations); MIT (tools and technical documentation)",
@@ -602,8 +616,8 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3602513956",
-        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b",
-        "path": "sources/steam-workshop/3602513956"
+        "snapshotChecksum": "sha256:9673d7507b72199a548214de04b798d27b0754006bc5732f07ac50dfe48d503d",
+        "path": "sources/steam-workshop/3602513956-2026-11-23"
       },
       "author": "Enrar",
       "targetGameVersion": "1.4.5",
@@ -621,7 +635,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3692202776",
-        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110",
+        "snapshotChecksum": "sha256:40ae855de27078a09ce30031c8fc8798060cb260e06e50a671b8a85a26973d5a",
         "path": "sources/steam-workshop/3692202776"
       },
       "author": "Community Mod Framework",
@@ -640,7 +654,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3809335454",
-        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd",
+        "snapshotChecksum": "sha256:3070e5026d223a21c5cfe41c79db46947893396e5d65a436e98144b87f472d4e",
         "path": "sources/steam-workshop/3809335454"
       },
       "author": "Naaku",
@@ -659,8 +673,8 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3602513956",
-        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b",
-        "path": "sources/steam-workshop/3602513956"
+        "snapshotChecksum": "sha256:9673d7507b72199a548214de04b798d27b0754006bc5732f07ac50dfe48d503d",
+        "path": "sources/steam-workshop/3602513956-2026-11-23"
       },
       "author": "Enrar",
       "targetGameVersion": "1.4.9",
@@ -678,13 +692,15 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:598ba086caeda8d29eeb0273aff194191fcbb9285a5a32c742cdcd282d41ff1a",
-        "path": "sources/steam-workshop/3785316314-1.1-2026-11-14"
+        "snapshotChecksum": "sha256:617a20cd613ec44d94ee25e8be85d2b96b1ad5686461ffcafd535f9b0ded7726",
+        "path": "sources/steam-workshop/3785316314-1.1-2026-11-23"
       },
       "author": "moveably",
       "targetGameVersion": "1.4.9",
       "version": "1.1.0",
-      "dependencies": ["community-mod-framework-eu5-1-4-9-review"],
+      "dependencies": [
+        "community-mod-framework-eu5-1-4-9-review"
+      ],
       "attribution": {
         "license": "No license provided",
         "notice": "EU5 1.4.9 static review alias for Just Goods 1.1.0. Upstream metadata declares EU5 1.4 support and a Community Mod Framework 2.* dependency. The repository owner confirms explicit author permission for distributing the compatibility patch; retain the written permission with release records. Runtime verification remains pending."

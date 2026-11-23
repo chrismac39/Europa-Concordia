@@ -11,7 +11,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3692202776",
-        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+        "snapshotChecksum": "sha256:40ae855de27078a09ce30031c8fc8798060cb260e06e50a671b8a85a26973d5a"
       }
     },
     {
@@ -21,7 +21,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3602513956",
-        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b"
+        "snapshotChecksum": "sha256:9673d7507b72199a548214de04b798d27b0754006bc5732f07ac50dfe48d503d"
       }
     },
     {
@@ -31,7 +31,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:598ba086caeda8d29eeb0273aff194191fcbb9285a5a32c742cdcd282d41ff1a"
+        "snapshotChecksum": "sha256:617a20cd613ec44d94ee25e8be85d2b96b1ad5686461ffcafd535f9b0ded7726"
       }
     }
   ],

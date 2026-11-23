@@ -16,18 +16,17 @@ test("selects Oikoumenē separately and resolves its location-name overlaps", as
 
   assert.ok(packageValue);
   assert.ok(profileMod);
-  if (packageValue.source.type !== "git" || profileMod.source.type !== "git") {
-    throw new Error("Oikoumenē must remain a pinned Git/Workshop input");
+  if (
+    packageValue.source.type !== "steam-workshop" ||
+    profileMod.source.type !== "steam-workshop"
+  ) {
+    throw new Error("Oikoumenē must remain a pinned Workshop input");
   }
-  assert.equal(packageValue.source.publishedWorkshopId, "3721193233");
+  assert.equal(packageValue.source.workshopId, "3721193233");
   assert.equal(profileMod.version, "0.19.0");
   assert.equal(
-    profileMod.source.revision,
-    "c246398bf3e3984f27be2731c86c1bef9a313f05",
-  );
-  assert.equal(
-    profileMod.source.publishedWorkshopId,
-    packageValue.source.publishedWorkshopId,
+    profileMod.source.snapshotChecksum,
+    packageValue.source.snapshotChecksum,
   );
 
   const order = configuration.profile.loadOrder;

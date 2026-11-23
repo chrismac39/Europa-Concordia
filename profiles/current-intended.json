@@ -11,7 +11,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3605677866",
-        "snapshotChecksum": "sha256:ab6429a6386afb3f7766693fc85d64490c16ec0044517fdfdac176f14e2b3512"
+        "snapshotChecksum": "sha256:d7a404eb31f2476f450a3404f2a7143fb95b360b526515da3d547e7c5bac5477"
       }
     },
     {
@@ -21,7 +21,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3692202776",
-        "snapshotChecksum": "sha256:d432d50a2fd81e39d35fb44d51906f95f99db90eccda8a706b0dc98d23302110"
+        "snapshotChecksum": "sha256:40ae855de27078a09ce30031c8fc8798060cb260e06e50a671b8a85a26973d5a"
       }
     },
     {
@@ -29,9 +29,9 @@
       "name": "Glorp UI - 1.4.0 Río Salado Open Beta",
       "version": "04.10.26",
       "source": {
-        "type": "git",
-        "revision": "7ef53888afca3d6febc4a25d17ee95ecbe9a499d",
-        "publishedWorkshopId": "3812518640"
+        "type": "steam-workshop",
+        "workshopId": "3812518640",
+        "snapshotChecksum": "sha256:5409f2acd3bce44886301adee91806b74e987bfb90485e43a52d2e0f289cc974"
       }
     },
     {
@@ -41,7 +41,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3812701995",
-        "snapshotChecksum": "sha256:74b78a37b8dc42ad6f1a8877a2d8bd9ad053a3363a240dd5b244b4f6eeefc635"
+        "snapshotChecksum": "sha256:cb3e132c9fa03941ceacb6b4d1f5a0098556dfcfb981b609a07df418ecc877bd"
       }
     },
     {
@@ -51,17 +51,17 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3790115532",
-        "snapshotChecksum": "sha256:20ef5af4452a48b47919f3643593fd04c8296243054dc692a55391423371e4b0"
+        "snapshotChecksum": "sha256:79de708a2b246e597996a80b6ba3de28269dc9c5eb301bc4679f9b4ebb1192fd"
       }
     },
     {
       "packageId": "just-goods",
       "name": "Just Goods",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3785316314",
-        "snapshotChecksum": "sha256:713bad18afeeb13fd63c8ff2b2f6b064edff988726d6b9a124e1f8d1e695eada"
+        "snapshotChecksum": "sha256:617a20cd613ec44d94ee25e8be85d2b96b1ad5686461ffcafd535f9b0ded7726"
       }
     },
     {
@@ -71,7 +71,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3602513956",
-        "snapshotChecksum": "sha256:b667dcc690475254963b8b874fe1c73cc9ae847ae2d350bf8fe378254b7b737b"
+        "snapshotChecksum": "sha256:9673d7507b72199a548214de04b798d27b0754006bc5732f07ac50dfe48d503d"
       }
     },
     {
@@ -79,19 +79,19 @@
       "name": "[v1.4 beta] Standard of Living",
       "version": "0.0.261024",
       "source": {
-        "type": "git",
-        "revision": "2c36654528de8cf03ce5a9d9d5a018342d781327",
-        "publishedWorkshopId": "3815438890"
+        "type": "steam-workshop",
+        "workshopId": "3815438890",
+        "snapshotChecksum": "sha256:84b12559c934d3eef735d0f3c582bf32caabf4ececfb8867a67a214eff889bb7"
       }
     },
     {
       "packageId": "eurocentric-institutions",
       "name": "Eurocentric Institutions",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3626542508",
-        "snapshotChecksum": "sha256:283b9d0741149efe939fb39f58e78bb0e938d8cef3ae19d8334df9353d23427b"
+        "snapshotChecksum": "sha256:385582b37cd44127ff736d05242617c9e181a5192c422618a0197ec03151dbbe"
       }
     },
     {
@@ -101,17 +101,17 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3664577264",
-        "snapshotChecksum": "sha256:80e533e03d6ad884b90fd0804b3d2afcc7eba4964d4d098ab34c5845d985471b"
+        "snapshotChecksum": "sha256:dc32444d96cc5455d53444dab8fb70c5ed44a688b175a54e80f2a0426dc51565"
       }
     },
     {
       "packageId": "gathering-land-rus",
-      "name": "Gathering the Land of the Rus",
+      "name": "Gathering of the Rus",
       "version": "1.1.0",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3652214415",
-        "snapshotChecksum": "sha256:5a9e71ec9a70e55c069a084c479994b4a9884960692da44f371cfcf841d96037"
+        "snapshotChecksum": "sha256:77dcd05c46b28ba85df001a33c8e323f37552678aa529ee2ee0afd0efe1f3448"
       }
     },
     {
@@ -121,17 +121,17 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3603092142",
-        "snapshotChecksum": "sha256:5c960d2cf194bb960914e1b3f80cebb8404e80f6bbf87b65519841b6723c755a"
+        "snapshotChecksum": "sha256:66b9c99fe194edc7a13d4ec69454a252720e1c44f607d2c4341dfad55d60ee06"
       }
     },
     {
       "packageId": "more-unique-urban-rights",
       "name": "More Unique Urban Rights",
-      "version": "1.1.9",
+      "version": "1.2.0",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3745922649",
-        "snapshotChecksum": "sha256:b5a3db6230fc2f067c4d76f42d8a759f4c96e94b333d4840464de5cffa803bd3"
+        "snapshotChecksum": "sha256:355882388185ea2b8dc4ad866a23ae93bb4d7e8a11bd2191a31d3473d4d43bfe"
       }
     },
     {
@@ -141,7 +141,7 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3809335454",
-        "snapshotChecksum": "sha256:9de6bd4c0b67d62a5c98b580020cdfb16a314835201fb3618a39893d2a684ddd"
+        "snapshotChecksum": "sha256:3070e5026d223a21c5cfe41c79db46947893396e5d65a436e98144b87f472d4e"
       }
     },
     {
@@ -149,9 +149,9 @@
       "name": "Oikoumenē",
       "version": "0.19.0",
       "source": {
-        "type": "git",
-        "revision": "c246398bf3e3984f27be2731c86c1bef9a313f05",
-        "publishedWorkshopId": "3721193233"
+        "type": "steam-workshop",
+        "workshopId": "3721193233",
+        "snapshotChecksum": "sha256:9c21466b6ebf06e05023e76e77593bcbe5e1c4ed1c84014459193f596b33de36"
       }
     },
     {
@@ -161,27 +161,27 @@
       "source": {
         "type": "steam-workshop",
         "workshopId": "3691186720",
-        "snapshotChecksum": "sha256:c40c15c43213cecd2f9fe58cb426d84ac519111483fcf6c9a0b4c3db935f0557"
+        "snapshotChecksum": "sha256:d68c78f84af8ac6e96f9bfcb9e52151a1abeb321e1efbecd7734279ee3df03d2"
       }
     },
     {
       "packageId": "sulphurs-rivers-expanded",
       "name": "Sulphur's Rivers Expanded",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3617910693",
-        "snapshotChecksum": "sha256:f758eedca808e603fafe7754db1b9e083be6f52a761cccd1fa23a17ed6541fc9"
+        "snapshotChecksum": "sha256:4e675ea6069d55aff8c659a2d2c0699ae297dff8a72565ccbbcfdb7af99f310b"
       }
     },
     {
       "packageId": "waterways-distance-rework",
       "name": "Waterways Distance Rework",
-      "version": "1.10.0",
+      "version": "2.4.2",
       "source": {
         "type": "steam-workshop",
         "workshopId": "3608489505",
-        "snapshotChecksum": "sha256:ce35d0f7f235fea897cb13b74b0a3436cab22dc539367383d113f94a08db3154"
+        "snapshotChecksum": "sha256:52e002b4c40bf877b3284e0d05221a1107000042bf97a9cf600cb37581480a53"
       }
     }
   ],
@@ -300,7 +300,9 @@
         "sol_unit_consumption_nobles_aromatics",
         "sol_unit_consumption_burghers_whaleoil"
       ],
-      "suppresses": ["sol_unit_consumption_nobles_wheat"]
+      "suppresses": [
+        "sol_unit_consumption_nobles_wheat"
+      ]
     },
     {
       "id": "sol-jtg-economy-effects",
@@ -320,7 +322,9 @@
         "sol_market_good_spending_nobles_amber",
         "sol_market_good_spending_nobles_aromatics"
       ],
-      "suppresses": ["TRY_REPLACE:change_gold_effect"]
+      "suppresses": [
+        "TRY_REPLACE:change_gold_effect"
+      ]
     },
     {
       "id": "sol-jtg-global-panel",
@@ -330,8 +334,13 @@
       "targetPackageId": "standard-of-living",
       "resolutionType": "merged-patch",
       "reason": "EU5 GUI files at the same path are full-file overrides, not text merges. This complete file retains SoL's existing panel and adds the Just Goods rows.",
-      "preserves": ["situation_panel = {", "SOL_UI_SECTION overall_balance"],
-      "suppresses": ["sol_jtg_compatibility_submod"]
+      "preserves": [
+        "situation_panel = {",
+        "SOL_UI_SECTION overall_balance"
+      ],
+      "suppresses": [
+        "sol_jtg_compatibility_submod"
+      ]
     },
     {
       "id": "sol-jtg-economy-tooltip",
@@ -341,8 +350,13 @@
       "targetPackageId": "standard-of-living",
       "resolutionType": "merged-patch",
       "reason": "Provide the complete SoL economy tooltip template with Just Goods demand entries; the zz_ filename ensures the merged GUI template is loaded after SoL's original template.",
-      "preserves": ["template StandardofLiving_tooltip", "SOL_UI_SECTION"],
-      "suppresses": ["sol_jtg_compatibility_submod"]
+      "preserves": [
+        "template StandardofLiving_tooltip",
+        "SOL_UI_SECTION"
+      ],
+      "suppresses": [
+        "sol_jtg_compatibility_submod"
+      ]
     },
     {
       "id": "gh-exchequer-glorp-ui-left-panel",
@@ -417,8 +431,12 @@
       "targetPackageId": "glorp-ui",
       "resolutionType": "merged-patch",
       "reason": "Remove Glorp UI's Construction Manager food-RGO widget reference while retaining the vanilla food-production controls.",
-      "preserves": ["FoodLocationItem.HasFoodGoods"],
-      "suppresses": ["cm_auto_food_widget_food_production_lateralview = {}"]
+      "preserves": [
+        "FoodLocationItem.HasFoodGoods"
+      ],
+      "suppresses": [
+        "cm_auto_food_widget_food_production_lateralview = {}"
+      ]
     },
     {
       "id": "glorp-ui-no-cm-raw-goods",
@@ -431,7 +449,10 @@
       "targetPackageId": "glorp-ui",
       "resolutionType": "merged-patch",
       "reason": "Remove Construction Manager's RGO automation widgets and show Glorp UI's native auto-expand control without a Construction Manager state check.",
-      "preserves": ["AutoExpand_RGO_Tooltip", "IsAutoExpandRGO(Location.Self)"],
+      "preserves": [
+        "AutoExpand_RGO_Tooltip",
+        "IsAutoExpandRGO(Location.Self)"
+      ],
       "suppresses": [
         "cm_mass_auto_expand_rgo_button = {}",
         "cm_auto_expand_rgo_widget_expand_raw_goods_lateralview = {}",
@@ -449,7 +470,9 @@
       "targetPackageId": "glorp-ui",
       "resolutionType": "merged-patch",
       "reason": "Remove the two CMM pause-menu buttons that call Construction Manager registration GUIs; preserve Glorp UI's normal settings menu.",
-      "preserves": ["SETTINGS_HEADER"],
+      "preserves": [
+        "SETTINGS_HEADER"
+      ],
       "suppresses": [
         "CMM_PAUSE_MENU_BUTTON",
         "CMM_SetHostAndRegisterCoreMod",
@@ -488,8 +511,12 @@
       "targetPackageId": "glorp-ui",
       "resolutionType": "merged-patch",
       "reason": "Stop Glorp UI's fallback warning-suppression effect from registering Construction Manager as an active CMF mod.",
-      "preserves": ["target = flag:smart_taxes"],
-      "suppresses": ["target = flag:cm"]
+      "preserves": [
+        "target = flag:smart_taxes"
+      ],
+      "suppresses": [
+        "target = flag:cm"
+      ]
     },
     {
       "id": "glorp-ui-no-cm-scripted-gui",
@@ -505,7 +532,10 @@
       "preserves": [
         "# Concordia: Construction Manager integration is excluded."
       ],
-      "suppresses": ["glorpui_is_cm_active = {", "target = flag:cm"]
+      "suppresses": [
+        "glorpui_is_cm_active = {",
+        "target = flag:cm"
+      ]
     },
     {
       "id": "sol-no-cm-location-window",
@@ -587,6 +617,10 @@
     "id": "europa_concordia_current_intended",
     "version": "0.5.0",
     "shortDescription": "Playset-specific EU5 compatibility patch. Requires the listed mods separately.",
-    "tags": ["Gameplay", "Map", "User Interface"]
+    "tags": [
+      "Gameplay",
+      "Map",
+      "User Interface"
+    ]
   }
 }

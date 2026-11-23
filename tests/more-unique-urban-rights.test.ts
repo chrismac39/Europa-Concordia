@@ -42,7 +42,7 @@ test("selects More Unique Urban Rights separately with a focused patch", async (
     );
   }
   assert.equal(packageValue.source.workshopId, "3745922649");
-  assert.equal(profileMod.version, "1.1.9");
+  assert.equal(profileMod.version, "1.2.0");
   assert.equal(
     profileMod.source.snapshotChecksum,
     packageValue.source.snapshotChecksum,
@@ -75,8 +75,19 @@ test("selects More Unique Urban Rights separately with a focused patch", async (
 });
 
 test("the pinned upstream snapshot still defines both patch targets", async () => {
-  const sourcePath =
-    "sources/steam-workshop/3745922649/in_game/common/town_rights/aga_town_rights.txt";
+  const configuration = await validateProject(process.cwd(), {
+    profileId: "current-intended",
+  });
+  const packageValue = configuration.packages.find(
+    (candidate) => candidate.id === "more-unique-urban-rights",
+  );
+  assert.ok(packageValue);
+  if (packageValue.source.type !== "steam-workshop") {
+    throw new Error(
+      "More Unique Urban Rights must use its pinned Workshop input",
+    );
+  }
+  const sourcePath = `${packageValue.source.path}/in_game/common/town_rights/aga_town_rights.txt`;
   const source = await readRepositoryFile(sourcePath);
   const definitions = extractDefinitions(
     "in_game/common/town_rights/aga_town_rights.txt",
