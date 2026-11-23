@@ -1089,7 +1089,7 @@ test("builds a profile under its configured output root", async () => {
       await readFile(buildConfigurationPath, "utf8"),
     ) as Record<string, unknown>;
     buildConfiguration.profileOutputDirectories = {
-      fixture: "dist/rgo-harmony",
+      fixture: "dist/fixture-output",
     };
     await writeFile(
       buildConfigurationPath,
@@ -1099,7 +1099,7 @@ test("builds a profile under its configured output root", async () => {
     const output = await buildProject(fixture.root);
     assert.equal(
       output,
-      path.join(fixture.root, "dist", "rgo-harmony", "fixture"),
+      path.join(fixture.root, "dist", "fixture-output", "fixture"),
     );
     await assert.rejects(
       readFile(

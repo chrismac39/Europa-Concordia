@@ -2,24 +2,14 @@
 
 ## Project boundary
 
-Europa Concordia builds independent EU5 mods from profiles. For example, the
-standalone RGO compatibility profile is
-[RGO Harmony](../profiles/rgo-harmony.json);
-the larger Concordia playset patch is
+Europa Concordia builds independent EU5 mods from profiles. The standalone
+[RGO Harmony project](https://github.com/chrismac39/RGO-Harmony) owns its
+Workshop page, release notes, build output, and CMT workflow. This repository
+retains the separate [RGO Harmony Expanded profile](../profiles/rgo-harmony-expanded.json)
+and the larger Concordia playset patch,
 [current-intended](../profiles/current-intended.json). Each profile must have
 its own Workshop item ID, description, release notes, and CMT workspace.
 Upstream Workshop mods remain separate.
-
-The standalone profile's Workshop page and versioned change notes are in
-[`integration/workshop/rgo-harmony/`](../integration/workshop/rgo-harmony/).
-Its source image is
-[`thumbnail.png`](../integration/workshop/rgo-harmony/thumbnail.png), alongside
-the gallery images. The
-built game mod is under `dist/rgo-harmony/`, separate from Concordia's
-`dist/europa-concordia/` output. The
-shared map-template payload preserves More Locations data, and the repository
-records the owner's confirmation of author permission for distributing this
-compatibility patch.
 
 The Fruits Expanded variant is a separate
 [RGO Harmony Expanded profile](../profiles/rgo-harmony-expanded.json), with its
@@ -70,13 +60,13 @@ preparation command builds and packages the profile again to ensure its files
 are current:
 
 ```powershell
-npm run validate -- --profile rgo-harmony
-npm run build -- --profile rgo-harmony
-npm run workshop:cmt -- prepare --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit
+npm run validate -- --profile rgo-harmony-expanded
+npm run build -- --profile rgo-harmony-expanded
+npm run workshop:cmt -- prepare --profile rgo-harmony-expanded --toolkit-dir .local\community-mod-toolkit
 ```
 
 The CMT project will be under
-`dist/cmt-workspaces/rgo-harmony/project`.
+`dist/cmt-workspaces/rgo-harmony-expanded/project`.
 It contains only the generated mod, CMT's upload tool/dependencies, the
 profile's Workshop description, and change notes for the built version. The
 adapter also includes EU5's `dlc` folder in CMT's release sources. CMT's
@@ -97,17 +87,17 @@ profile, remove only that profile's generated project directory under
 ## Workshop gallery images
 
 Put additional gallery images in the profile's Workshop directory under
-`gallery/`. For RGO Harmony, use
-`integration/workshop/rgo-harmony/gallery/`. JPG, JPEG, and PNG files are
-supported; each file must be smaller than 1,000,000 bytes. CMT does not resize
-or recompress images. 1280 × 720 (16:9) is a recommended size, but other
-dimensions are accepted.
+`gallery/`. For RGO Harmony Expanded, use
+`integration/workshop/rgo-harmony-expanded/gallery/`. JPG, JPEG, and PNG
+files are supported; each file must be smaller than 1,000,000 bytes. CMT does
+not resize or recompress images. 1280 × 720 (16:9) is a recommended size, but
+other dimensions are accepted.
 
 Gallery images are not synchronized during ordinary publishing. To stage the
 images for review, prepare with `--sync-gallery`:
 
 ```powershell
-npm run workshop:cmt -- prepare --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit --sync-gallery
+npm run workshop:cmt -- prepare --profile rgo-harmony-expanded --toolkit-dir .local\community-mod-toolkit --sync-gallery
 ```
 
 Only an explicit `--sync-gallery` publish changes the Workshop gallery. CMT
@@ -121,7 +111,7 @@ page.
 The `current-intended` Concordia profile is not yet registered for CMT: it
 needs its own reviewed Workshop description and version-matched change notes.
 Add those assets and a profile entry to `config/cmt-workshop.json` before
-preparing it. Do not reuse RGO Harmony's description or Workshop ID.
+preparing it. Do not reuse RGO Harmony Expanded's description or Workshop ID.
 
 ## Upload only after release review
 
@@ -139,11 +129,11 @@ confirmation immediately before invoking CMT. It uploads the mod, Workshop
 page, and versioned change notes:
 
 ```powershell
-npm run workshop:cmt -- publish --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit --python .local\cmt-venv\Scripts\python.exe
+npm run workshop:cmt -- publish --profile rgo-harmony-expanded --toolkit-dir .local\community-mod-toolkit --python .local\cmt-venv\Scripts\python.exe
 ```
 
-For a non-interactive terminal, provide the exact confirmation token as
-`--confirm-publish "PUBLISH rgo-harmony UPDATE"`.
+For a non-interactive terminal, provide the exact confirmation token for the
+selected profile and configured Workshop item.
 The command checks it against the current profile ID and configured Workshop
 item before starting CMT.
 
@@ -151,23 +141,25 @@ For an explicit gallery synchronization, add `--sync-gallery` to the publish
 command as well. For example:
 
 ```powershell
-npm run workshop:cmt -- publish --profile rgo-harmony --toolkit-dir .local\community-mod-toolkit --sync-gallery --confirm-publish "PUBLISH rgo-harmony UPDATE"
+npm run workshop:cmt -- publish --profile rgo-harmony-expanded --toolkit-dir .local\community-mod-toolkit --sync-gallery --confirm-publish "PUBLISH rgo-harmony-expanded UPDATE"
 ```
 
 The command also persists a newly-created Workshop item ID to
 `config/cmt-workshop.json`, including when CMT reports a later upload failure.
-For updates to that same item, use the same command after updating the versioned file
-[`change-notes/0.1.2.bbcode`](../integration/workshop/rgo-harmony/change-notes/0.1.2.bbcode)
+For updates to that same item, use the same command after updating the
+versioned file
+[`change-notes/0.1.0.bbcode`](../integration/workshop/rgo-harmony-expanded/change-notes/0.1.0.bbcode)
 and the version in the selected profile. The adapter stages the notes as
 CMT's expected version-header format. This wrapper always uploads the mod,
 Workshop page, and current version's change notes together. With
 `--sync-gallery`, it also synchronizes the staged gallery image set.
 
-Add these upstream items as Steam Workshop **Required Items** on RGO Harmony:
+Add these upstream items as Steam Workshop **Required Items** on RGO Harmony Expanded:
 
 - Just Goods: `3785316314`
 - Global Historical RGOs: `3602513956`
 - More locations Mod: `3809335454`
+- Fruits Expanded: `3821883489`
 
 Keep the load order in the page description: More Locations → Global
 Historical RGOs → Just Goods → RGO Harmony. Required-item relationships are

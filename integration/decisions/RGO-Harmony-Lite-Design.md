@@ -8,7 +8,8 @@ More Locations descendants or a variant of the More Locations map merge.
 Community Mod Framework remains selected because Just Goods 1.1 requires it.
 
 The profile pins the same Global Historical RGOs 1.4.0 and Just Goods 1.1.0
-snapshots as the 1.4.9 RGO Harmony profile. It starts with no compatibility
+snapshots as the standalone 1.4.9 RGO Harmony project. It starts with no
+compatibility
 payload. Its approvals are recorded separately using the Lite profile's own
 content fingerprints.
 

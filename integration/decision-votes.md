@@ -8,63 +8,52 @@ remains pending unless a section says otherwise.
 
 ## Vote register
 
-| Decision | Vote | Selected direction                            |
-| -------: | :--: | --------------------------------------------- |
-|        1 |  E   | Synthesize a Concordia merge                  |
-|        2 |  D   | Synthesize a Concordia merge                  |
-|        3 |  A   | Use Oikoumenē as the base                     |
-|        4 |  C   | Synthesize a Concordia merge                  |
-|        5 |  C   | Synthesize a Concordia merge                  |
-|        6 |  C   | Synthesize a Concordia merge                  |
-|        7 |  C   | Synthesize a Concordia merge                  |
-|        8 |  C   | Use National Destinies as the base            |
-|        9 |  C   | Use National Destinies as the base            |
-|       10 |  C   | Synthesize a Concordia merge                  |
-|       11 |  C   | Synthesize a Concordia merge                  |
-|       12 |  A   | Merge every compatible hook                   |
-|       13 |  A   | Merge every compatible hook                   |
-|       14 |  A   | Merge every compatible hook                   |
-|       15 |  A   | Merge every compatible hook                   |
-|       16 |  A   | Merge every compatible hook                   |
-|       17 |  A   | Merge every compatible hook                   |
-|       18 |  A   | Merge every compatible hook                   |
-|       19 |  A   | Use Gathering the Land of the Rus as the base |
-|       20 |  A   | Merge every compatible hook                   |
-|       21 |  C   | Synthesize a Concordia merge                  |
-|       22 |  A   | Merge every compatible hook                   |
-|       23 |  A   | Merge every compatible hook                   |
-|       24 |  A   | Merge every compatible hook                   |
-|       25 |  C   | Synthesize a Concordia merge                  |
-|       26 |  A   | Merge every compatible hook                   |
-|       27 |  A   | Merge every compatible hook                   |
-|       28 |  A   | Merge every compatible hook                   |
-|       29 |  D   | Curate by language or key family              |
-|       30 |  C   | Curate by language or key family              |
-|       31 |  B   | Prefer Oikoumenē's shared text                |
-|       32 |  B   | Prefer Oikoumenē's shared text                |
-|       33 |  A   | Prefer More locations Mod's shared text       |
-|       34 |  A   | Use Oikoumenē as the base                     |
-|       35 |  C   | Synthesize a Concordia merge                  |
-|       36 |  B   | Use Sulphur's Rivers Expanded as the base     |
-|       37 |  G   | Synthesize a Concordia merge                  |
-|       38 |  A   | Use SOL-JTG Compatibility Submod as the base  |
-|       39 |  C   | Synthesize a Concordia merge                  |
-|       40 |  C   | Synthesize a Concordia merge                  |
-|       41 |  A   | Use SOL-JTG Compatibility Submod as the base  |
+| Decision | Vote | Selected direction                                          |
+| -------: | :--: | ----------------------------------------------------------- |
+|        1 |  E   | Synthesize a Concordia merge                                |
+|        2 |  D   | Synthesize a Concordia merge                                |
+|        3 |  A   | Use Oikoumenē as the base                                   |
+|        4 |  C   | Synthesize a Concordia merge                                |
+|        5 |  C   | Synthesize a Concordia merge                                |
+|        6 |  C   | Synthesize a Concordia merge                                |
+|        7 |  C   | Synthesize a Concordia merge                                |
+|        8 |  C   | Use National Destinies as the base                          |
+|        9 |  C   | Use National Destinies as the base                          |
+|       10 |  C   | Synthesize a Concordia merge                                |
+|       11 |  C   | Synthesize a Concordia merge                                |
+|       12 |  A   | Merge every compatible hook                                 |
+|       13 |  A   | Merge every compatible hook                                 |
+|       14 |  A   | Merge every compatible hook                                 |
+|       15 |  A   | Merge every compatible hook                                 |
+|       16 |  A   | Merge every compatible hook                                 |
+|       17 |  A   | Merge every compatible hook                                 |
+|       18 |  A   | Merge every compatible hook                                 |
+|       19 |  A   | Use Gathering the Land of the Rus as the base               |
+|       20 |  A   | Merge every compatible hook                                 |
+|       21 |  C   | Synthesize a Concordia merge                                |
+|       22 |  A   | Merge every compatible hook                                 |
+|       23 |  A   | Merge every compatible hook                                 |
+|       24 |  A   | Merge every compatible hook                                 |
+|       25 |  C   | Synthesize a Concordia merge                                |
+|       26 |  A   | Merge every compatible hook                                 |
+|       27 |  A   | Merge every compatible hook                                 |
+|       28 |  A   | Merge every compatible hook                                 |
+|       29 |  D   | Curate by language or key family                            |
+|       30 |  C   | Curate by language or key family                            |
+|       31 |  B   | Prefer Oikoumenē's shared text                              |
+|       32 |  B   | Prefer Oikoumenē's shared text                              |
+|       33 |  A   | Prefer More locations Mod's shared text                     |
+|       34 |  A   | Use Oikoumenē as the base                                   |
+|       35 |  C   | Synthesize a Concordia merge                                |
+|       36 |  B   | Use Sulphur's Rivers Expanded as the base                   |
+|       37 |  G   | Synthesize a Concordia merge                                |
+|       38 |  A   | Use SOL-JTG Compatibility Submod as the base                |
+|       39 |  C   | Synthesize a Concordia merge                                |
+|       40 |  C   | Synthesize a Concordia merge                                |
+|       41 |  A   | Use SOL-JTG Compatibility Submod as the base                |
 |       42 |  A   | Preserve all 484 new Just Goods 1.1 startup RGO assignments |
-|       43 |  A   | Keep Reunion's sulfur startup and vanilla event option     |
-|       44 |  A   | Prefer Just Goods 1.1's `Hammam` localization              |
-
-### Decisions 42-44 — Just Goods 1.4 / RGO Harmony
-
-The user approved preserving all 484 new Just Goods 1.1 startup RGO
-assignments. The existing map patch remains unchanged, and the 484 setters
-remain in Just Goods' own startup callbacks. At Reunion, keep both behaviors:
-Just Goods starts the location with sulfur, and its later event option may
-change it to vanilla. For `english:hammam`, use Just Goods 1.1's `Hammam` text;
-the RGO Harmony profile loads Just Goods after More Locations. These approvals
-apply to the standalone RGO Harmony profile only; the `current-intended`
-Concordia profile remains pinned to Just Goods 1.0 pending its separate review.
+|       43 |  A   | Keep Reunion's sulfur startup and vanilla event option      |
+|       44 |  A   | Prefer Just Goods 1.1's `Hammam` localization               |
 
 ### Clarification to Decisions 38 and 41 — SoL / Just Goods
 

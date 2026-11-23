@@ -1384,7 +1384,7 @@
       "resolutionType": "load-order",
       "winner": "just-goods-1-1-eu5-1-4-9-review",
       "decision": "Use Just Goods 1.1's English `hammam` localization.",
-      "reason": "The selected RGO Harmony profile keeps Just Goods after More Locations in load order, so its `Hammam` value takes precedence over More Locations' `Hammām`."
+      "reason": "The selected profile keeps Just Goods after More Locations in load order, so its `Hammam` value takes precedence over More Locations' `Hammām`."
     }
   ],
   "definitionConflicts": "deferred"
